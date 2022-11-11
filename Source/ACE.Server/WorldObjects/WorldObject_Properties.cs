@@ -2869,6 +2869,12 @@ namespace ACE.Server.WorldObjects
         {
             get => GetProperty(PropertyFloat.JumpTimer);
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.JumpTimer); else SetProperty(PropertyFloat.JumpTimer, value.Value); }
+		}
+		
+        public double? TownControlTrophyTimer
+        {
+            get => GetProperty(PropertyFloat.TownControlTrophyTimer);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.TownControlTrophyTimer); else SetProperty(PropertyFloat.TownControlTrophyTimer, value.Value); }
         }
 
         public double? MaximumVelocity
