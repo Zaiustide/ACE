@@ -57,6 +57,12 @@ namespace ACE.Server.Managers
 
             var recipe = GetRecipe(player, source, target);
 
+
+            // Custom DR Z code
+
+
+
+
             if (recipe == null)
             {
                 player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The {source.NameWithMaterial} cannot be used on the {target.NameWithMaterial}.", ChatMessageType.Craft));
@@ -410,12 +416,48 @@ namespace ACE.Server.Managers
 
         public static bool TryMutateNative(Player player, WorldObject source, WorldObject target, Recipe recipe, uint dataId)
         {
+            var materialType = source.MaterialType.Value;
+            var xtramodroll = ThreadSafeRandom.Next(1, 300); // helps determine which mod occurs
+            var alamountlow = ThreadSafeRandom.Next(1, 5); // common base bonus AL
+            var modchance = ThreadSafeRandom.Next(1, 200);// the chance that a mod even will roll
+            var resistroll = ThreadSafeRandom.Next(1, 187);
+            var meleedmg = ThreadSafeRandom.Next(2, 6); // the roll for flat dmg for iron
+            var bowmoddmg = ThreadSafeRandom.Next(0.01f, 0.02f); // 1-2% bonus
+            var wanddamage = ThreadSafeRandom.Next(0.001f, 0.004f); // .1% - .4% bonus
+            var splitmodchance = ThreadSafeRandom.Next(1, 187);
+            var retainlore = target.GetProperty(PropertyInt.ItemDifficulty); // ensure that the lore difficulty doesnt increase when spells are added.
+
             // legacy method, unused by default
             switch (dataId)
             {
                 // armor tinkering
                 case 0x38000011:    // Steel
-                    target.ArmorLevel += 20;
+                    if (modchance <= 50) // 25% chance that an an extra mod bonus occurs
+                    {
+                        if (xtramodroll <= 200)
+                        {
+                            var alresult = 20 + alamountlow;
+                            target.ArmorLevel += 20 + alamountlow;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not so lucky, but you also gained {alamountlow} extra AL! New Target AL {target.ArmorLevel}(+{alresult})", ChatMessageType.Broadcast));
+                        }
+
+                        else if (xtramodroll >= 201 && xtramodroll <= 296)
+                        {
+                            target.ArmorLevel += 20;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target AL {target.ArmorLevel}(+20)", ChatMessageType.Broadcast));
+                        }
+
+                        else if (xtramodroll >= 297)
+                        {
+                            target.ArmorLevel += 40;
+                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{player.Name} Rolled a {xtramodroll}!! They just got super lucky applying steel to an item! New Target AL {target.ArmorLevel}(+40)", ChatMessageType.Broadcast));
+                        }
+                    }
+                    else
+                    {
+                        target.ArmorLevel += 20;
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target AL {target.ArmorLevel}(+20)", ChatMessageType.Broadcast));
+                    }
                     break;
 
                  // mutations apparently didn't cap to 2.0 here, clamps are applied in damage calculations though
@@ -551,7 +593,558 @@ namespace ACE.Server.Managers
                     target.ManaConversionMod = (target.ManaConversionMod ?? 0.0f) + 0.01f;
                     break;
                 case 0x3800004B:    // GreenGarnet: 44 -> 4B
-                    target.ElementalDamageMod = (target.ElementalDamageMod ?? 0.0f) + 0.01f;     // + 1% vs. monsters, + 0.25% vs. players
+                    // target.ElementalDamageMod = (target.ElementalDamageMod ?? 0.0f) + 0.01f;     // + 1% vs. monsters, + 0.25% vs. players
+
+                    if (modchance <= 25) // 12.5% chance to even roll a mod to begin with
+                    {
+                        if (xtramodroll <= 100) // 33.3%
+                        {
+                            if (target.GetProperty(PropertyInt.SlayerCreatureType) == null)
+                            {
+                                if (splitmodchance >= 1 && splitmodchance <= 17)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 2);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Banderlings!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 18 && splitmodchance <= 34)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 3);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Drudges!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 35 && splitmodchance <= 51)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 5);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Lugians!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 52 && splitmodchance <= 68)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 13);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Golems!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 69 && splitmodchance <= 85)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 4);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Mosswart!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 86 && splitmodchance <= 102)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 79);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Eaters!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 103 && splitmodchance <= 119)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 17);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Armoredillo!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 120 && splitmodchance <= 136)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 26);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Sclavus!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 137 && splitmodchance <= 153)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 9);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Phyntos Wasps!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 154 && splitmodchance <= 170)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 34);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Moarsmen!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 171 && splitmodchance <= 187)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 100);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Gurogs!", ChatMessageType.Broadcast));
+                                }
+                                else if (target.GetProperty(PropertyInt.SlayerCreatureType) != null)
+                                {
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                }
+                                else
+                                {
+                                    target.ElementalDamageMod += 0.01f;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                }
+
+                                if (xtramodroll >= 101 && xtramodroll <= 75)
+                                {
+                                    var dmgtype = target.GetProperty(PropertyInt.DamageType);
+
+                                    if (dmgtype == 1 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.SlashRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 1);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Slashing", ChatMessageType.Broadcast));
+                                    }
+                                    else if (dmgtype == 2 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.PierceRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 2);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Piercing", ChatMessageType.Broadcast));
+                                    }
+                                    else if (dmgtype == 4 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.BludgeonRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 4);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Bludgeon", ChatMessageType.Broadcast));
+                                    }
+                                    else if (dmgtype == 8 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.ColdRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 8);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Cold", ChatMessageType.Broadcast));
+                                    }
+                                    else if (dmgtype == 16 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.FireRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 16);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your{target.NameWithMaterial}! The item now has Resistance Cleaving: Fire", ChatMessageType.Broadcast));
+                                    }
+                                    else if (dmgtype == 32 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.AcidRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 32);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Acid", ChatMessageType.Broadcast));
+                                    }
+                                    else if (dmgtype == 64 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.ElectricRending))
+                                    {
+                                        target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                        target.SetProperty(PropertyInt.ResistanceModifierType, 64);
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You got lucky applying Green Garnet to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Electric", ChatMessageType.Broadcast));
+                                    }
+                                    else if (target.GetProperty(PropertyInt.ResistanceModifierType) != null)
+                                    {
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                    }
+                                    else
+                                    {
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                    }
+                                }
+                            }// 0.3% 
+
+                            else if (xtramodroll >= 176 && xtramodroll <= 263) // 13.3%
+                            {
+                                if (resistroll >= 1 && resistroll <= 30)
+                                {
+                                    if (!target.Biota.SpellIsKnown(2576, target.BiotaDatabaseLock)
+                                        && !target.Biota.SpellIsKnown(3965, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6107, target.BiotaDatabaseLock))// if no minor add minor
+                                    {
+                                        AddSpell(player, target, SpellId.CANTRIPSTRENGTH2); // add Major Str
+                                        target.Biota.TryRemoveKnownSpell(2583, target.BiotaDatabaseLock); // remove minor
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Strength to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                        target.ItemDifficulty = retainlore;
+                                    }
+                                    else if (target.Biota.SpellIsKnown(2576, target.BiotaDatabaseLock)) // if major upgrade to epic
+                                    {
+                                        AddSpell(player, target, SpellId.CANTRIPSTRENGTH3); // Epic Str
+                                        target.Biota.TryRemoveKnownSpell(2576, target.BiotaDatabaseLock); // remove major                                    
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Strength upgraded to Epic Strength! New Bonus Damage Mod {target.DamageMod:N2}(+4%)", ChatMessageType.Broadcast));
+                                        target.ItemDifficulty = retainlore;
+                                    }
+                                    else if (resistroll >= 31 && resistroll <= 61)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2573, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(4226, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6104, target.BiotaDatabaseLock))// if no minor add minor
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPENDURANCE2); // major end
+                                            target.Biota.TryRemoveKnownSpell(2580, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Endurance to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2573, target.BiotaDatabaseLock)) // if major upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPENDURANCE3); // epic end
+                                            target.Biota.TryRemoveKnownSpell(2573, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Endurance upgraded to Epic Endurance!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6104, target.BiotaDatabaseLock))
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Endurance *done 
+                                    else if (resistroll >= 62 && resistroll <= 92)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2572, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(3963, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6103, target.BiotaDatabaseLock))// if no minor add minor
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPCOORDINATION2); // major coord
+                                            target.Biota.TryRemoveKnownSpell(2579, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Coordination to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2572, target.BiotaDatabaseLock)) // if major upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPCOORDINATION3); // epic coord
+                                            target.Biota.TryRemoveKnownSpell(2572, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Coordination upgraded to Epic Coordination!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6103, target.BiotaDatabaseLock)) // checks if has legendary, if it does throw no mod roll.
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Coordination *done
+                                    else if (resistroll >= 93 && resistroll <= 123)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2575, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(4019, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6106, target.BiotaDatabaseLock))// if no cantrip add minor                                
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPQUICKNESS2); // Major quick
+                                            target.Biota.TryRemoveKnownSpell(2582, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Quickness to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2575, target.BiotaDatabaseLock)) // if major upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPQUICKNESS3); // Epic quick
+                                            target.Biota.TryRemoveKnownSpell(2575, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Quickness upgraded to Epic Quickness!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6106, target.BiotaDatabaseLock)) // checks if has legendary, if it does throw no mod roll.
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Quickness *done
+                                    else if (resistroll >= 124 && resistroll <= 154)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2574, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(3964, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6105, target.BiotaDatabaseLock))// if no cantrip add minor
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPFOCUS2); // major foc
+                                            target.Biota.TryRemoveKnownSpell(2581, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Focus to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2574, target.BiotaDatabaseLock)) // if minor upgrade to major
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPFOCUS3); // epic foc
+                                            target.Biota.TryRemoveKnownSpell(2574, target.BiotaDatabaseLock); // remove Major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Focus upgraded to Epic Focus!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6105, target.BiotaDatabaseLock)) // checks if has legendary, if it does throw no mod roll.
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Focus *done
+                                    else if (resistroll >= 155 && resistroll <= 187)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2577, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(4227, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6101, target.BiotaDatabaseLock))// if no cantrip add minor
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPWILLPOWER2); // Major will
+                                            target.Biota.TryRemoveKnownSpell(2584, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Willpower to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2577, target.BiotaDatabaseLock)) // if minor upgrade to major
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPWILLPOWER3); // EPIC will
+                                            target.Biota.TryRemoveKnownSpell(2577, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Willpower upgraded to Epic Willpower!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6101, target.BiotaDatabaseLock)) // checks if has legendary, if it does throw no mod roll.
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Willpower *done
+                                }// 9% attribute cantrips                        
+                                else if (xtramodroll >= 264 && xtramodroll <= 273) // 10%
+                                {
+                                    if (target.WeaponSkill == Skill.VoidMagic) // Checks for weapon type.
+                                    {
+                                        if (!target.Biota.SpellIsKnown(5428, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(5429, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(6074, target.BiotaDatabaseLock)) // if has no major/epic/leg
+                                        {
+                                            AddSpell(player, target, SpellId.CantripVoidMagicAptitude2); // adds major
+                                            target.ElementalDamageMod += 0.01f;
+                                            target.Biota.TryRemoveKnownSpell(5427, target.BiotaDatabaseLock); // removes minor
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Void Magic Aptitude to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have added Major Void Magic Aptitude to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(5428, target.BiotaDatabaseLock)) // if major already exists upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CantripVoidMagicAptitude3); // adds epic
+                                            target.ElementalDamageMod += 0.01f;
+                                            target.Biota.TryRemoveKnownSpell(5428, target.BiotaDatabaseLock); // removes major
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Void Magic Aptitude upgraded to Epic Void Magic Aptitude!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have upgraded their Major Cantrip, it is now Epic Void Magic Aptitude!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6074, target.BiotaDatabaseLock)) // if Legendary exists throw normal roll
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Void Magic *done
+
+                                    if (target.WeaponSkill == Skill.WarMagic) // Checks for weapon type.
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2534, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(4715, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(6075, target.BiotaDatabaseLock)) // if has no major/epic/leg
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPWARMAGICAPTITUDE2); // adds major
+                                            target.ElementalDamageMod += 0.01f;
+                                            target.Biota.TryRemoveKnownSpell(2569, target.BiotaDatabaseLock); // removes minor
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major War Magic Aptitude to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have added Major War Magic Aptitude to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2534, target.BiotaDatabaseLock)) // if major already exists upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPWARMAGICAPTITUDE3); // adds epic
+                                            target.ElementalDamageMod += 0.01f;
+                                            target.Biota.TryRemoveKnownSpell(2534, target.BiotaDatabaseLock); // removes major
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major War Magic Aptitude upgraded to Epic War Magic Aptitude!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have upgraded their Major Cantrip, it is now Epic War Magic Aptitude!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6074, target.BiotaDatabaseLock)) // if Legendary exists throw normal roll
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// War Magic *done
+
+                                    if (target.WeaponSkill != Skill.VoidMagic || target.WeaponSkill != Skill.WarMagic)
+                                    {
+                                        target.ElementalDamageMod += 0.01f;
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                    }// no wields cannot gain skill type cantrips??? -shrug-
+
+                                }// 3% Weapon skill Cantrips                        
+                                else if (xtramodroll >= 274 && xtramodroll <= 300) // 9.67%
+                                {
+                                    if (resistroll >= 1 && resistroll <= 31)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(3250, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(4670, target.BiotaDatabaseLock)
+                                            && !target.Biota.SpellIsKnown(6098, target.BiotaDatabaseLock))// if no major add major and remove minor.
+                                        {
+                                            if (target.Biota.SpellIsKnown(3251, target.BiotaDatabaseLock))
+                                            {
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You upgraded the Minor Spirit Thirst to Major Spirit Thirst on your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            }// conditional message if minor was detected
+                                            else
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Spirit Thirst to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+
+                                            AddSpell(player, target, SpellId.CantripSpiritThirst2); // Major Spirit Thirst
+                                            target.Biota.TryRemoveKnownSpell(3251, target.BiotaDatabaseLock); // remove minor if any
+
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They added Major Spirit Thirst to it!", ChatMessageType.Broadcast));
+
+                                            target.ElementalDamageMod += 0.01f;
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(3250, target.BiotaDatabaseLock)) // if major upgrade to Epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPSPIRITTHIRST3); // Epic ST
+                                            target.Biota.TryRemoveKnownSpell(3250, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Spirit Thirst upgraded to Epic Spirit Thirst!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They added Epic Spirit Thirst to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6098, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// spirit Thirst *done
+                                    else if (resistroll >= 32 && resistroll <= 62)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(3200, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6086, target.BiotaDatabaseLock)
+                                             && !target.Biota.SpellIsKnown(6087, target.BiotaDatabaseLock))// if no major add major and remove minor.
+                                        {
+                                            if (target.Biota.SpellIsKnown(3199, target.BiotaDatabaseLock))
+                                            {
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You upgraded the Minor Hermetic Link to Major Hermetic Link on your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            }// conditional message if minor was detected
+                                            else
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Hermetic Link to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+
+                                            AddSpell(player, target, SpellId.CantripHermeticLink2); // Major Hermetic Link
+                                            target.Biota.TryRemoveKnownSpell(3199, target.BiotaDatabaseLock); // remove minor if any
+
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They added Major Hermetic Link to it!", ChatMessageType.Broadcast));
+
+                                            target.ElementalDamageMod += 0.01f;
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(3200, target.BiotaDatabaseLock)) // if major upgrade to Epic
+                                        {
+                                            AddSpell(player, target, SpellId.CantripHermeticLink3); // Epic HL
+                                            target.Biota.TryRemoveKnownSpell(3200, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Hermetic Link upgraded to Epic Hermetic Link!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They added Epic Hermetic Link to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6087, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Hermetic Link *done                            
+                                    else if (resistroll >= 63 && resistroll <= 93)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2588, target.BiotaDatabaseLock)
+                                           && !target.Biota.SpellIsKnown(4663, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6091, target.BiotaDatabaseLock))// if minor or nothing add or upgrade to major
+                                        {
+                                            if (target.Biota.SpellIsKnown(2600, target.BiotaDatabaseLock))
+                                            {
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You upgraded the Minor Defender to Major Defender on your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            }// conditional message if minor was detected
+                                            else
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Defender to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+
+                                            AddSpell(player, target, SpellId.CANTRIPDEFENDER2); // Major Def
+                                            target.Biota.TryRemoveKnownSpell(2600, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They added Major Defender to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2588, target.BiotaDatabaseLock)) // if Major upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPDEFENDER3); // epic Def
+                                            target.Biota.TryRemoveKnownSpell(2588, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Defender upgraded to Epic Defender!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They upgraded Major Defender to Epic Defender on it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6091, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Defender *done
+                                    else if (resistroll >= 94 && resistroll <= 124)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2524, target.BiotaDatabaseLock)
+                                           && !target.Biota.SpellIsKnown(4704, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6063, target.BiotaDatabaseLock))// if no minor add minor
+                                        {
+                                            if (target.Biota.SpellIsKnown(2559, target.BiotaDatabaseLock))
+                                            {
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You upgraded the Minor Magic Resistance to Major Magic Resistance on your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            }// conditional message if minor was detected
+                                            else
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Magic Resistance to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+
+
+                                            AddSpell(player, target, SpellId.CANTRIPMAGICRESISTANCE2); // Major Mag D
+                                            target.Biota.TryRemoveKnownSpell(2559, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have added Major Magic Resistance to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2524, target.BiotaDatabaseLock)) // if major upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPMAGICRESISTANCE3); // epic Mag D
+                                            target.Biota.TryRemoveKnownSpell(2524, target.BiotaDatabaseLock); // remove major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Magic Resistance upgraded to Epic Magic Resistance!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have upgraded their Major Cantrip, it is now Epic Magic Resistance!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6063, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Magic Resistance *done
+                                    else if (resistroll >= 125 && resistroll <= 187)
+                                    {
+                                        if (!target.Biota.SpellIsKnown(2515, target.BiotaDatabaseLock)
+                                           && !target.Biota.SpellIsKnown(4696, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6055, target.BiotaDatabaseLock))// if no minor add minor
+                                        {
+                                            if (target.Biota.SpellIsKnown(2550, target.BiotaDatabaseLock))
+                                            {
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You upgraded Minor Invulnerability to Major Invulnerability to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                            }// conditional message if minor was detected
+                                            else
+                                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not bad! You added Major Invulnerability to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+
+
+                                            AddSpell(player, target, SpellId.CANTRIPINVULNERABILITY2); // Major Invul
+                                            target.Biota.TryRemoveKnownSpell(2550, target.BiotaDatabaseLock); // remove minor
+                                            target.ElementalDamageMod += 0.01f;
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have added Major Invulnerability to it!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(2515, target.BiotaDatabaseLock)) // if major upgrade to epic
+                                        {
+                                            AddSpell(player, target, SpellId.CANTRIPINVULNERABILITY3); // Epic Invul
+                                            target.Biota.TryRemoveKnownSpell(2515, target.BiotaDatabaseLock); // remove Major
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Invulnerability upgraded to Epic Invulnerability!", ChatMessageType.Broadcast));
+                                            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"[TINKERING] {player.Name} just got super lucky applying Green Garnet to their {target.NameWithMaterial}! They have upgraded their Major Cantrip, it is now Epic Invulnerability!", ChatMessageType.Broadcast));
+                                            target.ItemDifficulty = retainlore;
+                                        }
+                                        else if (target.Biota.SpellIsKnown(6055, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                                        {
+                                            target.ElementalDamageMod += 0.01f;
+                                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                        }
+                                    }// Invulnerability *done
+                                }
+                            }
+                        }
+                    }
                     break;
 
                 case 0x38000041:
@@ -587,7 +1180,678 @@ namespace ACE.Server.Managers
                 // weapon tinkering
 
                 case 0x3800001A:    // Iron
-                    target.Damage += 1;
+                    if (modchance <= 50) // 38% chance to even roll a mod to begin with
+                    {
+                        if (xtramodroll <= 180) // 33.3%
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+
+                            var dmgresult = 3 + meleedmg;
+                            target.Damage += 3 + meleedmg;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Not so lucky, but you also gained {meleedmg} extra Flat damage! New Target Damage {target.Damage}(+{dmgresult}){variancenote}", ChatMessageType.Broadcast));
+                        }
+                        else if (xtramodroll >= 181 && xtramodroll <= 190)
+                        {
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                        }
+                        else if (xtramodroll >= 210 && xtramodroll <= 234)
+                        {
+                            var dmgtype = target.GetProperty(PropertyInt.DamageType);
+
+                            if (dmgtype == 1 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.SlashRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 1);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Slashing", ChatMessageType.Broadcast));
+                            }
+                            else if (dmgtype == 2 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.PierceRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 2);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Piercing", ChatMessageType.Broadcast));
+                            }
+                            else if (dmgtype == 3 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.PierceRending) && !target.HasImbuedEffect(ImbuedEffectType.SlashRending))
+                            {
+                                var halfchance = ThreadSafeRandom.Next(1, 100);
+                                if (halfchance >= 1 && halfchance <= 50)
+                                {
+                                    target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                    target.SetProperty(PropertyInt.ResistanceModifierType, 1);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Slashing", ChatMessageType.Broadcast));
+                                }
+                                else if (halfchance >= 51 && halfchance <= 100)
+                                {
+                                    target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                    target.SetProperty(PropertyInt.ResistanceModifierType, 2);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Piercing", ChatMessageType.Broadcast));
+                                }
+                            }
+                            else if (dmgtype == 4 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.BludgeonRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 4);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Bludgeon", ChatMessageType.Broadcast));
+                            }
+                            else if (dmgtype == 8 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.ColdRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 8);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Cold", ChatMessageType.Broadcast));
+                            }
+                            else if (dmgtype == 16 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.FireRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 16);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Fire", ChatMessageType.Broadcast));
+                            }
+                            else if (dmgtype == 32 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.AcidRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 32);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Acid", ChatMessageType.Broadcast));
+                            }
+                            else if (dmgtype == 64 && target.GetProperty(PropertyInt.ResistanceModifierType) == null && !target.HasImbuedEffect(ImbuedEffectType.ElectricRending))
+                            {
+                                target.SetProperty(PropertyFloat.ResistanceModifier, 1);
+                                target.SetProperty(PropertyInt.ResistanceModifierType, 64);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"[TINKERING] You just got lucky applying iron to your {target.NameWithMaterial}! The item now has Resistance Cleaving: Electric", ChatMessageType.Broadcast));
+                            }
+                            else if (target.GetProperty(PropertyInt.ResistanceModifierType) != null)
+                            {
+                                string variancenote = null;
+                                if (target.Damage >= 80)
+                                {
+                                    target.DamageVariance += 0.05;
+                                    variancenote = " You've also gained 5% variance.";
+                                    if (target.DamageVariance >= 1.0)
+                                    {
+                                        target.DamageVariance = 0.9;
+                                        variancenote = " Your weapon has reached maximum variance.";
+                                    }
+                                }
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                            }
+                            else
+                            {
+                                string variancenote = null;
+                                if (target.Damage >= 80)
+                                {
+                                    target.DamageVariance += 0.05;
+                                    variancenote = " You've also gained 5% variance.";
+                                    if (target.DamageVariance >= 1.0)
+                                    {
+                                        target.DamageVariance = 0.9;
+                                        variancenote = " Your weapon has reached maximum variance.";
+                                    }
+                                }
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                            }
+                        }
+                        else if (xtramodroll <= 100) // 33.3%
+                        {
+                            if (target.GetProperty(PropertyInt.SlayerCreatureType) == null)
+                            {
+                                if (splitmodchance >= 1 && splitmodchance <= 17)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 2);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Banderlings!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 18 && splitmodchance <= 34)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 3);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Drudges!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 35 && splitmodchance <= 51)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 5);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Lugians!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 52 && splitmodchance <= 68)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 13);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Golems!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 69 && splitmodchance <= 85)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 4);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Mosswart!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 86 && splitmodchance <= 102)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 79);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Eaters!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 103 && splitmodchance <= 119)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 17);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Armoredillo!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 120 && splitmodchance <= 136)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 26);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Sclavus!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 137 && splitmodchance <= 153)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 9);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Phyntos Wasps!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 154 && splitmodchance <= 170)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 34);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Moarsmen!", ChatMessageType.Broadcast));
+                                }
+                                else if (splitmodchance >= 171 && splitmodchance <= 187)
+                                {
+                                    target.SetProperty(PropertyInt.SlayerCreatureType, 100);
+                                    target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Gurogs!", ChatMessageType.Broadcast));
+                                }
+                                else if (target.GetProperty(PropertyInt.SlayerCreatureType) != null)
+                                {
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                }
+                                else
+                                {
+                                    target.Damage += 1;
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                                }
+                            }
+                        }
+                    }
+                    else if (xtramodroll <= 100) // 33.3%
+                    {
+                        if (target.GetProperty(PropertyInt.SlayerCreatureType) == null)
+                        {
+                            if (splitmodchance >= 1 && splitmodchance <= 17)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 2);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Banderlings!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 18 && splitmodchance <= 34)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 3);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Drudges!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 35 && splitmodchance <= 51)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 5);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Lugians!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 52 && splitmodchance <= 68)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 13);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Golems!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 69 && splitmodchance <= 85)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 4);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Mosswart!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 86 && splitmodchance <= 102)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 79);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Eaters!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 103 && splitmodchance <= 119)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 17);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Armoredillo!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 120 && splitmodchance <= 136)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 26);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Sclavus!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 137 && splitmodchance <= 153)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 9);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Phyntos Wasps!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 154 && splitmodchance <= 170)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 34);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Moarsmen!", ChatMessageType.Broadcast));
+                            }
+                            else if (splitmodchance >= 171 && splitmodchance <= 187)
+                            {
+                                target.SetProperty(PropertyInt.SlayerCreatureType, 100);
+                                target.SetProperty(PropertyFloat.SlayerDamageBonus, 1.25);
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You rolled {xtramodroll}. Your {target.NameWithMaterial} has just been upgraded into a random creature slayer. It now does bonus damage against Gurogs!", ChatMessageType.Broadcast));
+                            }
+                            else if (target.GetProperty(PropertyInt.SlayerCreatureType) != null)
+                            {
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                            }
+                            else
+                            {
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time.", ChatMessageType.Broadcast));
+                            }
+                        }
+                    }
+                    else if (xtramodroll == 235)
+                    {
+                        string variancenote = null;
+                        if (target.Damage >= 80)
+                        {
+                            target.DamageVariance += 0.05;
+                            variancenote = " You've also gained 5% variance.";
+                            if (target.DamageVariance >= 1.0)
+                            {
+                                target.DamageVariance = 0.9;
+                                variancenote = " Your weapon has reached maximum variance.";
+                            }
+                        }
+                    }
+                    else if (xtramodroll >= 264 && xtramodroll <= 273) // 10%
+                    {
+                        if (target.WeaponSkill == Skill.LightWeapons) // Checks for weapon type.
+                        {
+                            if (!target.Biota.SpellIsKnown(2530, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(4711, target.BiotaDatabaseLock)
+                                   && !target.Biota.SpellIsKnown(6043, target.BiotaDatabaseLock)) // if no cantrip add minor                                
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPLIGHTWEAPONSAPTITUDE2); // adds major
+                                target.Biota.TryRemoveKnownSpell(2565, target.BiotaDatabaseLock); // removes minor
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Light Weapons Aptitude to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(2530, target.BiotaDatabaseLock)) // if major already exists upgrade to epic
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPLIGHTWEAPONSAPTITUDE3); // adds epic
+                                target.Biota.TryRemoveKnownSpell(2530, target.BiotaDatabaseLock); // removes major
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Light Weapons Aptitude upgraded to Epic Light Weapons Aptitude!", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(6043, target.BiotaDatabaseLock)) // if Legendary exists throw normal roll
+                            {
+                                string variancenote = null;
+                                if (target.Damage >= 80)
+                                {
+                                    target.DamageVariance += 0.05;
+                                    variancenote = " You've also gained 5% variance.";
+                                    if (target.DamageVariance >= 1.0)
+                                    {
+                                        target.DamageVariance = 0.9;
+                                        variancenote = " Your weapon has reached maximum variance.";
+                                    }
+                                }
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                            }
+
+                        }// Light Weapons *done
+                        else if (target.WeaponSkill == Skill.HeavyWeapons) // Checks for weapon type.
+                        {
+                            if (!target.Biota.SpellIsKnown(2531, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(4712, target.BiotaDatabaseLock)
+                                   && !target.Biota.SpellIsKnown(6072, target.BiotaDatabaseLock)) // if no cantrip add minor                                
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPHEAVYWEAPONSAPTITUDE2); // adds major
+                                target.Biota.TryRemoveKnownSpell(2566, target.BiotaDatabaseLock); // removes minor
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Heavy Weapons Aptitude to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(2531, target.BiotaDatabaseLock)) // if major already exists upgrade to epic
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPHEAVYWEAPONSAPTITUDE3); // adds epic
+                                target.Biota.TryRemoveKnownSpell(2531, target.BiotaDatabaseLock); // removes major
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Heavy Weapons Aptitude upgraded to Epic Heavy Weapons Aptitude!", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(6072, target.BiotaDatabaseLock)) // if Legendary exists throw normal roll
+                            {
+                                string variancenote = null;
+                                if (target.Damage >= 80)
+                                {
+                                    target.DamageVariance += 0.05;
+                                    variancenote = " You've also gained 5% variance.";
+                                    if (target.DamageVariance >= 1.0)
+                                    {
+                                        target.DamageVariance = 0.9;
+                                        variancenote = " Your weapon has reached maximum variance.";
+                                    }
+                                }
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+3){variancenote}", ChatMessageType.Broadcast));
+                            }
+                        }// Heavy Weapons *done
+                        else if (target.WeaponSkill == Skill.FinesseWeapons) // Checks for weapon type.
+                        {
+                            if (!target.Biota.SpellIsKnown(2509, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(4691, target.BiotaDatabaseLock)
+                                   && !target.Biota.SpellIsKnown(6047, target.BiotaDatabaseLock)) // if no cantrip add minor                                
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPFINESSEWEAPONSAPTITUDE2); // adds major
+                                target.Biota.TryRemoveKnownSpell(2544, target.BiotaDatabaseLock); // removes minor
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Finesse Weapons Aptitude to your {target.NameWithMaterial}!", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(2509, target.BiotaDatabaseLock)) // if major already exists upgrade to epic
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPFINESSEWEAPONSAPTITUDE3); // adds epic
+                                target.Biota.TryRemoveKnownSpell(2509, target.BiotaDatabaseLock); // removes major
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Finesse Weapons Aptitude upgraded to Epic Finesse Weapons Aptitude!", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(6047, target.BiotaDatabaseLock)) // if Legendary exists throw normal roll
+                            {
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            }
+                        }// Finesse Weapons *done
+                        else
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                        }
+
+                    }// 3%
+                    else if (xtramodroll >= 274 && xtramodroll <= 300) // 9.67%
+                    {
+                        if (resistroll >= 1 && resistroll <= 30)
+                        {
+                            if (!target.Biota.SpellIsKnown(2586, target.BiotaDatabaseLock)
+                                && !target.Biota.SpellIsKnown(4661, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6089, target.BiotaDatabaseLock))// if no minor add minor                                
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPBLOODTHIRST2); // major bt
+                                target.Biota.TryRemoveKnownSpell(2598, target.BiotaDatabaseLock); // remove minor
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Blood Thirst to your {target.NameWithMaterial}! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(2586, target.BiotaDatabaseLock)) // if major upgrade to epic
+                            {
+                                AddSpell(player, target, SpellId.CANTRIPBLOODTHIRST3); // epic bt
+                                target.Biota.TryRemoveKnownSpell(2586, target.BiotaDatabaseLock); // remove major
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Blood Thirst upgraded to Epic Blood Thirst! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                                target.ItemDifficulty = retainlore;
+                            }
+                            else if (target.Biota.SpellIsKnown(6089, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                            {
+                                string variancenote = null;
+                                if (target.Damage >= 80)
+                                {
+                                    target.DamageVariance += 0.05;
+                                    variancenote = " You've also gained 5% variance.";
+                                    if (target.DamageVariance >= 1.0)
+                                    {
+                                        target.DamageVariance = 0.9;
+                                        variancenote = " Your weapon has reached maximum variance.";
+                                    }
+                                }
+                                target.Damage += 1;
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                            }
+                        }
+                    }// Blood Thirst *done
+                    else if (resistroll >= 31 && resistroll <= 61)
+                    {
+                        if (!target.Biota.SpellIsKnown(2596, target.BiotaDatabaseLock)
+                           && !target.Biota.SpellIsKnown(4672, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6100, target.BiotaDatabaseLock))// if no minor add minor                                
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPSWIFTHUNTER2); // Major SH
+                            target.Biota.TryRemoveKnownSpell(2608, target.BiotaDatabaseLock); // remove minor
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Swift Hunter to your {target.NameWithMaterial}! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(2596, target.BiotaDatabaseLock)) // if major upgrade to epic
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPSWIFTHUNTER3); // Epic SH
+                            target.Biota.TryRemoveKnownSpell(2596, target.BiotaDatabaseLock); // remove major
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Swift Hunter upgraded to Epic Swift Hunter! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(6100, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                        }
+                    }// Swift Hunter *done
+                    else if (resistroll >= 62 && resistroll <= 92)
+                    {
+                        if (!target.Biota.SpellIsKnown(2603, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(2591, target.BiotaDatabaseLock)
+                           && !target.Biota.SpellIsKnown(4666, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6094, target.BiotaDatabaseLock))// if no minor add minor                                
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPHEARTTHIRST2); // Major SH
+                            target.Biota.TryRemoveKnownSpell(2603, target.BiotaDatabaseLock); // remove minor
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Heart Thirst to your {target.NameWithMaterial}! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(2591, target.BiotaDatabaseLock)) // if major upgrade to epic
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPHEARTTHIRST3); // Epic SH
+                            target.Biota.TryRemoveKnownSpell(2591, target.BiotaDatabaseLock); // remove major
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Heart Thirst upgraded to Epic Heart Thirst! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(6094, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                        }
+                    }// Heart Thirst *done
+                    else if (resistroll >= 93 && resistroll <= 123)
+                    {
+                        if (!target.Biota.SpellIsKnown(2588, target.BiotaDatabaseLock)
+                           && !target.Biota.SpellIsKnown(4663, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6091, target.BiotaDatabaseLock))// if no minor add minor                                
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPDEFENDER2); // Major Def
+                            target.Biota.TryRemoveKnownSpell(2600, target.BiotaDatabaseLock); // remove minor
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Defender to your {target.NameWithMaterial}! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(2588, target.BiotaDatabaseLock)) // if major upgrade to epic
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPDEFENDER3); // Epic Def
+                            target.Biota.TryRemoveKnownSpell(2588, target.BiotaDatabaseLock); // remove major
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Defender upgraded to Epic Defender! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(6091, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1){variancenote}", ChatMessageType.Broadcast));
+                        }
+                    }// Defender *done
+                    else if (resistroll >= 124 && resistroll <= 154)
+                    {
+                        if (!target.Biota.SpellIsKnown(2559, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(2524, target.BiotaDatabaseLock)
+                           && !target.Biota.SpellIsKnown(4704, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6063, target.BiotaDatabaseLock))// if no minor add minor                                
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPMAGICRESISTANCE2); // Major Mag D
+                            target.Biota.TryRemoveKnownSpell(2559, target.BiotaDatabaseLock); // remove minor
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Magic Resistance to your {target.NameWithMaterial}! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(2524, target.BiotaDatabaseLock)) // if major upgrade to epic
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPMAGICRESISTANCE3); // Epic Mag D
+                            target.Biota.TryRemoveKnownSpell(2524, target.BiotaDatabaseLock); // remove major
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Magic Resistance upgraded to Epic Magic Resistance! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(6063, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+3){variancenote}", ChatMessageType.Broadcast));
+                        }
+                    }// Magic Resistance *done
+                    else if (resistroll >= 155 && resistroll <= 187)
+                    {
+                        if (!target.Biota.SpellIsKnown(2515, target.BiotaDatabaseLock)
+                           && !target.Biota.SpellIsKnown(4696, target.BiotaDatabaseLock) && !target.Biota.SpellIsKnown(6055, target.BiotaDatabaseLock))// if no minor add minor                                
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPINVULNERABILITY2); // Major Invul
+                            target.Biota.TryRemoveKnownSpell(2550, target.BiotaDatabaseLock); // remove minor
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! You added Major Invulnerability to your {target.NameWithMaterial}! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(2515, target.BiotaDatabaseLock)) // if major upgrade to epic
+                        {
+                            AddSpell(player, target, SpellId.CANTRIPINVULNERABILITY3); // Epic Invul
+                            target.Biota.TryRemoveKnownSpell(2515, target.BiotaDatabaseLock); // remove major
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Rolled {xtramodroll}. Nice! Your {target.NameWithMaterial} had its Major Invulnerability upgraded to Epic Invulnerability! New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                            target.ItemDifficulty = retainlore;
+                        }
+                        else if (target.Biota.SpellIsKnown(6055, target.BiotaDatabaseLock)) // if has legendary throw no mod chance
+                        {
+                            string variancenote = null;
+                            if (target.Damage >= 80)
+                            {
+                                target.DamageVariance += 0.05;
+                                variancenote = " You've also gained 5% variance.";
+                                if (target.DamageVariance >= 1.0)
+                                {
+                                    target.DamageVariance = 0.9;
+                                    variancenote = " Your weapon has reached maximum variance.";
+                                }
+                            }
+                            target.Damage += 1;
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+3){variancenote}", ChatMessageType.Broadcast));
+                        }
+                    }// Invulnerability *done
+                    else
+                    {
+                        target.Damage += 1;
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"No mod chance roll. Better luck next time. New Target Damage {target.Damage}(+1)", ChatMessageType.Broadcast));
+                    }
                     break;
                 case 0x3800001B:    // Mahogany
                     target.DamageMod += 0.04f;
@@ -1459,6 +2723,40 @@ namespace ACE.Server.Managers
         /// flag to use c# logic instead of mutate script logic
         /// </summary>
         private static readonly bool useMutateNative = false;
+
+        // DR Z Custom code
+
+        public static bool AddImbuedEffect(Player player, WorldObject target, ImbuedEffectType effect)
+        {
+            var imbuedEffects = GetImbuedEffects(target);
+
+            if (imbuedEffects.HasFlag(effect))
+                return false;     // already present
+
+            imbuedEffects |= effect;
+
+            if (target.GetProperty(PropertyInt.ImbuedEffect) == null)
+                target.SetProperty(PropertyInt.ImbuedEffect, (int)effect);
+
+            else if (target.GetProperty(PropertyInt.ImbuedEffect2) == null)
+                target.SetProperty(PropertyInt.ImbuedEffect2, (int)effect);
+
+            else if (target.GetProperty(PropertyInt.ImbuedEffect3) == null)
+                target.SetProperty(PropertyInt.ImbuedEffect3, (int)effect);
+
+            else if (target.GetProperty(PropertyInt.ImbuedEffect4) == null)
+                target.SetProperty(PropertyInt.ImbuedEffect4, (int)effect);
+
+            else if (target.GetProperty(PropertyInt.ImbuedEffect5) == null)
+                target.SetProperty(PropertyInt.ImbuedEffect5, (int)effect);
+
+            else
+                return false;
+
+            return true;
+        }
+
+        //
 
         public static bool TryMutate(Player player, WorldObject source, WorldObject target, Recipe recipe, uint dataId, HashSet<uint> modified)
         {
