@@ -842,6 +842,8 @@ namespace ACE.Server.WorldObjects
             var damageResistRatingMod = 1.0f;
             var critDamageResistRatingMod = 1.0f;
             var pkDamageResistRatingMod = 1.0f;
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;
+            var pvpRatingsCap = PropertyManager.GetDouble("pvp_dmg_mod_ratings_cap").Item;
 
             WorldObject equippedCloak = null;
 
@@ -870,15 +872,33 @@ namespace ACE.Server.WorldObjects
                 }
 
                 var damageRating = sourceCreature?.GetDamageRating() ?? 0;
+                if (pkBattle)
+                {
+                    damageRating = damageRating > pvpRatingsCap ? (int)pvpRatingsCap : damageRating;
+                    damageRating = Convert.ToInt32(Math.Round(damageRating * pvpRatingsMod));
+                }
+
                 damageRatingMod = Creature.AdditiveCombine(Creature.GetPositiveRatingMod(damageRating), heritageMod, sneakAttackMod);
 
                 damageResistRatingMod = target.GetDamageResistRatingMod(CombatType.Magic);
+                if (pkBattle)
+                {
+                    damageResistRatingMod = damageResistRatingMod > pvpRatingsCap ? (int)pvpRatingsCap : damageResistRatingMod;
+                    damageResistRatingMod = Convert.ToInt32(Math.Round(damageResistRatingMod * pvpRatingsMod));
+                }
 
                 if (critical)
                 {
                     critDamageRatingMod = Creature.GetPositiveRatingMod(sourceCreature?.GetCritDamageRating() ?? 0);
                     critDamageResistRatingMod = Creature.GetNegativeRatingMod(target.GetCritDamageResistRating());
+                    if (pkBattle)
+                    {
+                        critDamageRatingMod = critDamageRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : critDamageRatingMod;
+                        critDamageRatingMod = Convert.ToInt32(Math.Round(critDamageRatingMod * pvpRatingsMod));
 
+                        critDamageResistRatingMod = critDamageResistRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : critDamageResistRatingMod;
+                        critDamageResistRatingMod = Convert.ToInt32(Math.Round(critDamageResistRatingMod * pvpRatingsMod));
+                    }
                     damageRatingMod = Creature.AdditiveCombine(damageRatingMod, critDamageRatingMod);
                     damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, critDamageResistRatingMod);
                 }

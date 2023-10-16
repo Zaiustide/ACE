@@ -171,6 +171,8 @@ namespace ACE.Server.Entity
             var playerDefender = defender as Player;
 
             var pkBattle = playerAttacker != null && playerDefender != null;
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;
+            var pvpRatingsCap = PropertyManager.GetDouble("pvp_dmg_mod_ratings_cap").Item;
 
             //If defender is town control boss and attacker is not a player in PK state, dmg is zero
             if (playerDefender == null)
@@ -293,6 +295,13 @@ namespace ACE.Server.Entity
 
             // ratings
             DamageRatingBaseMod = Creature.GetPositiveRatingMod(attacker.GetDamageRating());
+
+            if (pkBattle)
+            {
+                DamageRatingBaseMod = DamageRatingBaseMod > pvpRatingsCap ? (float)pvpRatingsCap : DamageRatingBaseMod;
+                DamageRatingBaseMod = DamageRatingBaseMod * (float)pvpRatingsMod;
+            }
+
             RecklessnessMod = Creature.GetRecklessnessMod(attacker, defender);
             SneakAttackMod = attacker.GetSneakAttackMod(defender);
             HeritageMod = attacker.GetHeritageBonus(Weapon) ? 1.05f : 1.0f;
@@ -339,6 +348,11 @@ namespace ACE.Server.Entity
                     CriticalDamageMod = 1.0f + WorldObject.GetWeaponCritDamageMod(Weapon, attacker, attackSkill, defender);
 
                     CriticalDamageRatingMod = Creature.GetPositiveRatingMod(attacker.GetCritDamageRating());
+                    if (pkBattle)
+                    {
+                        CriticalDamageRatingMod = CriticalDamageRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : CriticalDamageRatingMod;
+                        CriticalDamageRatingMod = CriticalDamageRatingMod * (float)pvpRatingsMod;
+                    }
 
                     // recklessness excluded from crits
                     RecklessnessMod = 1.0f;
@@ -413,10 +427,20 @@ namespace ACE.Server.Entity
 
             // damage resistance rating
             DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);
+            if (pkBattle)
+            {
+                DamageResistanceRatingMod = DamageResistanceRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : DamageResistanceRatingMod;
+                DamageResistanceRatingMod = DamageResistanceRatingMod * (float)pvpRatingsMod;
+            }
 
             if (IsCritical)
             {
                 CriticalDamageResistanceRatingMod = Creature.GetNegativeRatingMod(defender.GetCritDamageResistRating());
+                if (pkBattle)
+                {
+                    CriticalDamageResistanceRatingMod = CriticalDamageResistanceRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : CriticalDamageResistanceRatingMod;
+                    CriticalDamageResistanceRatingMod = CriticalDamageResistanceRatingMod * (float)pvpRatingsMod;
+                }
 
                 DamageResistanceRatingMod = Creature.AdditiveCombine(DamageResistanceRatingBaseMod, CriticalDamageResistanceRatingMod);
             }

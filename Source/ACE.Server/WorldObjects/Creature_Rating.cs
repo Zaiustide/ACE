@@ -467,8 +467,11 @@ namespace ACE.Server.WorldObjects
 
             // equipment ratings
             var equipment = GetEquippedItemsRatingSum(PropertyInt.GearPKDamageRating);
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;            
 
-            return pkDamageRating + equipment + enchantments;
+            var result = Convert.ToInt32(Math.Round((pkDamageRating + equipment + enchantments) * pvpRatingsMod));
+            var pvpRatingsCap = PropertyManager.GetDouble("pvp_dmg_mod_ratings_cap").Item;
+            return result > pvpRatingsCap ? (int)pvpRatingsCap : result;
         }
 
         public int GetPKDamageResistRating()
@@ -480,18 +483,23 @@ namespace ACE.Server.WorldObjects
 
             // equipment ratings
             var equipment = GetEquippedItemsRatingSum(PropertyInt.GearPKDamageResistRating);
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;
 
-            return pkDamageResistRating + equipment + enchantments;
+            var result = Convert.ToInt32(Math.Round((pkDamageResistRating + equipment + enchantments) * pvpRatingsMod));
+            var pvpRatingsCap = PropertyManager.GetDouble("pvp_dmg_mod_ratings_cap").Item;
+            return result > pvpRatingsCap ? (int)pvpRatingsCap : result;
         }
 
         public int GetGearPKDamageRating()
         {
-            return GetEquippedItemsRatingSum(PropertyInt.GearPKDamageRating);
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;
+            return Convert.ToInt32(Math.Round(GetEquippedItemsRatingSum(PropertyInt.GearPKDamageRating) * pvpRatingsMod));
         }
 
         public int GetGearPKDamageResistRating()
         {
-            return GetEquippedItemsRatingSum(PropertyInt.GearPKDamageResistRating);
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;
+            return Convert.ToInt32(Math.Round(GetEquippedItemsRatingSum(PropertyInt.GearPKDamageResistRating) * pvpRatingsMod));
         }
 
         public int GetItemManaReductionRating()

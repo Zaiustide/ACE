@@ -1323,6 +1323,9 @@ namespace ACE.Server.WorldObjects.Managers
                 }
             }
 
+            var pvpRatingsMod = PropertyManager.GetDouble("pvp_dmg_mod_ratings_bonus").Item;
+            var pvpRatingsCap = PropertyManager.GetDouble("pvp_dmg_mod_ratings_cap").Item;
+
             // get the total tick amount
             var tickAmountTotal = 0.0f;
             foreach (var enchantment in enchantments)
@@ -1360,15 +1363,20 @@ namespace ACE.Server.WorldObjects.Managers
 
                 var damageResistRatingMod = creature.GetDamageResistRatingMod(CombatType.Magic, useNetherDotDamageRating);   // df?
 
+                var dotResistRatingMod = Creature.GetNegativeRatingMod(creature.GetDotResistanceRating());  // should this be here, or somewhere else?
+                                                                                                            // should this affect NetherDotDamageRating?
                 if (sourcePlayer != null && targetPlayer != null)
                 {
+                    damageResistRatingMod = damageResistRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : damageResistRatingMod;
+                    damageResistRatingMod = damageResistRatingMod * (float)pvpRatingsMod;
+
                     var pkDamageResistRatingMod = Creature.GetNegativeRatingMod(targetPlayer.GetPKDamageResistRating());
 
                     damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, pkDamageResistRatingMod);
-                }
 
-                var dotResistRatingMod = Creature.GetNegativeRatingMod(creature.GetDotResistanceRating());  // should this be here, or somewhere else?
-                                                                                                            // should this affect NetherDotDamageRating?
+                    dotResistRatingMod = dotResistRatingMod > pvpRatingsCap ? (float)pvpRatingsCap : dotResistRatingMod;
+                    dotResistRatingMod = dotResistRatingMod * (float)pvpRatingsMod;
+                }                
 
                 //Console.WriteLine("DR: " + Creature.ModToRating(damageRatingMod));
                 //Console.WriteLine("DRR: " + Creature.NegativeModToRating(damageResistRatingMod));
@@ -1385,7 +1393,7 @@ namespace ACE.Server.WorldObjects.Managers
                 {
                     var arenaEvent = ArenaManager.GetArenaEventByLandblock(targetPlayer.Location.Landblock);
                     if (arenaEvent != null && arenaEvent.IsOvertime)
-                        tickAmount = tickAmount * arenaEvent.OvertimeHealingModifier * 0.25f;
+                        tickAmount = tickAmount * arenaEvent.OvertimeHealingModifier * 0.125f;
                 }
 
                 // make sure the target's current health is not exceeded
