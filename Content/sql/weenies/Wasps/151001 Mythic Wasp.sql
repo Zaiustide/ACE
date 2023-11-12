@@ -16,8 +16,9 @@ VALUES (151001,   1,         16) /* ItemType - Creature */
      , (151001,  68,          9) /* TargetingTactic - Random, TopDamager */
      , (151001,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (151001, 133,          2) /* ShowableOnRadar - ShowMovement */
-     , (151001, 146,   15000000) /* XpOverride */
-     , (151001, 332,   400); /* LuminanceAward */
+     , (151001, 146,   4000000) /* XpOverride */
+     , (151001, 332,   200); /* LuminanceAward */
+
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (151001,   1, True ) /* Stuck */
@@ -91,7 +92,7 @@ VALUES (151001,   1, 500, 0, 0) /* Strength */
      , (151001,   6, 900, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (151001,   1,   22000, 0, 0, 22000) /* MaxHealth */
+VALUES (151001,   1,   15000, 0, 0, 15000) /* MaxHealth */
      , (151001,   3,   8000, 0, 0, 8000) /* MaxStamina */
      , (151001,   5,   10000, 0, 0, 10000) /* MaxMana */;
 
