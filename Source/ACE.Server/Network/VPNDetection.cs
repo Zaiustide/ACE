@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using ACE.Server.Managers;
 using log4net;
+using ACE.Adapter.GDLE.Models;
 
 namespace ACE.Server.Network
 {
@@ -66,7 +67,7 @@ namespace ACE.Server.Network
                         PropertyNameCaseInsensitive = true,
                     };
 
-                    var d1 = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(data);
+                    var d1 = JsonSerializer.Deserialize<dynamic>(data);
                     var d = d1[ip];
                     var ispinfo = new ISPInfo()
                     {

@@ -12,7 +12,6 @@ using ACE.Server.WorldObjects;
 using ACE.Server.WorldObjects.Managers;
 using log4net;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +23,6 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace ACE.Server.Entity
 {
