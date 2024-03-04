@@ -65,7 +65,8 @@ VALUES (490259,   1,       5) /* HeartbeatInterval */
      , (490259, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490259,   1, 'Colossal Sleech') /* Name */;
+VALUES (490259,   1, 'Colossal Sleech') /* Name */
+   , (490259,  45, 'ColossalSleechKillTask') /* KillQuest */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490259,   1, 0x020014A0) /* Setup */
