@@ -264,10 +264,6 @@ VALUES (0x701C904B,   568, 0x01C90233, 80, -24.75, 0, 0, 0, 0, -1, False, '2005-
 /* @teleloc 0x01C90233 [80.000000 -24.750000 0.000000] 0.000000 0.000000 0.000000 -1.000000 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C904C, 151002, 0x01C901D1, 61.6175, -80.3056, -6.063, -0.708791, 0, 0, -0.705419, False, '2022-03-21 20:47:58');
-/* @teleloc 0x01C901D1 [61.617500 -80.305603 -6.063000] -0.708791 0.000000 0.000000 -0.705419 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x701C904D, 480607, 0x01C901D1, 56.0273, -79.8823, -6, -0.687989, 0, 0, -0.725722, False, '2023-07-09 16:48:05'); /* Darkbeat's Storage Locker */
 /* @teleloc 0x01C901D1 [56.027302 -79.882301 -6.000000] -0.687989 0.000000 0.000000 -0.725722 */
 
