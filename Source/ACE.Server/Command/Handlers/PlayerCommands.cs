@@ -547,305 +547,305 @@ namespace ACE.Server.Command.Handlers
         }
 
 
-        [CommandHandler("arena", AccessLevel.Player, CommandHandlerFlag.None, 1,
-            "The arena command is used to join an arena event or get information about arena statistics")]
-        public static void HandleArena(Session session, params string[] parameters)
-        {
-            if (parameters.Count() < 1)
-            {
-                CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  See the arena help file below for valid parameters.");
-                parameters[0] = "help";
-            }
+        //[CommandHandler("arena", AccessLevel.Player, CommandHandlerFlag.None, 1,
+        //    "The arena command is used to join an arena event or get information about arena statistics")]
+        //public static void HandleArena(Session session, params string[] parameters)
+        //{
+        //    if (parameters.Count() < 1)
+        //    {
+        //        CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  See the arena help file below for valid parameters.");
+        //        parameters[0] = "help";
+        //    }
 
-            if (session.Player.LastArenaCommandTimestamp.HasValue && Time.GetDateTimeFromTimestamp(session.Player.LastArenaCommandTimestamp.Value) > DateTime.Now.AddSeconds(-3))
-            {
-                CommandHandlerHelper.WriteOutputInfo(session, "To prevent abuse, you can only issue one arena command every 3 seconds. Please try again.");
-                return;
-            }
-            else
-            {
-                session.Player.LastArenaCommandTimestamp = Time.GetUnixTime(DateTime.Now);
-            }
+        //    if (session.Player.LastArenaCommandTimestamp.HasValue && Time.GetDateTimeFromTimestamp(session.Player.LastArenaCommandTimestamp.Value) > DateTime.Now.AddSeconds(-3))
+        //    {
+        //        CommandHandlerHelper.WriteOutputInfo(session, "To prevent abuse, you can only issue one arena command every 3 seconds. Please try again.");
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        session.Player.LastArenaCommandTimestamp = Time.GetUnixTime(DateTime.Now);
+        //    }
 
-            var actionType = parameters[0];
+        //    var actionType = parameters[0];
 
-            switch (actionType?.ToLower())
-            {
-                case "join":
+        //    switch (actionType?.ToLower())
+        //    {
+        //        case "join":
 
-                    string eventType = "1v1";
-                    if (parameters.Length > 1)
-                    {
-                        eventType = parameters[1];
+        //            string eventType = "1v1";
+        //            if (parameters.Length > 1)
+        //            {
+        //                eventType = parameters[1];
 
-                        for (int i = 2; i < parameters.Length; i++)
-                        {
-                            eventType += parameters[i];
-                        }
+        //                for (int i = 2; i < parameters.Length; i++)
+        //                {
+        //                    eventType += parameters[i];
+        //                }
 
-                        if(!ArenaManager.IsValidEventType(eventType))
-                        {
-                            CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  The Join command does not support the event type {eventType}. Proper syntax is as follows...\n  To join a 1v1 arena match: /arena join\n  To join a specific type of arena match, replace eventType with the string code for the type of match you want to join, such as 1v1, 2v2, ffa. : /arena join eventType\n  To get your current character's stats: /arena stats\n  To get a named character's stats, replace characterName with the target character's name: /arena stats characterName");
-                            return;
-                        }
-                    }
+        //                if(!ArenaManager.IsValidEventType(eventType))
+        //                {
+        //                    CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  The Join command does not support the event type {eventType}. Proper syntax is as follows...\n  To join a 1v1 arena match: /arena join\n  To join a specific type of arena match, replace eventType with the string code for the type of match you want to join, such as 1v1, 2v2, ffa. : /arena join eventType\n  To get your current character's stats: /arena stats\n  To get a named character's stats, replace characterName with the target character's name: /arena stats characterName");
+        //                    return;
+        //                }
+        //            }
 
-                    string resultMsg = JoinArenaQueue(session, eventType.ToLower());
-                    if (resultMsg != null)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, resultMsg);
-                        return;
-                    }
-                    break;
+        //            string resultMsg = JoinArenaQueue(session, eventType.ToLower());
+        //            if (resultMsg != null)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, resultMsg);
+        //                return;
+        //            }
+        //            break;
 
-                case "cancel":
+        //        case "cancel":
                     
-                    ArenaManager.PlayerCancel(session.Player.Character.Id);
+        //            ArenaManager.PlayerCancel(session.Player.Character.Id);
 
-                    break;
+        //            break;
 
-                case "forfeit":
-                    CommandHandlerHelper.WriteOutputInfo(session, "Forfeit feature not yet supported, check back later");
-                    break;
+        //        case "forfeit":
+        //            CommandHandlerHelper.WriteOutputInfo(session, "Forfeit feature not yet supported, check back later");
+        //            break;
 
-                case "observe":
-                case "watch":
-                    string eventIdParam = "";
+        //        case "observe":
+        //        case "watch":
+        //            string eventIdParam = "";
 
-                    if(!PropertyManager.GetBool("arena_allow_observers").Item)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"The arena observer feature is currently disabled");
-                        return;
-                    }
+        //            if(!PropertyManager.GetBool("arena_allow_observers").Item)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"The arena observer feature is currently disabled");
+        //                return;
+        //            }
 
-                    if (parameters.Length != 2)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters. The {actionType} command requires an EventID parameter to specify which event to join as an observer. Use the \"/arena info\" command to list all active arena events, including their EventID values.\nUsage: To watch an arena event as an observer /arena watch EventID");
-                        return;
-                    }
+        //            if (parameters.Length != 2)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters. The {actionType} command requires an EventID parameter to specify which event to join as an observer. Use the \"/arena info\" command to list all active arena events, including their EventID values.\nUsage: To watch an arena event as an observer /arena watch EventID");
+        //                return;
+        //            }
 
-                    //Parse EventID param to int and verify it corresponds to an active event
-                    int eventID = 0;
-                    eventIdParam = parameters[1];
-                    try
-                    {
-                        eventID = int.Parse(eventIdParam);
-                    }
-                    catch(Exception)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters. Invalid EventID value {eventIdParam}\nThe {actionType} command requires an EventID parameter to specify which event to join as an observer. Use the \"/arena info\" command to list all active arena events, including their EventID values.\nUsage: To watch an arena event as an observer /arena watch EventID");
-                        return;
-                    }
+        //            //Parse EventID param to int and verify it corresponds to an active event
+        //            int eventID = 0;
+        //            eventIdParam = parameters[1];
+        //            try
+        //            {
+        //                eventID = int.Parse(eventIdParam);
+        //            }
+        //            catch(Exception)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters. Invalid EventID value {eventIdParam}\nThe {actionType} command requires an EventID parameter to specify which event to join as an observer. Use the \"/arena info\" command to list all active arena events, including their EventID values.\nUsage: To watch an arena event as an observer /arena watch EventID");
+        //                return;
+        //            }
 
-                    var arenaEvent = ArenaManager.GetActiveEvents().FirstOrDefault(x => x.Id == eventID);
-                    if(arenaEvent != null)
-                    {
-                        ArenaManager.ObserveEvent(session.Player, eventID);
-                    }
-                    else
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters. EventID {eventIdParam} does not correspond to an active arena event\nThe {actionType} command requires an EventID parameter to specify which event to join as an observer. Use the \"/arena info\" command to list all active arena events, including their EventID values.\nUsage: To watch an arena event as an observer /arena watch EventID");
-                        return;
-                    }
+        //            var arenaEvent = ArenaManager.GetActiveEvents().FirstOrDefault(x => x.Id == eventID);
+        //            if(arenaEvent != null)
+        //            {
+        //                ArenaManager.ObserveEvent(session.Player, eventID);
+        //            }
+        //            else
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters. EventID {eventIdParam} does not correspond to an active arena event\nThe {actionType} command requires an EventID parameter to specify which event to join as an observer. Use the \"/arena info\" command to list all active arena events, including their EventID values.\nUsage: To watch an arena event as an observer /arena watch EventID");
+        //                return;
+        //            }
 
-                    break;                        
+        //            break;                        
 
-                case "info":
+        //        case "info":
 
-                    var queuedPlayers = ArenaManager.GetQueuedPlayers();
-                    var queuedOnes = queuedPlayers.Where(x => x.EventType.ToLower().Equals("1v1"));
-                    var queuedTwos = queuedPlayers.Where(x => x.EventType.ToLower().Equals("2v2"));
-                    var queuedFFA = queuedPlayers.Where(x => x.EventType.ToLower().Equals("ffa"));
-                    var longestOnesWait = queuedOnes.Count() > 0 ? (DateTime.Now - queuedOnes.Min(x => x.CreateDateTime)) : new TimeSpan(0);
-                    var longestTwosWait = queuedTwos.Count() > 0 ? (DateTime.Now - queuedTwos.Min(x => x.CreateDateTime)) : new TimeSpan(0);
-                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);
+        //            var queuedPlayers = ArenaManager.GetQueuedPlayers();
+        //            var queuedOnes = queuedPlayers.Where(x => x.EventType.ToLower().Equals("1v1"));
+        //            var queuedTwos = queuedPlayers.Where(x => x.EventType.ToLower().Equals("2v2"));
+        //            var queuedFFA = queuedPlayers.Where(x => x.EventType.ToLower().Equals("ffa"));
+        //            var longestOnesWait = queuedOnes.Count() > 0 ? (DateTime.Now - queuedOnes.Min(x => x.CreateDateTime)) : new TimeSpan(0);
+        //            var longestTwosWait = queuedTwos.Count() > 0 ? (DateTime.Now - queuedTwos.Min(x => x.CreateDateTime)) : new TimeSpan(0);
+        //            var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);
 
-                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}";
+        //            string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}";
 
-                    var activeEvents = ArenaManager.GetActiveEvents();
-                    var eventsOnes = activeEvents.Where(x => x.EventType.ToLower().Equals("1v1"));
-                    var eventsTwos = activeEvents.Where(x => x.EventType.ToLower().Equals("2v2"));
-                    var eventsFFA = activeEvents.Where(x => x.EventType.ToLower().Equals("ffa"));
+        //            var activeEvents = ArenaManager.GetActiveEvents();
+        //            var eventsOnes = activeEvents.Where(x => x.EventType.ToLower().Equals("1v1"));
+        //            var eventsTwos = activeEvents.Where(x => x.EventType.ToLower().Equals("2v2"));
+        //            var eventsFFA = activeEvents.Where(x => x.EventType.ToLower().Equals("ffa"));
 
-                    string onesEventInfo = eventsOnes.Count() == 0 ? "No active events" : "";
-                    foreach (var ev in eventsOnes)
-                    {
-                        onesEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
-                                         $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
-                                         $"    Players:\n    {ev.PlayersDisplay}\n" +
-                                         $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
-                    }
+        //            string onesEventInfo = eventsOnes.Count() == 0 ? "No active events" : "";
+        //            foreach (var ev in eventsOnes)
+        //            {
+        //                onesEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
+        //                                 $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
+        //                                 $"    Players:\n    {ev.PlayersDisplay}\n" +
+        //                                 $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
+        //            }
 
-                    string twosEventInfo = eventsTwos.Count() == 0 ? "No active events" : "";
-                    foreach (var ev in eventsTwos)
-                    {
-                        twosEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
-                                         $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
-                                         $"    Players:\n    {ev.PlayersDisplay}\n" +
-                                         $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
-                    }
+        //            string twosEventInfo = eventsTwos.Count() == 0 ? "No active events" : "";
+        //            foreach (var ev in eventsTwos)
+        //            {
+        //                twosEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
+        //                                 $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
+        //                                 $"    Players:\n    {ev.PlayersDisplay}\n" +
+        //                                 $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
+        //            }
 
-                    string ffaEventInfo = eventsFFA.Count() == 0 ? "No active events" : "";
-                    foreach (var ev in eventsFFA)
-                    {
-                        ffaEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
-                                         $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
-                                         $"    Players:\n    {ev.PlayersDisplay}\n" +
-                                         $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
-                    }
+        //            string ffaEventInfo = eventsFFA.Count() == 0 ? "No active events" : "";
+        //            foreach (var ev in eventsFFA)
+        //            {
+        //                ffaEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
+        //                                 $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
+        //                                 $"    Players:\n    {ev.PlayersDisplay}\n" +
+        //                                 $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
+        //            }
 
-                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n";
+        //            string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n";
 
-                    CommandHandlerHelper.WriteOutputInfo(session, $"*********\n{queueInfo}\n\n{eventInfo}\n*********\n");
-                    break;
+        //            CommandHandlerHelper.WriteOutputInfo(session, $"*********\n{queueInfo}\n\n{eventInfo}\n*********\n");
+        //            break;
 
-                case "stats":                
+        //        case "stats":                
 
-                    string returnMsg;
-                    if (parameters.Count() >= 2)
-                    {
-                        string playerParam = "";
-                        for(int i = 1; i < parameters.Length; i++)
-                        {
-                            playerParam += i == 1 ? parameters[i] : $" {parameters[i]}";
-                        }
+        //            string returnMsg;
+        //            if (parameters.Count() >= 2)
+        //            {
+        //                string playerParam = "";
+        //                for(int i = 1; i < parameters.Length; i++)
+        //                {
+        //                    playerParam += i == 1 ? parameters[i] : $" {parameters[i]}";
+        //                }
 
-                        var targetPlayer = PlayerManager.GetAllPlayers().FirstOrDefault(x => x.Name.ToLower().Equals(playerParam.ToLower()));
-                        if(targetPlayer != null)
-                        {
-                            var targetOnlinePlayer = PlayerManager.GetOnlinePlayer(targetPlayer.Guid);
-                            var targetOfflinePlayer = PlayerManager.GetOfflinePlayer(targetPlayer.Guid);
+        //                var targetPlayer = PlayerManager.GetAllPlayers().FirstOrDefault(x => x.Name.ToLower().Equals(playerParam.ToLower()));
+        //                if(targetPlayer != null)
+        //                {
+        //                    var targetOnlinePlayer = PlayerManager.GetOnlinePlayer(targetPlayer.Guid);
+        //                    var targetOfflinePlayer = PlayerManager.GetOfflinePlayer(targetPlayer.Guid);
 
-                            returnMsg = GetArenaStats(targetOnlinePlayer != null ? targetOnlinePlayer.Character.Id : (targetOfflinePlayer != null ? targetOfflinePlayer.Biota.Id : 0), targetPlayer.Name);
-                        }
-                        else
-                        {
-                            returnMsg = $"Unable to find a player named {playerParam}";
-                        }
-                    }
-                    else
-                    {
-                        returnMsg = GetArenaStats(session.Player.Character.Id, session.Player.Character.Name);
-                    }
+        //                    returnMsg = GetArenaStats(targetOnlinePlayer != null ? targetOnlinePlayer.Character.Id : (targetOfflinePlayer != null ? targetOfflinePlayer.Biota.Id : 0), targetPlayer.Name);
+        //                }
+        //                else
+        //                {
+        //                    returnMsg = $"Unable to find a player named {playerParam}";
+        //                }
+        //            }
+        //            else
+        //            {
+        //                returnMsg = GetArenaStats(session.Player.Character.Id, session.Player.Character.Name);
+        //            }
                     
-                    CommandHandlerHelper.WriteOutputInfo(session, returnMsg);
-                    break;
+        //            CommandHandlerHelper.WriteOutputInfo(session, returnMsg);
+        //            break;
 
-                case "rank":
+        //        case "rank":
 
-                    StringBuilder rankReturnMsg = new StringBuilder();
-                    string eventTypeParam = "";
-                    if (parameters.Count() >= 2)
-                    {
-                        eventTypeParam = parameters[1];
-                    }
+        //            StringBuilder rankReturnMsg = new StringBuilder();
+        //            string eventTypeParam = "";
+        //            if (parameters.Count() >= 2)
+        //            {
+        //                eventTypeParam = parameters[1];
+        //            }
 
-                    bool validParam = false;
-                    if(eventTypeParam.ToLower().Equals("1v1") ||
-                        eventTypeParam.ToLower().Equals("2v2") ||
-                        eventTypeParam.ToLower().Equals("ffa"))
-                    {
-                        validParam = true;
-                    }
+        //            bool validParam = false;
+        //            if(eventTypeParam.ToLower().Equals("1v1") ||
+        //                eventTypeParam.ToLower().Equals("2v2") ||
+        //                eventTypeParam.ToLower().Equals("ffa"))
+        //            {
+        //                validParam = true;
+        //            }
 
-                    if (!validParam)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, "Invalid Event Type Parameter\nUsage: /arena rank {eventType}\nExample: /arena rank 1v1");
-                        break;
-                    }
+        //            if (!validParam)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, "Invalid Event Type Parameter\nUsage: /arena rank {eventType}\nExample: /arena rank 1v1");
+        //                break;
+        //            }
 
-                    List<ArenaCharacterStats> topTen = DatabaseManager.Log.GetArenaTopRankedByEventType(eventTypeParam.ToLower());
+        //            List<ArenaCharacterStats> topTen = DatabaseManager.Log.GetArenaTopRankedByEventType(eventTypeParam.ToLower());
                    
-                    rankReturnMsg.Append($"***** Top Ten {eventTypeParam.ToLower()} Players *****\n\n");
-                    for (int i = 0; i < topTen.Count(); i++)
-                    {
-                        var currStats = topTen[i];
-                        rankReturnMsg.Append($"  Rank #{i + 1} - {currStats.CharacterName}\n  Rank Points: {currStats.RankPoints}\n  Total Matches: {currStats.TotalMatches}\n  Total Wins: {currStats.TotalWins}\n  Total Draws: {currStats.TotalDraws}\n  Total Losses: {currStats.TotalLosses}\n\n");
-                    }
+        //            rankReturnMsg.Append($"***** Top Ten {eventTypeParam.ToLower()} Players *****\n\n");
+        //            for (int i = 0; i < topTen.Count(); i++)
+        //            {
+        //                var currStats = topTen[i];
+        //                rankReturnMsg.Append($"  Rank #{i + 1} - {currStats.CharacterName}\n  Rank Points: {currStats.RankPoints}\n  Total Matches: {currStats.TotalMatches}\n  Total Wins: {currStats.TotalWins}\n  Total Draws: {currStats.TotalDraws}\n  Total Losses: {currStats.TotalLosses}\n\n");
+        //            }
 
-                    rankReturnMsg.Append($"**********\n");
-                    CommandHandlerHelper.WriteOutputInfo(session, rankReturnMsg.ToString());
+        //            rankReturnMsg.Append($"**********\n");
+        //            CommandHandlerHelper.WriteOutputInfo(session, rankReturnMsg.ToString());
 
-                    break;
+        //            break;
 
-                default:
-                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2 or FFA)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
-                    return;
-            }
-        }
+        //        default:
+        //            CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2 or FFA)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
+        //            return;
+        //    }
+        //}
 
-        private static string JoinArenaQueue(Session session, string eventType)
-        {
-            //Whitelist specific clans to participate
-            uint? monarchId = session.Player.MonarchId;
-            string monarchName = session.Player.Name;
-            var playerAllegiance = AllegianceManager.GetAllegiance(session.Player);
-            if (playerAllegiance != null && playerAllegiance.MonarchId.HasValue)
-            {
-                monarchId = playerAllegiance.MonarchId;
-                monarchName = playerAllegiance.Monarch.Player.Name;
-            }
+        //private static string JoinArenaQueue(Session session, string eventType)
+        //{
+        //    //Whitelist specific clans to participate
+        //    uint? monarchId = session.Player.MonarchId;
+        //    string monarchName = session.Player.Name;
+        //    var playerAllegiance = AllegianceManager.GetAllegiance(session.Player);
+        //    if (playerAllegiance != null && playerAllegiance.MonarchId.HasValue)
+        //    {
+        //        monarchId = playerAllegiance.MonarchId;
+        //        monarchName = playerAllegiance.Monarch.Player.Name;
+        //    }
 
-            var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)session.Player.Character.Id;
-            var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
+        //    var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)session.Player.Character.Id;
+        //    var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
 
-            if (!isWhitelisted)
-            {
-                return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
-            }
+        //    if (!isWhitelisted)
+        //    {
+        //        return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
+        //    }
 
-            //Blacklist specific players
-            var blacklistString = PropertyManager.GetString("arenas_blacklist").Item;
-            if (!string.IsNullOrEmpty(blacklistString))
-            {
-                var blacklist = blacklistString.Split(',');
-                foreach (var charIdString in blacklist)
-                {
-                    if (uint.TryParse(charIdString, out uint charId) && session.Player.Character.Id == charId)
-                    {
-                        return "You are blacklisted from joining Arena events, probably because you're a cunt who tried to abuse it or some shit.  Fuck yourself.  Or ask forgiveness from Doc Z.  Whatever, I don't care.";
-                    }
-                }
-            }            
+        //    //Blacklist specific players
+        //    var blacklistString = PropertyManager.GetString("arenas_blacklist").Item;
+        //    if (!string.IsNullOrEmpty(blacklistString))
+        //    {
+        //        var blacklist = blacklistString.Split(',');
+        //        foreach (var charIdString in blacklist)
+        //        {
+        //            if (uint.TryParse(charIdString, out uint charId) && session.Player.Character.Id == charId)
+        //            {
+        //                return "You are blacklisted from joining Arena events, probably because you're a cunt who tried to abuse it or some shit.  Fuck yourself.  Or ask forgiveness from Doc Z.  Whatever, I don't care.";
+        //            }
+        //        }
+        //    }            
 
-            var minLevel = PropertyManager.GetLong("arenas_min_level").Item;
-            if (session.Player.Level < minLevel)
-            {
-                return $"You must be at least level {minLevel} to join an arena match";
-            }
+        //    var minLevel = PropertyManager.GetLong("arenas_min_level").Item;
+        //    if (session.Player.Level < minLevel)
+        //    {
+        //        return $"You must be at least level {minLevel} to join an arena match";
+        //    }
 
-            if(session.Player.IsArenaObserver ||
-                session.Player.IsPendingArenaObserver ||
-                session.Player.CloakStatus == CloakStatus.On)
-                return $"You cannot join an arena queue while you're watching an arena event. Use /arena cancel to stop watching the current event before you queue.";
+        //    if(session.Player.IsArenaObserver ||
+        //        session.Player.IsPendingArenaObserver ||
+        //        session.Player.CloakStatus == CloakStatus.On)
+        //        return $"You cannot join an arena queue while you're watching an arena event. Use /arena cancel to stop watching the current event before you queue.";
 
-            if (!session.Player.IsPK)
-                return $"You cannot join an arena queue until you are in a PK state";
+        //    if (!session.Player.IsPK)
+        //        return $"You cannot join an arena queue until you are in a PK state";
 
-            if(session.Player.PKTimerActive)
-                return $"You cannot join an arena queue while you are PK tagged";
+        //    if(session.Player.PKTimerActive)
+        //        return $"You cannot join an arena queue while you are PK tagged";
 
-            string returnMsg;
-            if(!ArenaManager.AddPlayerToQueue(
-                session.Player.Character.Id,
-                session.Player.Character.Name,
-                session.Player.Level,
-                eventType,
-                monarchId.HasValue ? monarchId.Value : session.Player.Character.Id,
-                monarchName,
-                session.EndPointC2S?.Address?.ToString(),
-                out returnMsg))
-            {
-                return returnMsg;
-            }
+        //    string returnMsg;
+        //    if(!ArenaManager.AddPlayerToQueue(
+        //        session.Player.Character.Id,
+        //        session.Player.Character.Name,
+        //        session.Player.Level,
+        //        eventType,
+        //        monarchId.HasValue ? monarchId.Value : session.Player.Character.Id,
+        //        monarchName,
+        //        session.EndPointC2S?.Address?.ToString(),
+        //        out returnMsg))
+        //    {
+        //        return returnMsg;
+        //    }
 
-            return $"You have successfully joined the {eventType} arena queue";
-        }
+        //    return $"You have successfully joined the {eventType} arena queue";
+        //}
 
-        private static string GetArenaStats(uint characterId, string characterName)
-        {
-            return DatabaseManager.Log.GetArenaStatsByCharacterId(characterId, characterName);
-        }
+        //private static string GetArenaStats(uint characterId, string characterName)
+        //{
+        //    return DatabaseManager.Log.GetArenaStatsByCharacterId(characterId, characterName);
+        //}
 
         
 
@@ -1022,111 +1022,111 @@ namespace ACE.Server.Command.Handlers
         private static string _townOwnerMessageHeader = "Town Owners:\n";
         private static string _townOwnerRecordTemplate = "{0} is owned by {1}\n";
 
-        [CommandHandler("town-owners", AccessLevel.Player, CommandHandlerFlag.None, 0,
-            "Show owners of each town",
-            "")]
-        public static void HandleTownOwnersQuery(Session session, params string[] parameters)
-        {
-            try
-            {
-                StringBuilder townOwnerMsg = new StringBuilder(_townOwnerMessageHeader);
+        //[CommandHandler("town-owners", AccessLevel.Player, CommandHandlerFlag.None, 0,
+        //    "Show owners of each town",
+        //    "")]
+        //public static void HandleTownOwnersQuery(Session session, params string[] parameters)
+        //{
+        //    try
+        //    {
+        //        StringBuilder townOwnerMsg = new StringBuilder(_townOwnerMessageHeader);
 
-                var townList = DatabaseManager.TownControl.GetAllTowns();
+        //        var townList = DatabaseManager.TownControl.GetAllTowns();
 
-                foreach (var town in townList)
-                {
-                    string townOwner = string.Empty;
+        //        foreach (var town in townList)
+        //        {
+        //            string townOwner = string.Empty;
 
-                    if (town.CurrentOwnerID.HasValue)
-                    {
-                        var monarch = PlayerManager.FindByGuid(town.CurrentOwnerID.Value);
-                        townOwner = monarch.Name;
-                    }
-                    else
-                    {
-                        townOwner = "nobody";
-                    }
+        //            if (town.CurrentOwnerID.HasValue)
+        //            {
+        //                var monarch = PlayerManager.FindByGuid(town.CurrentOwnerID.Value);
+        //                townOwner = monarch.Name;
+        //            }
+        //            else
+        //            {
+        //                townOwner = "nobody";
+        //            }
 
-                    townOwnerMsg.Append(String.Format(_townOwnerRecordTemplate, town.TownName, townOwner));
-                }
+        //            townOwnerMsg.Append(String.Format(_townOwnerRecordTemplate, town.TownName, townOwner));
+        //        }
 
-                CommandHandlerHelper.WriteOutputInfo(session, townOwnerMsg.ToString(), ChatMessageType.Broadcast);
-            }
-            catch (Exception ex)
-            {
-                CommandHandlerHelper.WriteOutputInfo(session, "Server Error checking town owner list.  Pls report this to the admins with a timestamp of when it happened.", ChatMessageType.Broadcast);
-                log.ErrorFormat("Error in PlayerCommands.HandleTownOwnersQuery. Ex: {0}", ex);
-            }
-        }
+        //        CommandHandlerHelper.WriteOutputInfo(session, townOwnerMsg.ToString(), ChatMessageType.Broadcast);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommandHandlerHelper.WriteOutputInfo(session, "Server Error checking town owner list.  Pls report this to the admins with a timestamp of when it happened.", ChatMessageType.Broadcast);
+        //        log.ErrorFormat("Error in PlayerCommands.HandleTownOwnersQuery. Ex: {0}", ex);
+        //    }
+        //}
 
 
-        [CommandHandler("town-control-respite", AccessLevel.Player, CommandHandlerFlag.None, 1,
-            "Show the remaining respite time for a given town for your clan",
-            "")]
-        public static void HandleTownRespiteQuery(Session session, params string[] parameters)
-        {
-            try
-            {
-                if (parameters != null && parameters.Length > 0)
-                {
-                    string townName = "";
+        //[CommandHandler("town-control-respite", AccessLevel.Player, CommandHandlerFlag.None, 1,
+        //    "Show the remaining respite time for a given town for your clan",
+        //    "")]
+        //public static void HandleTownRespiteQuery(Session session, params string[] parameters)
+        //{
+        //    try
+        //    {
+        //        if (parameters != null && parameters.Length > 0)
+        //        {
+        //            string townName = "";
 
-                    foreach (string param in parameters)
-                    {
-                        townName = String.Concat(townName, param, " ");
-                    }
+        //            foreach (string param in parameters)
+        //            {
+        //                townName = String.Concat(townName, param, " ");
+        //            }
 
-                    townName = townName.Trim();
+        //            townName = townName.Trim();
 
-                    var townList = DatabaseManager.TownControl.GetAllTowns();
+        //            var townList = DatabaseManager.TownControl.GetAllTowns();
 
-                    var town = townList.Find(x => x.TownName.Equals(townName, StringComparison.OrdinalIgnoreCase));
-                    if (town == null)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"{townName} is not a valid town that is provisioned for Town Control", ChatMessageType.Broadcast);
-                        return;
-                    }
+        //            var town = townList.Find(x => x.TownName.Equals(townName, StringComparison.OrdinalIgnoreCase));
+        //            if (town == null)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"{townName} is not a valid town that is provisioned for Town Control", ChatMessageType.Broadcast);
+        //                return;
+        //            }
 
-                    if (!session.Player.MonarchId.HasValue)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"You are not part of a valid allegiance, unable to check respite for {townName}", ChatMessageType.Broadcast);
-                        return;
-                    }
+        //            if (!session.Player.MonarchId.HasValue)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"You are not part of a valid allegiance, unable to check respite for {townName}", ChatMessageType.Broadcast);
+        //                return;
+        //            }
 
-                    if (session.Player.MonarchId == town.CurrentOwnerID)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"Your allegiance already owns {townName}", ChatMessageType.Broadcast);
-                        return;
-                    }
+        //            if (session.Player.MonarchId == town.CurrentOwnerID)
+        //            {
+        //                CommandHandlerHelper.WriteOutputInfo(session, $"Your allegiance already owns {townName}", ChatMessageType.Broadcast);
+        //                return;
+        //            }
 
-                    var latestTcEvent = DatabaseManager.TownControl.GetLatestTownControlEventByAttackingMonarchId(session.Player.MonarchId.Value, town.TownId);
+        //            var latestTcEvent = DatabaseManager.TownControl.GetLatestTownControlEventByAttackingMonarchId(session.Player.MonarchId.Value, town.TownId);
 
-                    if (latestTcEvent != null)
-                    {
-                        var respiteExpirationDate = latestTcEvent.EventStartDateTime?.AddSeconds(town.ConflictRespiteLength.HasValue ? town.ConflictRespiteLength.Value : 0);
-                        if (respiteExpirationDate.HasValue && respiteExpirationDate.Value > DateTime.UtcNow)
-                        {
-                            TimeSpan timeLeft = respiteExpirationDate.Value - DateTime.UtcNow;
-                            CommandHandlerHelper.WriteOutputInfo(session, $"Your clan can attack {townName} again in {timeLeft.TotalMinutes} minutes", ChatMessageType.Broadcast);
-                            return;
-                        }
-                    }
+        //            if (latestTcEvent != null)
+        //            {
+        //                var respiteExpirationDate = latestTcEvent.EventStartDateTime?.AddSeconds(town.ConflictRespiteLength.HasValue ? town.ConflictRespiteLength.Value : 0);
+        //                if (respiteExpirationDate.HasValue && respiteExpirationDate.Value > DateTime.UtcNow)
+        //                {
+        //                    TimeSpan timeLeft = respiteExpirationDate.Value - DateTime.UtcNow;
+        //                    CommandHandlerHelper.WriteOutputInfo(session, $"Your clan can attack {townName} again in {timeLeft.TotalMinutes} minutes", ChatMessageType.Broadcast);
+        //                    return;
+        //                }
+        //            }
 
-                    CommandHandlerHelper.WriteOutputInfo(session, $"Your clan is not currently limited by a respite and can attack {townName} any time", ChatMessageType.Broadcast);
-                    return;
-                }
-                else
-                {
-                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameters.  Expected Syntax: /town-control-respite TownName", ChatMessageType.Broadcast);
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                CommandHandlerHelper.WriteOutputInfo(session, "Server Error checking town respite timer.  Pls report this to the admins with a timestamp of when it happened.", ChatMessageType.Broadcast);
-                log.ErrorFormat("Error in PlayerCommands.HandleTownRespiteQuery. Ex: {0}", ex);
-            }
-        }
+        //            CommandHandlerHelper.WriteOutputInfo(session, $"Your clan is not currently limited by a respite and can attack {townName} any time", ChatMessageType.Broadcast);
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameters.  Expected Syntax: /town-control-respite TownName", ChatMessageType.Broadcast);
+        //            return;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommandHandlerHelper.WriteOutputInfo(session, "Server Error checking town respite timer.  Pls report this to the admins with a timestamp of when it happened.", ChatMessageType.Broadcast);
+        //        log.ErrorFormat("Error in PlayerCommands.HandleTownRespiteQuery. Ex: {0}", ex);
+        //    }
+        //}
 
         #endregion
     }

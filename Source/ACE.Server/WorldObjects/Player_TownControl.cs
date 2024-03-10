@@ -35,78 +35,78 @@ namespace ACE.Server.WorldObjects
 {
     partial class Player
     {
-        public void HandleTownControlQuestStamps()
-        {
-            try
-            {
-                //Remove all town control related quest stamps
-                var playerQuests = this.QuestManager.GetQuests();
-                if (playerQuests != null && playerQuests.Count() > 0)
-                {
-                    var playerTownControlQuests = playerQuests.Where(x => x.QuestName.Contains("TownControlOwner"));
+        //public void HandleTownControlQuestStamps()
+        //{
+        //    try
+        //    {
+        //        //Remove all town control related quest stamps
+        //        var playerQuests = this.QuestManager.GetQuests();
+        //        if (playerQuests != null && playerQuests.Count() > 0)
+        //        {
+        //            var playerTownControlQuests = playerQuests.Where(x => x.QuestName.Contains("TownControlOwner"));
 
-                    foreach (var qst in playerTownControlQuests)
-                    {
-                        this.QuestManager.Erase(qst.QuestName);
-                    }
-                }
+        //            foreach (var qst in playerTownControlQuests)
+        //            {
+        //                this.QuestManager.Erase(qst.QuestName);
+        //            }
+        //        }
 
-                //Get a list of towns currently owned by player's monarchy and add the quest stamps
-                var townList = DatabaseManager.TownControl.GetAllTowns();
-                var allegiance = AllegianceManager.GetAllegiance(this);
+        //        //Get a list of towns currently owned by player's monarchy and add the quest stamps
+        //        var townList = DatabaseManager.TownControl.GetAllTowns();
+        //        var allegiance = AllegianceManager.GetAllegiance(this);
 
-                if (allegiance == null || !allegiance.MonarchId.HasValue)
-                {
-                    return;
-                }
+        //        if (allegiance == null || !allegiance.MonarchId.HasValue)
+        //        {
+        //            return;
+        //        }
 
-                var ownedTowns = townList.Where(x => x.CurrentOwnerID.HasValue && x.CurrentOwnerID.Value == allegiance.MonarchId.Value);
+        //        var ownedTowns = townList.Where(x => x.CurrentOwnerID.HasValue && x.CurrentOwnerID.Value == allegiance.MonarchId.Value);
 
-                if (ownedTowns == null || ownedTowns.Count() == 0)
-                {
-                    return;
-                }
+        //        if (ownedTowns == null || ownedTowns.Count() == 0)
+        //        {
+        //            return;
+        //        }
 
-                foreach (var town in ownedTowns)
-                {
-                    this.QuestManager.Update(town.TownName.Trim().Replace(" ", "") + "TownControlOwner");
-                }
-            }
-            catch(Exception ex)
-            {
-                log.Error($"Exception in HandleTownControlQuestStamps. Ex: {ex}");
-            }
-        }
+        //        foreach (var town in ownedTowns)
+        //        {
+        //            this.QuestManager.Update(town.TownName.Trim().Replace(" ", "") + "TownControlOwner");
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        log.Error($"Exception in HandleTownControlQuestStamps. Ex: {ex}");
+        //    }
+        //}
 
-        public int GetTownOwnershipCount()
-        {
-            int townsOwned = 0;
+        //public int GetTownOwnershipCount()
+        //{
+        //    int townsOwned = 0;
 
-            try
-            {
-                var alleg = AllegianceManager.GetAllegiance(this);
+        //    try
+        //    {
+        //        var alleg = AllegianceManager.GetAllegiance(this);
 
-                if (alleg != null && alleg.MonarchId.HasValue && TownControlAllegiances.IsAllowedAllegiance((int)alleg.MonarchId.Value))
-                {
-                    var towns = DatabaseManager.TownControl.GetAllTowns();
-                    if (towns != null)
-                    {
-                        foreach (var town in towns)
-                        {
-                            if (town.CurrentOwnerID == alleg.MonarchId.Value)
-                            {
-                                townsOwned++;
-                            }
-                        }
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                log.Error($"Error in GetTownOwnershipCount. Ex: {ex}");
-            }
+        //        if (alleg != null && alleg.MonarchId.HasValue && TownControlAllegiances.IsAllowedAllegiance((int)alleg.MonarchId.Value))
+        //        {
+        //            var towns = DatabaseManager.TownControl.GetAllTowns();
+        //            if (towns != null)
+        //            {
+        //                foreach (var town in towns)
+        //                {
+        //                    if (town.CurrentOwnerID == alleg.MonarchId.Value)
+        //                    {
+        //                        townsOwned++;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        log.Error($"Error in GetTownOwnershipCount. Ex: {ex}");
+        //    }
 
-            return townsOwned;
-        }
+        //    return townsOwned;
+        //}
     }
 }

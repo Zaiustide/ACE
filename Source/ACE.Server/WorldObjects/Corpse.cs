@@ -376,38 +376,38 @@ namespace ACE.Server.WorldObjects
 
                 if (killerPlayer != null)
                 {
-                    //log the rare find to db and webhook
-                    try
-                    {
-                        RareLog rareLog = new RareLog();
-                        rareLog.CharacterId = killerPlayer.Character.Id;
-                        rareLog.CharacterName = killerPlayer.Character.Name;
-                        rareLog.ItemName = wo.Name;
-                        rareLog.ItemWeenieId = wo.WeenieClassId;
-                        rareLog.ItemBiotaId = wo.Biota.Id;
-                        rareLog.CreatedDateTime = DateTime.Now;
-                        DatabaseManager.Log.LogRare(rareLog);
-                    }
-                    catch(Exception ex)
-                    {
-                        log.Error($"Error logging loot generated rare to DB. Ex: {ex}");
-                    }
+                    ////log the rare find to db and webhook
+                    //try
+                    //{
+                    //    RareLog rareLog = new RareLog();
+                    //    rareLog.CharacterId = killerPlayer.Character.Id;
+                    //    rareLog.CharacterName = killerPlayer.Character.Name;
+                    //    rareLog.ItemName = wo.Name;
+                    //    rareLog.ItemWeenieId = wo.WeenieClassId;
+                    //    rareLog.ItemBiotaId = wo.Biota.Id;
+                    //    rareLog.CreatedDateTime = DateTime.Now;
+                    //    DatabaseManager.Log.LogRare(rareLog);
+                    //}
+                    //catch(Exception ex)
+                    //{
+                    //    log.Error($"Error logging loot generated rare to DB. Ex: {ex}");
+                    //}
 
-                    try
-                    {
-                        if (tier > 2)
-                        {
-                            string rareAuditUrl = PropertyManager.GetString("rare_audit_webhook").Item;
-                            if (!string.IsNullOrEmpty(rareAuditUrl))
-                            {
-                                _ = TurbineChatHandler.SendWebhookedChat("", $"Rare item {wo.Name} was generated on a corpse killed by {killerPlayer.Character.Name}.  ItemBiotaId = {wo.Biota.Id}", rareAuditUrl, "Rare Audit");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error($"Error logging loot generated rare to webhook. Ex: {ex}");
-                    }
+                    //try
+                    //{
+                    //    if (tier > 2)
+                    //    {
+                    //        string rareAuditUrl = PropertyManager.GetString("rare_audit_webhook").Item;
+                    //        if (!string.IsNullOrEmpty(rareAuditUrl))
+                    //        {
+                    //            _ = TurbineChatHandler.SendWebhookedChat("", $"Rare item {wo.Name} was generated on a corpse killed by {killerPlayer.Character.Name}.  ItemBiotaId = {wo.Biota.Id}", rareAuditUrl, "Rare Audit");
+                    //        }
+                    //    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    log.Error($"Error logging loot generated rare to webhook. Ex: {ex}");
+                    //}
 
                     if (realTimeRares)
                         killerPlayer.RaresLoginTimestamp = (int)Time.GetFutureUnixTime(ThreadSafeRandom.Next(1, (int)PropertyManager.GetLong("rares_max_seconds_between").Item));

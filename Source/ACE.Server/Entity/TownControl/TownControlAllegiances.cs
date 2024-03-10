@@ -45,7 +45,8 @@ namespace ACE.Server.Entity.TownControl
 
         public static bool IsAllowedAllegiance(int monarchID)
         {
-            return AllowedAllegianceList.Contains(monarchID);
+            //return AllowedAllegianceList.Contains(monarchID);
+            return false;
         }
     }
 }

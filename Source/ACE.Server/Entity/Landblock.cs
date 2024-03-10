@@ -200,174 +200,174 @@ namespace ACE.Server.Entity
 
                 SpawnEncounters();
 
-                HandleTownControl();
+                //HandleTownControl();
             });
 
             //LoadMeshes(objects);
 
-            if (this.IsTownControlLandblock)
-            {
-                log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");                
-            }
+            //if (this.IsTownControlLandblock)
+            //{
+            //    log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");                
+            //}
         }
 
-        public void HandleTownControl()
-        {
-            IsTownControlLandblock = TownControlLandblocks.IsTownControlLandblock(this.Id.Landblock);
-            if (IsTownControlLandblock)
-            {
-                try
-                {
-                    uint? townId = TownControlLandblocks.GetTownIdByLandblockId(this.Id.Landblock);
-                    var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(townId.HasValue ? townId.Value : 0);
-                    if (latestEvent != null && townId.HasValue)
-                    {
-                        if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
-                        {
-                            var town = DatabaseManager.TownControl.GetTownById(townId.Value);
-                            if (town != null)
-                            {
-                                var tcEventDurationExpiredTime = latestEvent.EventStartDateTime.Value.AddSeconds(town.ConflictLength);
+        //public void HandleTownControl()
+        //{
+        //    IsTownControlLandblock = TownControlLandblocks.IsTownControlLandblock(this.Id.Landblock);
+        //    if (IsTownControlLandblock)
+        //    {
+        //        try
+        //        {
+        //            uint? townId = TownControlLandblocks.GetTownIdByLandblockId(this.Id.Landblock);
+        //            var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(townId.HasValue ? townId.Value : 0);
+        //            if (latestEvent != null && townId.HasValue)
+        //            {
+        //                if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
+        //                {
+        //                    var town = DatabaseManager.TownControl.GetTownById(townId.Value);
+        //                    if (town != null)
+        //                    {
+        //                        var tcEventDurationExpiredTime = latestEvent.EventStartDateTime.Value.AddSeconds(town.ConflictLength);
 
-                                //If there's an active town control event and the duration is more than 2 minutes past the expiration,
-                                //something went wrong with ending the event the normal way (via Creature_Death or Creature_Tick)
-                                //end the TC event with defenders winning, but don't award any rewards
-                                if (DateTime.UtcNow > tcEventDurationExpiredTime.AddMinutes(2))
-                                {
-                                    var msg = $"Landblock.HandleTownControl - Found active TC event that is more than 2 minutes past its expiration. TownID = {town.TownId}, TownName = {town.TownName}, TC Event ID = {latestEvent.EventId}";
-                                    log.Warn(msg);
+        //                        //If there's an active town control event and the duration is more than 2 minutes past the expiration,
+        //                        //something went wrong with ending the event the normal way (via Creature_Death or Creature_Tick)
+        //                        //end the TC event with defenders winning, but don't award any rewards
+        //                        if (DateTime.UtcNow > tcEventDurationExpiredTime.AddMinutes(2))
+        //                        {
+        //                            var msg = $"Landblock.HandleTownControl - Found active TC event that is more than 2 minutes past its expiration. TownID = {town.TownId}, TownName = {town.TownName}, TC Event ID = {latestEvent.EventId}";
+        //                            log.Warn(msg);
 
-                                    if (PropertyManager.GetBool("town_control_enable_webhook_debug").Item)
-                                    {
-                                        try
-                                        {
-                                            var webhookUrl = PropertyManager.GetString("town_control_globals_webhook").Item;
-                                            if (!string.IsNullOrEmpty(webhookUrl))
-                                            {
-                                                _ = TurbineChatHandler.SendWebhookedChat("God of PK", msg, webhookUrl, "General");
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            log.ErrorFormat("Failed sending TownControl global message to webhook. Ex:{0}", ex);
-                                        }
-                                    }
+        //                            if (PropertyManager.GetBool("town_control_enable_webhook_debug").Item)
+        //                            {
+        //                                try
+        //                                {
+        //                                    var webhookUrl = PropertyManager.GetString("town_control_globals_webhook").Item;
+        //                                    if (!string.IsNullOrEmpty(webhookUrl))
+        //                                    {
+        //                                        _ = TurbineChatHandler.SendWebhookedChat("God of PK", msg, webhookUrl, "General");
+        //                                    }
+        //                                }
+        //                                catch (Exception ex)
+        //                                {
+        //                                    log.ErrorFormat("Failed sending TownControl global message to webhook. Ex:{0}", ex);
+        //                                }
+        //                            }
 
-                                    //Update the Town's conflict status
-                                    town.IsInConflict = false;
-                                    DatabaseManager.TownControl.UpdateTown(town);
+        //                            //Update the Town's conflict status
+        //                            town.IsInConflict = false;
+        //                            DatabaseManager.TownControl.UpdateTown(town);
 
-                                    //End the TownControlEvent
-                                    latestEvent.IsAttackSuccess = false;
-                                    latestEvent.EventEndDateTime = DateTime.UtcNow;
-                                    DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);
+        //                            //End the TownControlEvent
+        //                            latestEvent.IsAttackSuccess = false;
+        //                            latestEvent.EventEndDateTime = DateTime.UtcNow;
+        //                            DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);
 
-                                    //End the content generated event
-                                    if(TownControlLandblocks.LandblockEventsMap.TryGetValue(this.Id.Landblock, out var eventName))
-                                    {
-                                        EventManager.StopEvent(eventName, null, null);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log.ErrorFormat("Landblock.HandleTownControl exception. Ex: {0}", ex);
-                }
-            }
-        }
+        //                            //End the content generated event
+        //                            if(TownControlLandblocks.LandblockEventsMap.TryGetValue(this.Id.Landblock, out var eventName))
+        //                            {
+        //                                EventManager.StopEvent(eventName, null, null);
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            log.ErrorFormat("Landblock.HandleTownControl exception. Ex: {0}", ex);
+        //        }
+        //    }
+        //}
 
 
-        public void HandleZergControl()
-        {
-            try
-            {
-                if (ZergControlLandblocks.IsZergControlLandblock(this.Id.Landblock))
-                {
-                    var area = ZergControlLandblocks.GetLandblockZergControlArea(this.Id.Landblock);
+        //public void HandleZergControl()
+        //{
+        //    try
+        //    {
+        //        if (ZergControlLandblocks.IsZergControlLandblock(this.Id.Landblock))
+        //        {
+        //            var area = ZergControlLandblocks.GetLandblockZergControlArea(this.Id.Landblock);
 
-                    Dictionary<uint, List<Player>> clansInZergControlArea = new Dictionary<uint, List<Player>>();
-                    List<Player> playersInZergControlArea = new List<Player>();
-                    List<Player> playersNotWhitelisted = new List<Player>();
+        //            Dictionary<uint, List<Player>> clansInZergControlArea = new Dictionary<uint, List<Player>>();
+        //            List<Player> playersInZergControlArea = new List<Player>();
+        //            List<Player> playersNotWhitelisted = new List<Player>();
 
-                    foreach (var block in area.AreaLandblockIds)
-                    {
-                        var landblock = LandblockManager.GetLandblock(new LandblockId(block << 16), false);
-                        var playersInLandblock = landblock.GetCurrentLandblockPlayers();
-                        foreach (var landblockPlayer in playersInLandblock)
-                        {
-                            var lbPlayerAlleg = AllegianceManager.GetAllegiance(landblockPlayer);
-                            if (lbPlayerAlleg != null && lbPlayerAlleg.MonarchId.HasValue && !playersInZergControlArea.Contains(landblockPlayer))
-                            {
-                                if (clansInZergControlArea.ContainsKey(lbPlayerAlleg.MonarchId.Value))
-                                {
-                                    clansInZergControlArea[lbPlayerAlleg.MonarchId.Value].Add(landblockPlayer);
-                                }
-                                else
-                                {
-                                    var playerList = new List<Player>();
-                                    playerList.Add(landblockPlayer);
-                                    clansInZergControlArea.Add(lbPlayerAlleg.MonarchId.Value, playerList);
-                                }
+        //            foreach (var block in area.AreaLandblockIds)
+        //            {
+        //                var landblock = LandblockManager.GetLandblock(new LandblockId(block << 16), false);
+        //                var playersInLandblock = landblock.GetCurrentLandblockPlayers();
+        //                foreach (var landblockPlayer in playersInLandblock)
+        //                {
+        //                    var lbPlayerAlleg = AllegianceManager.GetAllegiance(landblockPlayer);
+        //                    if (lbPlayerAlleg != null && lbPlayerAlleg.MonarchId.HasValue && !playersInZergControlArea.Contains(landblockPlayer))
+        //                    {
+        //                        if (clansInZergControlArea.ContainsKey(lbPlayerAlleg.MonarchId.Value))
+        //                        {
+        //                            clansInZergControlArea[lbPlayerAlleg.MonarchId.Value].Add(landblockPlayer);
+        //                        }
+        //                        else
+        //                        {
+        //                            var playerList = new List<Player>();
+        //                            playerList.Add(landblockPlayer);
+        //                            clansInZergControlArea.Add(lbPlayerAlleg.MonarchId.Value, playerList);
+        //                        }
 
-                                playersInZergControlArea.Add(landblockPlayer);
-                            }
+        //                        playersInZergControlArea.Add(landblockPlayer);
+        //                    }
 
-                            if (!landblockPlayer.IsAdmin &&
-                                (lbPlayerAlleg == null || !lbPlayerAlleg.MonarchId.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)lbPlayerAlleg.MonarchId.Value)))
-                            {
-                                playersNotWhitelisted.Add(landblockPlayer);
-                            }
-                        }
-                    }
+        //                    if (!landblockPlayer.IsAdmin &&
+        //                        (lbPlayerAlleg == null || !lbPlayerAlleg.MonarchId.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)lbPlayerAlleg.MonarchId.Value)))
+        //                    {
+        //                        playersNotWhitelisted.Add(landblockPlayer);
+        //                    }
+        //                }
+        //            }
 
-                    //Boot any excess players from clans with too many players in the area
-                    foreach (var clanPlayers in clansInZergControlArea.Values)
-                    {
-                        if (clanPlayers.Count > area.MaxPlayersPerAllegiance)
-                        {
-                            var overageCount = clanPlayers.Count - (int)area.MaxPlayersPerAllegiance;
-                            var playersToKick = clanPlayers.OrderBy(x => x.LastTeleportTime).Take(overageCount);
+        //            //Boot any excess players from clans with too many players in the area
+        //            foreach (var clanPlayers in clansInZergControlArea.Values)
+        //            {
+        //                if (clanPlayers.Count > area.MaxPlayersPerAllegiance)
+        //                {
+        //                    var overageCount = clanPlayers.Count - (int)area.MaxPlayersPerAllegiance;
+        //                    var playersToKick = clanPlayers.OrderBy(x => x.LastTeleportTime).Take(overageCount);
 
-                            foreach (var playerToKick in playersToKick)
-                            {
-                                try
-                                {
-                                    //Teleport to LS
-                                    playerToKick.Session.Network.EnqueueSend(new GameMessageSystemChat("You have violated the max number of members allowed inside of a zerg restricted area.  Fuck you.", ChatMessageType.Broadcast));
-                                    playerToKick.Teleport(playerToKick.Sanctuary);
-                                }
-                                catch (Exception ex)
-                                {
-                                    log.Error($"Failed kicking player {playerToKick.Name} to lifestone after allegiance violated zerg control landblock restrictions.  Ex: {ex}");
-                                }
-                            }
-                        }
-                    }
+        //                    foreach (var playerToKick in playersToKick)
+        //                    {
+        //                        try
+        //                        {
+        //                            //Teleport to LS
+        //                            playerToKick.Session.Network.EnqueueSend(new GameMessageSystemChat("You have violated the max number of members allowed inside of a zerg restricted area.  Fuck you.", ChatMessageType.Broadcast));
+        //                            playerToKick.Teleport(playerToKick.Sanctuary);
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+        //                            log.Error($"Failed kicking player {playerToKick.Name} to lifestone after allegiance violated zerg control landblock restrictions.  Ex: {ex}");
+        //                        }
+        //                    }
+        //                }
+        //            }
 
-                    //Boot any players in the area who are not part of a whitelisted allegiance
-                    foreach (var disallowedPlayer in playersNotWhitelisted)
-                    {
-                        try
-                        {
-                            var currPlayer = (Player)disallowedPlayer;
-                            currPlayer.Session.Network.EnqueueSend(new GameMessageSystemChat("You have violated the whitelist inside of a zerg restricted area.  Fuck you.", ChatMessageType.Broadcast));
-                            currPlayer.Teleport(currPlayer.Sanctuary);
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Error($"Failed removing player {disallowedPlayer.Name} to LS for violating zerg control landblock whitelist.  Ex: {ex}");
-                        }
-                    }
-                }                
-            }
-            catch(Exception ex)
-            {
-                log.Error($"Error in HandleZergControl. Ex: {ex}");
-            }
-        }
+        //            //Boot any players in the area who are not part of a whitelisted allegiance
+        //            foreach (var disallowedPlayer in playersNotWhitelisted)
+        //            {
+        //                try
+        //                {
+        //                    var currPlayer = (Player)disallowedPlayer;
+        //                    currPlayer.Session.Network.EnqueueSend(new GameMessageSystemChat("You have violated the whitelist inside of a zerg restricted area.  Fuck you.", ChatMessageType.Broadcast));
+        //                    currPlayer.Teleport(currPlayer.Sanctuary);
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    log.Error($"Failed removing player {disallowedPlayer.Name} to LS for violating zerg control landblock whitelist.  Ex: {ex}");
+        //                }
+        //            }
+        //        }                
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        log.Error($"Error in HandleZergControl. Ex: {ex}");
+        //    }
+        //}
 
 
         /// <summary>
@@ -785,8 +785,8 @@ namespace ACE.Server.Entity
             }
             ServerPerformanceMonitor.AddToCumulativeEvent(ServerPerformanceMonitor.CumulativeEventHistoryType.Landblock_Tick_WorldObject_Heartbeat, stopwatch.Elapsed.TotalSeconds);
 
-            HandleTownControl();
-            HandleZergControl();
+            //HandleTownControl();
+            //HandleZergControl();
 
             Monitor5m.RegisterEventEnd();
             Monitor1h.RegisterEventEnd();

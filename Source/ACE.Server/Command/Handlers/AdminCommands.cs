@@ -5045,75 +5045,75 @@ namespace ACE.Server.Command.Handlers
             }
         }
 
-        [CommandHandler("arenarecalcelo", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
-            "Recalculates all players ELO from match history")]
-        public static void HandleArenaRecalcELO(Session session, params string[] parameters)
-        {
-            //Process 1v1
-            var arenaEvents = DatabaseManager.Log.GetAllArenaEvents();
-            Dictionary<uint, uint> characterRankings = new Dictionary<uint, uint>();
-            arenaEvents = arenaEvents.Where(x => x.EventType.ToLower().Equals("1v1"))?.OrderBy(x => x.CreatedDateTime).ToList() ?? new List<ArenaEvent>();
-            foreach(var arenaEvent in arenaEvents)
-            {
-                if(arenaEvent.WinningTeamGuid.HasValue)
-                {
-                    var winner = arenaEvent.Players?.FirstOrDefault(x => x.TeamGuid == arenaEvent.WinningTeamGuid);
-                    if(winner != null)
-                    {
-                        var loser = arenaEvent.Players?.FirstOrDefault(x => x.CharacterId != winner.CharacterId);
-                        if(loser != null)
-                        {
-                            var winnerCurrentRank = characterRankings.ContainsKey(winner.CharacterId) ? characterRankings[winner.CharacterId] : 1500;
-                            var loserCurrentRank = characterRankings.ContainsKey(loser.CharacterId) ? characterRankings[loser.CharacterId] : 1500;
+        //[CommandHandler("arenarecalcelo", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+        //    "Recalculates all players ELO from match history")]
+        //public static void HandleArenaRecalcELO(Session session, params string[] parameters)
+        //{
+        //    //Process 1v1
+        //    var arenaEvents = DatabaseManager.Log.GetAllArenaEvents();
+        //    Dictionary<uint, uint> characterRankings = new Dictionary<uint, uint>();
+        //    arenaEvents = arenaEvents.Where(x => x.EventType.ToLower().Equals("1v1"))?.OrderBy(x => x.CreatedDateTime).ToList() ?? new List<ArenaEvent>();
+        //    foreach(var arenaEvent in arenaEvents)
+        //    {
+        //        if(arenaEvent.WinningTeamGuid.HasValue)
+        //        {
+        //            var winner = arenaEvent.Players?.FirstOrDefault(x => x.TeamGuid == arenaEvent.WinningTeamGuid);
+        //            if(winner != null)
+        //            {
+        //                var loser = arenaEvent.Players?.FirstOrDefault(x => x.CharacterId != winner.CharacterId);
+        //                if(loser != null)
+        //                {
+        //                    var winnerCurrentRank = characterRankings.ContainsKey(winner.CharacterId) ? characterRankings[winner.CharacterId] : 1500;
+        //                    var loserCurrentRank = characterRankings.ContainsKey(loser.CharacterId) ? characterRankings[loser.CharacterId] : 1500;
 
-                            var rankChange = ArenaRanking.GetRankChange(winnerCurrentRank, loserCurrentRank, 32);
+        //                    var rankChange = ArenaRanking.GetRankChange(winnerCurrentRank, loserCurrentRank, 32);
 
-                            var winnerNewRank = (int)winnerCurrentRank + rankChange > 0 ? (uint)(winnerCurrentRank + rankChange) : default(uint);
-                            var loserNewRank = (int)loserCurrentRank - rankChange > 0 ? (uint)(loserCurrentRank - rankChange) : default(uint);
+        //                    var winnerNewRank = (int)winnerCurrentRank + rankChange > 0 ? (uint)(winnerCurrentRank + rankChange) : default(uint);
+        //                    var loserNewRank = (int)loserCurrentRank - rankChange > 0 ? (uint)(loserCurrentRank - rankChange) : default(uint);
 
-                            if (characterRankings.ContainsKey(winner.CharacterId))
-                            {
-                                characterRankings[winner.CharacterId] = winnerNewRank;
-                            }
-                            else
-                            {
-                                characterRankings.Add(winner.CharacterId, winnerNewRank);
-                            }
+        //                    if (characterRankings.ContainsKey(winner.CharacterId))
+        //                    {
+        //                        characterRankings[winner.CharacterId] = winnerNewRank;
+        //                    }
+        //                    else
+        //                    {
+        //                        characterRankings.Add(winner.CharacterId, winnerNewRank);
+        //                    }
 
-                            if (characterRankings.ContainsKey(loser.CharacterId))
-                            {
-                                characterRankings[loser.CharacterId] = loserNewRank;
-                            }
-                            else
-                            {
-                                characterRankings.Add(loser.CharacterId, loserNewRank);
-                            }
+        //                    if (characterRankings.ContainsKey(loser.CharacterId))
+        //                    {
+        //                        characterRankings[loser.CharacterId] = loserNewRank;
+        //                    }
+        //                    else
+        //                    {
+        //                        characterRankings.Add(loser.CharacterId, loserNewRank);
+        //                    }
 
-                            DatabaseManager.Log.AddToArenaStats(winner.CharacterId, winner.CharacterName, "1v1", 0, 0, 0, 0, 0, 0, 0, 0, 0, winnerNewRank);
-                            DatabaseManager.Log.AddToArenaStats(loser.CharacterId, loser.CharacterName, "1v1", 0, 0, 0, 0, 0, 0, 0, 0, 0, loserNewRank);
-                        }
-                    }
-                }
-            }
-        }
+        //                    DatabaseManager.Log.AddToArenaStats(winner.CharacterId, winner.CharacterName, "1v1", 0, 0, 0, 0, 0, 0, 0, 0, 0, winnerNewRank);
+        //                    DatabaseManager.Log.AddToArenaStats(loser.CharacterId, loser.CharacterName, "1v1", 0, 0, 0, 0, 0, 0, 0, 0, 0, loserNewRank);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
-        [CommandHandler("worldbossinfo", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
-            "Displays debug info about world bosses")]
-        public static void HandleWorldBossInfo(Session session, params string[] parameters)
-        {
-            var msg = $"Active World Boss = {WorldBossManager.GetActiveWorldBoss()?.Name ?? "Null"}\nLocation = {WorldBossManager.GetActiveWorldBoss()?.Location.ToLOCString() ?? "Null"}\nNextSpawnTime = {WorldBossManager.GetNextSpawnTime()?.ToString(new CultureInfo("en-us"))}";
-            CommandHandlerHelper.WriteOutputInfo(session, msg);
-        }
+        //[CommandHandler("worldbossinfo", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+        //    "Displays debug info about world bosses")]
+        //public static void HandleWorldBossInfo(Session session, params string[] parameters)
+        //{
+        //    var msg = $"Active World Boss = {WorldBossManager.GetActiveWorldBoss()?.Name ?? "Null"}\nLocation = {WorldBossManager.GetActiveWorldBoss()?.Location.ToLOCString() ?? "Null"}\nNextSpawnTime = {WorldBossManager.GetNextSpawnTime()?.ToString(new CultureInfo("en-us"))}";
+        //    CommandHandlerHelper.WriteOutputInfo(session, msg);
+        //}
 
-        [CommandHandler("worldbossspawn", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
-            "Displays debug info about world bosses")]
-        public static void HandleWorldBossSpawn(Session session, params string[] parameters)
-        {
-            CommandHandlerHelper.WriteOutputInfo(session, "Spawning new world boss");
-            WorldBossManager.SpawnNewWorldBoss();
-            var boss = WorldBossManager.GetActiveWorldBoss();
-            CommandHandlerHelper.WriteOutputInfo(session, $"{boss.Name} spawned at {boss.Location}");
+        //[CommandHandler("worldbossspawn", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+        //    "Displays debug info about world bosses")]
+        //public static void HandleWorldBossSpawn(Session session, params string[] parameters)
+        //{
+        //    CommandHandlerHelper.WriteOutputInfo(session, "Spawning new world boss");
+        //    WorldBossManager.SpawnNewWorldBoss();
+        //    var boss = WorldBossManager.GetActiveWorldBoss();
+        //    CommandHandlerHelper.WriteOutputInfo(session, $"{boss.Name} spawned at {boss.Location}");
 
-        }
+        //}
     }
 }

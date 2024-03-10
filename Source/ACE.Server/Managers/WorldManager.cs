@@ -86,29 +86,29 @@ namespace ACE.Server.Managers
             if (WorldStatus == WorldStatusState.Closed)
                 log.Info($"To open world to players, use command: world open");
 
-            //End any open town control events
-            try
-            {
-                foreach (var town in DatabaseManager.TownControl.GetAllTowns())
-                {
-                    var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
-                    if (latestEvent != null)
-                    {
-                        if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
-                        {
-                            latestEvent.EventEndDateTime = DateTime.UtcNow;
-                            latestEvent.IsAttackSuccess = false;
-                            DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);                            
-                            town.IsInConflict = false;
-                            DatabaseManager.TownControl.UpdateTown(town);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                log.ErrorFormat("WorldManager.Init - Error ending open town control events exception. Ex: {0}", ex);
-            }
+            ////End any open town control events
+            //try
+            //{
+            //    foreach (var town in DatabaseManager.TownControl.GetAllTowns())
+            //    {
+            //        var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
+            //        if (latestEvent != null)
+            //        {
+            //            if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
+            //            {
+            //                latestEvent.EventEndDateTime = DateTime.UtcNow;
+            //                latestEvent.IsAttackSuccess = false;
+            //                DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);                            
+            //                town.IsInConflict = false;
+            //                DatabaseManager.TownControl.UpdateTown(town);
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.ErrorFormat("WorldManager.Init - Error ending open town control events exception. Ex: {0}", ex);
+            //}
         }
 
         internal static void Open(Player player)
@@ -253,36 +253,36 @@ namespace ACE.Server.Managers
                     session.Player.Location = new Position(0xA9B40019, 84, 7.1f, 94, 0, 0, -0.0784591f, 0.996917f);  // ultimate fallback
             }
 
-            //Handle logging into arena
-            if(ArenaLocation.IsArenaLandblock(session.Player.Location?.Landblock ?? 0))
-            {
-                session.Player.Location = new Position(session.Player.Sanctuary);
-            }
+            ////Handle logging into arena
+            //if(ArenaLocation.IsArenaLandblock(session.Player.Location?.Landblock ?? 0))
+            //{
+            //    session.Player.Location = new Position(session.Player.Sanctuary);
+            //}
 
-            //Handle players who disconnected while Arena observers
-            if (session.Player.IsArenaObserver ||
-                session.Player.IsPendingArenaObserver ||
-                (!session.Player.IsPlussed && session.Player.Cloaked.HasValue && session.Player.Cloaked.Value))
-                ArenaManager.ExitArenaObserverMode(session.Player);
+            ////Handle players who disconnected while Arena observers
+            //if (session.Player.IsArenaObserver ||
+            //    session.Player.IsPendingArenaObserver ||
+            //    (!session.Player.IsPlussed && session.Player.Cloaked.HasValue && session.Player.Cloaked.Value))
+            //    ArenaManager.ExitArenaObserverMode(session.Player);
 
-            //Catch-all in case anyone gets stuck being cloaked or unattackable but isn't still flagged as an Arena Observer
-            if (!session.Player.IsPlussed)
-            {
-                player.RecallsDisabled = false;
-                player.IsFrozen = false;
-                player.Attackable = true;
-                if (player.GagDuration <= 0)
-                {
-                    player.IsGagged = false;
-                }
-                player.EnqueueBroadcastPhysicsState();
-                player.DeCloak();
-                player.IsPendingArenaObserver = false;
-                player.IsArenaObserver = false;
-            }
+            ////Catch-all in case anyone gets stuck being cloaked or unattackable but isn't still flagged as an Arena Observer
+            //if (!session.Player.IsPlussed)
+            //{
+            //    player.RecallsDisabled = false;
+            //    player.IsFrozen = false;
+            //    player.Attackable = true;
+            //    if (player.GagDuration <= 0)
+            //    {
+            //        player.IsGagged = false;
+            //    }
+            //    player.EnqueueBroadcastPhysicsState();
+            //    player.DeCloak();
+            //    player.IsPendingArenaObserver = false;
+            //    player.IsArenaObserver = false;
+            //}
 
-            if (session.Player.HasArenaRareDmgBuff || session.Player.HasArenaRareDmgReductionBuff)
-                ArenaManager.DispelArenaRares(session.Player);
+            //if (session.Player.HasArenaRareDmgBuff || session.Player.HasArenaRareDmgReductionBuff)
+            //    ArenaManager.DispelArenaRares(session.Player);
 
 
             //Handle global chat gag by IP
@@ -438,25 +438,25 @@ namespace ACE.Server.Managers
                 PlayerManager.Tick();
                 ServerPerformanceMonitor.RegisterEventEnd(ServerPerformanceMonitor.MonitorType.PlayerManager_Tick);
 
-                //Arena logic
-                try
-                {
-                    ArenaManager.Tick();
-                }
-                catch(Exception ex)
-                {
-                    log.Error($"Exception executing ArenaManager Tick. ex: {ex}");
-                }
+                ////Arena logic
+                //try
+                //{
+                //    ArenaManager.Tick();
+                //}
+                //catch(Exception ex)
+                //{
+                //    log.Error($"Exception executing ArenaManager Tick. ex: {ex}");
+                //}
 
-                //Arena logic
-                try
-                {
-                    WorldBossManager.Tick();
-                }
-                catch (Exception ex)
-                {
-                    log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
-                }
+                ////World Boss logic
+                //try
+                //{
+                //    WorldBossManager.Tick();
+                //}
+                //catch (Exception ex)
+                //{
+                //    log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
+                //}
 
                 ServerPerformanceMonitor.RestartEvent(ServerPerformanceMonitor.MonitorType.NetworkManager_InboundClientMessageQueueRun);
                 NetworkManager.InboundMessageQueue.RunActions();
