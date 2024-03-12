@@ -200,15 +200,15 @@ namespace ACE.Server.Entity
 
                 SpawnEncounters();
 
-                HandleTownControl();
+                //HandleTownControl();
             });
 
             //LoadMeshes(objects);
 
-            if (this.IsTownControlLandblock)
-            {
-                log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");                
-            }
+            //if (this.IsTownControlLandblock)
+            //{
+            //    log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");                
+            //}
         }
 
         public void HandleTownControl()
@@ -785,8 +785,8 @@ namespace ACE.Server.Entity
             }
             ServerPerformanceMonitor.AddToCumulativeEvent(ServerPerformanceMonitor.CumulativeEventHistoryType.Landblock_Tick_WorldObject_Heartbeat, stopwatch.Elapsed.TotalSeconds);
 
-            HandleTownControl();
-            HandleZergControl();
+            //HandleTownControl();
+            //HandleZergControl();
 
             Monitor5m.RegisterEventEnd();
             Monitor1h.RegisterEventEnd();

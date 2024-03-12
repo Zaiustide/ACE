@@ -499,7 +499,7 @@ namespace ACE.Database
             }
             catch (Exception ex)
             {
-                log.Error($"Error in GetArenaRank. ex:{ex}");
+                log.Error($"Error in GetArenaTopRankedByEventType. ex:{ex}");
             }
 
             return new List<ArenaCharacterStats>();

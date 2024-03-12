@@ -403,49 +403,49 @@ namespace ACE.Server.WorldObjects
                 return null;
             }
 
-            //If defender is town control boss and attacker is not a player in PK state, dmg is zero
-            if (targetPlayer == null)
-            {
-                if (target.IsTownControlBoss)
-                {
-                    if (sourcePlayer == null || !sourcePlayer.IsPK)
-                    {
-                        //Don't allow summons or NPKs to damage the town control bosses
-                        return 0.0f;
-                    }
-                    else
-                    {
-                        //Don't allow the owning clan to damage the town control bosses
-                        bool playerOwnsTown = false;
-                        var boss = TownControlBosses.TownControlBossMap[target.WeenieClassId];
-                        var town = DatabaseManager.TownControl.GetTownById(boss.TownID);
-                        var playerAlleg = AllegianceManager.GetAllegiance(sourcePlayer);
-                        if (playerAlleg != null)
-                        {
-                            var playerMonarchId = playerAlleg.MonarchId;
+            ////If defender is town control boss and attacker is not a player in PK state, dmg is zero
+            //if (targetPlayer == null)
+            //{
+            //    if (target.IsTownControlBoss)
+            //    {
+            //        if (sourcePlayer == null || !sourcePlayer.IsPK)
+            //        {
+            //            //Don't allow summons or NPKs to damage the town control bosses
+            //            return 0.0f;
+            //        }
+            //        else
+            //        {
+            //            //Don't allow the owning clan to damage the town control bosses
+            //            bool playerOwnsTown = false;
+            //            var boss = TownControlBosses.TownControlBossMap[target.WeenieClassId];
+            //            var town = DatabaseManager.TownControl.GetTownById(boss.TownID);
+            //            var playerAlleg = AllegianceManager.GetAllegiance(sourcePlayer);
+            //            if (playerAlleg != null)
+            //            {
+            //                var playerMonarchId = playerAlleg.MonarchId;
 
-                            if (town.CurrentOwnerID.HasValue && town.CurrentOwnerID.Value == playerMonarchId)
-                            {
-                                playerOwnsTown = true;
-                            }
-                        }
+            //                if (town.CurrentOwnerID.HasValue && town.CurrentOwnerID.Value == playerMonarchId)
+            //                {
+            //                    playerOwnsTown = true;
+            //                }
+            //            }
 
-                        if (playerOwnsTown)
-                        {
-                            return 0.0f;
-                        }
+            //            if (playerOwnsTown)
+            //            {
+            //                return 0.0f;
+            //            }
 
-                        //Only allow clans that are whitelisted to damage the Init bosses                        
-                        if (target.IsTownControlInitBoss)
-                        {
-                            if (playerAlleg == null || !playerAlleg.MonarchId.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)playerAlleg.MonarchId.Value))
-                            {
-                                return 0.0f;
-                            }
-                        }
-                    }
-                }
-            }
+            //            //Only allow clans that are whitelisted to damage the Init bosses                        
+            //            if (target.IsTownControlInitBoss)
+            //            {
+            //                if (playerAlleg == null || !playerAlleg.MonarchId.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)playerAlleg.MonarchId.Value))
+            //                {
+            //                    return 0.0f;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             //Arenas - If this is an arena landblock
             //don't allow any dmg except while the event is in a started status and between non-eliminated players            
@@ -683,19 +683,19 @@ namespace ACE.Server.WorldObjects
                 }
             }
 
-            //For town control, reduce the dmg on the boss based on distance of attacker
-            if (target.IsTownControlConflictBoss && sourcePlayer != null)
-            {
-                var distance = target.Location.DistanceTo(sourcePlayer.Location);
-                if (distance > 15)
-                {
-                    var distanceMod = 0.2f * (20 - distance);
-                    if (distanceMod < 0)
-                        distanceMod = 0;
+            ////For town control, reduce the dmg on the boss based on distance of attacker
+            //if (target.IsTownControlConflictBoss && sourcePlayer != null)
+            //{
+            //    var distance = target.Location.DistanceTo(sourcePlayer.Location);
+            //    if (distance > 15)
+            //    {
+            //        var distanceMod = 0.2f * (20 - distance);
+            //        if (distanceMod < 0)
+            //            distanceMod = 0;
 
-                    finalDamage = finalDamage * distanceMod;
-                }
-            }
+            //        finalDamage = finalDamage * distanceMod;
+            //    }
+            //}
 
             //Arenas - If this is an arena landblock
             //track dmg dealt and received

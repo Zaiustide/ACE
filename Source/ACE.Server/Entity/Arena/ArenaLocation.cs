@@ -55,8 +55,8 @@ namespace ACE.Server.Entity
         {
             //log.Info($"ArenaLocation.Tick() called for {this.ArenaName}");            
 
-            //If there's no active event, only run Tick every 5 seconds
-            if (!HasActiveEvent && lastTickDateTime > DateTime.Now.AddSeconds(-5))
+            //If there's no active event, only run Tick every 10 seconds
+            if (!HasActiveEvent && lastTickDateTime > DateTime.Now.AddSeconds(-10))
             {
                 return;
             }

@@ -127,7 +127,7 @@ namespace ACE.Server.WorldObjects
 
             GagsTick();
 
-            TownControlTick();
+            //TownControlTick();
 
             if(IsArenaObserver)
             {
