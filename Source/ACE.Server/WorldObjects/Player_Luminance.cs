@@ -47,12 +47,12 @@ namespace ACE.Server.WorldObjects
             }
             else
             {
-                ////Town Control - give bonus % to xp for each town your clan owns
-                //var townsOwned = GetTownOwnershipCount();
-                //if (townsOwned > 0)
-                //{
-                //    amount = (long)Math.Round((amount * (1 + (Math.Min(townsOwned, 3)) * 0.1)));
-                //}
+                //Town Control - give bonus % to xp for each town your clan owns
+                var townsOwned = GetTownOwnershipCount();
+                if (townsOwned > 0)
+                {
+                    amount = (long)Math.Round((amount * (1 + (Math.Min(townsOwned, 3)) * 0.1)));
+                }
                 AddLuminance(amount, xpType);
             }
         }

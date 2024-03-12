@@ -120,27 +120,27 @@ namespace ACE.Server.WorldObjects
 
             var boostValue = (int)Math.Round(BoostValue * ratingMod);
 
-            //if (ArenaLocation.IsArenaLandblock(player.Location.Landblock))
-            //{
-            //    var arenaEvent = ArenaManager.GetArenaEventByLandblock(player.Location.Landblock);
-            //    if (arenaEvent != null && arenaEvent.IsOvertime)
-            //    {
-            //        boostValue = 0;
-            //    }
-            //}
+            if (ArenaLocation.IsArenaLandblock(player.Location.Landblock))
+            {
+                var arenaEvent = ArenaManager.GetArenaEventByLandblock(player.Location.Landblock);
+                if (arenaEvent != null && arenaEvent.IsOvertime)
+                {
+                    boostValue = 0;
+                }
+            }
 
-            //var chugTimerMillis = PropertyManager.GetLong("pvp_chug_timer").Item;
-            //if (chugTimerMillis > 0)
-            //{
-            //    if (player.LastChugTimestamp.HasValue && Time.GetDateTimeFromTimestamp(player.LastChugTimestamp.Value) > DateTime.Now.AddMilliseconds(chugTimerMillis * -1))
-            //    {
-            //        boostValue = 0;
-            //    }
-            //    else if(boostValue > 0)
-            //    {
-            //        player.LastChugTimestamp = Time.GetUnixTime(DateTime.Now);
-            //    }
-            //}
+            var chugTimerMillis = PropertyManager.GetLong("pvp_chug_timer").Item;
+            if (chugTimerMillis > 0)
+            {
+                if (player.LastChugTimestamp.HasValue && Time.GetDateTimeFromTimestamp(player.LastChugTimestamp.Value) > DateTime.Now.AddMilliseconds(chugTimerMillis * -1))
+                {
+                    boostValue = 0;
+                }
+                else if(boostValue > 0)
+                {
+                    player.LastChugTimestamp = Time.GetUnixTime(DateTime.Now);
+                }
+            }
 
             var vitalChange = (uint)Math.Abs(player.UpdateVitalDelta(vital, boostValue));
 

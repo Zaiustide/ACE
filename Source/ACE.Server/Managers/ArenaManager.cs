@@ -46,7 +46,7 @@ namespace ACE.Server.Managers
         private static DateTime LastTickDateTime = DateTime.MinValue;
         public static void Tick()
         {
-            if (DateTime.Now.AddSeconds(-2) < LastTickDateTime)
+            if (DateTime.Now.AddSeconds(-1) < LastTickDateTime)
                 return;
 
             bool isArenasDisabled = PropertyManager.GetBool("disable_arenas").Item;

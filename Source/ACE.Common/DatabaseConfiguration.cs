@@ -29,8 +29,10 @@ namespace ACE.Common
             Password = ""
         };
 
+        public MySqlConfiguration PKKills { get; set; }
+
         public MySqlConfiguration Log { get; set; }
 
-        //public MySqlConfiguration TownControl { get; set; }    
+        public MySqlConfiguration TownControl { get; set; }    
     }
 }

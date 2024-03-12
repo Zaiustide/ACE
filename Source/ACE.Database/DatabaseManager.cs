@@ -20,7 +20,7 @@ namespace ACE.Database
 
         public static LogDatabase Log { get; } = new LogDatabase();
 
-        //public static TownControlDatabase TownControl { get; } = new TownControlDatabase();
+        public static TownControlDatabase TownControl { get; } = new TownControlDatabase();
 
         public static bool InitializationFailure = false;
 
@@ -60,7 +60,7 @@ namespace ACE.Database
 
             shardDb.Exists(true);
 
-            //TownControl.Exists(true);
+            TownControl.Exists(true);
         }
 
         public static bool AutoPromoteNextAccountToAdmin { get; set; }

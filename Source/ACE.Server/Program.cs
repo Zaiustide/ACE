@@ -298,8 +298,8 @@ namespace ACE.Server
             log.Info("Initializing PlayerManager...");
             PlayerManager.Initialize();
 
-            //log.Info("Initializing ArenaManager...");
-            //ArenaManager.Initialize();
+            log.Info("Initializing ArenaManager...");
+            ArenaManager.Initialize();
 
             log.Info("Initializing HouseManager...");
             HouseManager.Initialize();
