@@ -86,29 +86,29 @@ namespace ACE.Server.Managers
             if (WorldStatus == WorldStatusState.Closed)
                 log.Info($"To open world to players, use command: world open");
 
-            ////End any open town control events
-            //try
-            //{
-            //    foreach (var town in DatabaseManager.TownControl.GetAllTowns())
-            //    {
-            //        var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
-            //        if (latestEvent != null)
-            //        {
-            //            if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
-            //            {
-            //                latestEvent.EventEndDateTime = DateTime.UtcNow;
-            //                latestEvent.IsAttackSuccess = false;
-            //                DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);                            
-            //                town.IsInConflict = false;
-            //                DatabaseManager.TownControl.UpdateTown(town);
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.ErrorFormat("WorldManager.Init - Error ending open town control events exception. Ex: {0}", ex);
-            //}
+            //End any open town control events
+            try
+            {
+                foreach (var town in DatabaseManager.TownControl.GetAllTowns())
+                {
+                    var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
+                    if (latestEvent != null)
+                    {
+                        if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
+                        {
+                            latestEvent.EventEndDateTime = DateTime.UtcNow;
+                            latestEvent.IsAttackSuccess = false;
+                            DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);
+                            town.IsInConflict = false;
+                            DatabaseManager.TownControl.UpdateTown(town);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("WorldManager.Init - Error ending open town control events exception. Ex: {0}", ex);
+            }
         }
 
         internal static void Open(Player player)

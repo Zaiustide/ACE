@@ -129,7 +129,7 @@ namespace ACE.Server.WorldObjects
 
             HandleDBUpdates();
 
-            //HandleTownControlQuestStamps();
+            HandleTownControlQuestStamps();
 
             if (ServerManager.ShutdownInitiated)
             {

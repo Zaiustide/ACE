@@ -54,10 +54,10 @@ namespace ACE.Server.WorldObjects
             if (!IsOnNoDeathXPLandblock)
                 OnDeath_GrantXP();
 
-            //if (this.IsTownControlBoss)
-            //{
-            //    HandleTownControlBossDeath();
-            //}
+            if (this.IsTownControlBoss)
+            {
+                HandleTownControlBossDeath();
+            }
 
             //if(WorldBosses.IsWorldBoss(this.WeenieClassId))
             //{

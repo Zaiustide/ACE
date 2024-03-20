@@ -53,6 +53,8 @@ namespace ACE.Server.Entity
         public static float MaxObjectRange { get; } = 192f;
         public static float MaxObjectGhostRange { get; } = 250f;
 
+        private static DateTime lastTownControlTickDateTime = DateTime.MinValue;
+        private static DateTime lastZergControlTickDateTime = DateTime.MinValue;
 
         public LandblockId Id { get; }
 
@@ -200,15 +202,15 @@ namespace ACE.Server.Entity
 
                 SpawnEncounters();
 
-                //HandleTownControl();
+                HandleTownControl();
             });
 
             //LoadMeshes(objects);
 
-            //if (this.IsTownControlLandblock)
-            //{
-            //    log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");                
-            //}
+            if (this.IsTownControlLandblock)
+            {
+                log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");
+            }
         }
 
         public void HandleTownControl()
@@ -785,8 +787,17 @@ namespace ACE.Server.Entity
             }
             ServerPerformanceMonitor.AddToCumulativeEvent(ServerPerformanceMonitor.CumulativeEventHistoryType.Landblock_Tick_WorldObject_Heartbeat, stopwatch.Elapsed.TotalSeconds);
 
-            //HandleTownControl();
-            //HandleZergControl();
+            if (lastTownControlTickDateTime < DateTime.Now.AddSeconds(-30))
+            {
+                HandleTownControl();
+                lastTownControlTickDateTime = DateTime.Now;
+            }
+
+            if (lastZergControlTickDateTime < DateTime.Now.AddSeconds(-5))
+            {
+                HandleZergControl();
+                lastZergControlTickDateTime = DateTime.Now;
+            }
 
             Monitor5m.RegisterEventEnd();
             Monitor1h.RegisterEventEnd();

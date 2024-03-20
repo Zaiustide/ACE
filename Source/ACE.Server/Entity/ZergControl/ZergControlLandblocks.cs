@@ -19,7 +19,7 @@ namespace ACE.Server.Entity
                 {
                     _zergControlLandblocksMap = new Dictionary<uint, ZergControlArea>();
 
-                    //Zerg control Town Control landblocks to 6
+                    //Zerg control Town Control landblocks to 9
                     var holtTC = new ZergControlArea();
                     holtTC.MaxPlayersPerAllegiance = 9;
                     holtTC.AreaLandblockIds = new uint[] { 0x4FF1 };

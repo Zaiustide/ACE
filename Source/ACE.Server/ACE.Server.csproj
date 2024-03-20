@@ -288,4 +288,8 @@
     <None Include="..\..\Database\Optional\**" CopyToOutputDirectory="PreserveNewest" LinkBase="DatabaseSetupScripts\Optional\" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /E /I /Y $(ProjectDir)bin\x64\$(Configuration)\net6.0 C:\ACE\Server" />
+  </Target>
+
 </Project>

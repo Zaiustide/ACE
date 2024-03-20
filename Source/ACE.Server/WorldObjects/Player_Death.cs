@@ -626,122 +626,122 @@ namespace ACE.Server.WorldObjects
 
             var destroyCoins = PropertyManager.GetBool("corpse_destroy_pyreals").Item;
 
-            ////PK Trophy drop on death behavior
-            //if (IsPKDeath(corpse.KillerId))
-            //{
-            //    //Don't drop trophy if low level
-            //    var shouldDropTrophy = true;
-            //    var shouldDropTcRewards = true;
-            //    if (this.Level < 100)
-            //    {
-            //        shouldDropTrophy = false;
-            //    }
+            //PK Trophy drop on death behavior
+            if (IsPKDeath(corpse.KillerId))
+            {
+                //Don't drop trophy if low level
+                var shouldDropTrophy = true;
+                var shouldDropTcRewards = true;
+                if (this.Level < 100)
+                {
+                    shouldDropTrophy = false;
+                }
 
-            //    if (this.Level < 150)
-            //    {
-            //        shouldDropTcRewards = false;
-            //    }
+                if (this.Level < 150)
+                {
+                    shouldDropTcRewards = false;
+                }
 
-            //    //Don't drop trophy if killer is in same clan
-            //    var _killer = PlayerManager.FindByGuid(new ObjectGuid((uint)corpse.KillerId));
-            //    if (_killer != null)
-            //    {
-            //        var victimMonarch = this.MonarchId != null ? this.MonarchId : this.Guid.Full;
-            //        var killerMonarch = _killer.MonarchId != null ? _killer.MonarchId : _killer.Guid.Full;
-            //        if (victimMonarch == killerMonarch)
-            //        {
-            //            shouldDropTrophy = false;
-            //            shouldDropTcRewards = false;
-            //        }
+                //Don't drop trophy if killer is in same clan
+                var _killer = PlayerManager.FindByGuid(new ObjectGuid((uint)corpse.KillerId));
+                if (_killer != null)
+                {
+                    var victimMonarch = this.MonarchId != null ? this.MonarchId : this.Guid.Full;
+                    var killerMonarch = _killer.MonarchId != null ? _killer.MonarchId : _killer.Guid.Full;
+                    if (victimMonarch == killerMonarch)
+                    {
+                        shouldDropTrophy = false;
+                        shouldDropTcRewards = false;
+                    }
 
-            //        if(!victimMonarch.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)victimMonarch.Value))
-            //        {
-            //            shouldDropTcRewards = false;
-            //        }
+                    if (!victimMonarch.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)victimMonarch.Value))
+                    {
+                        shouldDropTcRewards = false;
+                    }
 
-            //        if (!killerMonarch.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)killerMonarch.Value))
-            //        {
-            //            shouldDropTcRewards = false;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        shouldDropTrophy = false;
-            //        shouldDropTcRewards = false;
-            //    }
+                    if (!killerMonarch.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)killerMonarch.Value))
+                    {
+                        shouldDropTcRewards = false;
+                    }
+                }
+                else
+                {
+                    shouldDropTrophy = false;
+                    shouldDropTcRewards = false;
+                }
 
-            //    //Don't drop trophy if two dropped within last hour
-            //    if (LastPkTrophyDropTime.HasValue &&
-            //        Last2PkTrophyDropTime.HasValue &&
-            //        Last2PkTrophyDropTime.Value > (Time.GetUnixTime() - 3600))
-            //    {
-            //        shouldDropTrophy = false;
-            //    }
+                //Don't drop trophy if two dropped within last hour
+                if (LastPkTrophyDropTime.HasValue &&
+                    Last2PkTrophyDropTime.HasValue &&
+                    Last2PkTrophyDropTime.Value > (Time.GetUnixTime() - 3600))
+                {
+                    shouldDropTrophy = false;
+                }
 
-            //    //Don't drop trophy if 10 have already dropped today
-            //    if(PkTrophyDropDay.HasValue && PkTrophyDropsToday.HasValue)
-            //    {
-            //        if(PkTrophyDropDay.Value >= Time.GetUnixTime(DateTime.Today) &&
-            //            PkTrophyDropsToday >= 10)
-            //        {
-            //            shouldDropTrophy = false;
-            //        }
-            //    }
-                
-            //    if (shouldDropTrophy)
-            //    {
-            //        var dropItem = WorldObjectFactory.CreateNewWorldObject(1000002);
-            //        dropItem.SetStackSize(1);
-            //        dropItems.Add(dropItem);
+                //Don't drop trophy if 10 have already dropped today
+                if (PkTrophyDropDay.HasValue && PkTrophyDropsToday.HasValue)
+                {
+                    if (PkTrophyDropDay.Value >= Time.GetUnixTime(DateTime.Today) &&
+                        PkTrophyDropsToday >= 10)
+                    {
+                        shouldDropTrophy = false;
+                    }
+                }
 
-            //        if(!LastPkTrophyDropTime.HasValue)
-            //        {
-            //            SetProperty(PropertyFloat.LastPkTrophyDropTime, Time.GetUnixTime());
-            //        }
-            //        else
-            //        {
-            //            SetProperty(PropertyFloat.Last2PkTrophyDropTime, LastPkTrophyDropTime.Value);
-            //            SetProperty(PropertyFloat.LastPkTrophyDropTime, Time.GetUnixTime());
-            //        }
+                if (shouldDropTrophy)
+                {
+                    var dropItem = WorldObjectFactory.CreateNewWorldObject(1000002);
+                    dropItem.SetStackSize(1);
+                    dropItems.Add(dropItem);
 
-            //        if (!PkTrophyDropDay.HasValue ||
-            //            PkTrophyDropDay < Time.GetUnixTime(DateTime.Today) ||
-            //            !PkTrophyDropsToday.HasValue)
-            //        {
-            //            SetProperty(PropertyFloat.PkTrophyDropDay, Time.GetUnixTime(DateTime.Today));
-            //            SetProperty(PropertyFloat.PkTrophyDropsToday, 1);
-            //        }
-            //        else
-            //        {
-            //            SetProperty(PropertyFloat.PkTrophyDropsToday, PkTrophyDropsToday.Value + 1);
-            //        }
-            //    }
+                    if (!LastPkTrophyDropTime.HasValue)
+                    {
+                        SetProperty(PropertyFloat.LastPkTrophyDropTime, Time.GetUnixTime());
+                    }
+                    else
+                    {
+                        SetProperty(PropertyFloat.Last2PkTrophyDropTime, LastPkTrophyDropTime.Value);
+                        SetProperty(PropertyFloat.LastPkTrophyDropTime, Time.GetUnixTime());
+                    }
 
-            //    //Drop bonus trophy during active town control events
-            //    if (TownControlLandblocks.IsTownControlLandblock(this.Location.Landblock) && shouldDropTcRewards)
-            //    {
-            //        //For Town Control landblocks that always drop a set number of pk trophies within a certain subset of cells
-            //        var townId = TownControlLandblocks.GetTownIdByLandblockId(this.Location.Landblock);
+                    if (!PkTrophyDropDay.HasValue ||
+                        PkTrophyDropDay < Time.GetUnixTime(DateTime.Today) ||
+                        !PkTrophyDropsToday.HasValue)
+                    {
+                        SetProperty(PropertyFloat.PkTrophyDropDay, Time.GetUnixTime(DateTime.Today));
+                        SetProperty(PropertyFloat.PkTrophyDropsToday, 1);
+                    }
+                    else
+                    {
+                        SetProperty(PropertyFloat.PkTrophyDropsToday, PkTrophyDropsToday.Value + 1);
+                    }
+                }
 
-            //        if (townId.HasValue)
-            //        {
-            //            var town = DatabaseManager.TownControl.GetTownById(townId.Value);
-            //            if (town.IsInConflict)
-            //            {
-            //                var pkTrophy = WorldObjectFactory.CreateNewWorldObject(1000002);
-            //                pkTrophy.SetStackSize(1);
-            //                dropItems.Add(pkTrophy);
+                //Drop bonus trophy during active town control events
+                if (TownControlLandblocks.IsTownControlLandblock(this.Location.Landblock) && shouldDropTcRewards)
+                {
+                    //For Town Control landblocks that always drop a set number of pk trophies within a certain subset of cells
+                    var townId = TownControlLandblocks.GetTownIdByLandblockId(this.Location.Landblock);
 
-            //                if (TownControlLandblocks.IsTownControlRewardLandblock(this.Location.Landblock))
-            //                {
-            //                    var dbKey = WorldObjectFactory.CreateNewWorldObject(480608);
-            //                    dbKey.SetStackSize(1);
-            //                    dropItems.Add(dbKey);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+                    if (townId.HasValue)
+                    {
+                        var town = DatabaseManager.TownControl.GetTownById(townId.Value);
+                        if (town.IsInConflict)
+                        {
+                            var pkTrophy = WorldObjectFactory.CreateNewWorldObject(1000002);
+                            pkTrophy.SetStackSize(1);
+                            dropItems.Add(pkTrophy);
+
+                            if (TownControlLandblocks.IsTownControlRewardLandblock(this.Location.Landblock))
+                            {
+                                var dbKey = WorldObjectFactory.CreateNewWorldObject(480608);
+                                dbKey.SetStackSize(1);
+                                dropItems.Add(dbKey);
+                            }
+                        }
+                    }
+                }
+            }
 
             // add items to corpse
             foreach (var dropItem in dropItems)

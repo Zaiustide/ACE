@@ -35,10 +35,10 @@
       "Username": "root",
       "Password": "Password12!"
         },
-    "PKKills": {
+    "Log": {
        "Host": "127.0.0.1",
        "Port": 3306,
-       "Database": "ace_pk_kills",
+       "Database": "ace_log",
         "Username": "root",
         "Password": "Password12!"
      }
