@@ -1,4 +1,4 @@
-DELETE FROM ace_world.treasure_death WHERE treasure_Type = 10001;
+DELETE FROM ace_world.treasure_death WHERE treasure_Type = 10002;
 
 INSERT INTO ace_world.treasure_death
 (
@@ -21,7 +21,7 @@ INSERT INTO ace_world.treasure_death
 )
 VALUES
 (  
-  10001,
+  10002,
   8,
   0.4,
   19,

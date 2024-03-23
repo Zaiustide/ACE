@@ -71,7 +71,7 @@ VALUES (490172,   1, 0x0200101A) /* Setup */
      , (490172,  19, 0x00000057) /* ActivationAnimation */
      , (490172,  22, 0x340000A9) /* PhysicsEffectTable */
      , (490172,  30,         84) /* PhysicsScript - BreatheFire */
-     , (490172,  35,       10001) /* DeathTreasureType */;
+     , (490172,  35,       10002) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490172,   1, 400, 0, 0) /* Strength */

@@ -76,7 +76,7 @@ VALUES (490166,   1, 0x020007DD) /* Setup */
      , (490166,   7, 0x10000204) /* ClothingBase */
      , (490166,   8, 0x06001035) /* Icon */
      , (490166,  22, 0x3400001A) /* PhysicsEffectTable */
-     , (490166,  35,        449) /* DeathTreasureType */;
+     , (490166,  35,        10002) /* DeathTreasureType */;
 	 
 INSERT INTO `weenie_properties_i_i_d` (`object_Id`, `type`, `value`)
 VALUES (490166,  16, 0x7F663044) /* ActivationTarget */;

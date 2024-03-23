@@ -80,7 +80,7 @@ VALUES (490253,   1, 0x02001496) /* Setup */
      , (490253,   7, 0x10000637) /* ClothingBase */
      , (490253,   8, 0x06001224) /* Icon */
      , (490253,  22, 0x34000064) /* PhysicsEffectTable */
-     , (490253,  35,       10001) /* DeathTreasureType - Loot Tier: 7 */;
+     , (490253,  35,       10002) /* DeathTreasureType - Loot Tier: 7 */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490253,   1, 500, 0, 0) /* Strength */
@@ -148,5 +148,5 @@ VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 1090519043 /* Ready */, NULL, NU
      , (@parent_id,  1,   5 /* Motion */, 0, 1, 1090519060 /* Sleeping */, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (490253, 9, 34277,  5, 0, 0.10, False) /* Trinket */
+VALUES (490253, 9, 34277,  2, 0, 0.10, False) /* Trinket */
 	 , (490253, 9,     0,  0, 0, 0.85, False) /* Create nothing for ContainTreasure */;

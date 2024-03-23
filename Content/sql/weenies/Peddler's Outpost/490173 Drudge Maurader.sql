@@ -20,7 +20,7 @@ VALUES (490173,   1,         16) /* ItemType - Creature */
      , (490173, 140,          1) /* AiOptions - CanOpenDoors */
      , (490173, 146,      5000000) /* XpOverride */
 	 , (490173, 386,         10) /* Overpower */
-	 , (490173, 332,   200); /* LuminanceAward */;
+	 , (490173, 332,   200); /* LuminanceAward */
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490173,   1, True ) /* Stuck */
@@ -83,7 +83,7 @@ VALUES (490173,   1, 0x020017C8) /* Setup */
                                    Wield Tachi (23699) | Probability: 33%
                                    Wield Yaoji (23709) | Probability: 33%
                                    Wield Acid Yari (23721) | Probability: 34% */
-     , (490173,  35,       10001) /* DeathTreasureType - Loot Tier: 8+ */;
+     , (490173,  35,       10002) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490173,   1, 300, 0, 0) /* Strength */

@@ -77,7 +77,7 @@ VALUES (490256,   1, 0x020007DD) /* Setup */
      , (490256,   7, 0x10000486) /* ClothingBase */
      , (490256,   8, 0x06001035) /* Icon */
      , (490256,  22, 0x3400001A) /* PhysicsEffectTable */
-     , (490256,  35,       10001) /* DeathTreasureType */;
+     , (490256,  35,       10002) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490256,   1, 350, 0, 0) /* Strength */
