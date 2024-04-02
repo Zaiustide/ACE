@@ -9,9 +9,9 @@ VALUES (490296,   1,        128) /* ItemType - Misc */
      , (490296,  11,          1) /* MaxStackSize */
      , (490296,  12,          1) /* StackSize */
      , (490296,  13,         50) /* StackUnitEncumbrance */
-     , (490296,  15,          10) /* StackUnitValue */
+     , (490296,  15,          5) /* StackUnitValue */
      , (490296,  16,          8) /* ItemUseable - Contained */
-     , (490296,  19,          10) /* Value */
+     , (490296,  19,          5) /* Value */
      , (490296,  33,          1) /* Bonded - Bonded */
      , (490296,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (490296,  94,         16) /* TargetType - Creature */

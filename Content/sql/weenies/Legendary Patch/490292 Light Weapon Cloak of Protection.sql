@@ -19,7 +19,7 @@ VALUES (490292,   1,          4) /* ItemType - Clothing */
      , (490292, 159,          1) /* WieldSkillType - Axe */
      , (490292, 160,        180) /* WieldDifficulty */
      , (490292, 169,         16) /* TsysMutationData */
-     , (490292, 265,         19) /* EquipmentSetId - CloakMagicDefense */
+     , (490292, 265,         53) /* EquipmentSetId - CloakMagicDefense */
      , (490292, 267,     604800) /* Lifespan */
      , (490292, 319,          5) /* ItemMaxLevel */
      , (490292, 320,          2) /* ItemXpStyle - ScalesWithLevel */

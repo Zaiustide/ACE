@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 151001;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (151001, 'sanctuarygolem', 10, '2019-09-13 00:00:00') /* Creature */;
+VALUES (151001, 'mythicwasp', 10, '2019-09-13 00:00:00') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (151001,   1,         16) /* ItemType - Creature */
@@ -18,7 +18,7 @@ VALUES (151001,   1,         16) /* ItemType - Creature */
      , (151001, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (151001, 146,   3000000) /* XpOverride */
 	 , (151001, 386,         20) /* Overpower */
-     , (151001, 332,   150); /* LuminanceAward */
+     , (151001, 332,   200); /* LuminanceAward */
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (151001,   1, True ) /* Stuck */
@@ -81,7 +81,7 @@ VALUES (151001,   1, 0x02001121) /* Setup */
      , (151001,   7, 0x10000564) /* ClothingBase */
      , (151001,   8, 0x0600103A) /* Icon */
      , (151001,  22, 0x34000022) /* PhysicsEffectTable */
-     , (151001,  35,       10001) /* DeathTreasureType - Loot Tier: 7 */;
+     , (151001,  35,       10002) /* DeathTreasureType - Loot Tier: 7 */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (151001,   1, 500, 0, 0) /* Strength */

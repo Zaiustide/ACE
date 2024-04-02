@@ -17,7 +17,7 @@ VALUES (490287,   1,        256) /* ItemType - MissileWeapon */
      , (490287,  16,          1) /* ItemUseable - No */
      , (490287,  18,          1) /* UiEffects - Magical */
      , (490287,  19,        2) /* Value */
-     , (490287,  44,         53) /* Damage */
+     , (490287,  44,         52) /* Damage */
      , (490287,  45,  268435456) /* DamageType - Base */
      , (490287,  50,          2) /* AmmoType - Bolt */
      , (490287,  51,          3) /* CombatUse - Ammo */

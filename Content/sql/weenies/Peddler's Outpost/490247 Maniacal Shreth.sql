@@ -43,7 +43,7 @@ VALUES (490247,   1,       5) /* HeartbeatInterval */
      , (490247,  17,       1) /* ArmorModVsFire */
      , (490247,  18,       1) /* ArmorModVsAcid */
      , (490247,  19,       1) /* ArmorModVsElectric */
-     , (490247,  31,      16) /* VisualAwarenessRange */
+     , (490247,  31,      20) /* VisualAwarenessRange */
      , (490247,  34,       2) /* PowerupTime */
      , (490247,  36,       1) /* ChargeSpeed */
      , (490247,  39,     0.85) /* DefaultScale */
@@ -59,8 +59,9 @@ VALUES (490247,   1,       5) /* HeartbeatInterval */
      , (490247,  73,       1) /* ResistStaminaBoost */
      , (490247,  74,       1) /* ResistManaDrain */
      , (490247,  75,       1) /* ResistManaBoost */
-     , (490247, 104,      10) /* ObviousRadarRange */
-     , (490247, 125,       1) /* ResistHealthDrain */;
+     , (490247, 104,      25) /* ObviousRadarRange */
+     , (490247, 125,       1) /* ResistHealthDrain */
+	 , (490247, 151,       1) /* IgnoreShield */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490247,   1, 'Maniacal Shreth') /* Name */
@@ -78,7 +79,7 @@ VALUES (490247,   1, 0x020005A7) /* Setup */
      , (490247,  35,    10002) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (490247,   1, 360, 0, 0) /* Strength */
+VALUES (490247,   1, 400, 0, 0) /* Strength */
      , (490247,   2, 400, 0, 0) /* Endurance */
      , (490247,   3, 380, 0, 0) /* Quickness */
      , (490247,   4, 360, 0, 0) /* Coordination */
@@ -97,7 +98,7 @@ VALUES (490247,  6, 0, 3, 0, 390, 0, 0) /* MeleeDefense        Specialized */
      , (490247, 20, 0, 3, 0,  20, 0, 0) /* Deception           Specialized */
      , (490247, 22, 0, 3, 0,  70, 0, 0) /* Jump                Specialized */
      , (490247, 24, 0, 3, 0, 150, 0, 0) /* Run                 Specialized */
-     , (490247, 45, 0, 3, 0, 560, 0, 0) /* LightWeapons        Specialized */
+     , (490247, 45, 0, 3, 0, 760, 0, 0) /* LightWeapons        Specialized */
      , (490247, 47, 0, 3, 0, 580, 0, 0) /* MissileWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)

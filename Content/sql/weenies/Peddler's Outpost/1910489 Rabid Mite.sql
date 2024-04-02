@@ -112,5 +112,5 @@ VALUES (1910489,  0,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  42
      , (1910489,  8,  4, 400, 0.35,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (1910489, 9, 490244,  0, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (1910489, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */;
+VALUES (1910489, 9, 490244,  0, 0, 0.025, False) /* 4200028 Set Randomizer Morph Gem */
+	 , (1910489, 9,     0,  0, 0, 0.975, False)    /* Create nothing for ContainTreasure */;

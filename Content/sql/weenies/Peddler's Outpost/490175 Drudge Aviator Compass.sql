@@ -17,7 +17,7 @@ VALUES (490175,   1,        128) /* ItemType - Misc */
      , (490175,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490175,   1, 'Drudge Maurader Charm') /* Name */;
+VALUES (490175,   1, 'Drudge Aviator Compass') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490175,   1, 0x020012E1) /* Setup */
