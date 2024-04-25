@@ -390,3 +390,35 @@ VALUES (0x7003F04E, 490230, 0x003F01EA, 95.6609, -252.718, -30, 0.99983, 0, 0, 0
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7003F04F, 490225, 0x003F01EA, 96.879, -248.391, -29.945, 0.727524, 0, 0, -0.686082, False, '2024-02-10 11:18:37'); /* Cave Exit Generator */
 /* @teleloc 0x003F01EA [96.878998 -248.391006 -29.945000] 0.727524 0.000000 0.000000 -0.686082 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F050, 490227, 0x003F0264, 204.512, -216.142, -29.945, 0.365057, 0, 0, 0.930985, False, '2024-03-23 14:27:06'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0264 [204.511993 -216.141998 -29.945000] 0.365057 0.000000 0.000000 0.930985 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F051, 490227, 0x003F0278, 217.006, -222.988, -29.945, -0.948641, 0, 0, 0.316355, False, '2024-03-23 14:27:17'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0278 [217.005997 -222.988007 -29.945000] -0.948641 0.000000 0.000000 0.316355 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F052, 490227, 0x003F026F, 222.644, -196.932, -29.945, -0.287137, 0, 0, -0.95789, False, '2024-03-23 14:27:24'); /* Dragon Egg Generator */
+/* @teleloc 0x003F026F [222.643997 -196.932007 -29.945000] -0.287137 0.000000 0.000000 -0.957890 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F053, 490227, 0x003F0272, 217.349, -213.016, -29.945, -0.559776, 0, 0, -0.828644, False, '2024-03-23 14:27:30'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0272 [217.348999 -213.016006 -29.945000] -0.559776 0.000000 0.000000 -0.828644 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F054, 490227, 0x003F01BD, 108.771, -208.133, -35.945, -0.4039, 0, 0, -0.914803, False, '2024-03-23 14:27:58'); /* Dragon Egg Generator */
+/* @teleloc 0x003F01BD [108.771004 -208.132996 -35.945000] -0.403900 0.000000 0.000000 -0.914803 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F055, 490227, 0x003F0124, 46.2629, -193.002, -47.945, -0.359032, 0, 0, -0.933325, False, '2024-03-23 14:28:04'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0124 [46.262901 -193.001999 -47.945000] -0.359032 0.000000 0.000000 -0.933325 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F056, 490227, 0x003F0126, 47.4764, -205.598, -47.945, 0.236272, 0, 0, -0.971687, False, '2024-03-23 14:28:06'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0126 [47.476398 -205.598007 -47.945000] 0.236272 0.000000 0.000000 -0.971687 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F057, 490227, 0x003F0125, 53.12351, -199.3058, -47.945, 0.727835, 0, 0, 0.685752, False, '2024-03-23 14:28:11'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0125 [53.123508 -199.305801 -47.945000] 0.727835 0.000000 0.000000 0.685752 */

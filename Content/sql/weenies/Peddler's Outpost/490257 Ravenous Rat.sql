@@ -71,7 +71,7 @@ VALUES (490257,   1, 0x0200003D) /* Setup */
      , (490257,  19, 0x00000056) /* ActivationAnimation */
      , (490257,  22, 0x34000023) /* PhysicsEffectTable */
      , (490257,  30,         86) /* PhysicsScript - BreatheAcid */
-     , (490257,  35,       10001) /* DeathTreasureType */;
+     , (490257,  35,       10002) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490257,   1, 320, 0, 0) /* Strength */
@@ -90,13 +90,13 @@ INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s
 VALUES (490257,  6, 0, 2, 0, 360, 0, 0) /* MeleeDefense        Trained */
      , (490257,  7, 0, 2, 0, 256, 0, 0) /* MissileDefense      Trained */
      , (490257, 15, 0, 2, 0, 400, 0, 0) /* MagicDefense        Trained */
-     , (490257, 16, 0, 2, 0, 165, 0, 0) /* ManaConversion      Trained */
-     , (490257, 31, 0, 2, 0, 198, 0, 0) /* CreatureEnchantment Trained */
-     , (490257, 33, 0, 2, 0, 198, 0, 0) /* LifeMagic           Trained */
-     , (490257, 34, 0, 2, 0, 198, 0, 0) /* WarMagic            Trained */
-     , (490257, 44, 0, 2, 0, 650, 0, 0) /* HeavyWeapons        Trained */
-     , (490257, 45, 0, 2, 0, 650, 0, 0) /* LightWeapons        Trained */
-     , (490257, 46, 0, 2, 0, 650, 0, 0) /* FinesseWeapons      Trained */;
+     , (490257, 16, 0, 2, 0, 700, 0, 0) /* ManaConversion      Trained */
+     , (490257, 31, 0, 2, 0, 700, 0, 0) /* CreatureEnchantment Trained */
+     , (490257, 33, 0, 2, 0, 700, 0, 0) /* LifeMagic           Trained */
+     , (490257, 34, 0, 2, 0, 700, 0, 0) /* WarMagic            Trained */
+     , (490257, 44, 0, 2, 0, 850, 0, 0) /* HeavyWeapons        Trained */
+     , (490257, 45, 0, 2, 0, 850, 0, 0) /* LightWeapons        Trained */
+     , (490257, 46, 0, 2, 0, 850, 0, 0) /* FinesseWeapons      Trained */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
 VALUES (490257,  0,  2, 180, 0.75,  430,  421,  421,  310,  421,  421,  421,  310,    0, 1, 0.33,  0.4,    0, 0.33,  0.4,    0, 0.33,  0.4,    0, 0.33,  0.4,    0) /* Head */

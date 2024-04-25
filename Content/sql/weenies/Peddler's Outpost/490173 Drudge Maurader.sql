@@ -20,7 +20,7 @@ VALUES (490173,   1,         16) /* ItemType - Creature */
      , (490173, 140,          1) /* AiOptions - CanOpenDoors */
      , (490173, 146,      5000000) /* XpOverride */
 	 , (490173, 386,         10) /* Overpower */
-	 , (490173, 332,   200); /* LuminanceAward */;
+	 , (490173, 332,   200); /* LuminanceAward */
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490173,   1, True ) /* Stuck */
@@ -40,23 +40,23 @@ VALUES (490173,   1,       5) /* HeartbeatInterval */
      , (490173,   4,       3) /* StaminaRate */
      , (490173,   5,       1) /* ManaRate */
      , (490173,  12,     0.5) /* Shade */
-     , (490173,  13, 1) /* ArmorModVsSlash */
-     , (490173,  14, 1) /* ArmorModVsPierce */
-     , (490173,  15, 1) /* ArmorModVsBludgeon */
-     , (490173,  16, 1) /* ArmorModVsCold */
-     , (490173,  17, 1) /* ArmorModVsFire */
-     , (490173,  18, 1) /* ArmorModVsAcid */
-     , (490173,  19, 1) /* ArmorModVsElectric */
+     , (490173,  13, 1.5) /* ArmorModVsSlash */
+     , (490173,  14, 1.2) /* ArmorModVsPierce */
+     , (490173,  15, 1.5) /* ArmorModVsBludgeon */
+     , (490173,  16, 1.5) /* ArmorModVsCold */
+     , (490173,  17, 1.5) /* ArmorModVsFire */
+     , (490173,  18, 1.5) /* ArmorModVsAcid */
+     , (490173,  19, 1.5) /* ArmorModVsElectric */
      , (490173,  31,      18) /* VisualAwarenessRange */
      , (490173,  34,       1) /* PowerupTime */
      , (490173,  36,       1) /* ChargeSpeed */
      , (490173,  39, 1.5) /* DefaultScale */
-     , (490173,  64, 1) /* ResistSlash */
-     , (490173,  65, 1) /* ResistPierce */
-     , (490173,  66, 1) /* ResistBludgeon */
-     , (490173,  67, 0.88) /* ResistFire */
-     , (490173,  68, 1) /* ResistCold */
-     , (490173,  69, 1) /* ResistAcid */
+     , (490173,  64,     0.8) /* ResistSlash */
+     , (490173,  65,     0.8) /* ResistPierce */
+     , (490173,  66,     0.9) /* ResistBludgeon */
+     , (490173,  67,     1.0) /* ResistFire */
+     , (490173,  68,     0.9) /* ResistCold */
+     , (490173,  69,     0.9) /* ResistAcid */
      , (490173,  70,       1) /* ResistElectric */
      , (490173,  71,       1) /* ResistHealthBoost */
      , (490173,  72,       1) /* ResistStaminaDrain */
@@ -79,11 +79,7 @@ VALUES (490173,   1, 0x020017C8) /* Setup */
      , (490173,   4, 0x30000004) /* CombatTable */
      , (490173,   8, 0x06001035) /* Icon */
      , (490173,  22, 0x34000017) /* PhysicsEffectTable */
-     , (490173,  32,        272) /* WieldedTreasureType - 
-                                   Wield Tachi (23699) | Probability: 33%
-                                   Wield Yaoji (23709) | Probability: 33%
-                                   Wield Acid Yari (23721) | Probability: 34% */
-     , (490173,  35,       10001) /* DeathTreasureType - Loot Tier: 8+ */;
+     , (490173,  35,       10002) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490173,   1, 300, 0, 0) /* Strength */
@@ -108,7 +104,9 @@ VALUES (490173,  6, 0, 3, 0, 365, 0, 0) /* MeleeDefense        Specialized */
      , (490173, 31, 0, 3, 0,  395, 0, 0) /* CreatureEnchantment Specialized */
      , (490173, 33, 0, 3, 0, 600, 0, 0) /* LifeMagic           Specialized */
      , (490173, 34, 0, 3, 0, 600, 0, 0) /* WarMagic            Specialized */
-     , (490173, 45, 0, 3, 0, 600, 0, 0) /* LightWeapons        Specialized */
+     , (490173, 45, 0, 3, 0, 750, 0, 0) /* LightWeapons        Specialized */
+	 , (490173, 44, 0, 2, 0, 750, 0, 0) /* HeavyWeapons        Trained */
+     , (490173, 46, 0, 2, 0, 750, 0, 0) /* FinesseWeapons      Trained */
      , (490173, 47, 0, 3, 0, 500, 0, 0) /* MissileWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
@@ -125,7 +123,6 @@ VALUES (490173,  0,  4,  0,    0,  230,  189,  101,  191,  166,  191,  166,  207
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490173,  6199,  2.085)  /* Incantation of Lightning Arc */
      , (490173,  4483,   2.03)  /* Incantation of Lightning Vulnerability Other */
-     , (490173,  4643,  2.008)  /* Incantation of Drain Health Other */
      , (490173,  4312,   2.04)  /* Incantation of Imperil Other */
      , (490173,  4326,   2.03)  /* Incantation of Weakness Other */
      , (490173,  4294,   2.03)  /* Incantation of Clumsiness Other */
@@ -205,7 +202,8 @@ VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 268435537 /* Twitch1 */, NULL, N
 
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
+VALUES   (490173, 2, 25632,  1, 2, 1, False) /* Create The Fist of Bellenesse (31199) for Wield */
+, (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
      , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 43901,  5, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */

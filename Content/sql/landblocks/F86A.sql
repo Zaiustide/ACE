@@ -49,13 +49,21 @@ VALUES (0x7F86A013, 490118, 0xF86A000A, 36.3337, 32.9328, 0.055, 0.92388, 0, 0, 
 /* @teleloc 0xF86A000A [36.333698 32.932800 0.055000] 0.923880 0.000000 0.000000 -0.382684 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86A014, 490262, 0xF86A001B, 85.557, 48.8954, 0.055, 0.646436, 0, 0, -0.762968, False, '2024-02-10 16:31:14');
+VALUES (0x7F86A014, 490262, 0xF86A001B, 85.557, 48.8954, 0.055, 0.646436, 0, 0, -0.762968, False, '2024-02-10 16:31:14'); /* Upper Outpost Isle Generator */
 /* @teleloc 0xF86A001B [85.556999 48.895401 0.055000] 0.646436 0.000000 0.000000 -0.762968 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86A015, 490262, 0xF86A0019, 86.7552, 22.2347, 0.202106, 0.002904, 0, 0, -0.999996, False, '2024-02-10 16:31:18');
+VALUES (0x7F86A015, 490262, 0xF86A0019, 86.7552, 22.2347, 0.202106, 0.002904, 0, 0, -0.999996, False, '2024-02-10 16:31:18'); /* Upper Outpost Isle Generator */
 /* @teleloc 0xF86A0019 [86.755203 22.234699 0.202106] 0.002904 0.000000 0.000000 -0.999996 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86A016, 490262, 0xF86A0032, 165.4286, 38.60438, 0.055, 0.946302, 0, 0, 0.323285, False, '2024-02-10 16:32:21');
-/* @teleloc 0xF86A0032 [165.428604 38.604382 0.055000] 0.946302 0.000000 0.000000 0.323285 */
+VALUES (0x7F86A016, 490262, 0xF86A0032, 165.429, 38.6044, 0.055, 0.946302, 0, 0, 0.323285, False, '2024-02-10 16:32:21'); /* Upper Outpost Isle Generator */
+/* @teleloc 0xF86A0032 [165.429001 38.604401 0.055000] 0.946302 0.000000 0.000000 0.323285 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F86A017, 490262, 0xF86A0003, 0.561025, 61.6197, -0.395, 0.331685, 0, 0, 0.94339, False, '2024-04-01 21:34:42'); /* Upper Outpost Isle Generator */
+/* @teleloc 0xF86A0003 [0.561025 61.619701 -0.395000] 0.331685 0.000000 0.000000 0.943390 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F86A018, 490262, 0xF86A003C, 179.7994, 82.41437, -0.845, -0.957001, 0, 0, -0.290086, False, '2024-04-01 21:40:53'); /* Upper Outpost Isle Generator */
+/* @teleloc 0xF86A003C [179.799393 82.414368 -0.845000] -0.957001 0.000000 0.000000 -0.290086 */

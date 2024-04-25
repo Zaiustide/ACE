@@ -80,7 +80,7 @@ VALUES (490151,   1, 0x0200101A) /* Setup */
      , (490151,  19, 0x00000057) /* ActivationAnimation */
      , (490151,  22, 0x340000A9) /* PhysicsEffectTable */
      , (490151,  30,         84) /* PhysicsScript - BreatheFire */
-     , (490151,  35,       2105) /* DeathTreasureType */;
+     , (490151,  35,       10002) /* DeathTreasureType */;
 	 
 INSERT INTO `weenie_properties_i_i_d` (`object_Id`, `type`, `value`)
 VALUES (490151,  16, 0x7F86400B) /* ActivationTarget */;

@@ -77,7 +77,7 @@ VALUES (490260,   1, 0x020014A0) /* Setup */
      , (490260,   7, 0x10000639) /* ClothingBase */
      , (490260,   8, 0x06001DF1) /* Icon */
      , (490260,  22, 0x340000B8) /* PhysicsEffectTable */
-     , (490260,  35,       10001) /* DeathTreasureType */;
+     , (490260,  35,       10002) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490260,   1, 360, 0, 0) /* Strength */
@@ -100,9 +100,9 @@ VALUES (490260,  6, 0, 3, 0, 380, 0, 0) /* MeleeDefense        Specialized */
      , (490260, 20, 0, 3, 0,  50, 0, 0) /* Deception           Specialized */
      , (490260, 31, 0, 3, 0, 175, 0, 0) /* CreatureEnchantment Specialized */
      , (490260, 32, 0, 3, 0, 175, 0, 0) /* ItemEnchantment     Specialized */
-     , (490260, 33, 0, 3, 0, 550, 0, 0) /* LifeMagic           Specialized */
-     , (490260, 34, 0, 3, 0, 550, 0, 0) /* WarMagic            Specialized */
-     , (490260, 45, 0, 3, 0, 500, 0, 0) /* LightWeapons        Specialized */;
+     , (490260, 33, 0, 3, 0, 650, 0, 0) /* LifeMagic           Specialized */
+     , (490260, 34, 0, 3, 0, 650, 0, 0) /* WarMagic            Specialized */
+     , (490260, 45, 0, 3, 0, 800, 0, 0) /* LightWeapons        Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
 VALUES (490260,  0,  4, 275, 0.75,  650,  650,  618,  618,  650,  650,  650,  650,    0, 1, 0.44,  0.3,    0,  0.4,  0.1,    0, 0.44,  0.3,    0,  0.4,  0.1,    0) /* Head */
