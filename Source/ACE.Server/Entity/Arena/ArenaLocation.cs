@@ -770,24 +770,24 @@ namespace ACE.Server.Entity
                                 //Give % xp to next level
                                 if (player.Level > 0 && player.Level < 50)
                                 {
-                                    //25% xp to next level, min of 100k
-                                    player.GrantLevelProportionalXp(0.25, 100000, long.MaxValue, true);
+                                    //500% xp to next level
+                                    player.GrantLevelProportionalXp(5, 0, 0, true);
                                 }
                                 else if (player.Level >= 50 && player.Level < 150)
                                 {
-                                    //15% xp to next level, min of 1 mil
-                                    player.GrantLevelProportionalXp(0.15, 1000000, long.MaxValue, true);
+                                    //50% xp to next level
+                                    player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                 }
                                 else if (player.Level >= 150)
                                 {
-                                    //10% xp to next level, min of 1 mil
-                                    player.GrantLevelProportionalXp(0.1, 1000000, long.MaxValue, true);
+                                    //35% xp to next level
+                                    player.GrantLevelProportionalXp(0.35, 0, 0, true);
                                 }
 
-                                //Give 8k lum
+                                //Give 30k lum
                                 if (player.MaximumLuminance != null)
                                 {
-                                    player.GrantLuminance(8000, XpType.Quest, ShareType.None);
+                                    player.GrantLuminance(30000, XpType.Quest, ShareType.None);
                                 }
 
                                 //Give 5 PK trophies
@@ -821,6 +821,23 @@ namespace ACE.Server.Entity
                                     player.Session.Network.EnqueueSend(new GameMessageCreateObject(arenaKey));
                                     var msg = new GameMessageSystemChat($"You have received one of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
                                     player.Session.Network.EnqueueSend(msg);
+                                }                                
+
+                                //Give 25% chance for extra 1 to 3 Darkbeat's Lost Storage Keys
+                                if (new Random().NextDouble() > 0.75)
+                                {
+                                    var bonusCount = new Random().Next(1, 4);
+                                    for (int i = 0; i < bonusCount; i++)
+                                    {
+                                        arenaKey.SetStackSize(1);
+                                        var arenaKeyCreateResult2 = player.TryCreateInInventoryWithNetworking(arenaKey);
+                                        if (arenaKeyCreateResult2)
+                                        {
+                                            player.Session.Network.EnqueueSend(new GameMessageCreateObject(arenaKey));
+                                            var msg = new GameMessageSystemChat($"You have received a bonus Darkbeat's Lost Storage Key", ChatMessageType.Broadcast);
+                                            player.Session.Network.EnqueueSend(msg);
+                                        }
+                                    }
                                 }
                                 break;
 
@@ -831,21 +848,21 @@ namespace ACE.Server.Entity
                                 //Give % xp to next level
                                 if (player.Level > 0 && player.Level < 50)
                                 {
-                                    player.GrantLevelProportionalXp(1, 1000000, long.MaxValue, true);
+                                    player.GrantLevelProportionalXp(10, 0, 0, true);
                                 }
                                 else if (player.Level >= 50 && player.Level < 150)
                                 {
-                                    player.GrantLevelProportionalXp(0.75, 1000000, long.MaxValue, true);
+                                    player.GrantLevelProportionalXp(2, 0, 0, true);
                                 }
                                 else if (player.Level >= 150)
                                 {
-                                    player.GrantLevelProportionalXp(0.5, 1000000, long.MaxValue, true);
+                                    player.GrantLevelProportionalXp(1, 0, 0, true);
                                 }
 
-                                //Give 20k lum
+                                //Give 80k lum
                                 if (player.MaximumLuminance != null)
                                 {
-                                    player.GrantLuminance(20000, XpType.Quest, ShareType.None);
+                                    player.GrantLuminance(80000, XpType.Quest, ShareType.None);
                                 }
 
                                 //Give 5 PK trophies
@@ -859,7 +876,6 @@ namespace ACE.Server.Entity
                                     player.Session.Network.EnqueueSend(msg);
                                 }
 
-
                                 //Give 3 Phial of Bloody Tears
                                 var ffaWinner_arenaTrophy = WorldObjectFactory.CreateNewWorldObject(1000003); //Phial of Bloody Tears
                                 ffaWinner_arenaTrophy.SetStackSize(3);
@@ -871,15 +887,18 @@ namespace ACE.Server.Entity
                                     player.Session.Network.EnqueueSend(msg);
                                 }
 
-                                //Give 1 Darkbeat's Lost Storage Keys
-                                var ffaWinner_arenaKey = WorldObjectFactory.CreateNewWorldObject(480608); //Darkbeat's Lost Storage Keys
-                                ffaWinner_arenaKey.SetStackSize(1);
-                                var ffaWinner_arenaKeyCreateResult = player.TryCreateInInventoryWithNetworking(ffaWinner_arenaKey);
-                                if (ffaWinner_arenaKeyCreateResult)
+                                //Give 5 Darkbeat's Lost Storage Keys
+                                for (int i = 0; i < 5; i++)
                                 {
-                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(ffaWinner_arenaKey));
-                                    var msg = new GameMessageSystemChat($"You have received one of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
-                                    player.Session.Network.EnqueueSend(msg);
+                                    var ffaWinner_arenaKey = WorldObjectFactory.CreateNewWorldObject(480608); //Darkbeat's Lost Storage Keys
+                                    ffaWinner_arenaKey.SetStackSize(1);
+                                    var ffaWinner_arenaKeyCreateResult = player.TryCreateInInventoryWithNetworking(ffaWinner_arenaKey);
+                                    if (ffaWinner_arenaKeyCreateResult)
+                                    {
+                                        player.Session.Network.EnqueueSend(new GameMessageCreateObject(ffaWinner_arenaKey));
+                                        var msg = new GameMessageSystemChat($"You have received five of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
+                                        player.Session.Network.EnqueueSend(msg);
+                                    }
                                 }
                                 break;
                         }
@@ -940,13 +959,13 @@ namespace ACE.Server.Entity
                             case "1v1":
                             case "2v2":
 
-                                //Give 2.5% xp to next level
-                                player.GrantLevelProportionalXp(0.025, 250000, long.MaxValue, true);
+                                //Give 10% xp to next level
+                                player.GrantLevelProportionalXp(0.1, 0, 0, true);
 
-                                //Give 3k lum
+                                //Give 5k lum
                                 if (player.MaximumLuminance != null)
                                 {
-                                    player.GrantLuminance(3000, XpType.Quest, ShareType.None);
+                                    player.GrantLuminance(5000, XpType.Quest, ShareType.None);
                                 }
 
                                 //Give 1 PK trophy
@@ -983,21 +1002,21 @@ namespace ACE.Server.Entity
                                     //Give % xp to next level
                                     if (player.Level > 0 && player.Level < 50)
                                     {
-                                        player.GrantLevelProportionalXp(0.75, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(5, 0, 0, true);
                                     }
                                     else if (player.Level >= 50 && player.Level < 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.25, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(1, 0, 0, true);
                                     }
                                     else if (player.Level >= 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.15, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                     }
 
-                                    //Give 8k lum
+                                    //Give 12k lum
                                     if (player.MaximumLuminance != null)
                                     {
-                                        player.GrantLuminance(8000, XpType.Quest, ShareType.None);
+                                        player.GrantLuminance(12000, XpType.Quest, ShareType.None);
                                     }
 
                                     //Give 3 PK trophies
@@ -1038,21 +1057,21 @@ namespace ACE.Server.Entity
                                     //Give % xp to next level
                                     if (player.Level > 0 && player.Level < 50)
                                     {
-                                        player.GrantLevelProportionalXp(0.25, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(1, 0, 0, true);
                                     }
                                     else if (player.Level >= 50 && player.Level < 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.15, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                     }
                                     else if (player.Level >= 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.05, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.25, 0, 0, true);
                                     }
 
-                                    //Give 5k lum
+                                    //Give 8k lum
                                     if (player.MaximumLuminance != null)
                                     {
-                                        player.GrantLuminance(5000, XpType.Quest, ShareType.None);
+                                        player.GrantLuminance(8000, XpType.Quest, ShareType.None);
                                     }
 
                                     //Give 1 PK trophies
@@ -1093,21 +1112,21 @@ namespace ACE.Server.Entity
                                     //Give % xp to next level
                                     if (player.Level > 0 && player.Level < 50)
                                     {
-                                        player.GrantLevelProportionalXp(0.1, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                     }
                                     else if (player.Level >= 50 && player.Level < 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.05, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.25, 0, 0, true);
                                     }
                                     else if (player.Level >= 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.025, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.1, 0, 0, true);
                                     }
 
-                                    //Give 3k lum
+                                    //Give 5k lum
                                     if (player.MaximumLuminance != null)
                                     {
-                                        player.GrantLuminance(3000, XpType.Quest, ShareType.None);
+                                        player.GrantLuminance(5000, XpType.Quest, ShareType.None);
                                     }
 
                                     //25% chance to give 1 Darkbeat's Lost Storage Keys
@@ -1500,23 +1519,23 @@ namespace ACE.Server.Entity
             fowl.ArenaName = "Fowl Basement";
             locList.Add(fowl.LandblockId, fowl);
 
-            //Landing Strip
-            var ls = new ArenaLocation();
-            ls.LandblockId = 0xD50E;
-            ls.SupportedEventTypes = new List<string>();
-            ls.SupportedEventTypes.Add("1v1");
-            ls.SupportedEventTypes.Add("2v2");
-            ls.ArenaName = "The Landing Strip";
-            locList.Add(ls.LandblockId, ls);
+            ////Landing Strip
+            //var ls = new ArenaLocation();
+            //ls.LandblockId = 0xD50E;
+            //ls.SupportedEventTypes = new List<string>();
+            //ls.SupportedEventTypes.Add("1v1");
+            //ls.SupportedEventTypes.Add("2v2");
+            //ls.ArenaName = "The Landing Strip";
+            //locList.Add(ls.LandblockId, ls);
 
-            //The Heptagon
-            var heptagon = new ArenaLocation();
-            heptagon.LandblockId = 0x7222;
-            heptagon.SupportedEventTypes = new List<string>();
-            heptagon.SupportedEventTypes.Add("1v1");
-            heptagon.SupportedEventTypes.Add("2v2");
-            heptagon.ArenaName = "The Heptagon";
-            locList.Add(heptagon.LandblockId, heptagon);
+            ////The Heptagon
+            //var heptagon = new ArenaLocation();
+            //heptagon.LandblockId = 0x7222;
+            //heptagon.SupportedEventTypes = new List<string>();
+            //heptagon.SupportedEventTypes.Add("1v1");
+            //heptagon.SupportedEventTypes.Add("2v2");
+            //heptagon.ArenaName = "The Heptagon";
+            //locList.Add(heptagon.LandblockId, heptagon);
 
             return locList;
         }
@@ -1538,8 +1557,8 @@ namespace ACE.Server.Entity
                         0xECEC, //Pyramid -Admin Island
                         //0x00AF, //Mad Cow Arena
                         0x596A, //Fowl Basement
-                        0xD50E, //Landing Strip
-                        0x7222  //The Heptagon
+                        //0xD50E, //Landing Strip
+                        //0x7222  //The Heptagon
                     };
                 }
 
