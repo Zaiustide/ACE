@@ -1565,5 +1565,12 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyFloat.LastChugTimestamp) ?? 0;
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastChugTimestamp); else SetProperty(PropertyFloat.LastChugTimestamp, value.Value); }
         }
+
+        /* Tinkering Tool morph gem */
+        public bool NextTinkIsFoolproof
+        {
+            get => GetProperty(PropertyBool.NextTinkIsFoolproof) ?? false;
+            set { if (!value) RemoveProperty(PropertyBool.NextTinkIsFoolproof); else SetProperty(PropertyBool.NextTinkIsFoolproof, value); }
+        }
     }
 }

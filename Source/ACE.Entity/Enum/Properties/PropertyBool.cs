@@ -207,6 +207,9 @@ namespace ACE.Entity.Enum.Properties
 
         [ServerOnly]
         IsGlobalChatGagged = 9015,
+
+        [ServerOnly]
+        NextTinkIsFoolproof = 9016,
     }
 
     public static class PropertyBoolExtensions

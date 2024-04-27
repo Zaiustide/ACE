@@ -1,5 +1,5 @@
 using System;
-
+using System.Linq;
 using ACE.Common;
 using ACE.Entity;
 using ACE.Entity.Enum;
@@ -161,7 +161,51 @@ namespace ACE.Server.WorldObjects
                 player.TryConsumeFromInventoryWithNetworking(this, 1);
                 return;
             }
-            
+
+            //Custom Tinkering Tool
+            //Check if player has at least one tinkering skill trained
+            if (WeenieClassId == 490298)
+            {
+                string playerMsg = "";
+
+                var tinkeringSkills =
+                player.Skills.Values.Where(
+                    s =>
+                    (
+                        s.AdvancementClass == SkillAdvancementClass.Specialized ||
+                        s.AdvancementClass == SkillAdvancementClass.Trained
+                    ) &&
+                    (
+                        s.Skill == Skill.ItemTinkering ||
+                        s.Skill == Skill.MagicItemTinkering ||
+                        s.Skill == Skill.WeaponTinkering ||
+                        s.Skill == Skill.ArmorTinkering
+                    ));
+
+                if (tinkeringSkills == null || tinkeringSkills.Count() < 1)
+                {
+                    playerMsg = $"You must have trained at least one tinkering skill to use an {this.Name}";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                    return;
+                }
+
+                //Check if player already has the NextTinkIsFoolproof flag set
+                if (player.NextTinkIsFoolproof)
+                {
+                    playerMsg = $"You have already consumed an {this.Name} and have not yet used it for a tinkering attempt.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                    return;
+                }
+
+                //Set NextTinkIsFoolproof flag to true
+                player.NextTinkIsFoolproof = true;
+
+                playerMsg = $"You feel a slight discomfort as the {this.Name} slowly slides into you, but that discomfort soon fades and is replaced by an overwhelming feeling of fulfillment.  The tool suddenly blasts its essence into you, filling you with good luck. As the tool empties itself into you, it becomes flacid and wet and slowly melts into nothing, now fully consumed.  You feel as though the next time you tinker anything it can't possibly fail.";
+                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+            }
+
 
             // trying to use a dispel potion while pk timer is active
             // send error message and cancel - do not consume item
