@@ -98,9 +98,9 @@ namespace ACE.Server.Managers
             var spawnLoc = boss.RollRandomSpawnLocation();
             boss.Location = spawnLoc.Value;
 
-            //Perma load the landblock for the spawn location
+            //Load the landblock for the spawn location
             var landblockID = new LandblockId(spawnLoc.Key << 16);
-            var landblock = LandblockManager.GetLandblock(landblockID, false, true);
+            var landblock = LandblockManager.GetLandblock(landblockID, false, false);
 
             //Spawn the boss
             var bossWeenie = DatabaseManager.World.GetCachedWeenie(boss.WeenieID);
@@ -133,6 +133,14 @@ namespace ACE.Server.Managers
         public static WorldBoss GetActiveWorldBoss()
         {
             return activeWorldBoss;            
+        }
+
+        public static bool IsActiveWorldBossLocation(uint landblockId)
+        {
+            if (activeWorldBoss == null || activeWorldBoss.Location == null)
+                return false;
+
+            return activeWorldBoss.Location.Landblock == landblockId;
         }
 
         public static DateTime? GetNextSpawnTime()

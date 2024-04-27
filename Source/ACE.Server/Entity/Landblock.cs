@@ -33,6 +33,7 @@ using ACE.Adapter.GDLE.Models;
 using ACE.Database.Models.TownControl;
 using ACE.Server.Network.Handlers;
 using ACE.Server.Entity;
+using ACE.Server.Entity.WorldBoss;
 
 namespace ACE.Server.Entity
 {
@@ -831,9 +832,9 @@ namespace ACE.Server.Entity
 
                     InsertWorldObjectIntoSortedHeartbeatList(kvp.Value);
                     InsertWorldObjectIntoSortedGeneratorUpdateList(kvp.Value);
-                    InsertWorldObjectIntoSortedGeneratorRegenerationList(kvp.Value);
+                    InsertWorldObjectIntoSortedGeneratorRegenerationList(kvp.Value);                    
 
-                    if (kvp.Value.WeenieClassId == 80007) // Landblock KeepAlive weenie (ACE custom)
+                    if (kvp.Value.WeenieClassId == 80007 || WorldBosses.IsWorldBoss(kvp.Value.WeenieClassId)) // Landblock KeepAlive weenie (ACE custom)
                         HasNoKeepAliveObjects = false;
                 }
 
@@ -855,11 +856,12 @@ namespace ACE.Server.Entity
                         sortedGeneratorsByNextGeneratorUpdate.Remove(wo);
                         sortedGeneratorsByNextRegeneration.Remove(wo);
 
-                        if (wo.WeenieClassId == 80007) // Landblock KeepAlive weenie (ACE custom)
+                        if (wo.WeenieClassId == 80007 || WorldBosses.IsWorldBoss(wo.WeenieClassId)) // Landblock KeepAlive weenie (ACE custom)
                         {
                             var keepAliveObject = worldObjects.Values.FirstOrDefault(w => w.WeenieClassId == 80007);
+                            var wbObject = worldObjects.Values.FirstOrDefault(w => WorldBosses.IsWorldBoss(w.WeenieClassId));
 
-                            if (keepAliveObject == null)
+                            if (keepAliveObject == null && wbObject == null)
                                 HasNoKeepAliveObjects = true;
                         }
                     }

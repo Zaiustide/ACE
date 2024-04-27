@@ -231,9 +231,12 @@ namespace ACE.Server.WorldObjects
                 }
             }
 
-            else if (WorldBosses.IsWorldBoss(this.WeenieClassId))
+            else if (
+                (!this.WorldBoss_LastPeriodicGlobal.HasValue ||
+                this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-2)) &&
+                WorldBosses.IsWorldBoss(this.WeenieClassId))
             {
-                if (this.Health.Percent < 1 && (!this.WorldBoss_LastPeriodicGlobal.HasValue || this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-2)))
+                if(this.Health.Percent < 1 && (!this.WorldBoss_LastPeriodicGlobal.HasValue || this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-5)))
                 {
                     var msg = "";
                     string coordsDisplay = this.Location.GetMapCoordStr();
@@ -247,21 +250,39 @@ namespace ACE.Server.WorldObjects
                     }
                     PlayerManager.BroadcastToAll(new GameMessageSystemChat(msg, ChatMessageType.Broadcast));
 
-                    if (this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-10))
+                    //Send global to webhook
+                    try
                     {
-                        //Send global to webhook
-                        try
+                        var webhookUrl = PropertyManager.GetString("world_boss_webhook").Item;
+                        if (!string.IsNullOrEmpty(webhookUrl))
                         {
-                            var webhookUrl = PropertyManager.GetString("world_boss_webhook").Item;
-                            if (!string.IsNullOrEmpty(webhookUrl))
-                            {
-                                _ = TurbineChatHandler.SendWebhookedChat("World Boss", msg, webhookUrl, "Global");
-                            }
+                            _ = TurbineChatHandler.SendWebhookedChat("World Boss", msg, webhookUrl, "Global");
                         }
-                        catch (Exception ex)
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Failed sending World Boss Death global message to webhook. Ex:{0}", ex);
+                    }
+
+                    this.WorldBoss_LastPeriodicGlobal = DateTime.Now;
+                }
+                else if (!this.WorldBoss_LastPeriodicGlobal.HasValue || this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-15))
+                {
+                    string msg = $"The search for {this.Name} continues!";
+                    PlayerManager.BroadcastToAll(new GameMessageSystemChat(msg, ChatMessageType.Broadcast));
+
+                    //Send global to webhook
+                    try
+                    {
+                        var webhookUrl = PropertyManager.GetString("world_boss_webhook").Item;
+                        if (!string.IsNullOrEmpty(webhookUrl))
                         {
-                            log.ErrorFormat("Failed sending World Boss Death global message to webhook. Ex:{0}", ex);
+                            _ = TurbineChatHandler.SendWebhookedChat("World Boss", msg, webhookUrl, "Global");
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Failed sending World Boss Death global message to webhook. Ex:{0}", ex);
                     }
 
                     this.WorldBoss_LastPeriodicGlobal = DateTime.Now;
