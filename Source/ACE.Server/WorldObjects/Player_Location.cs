@@ -796,6 +796,18 @@ namespace ACE.Server.WorldObjects
                 return;
             }
 
+            var minPortalspaceSeconds = PropertyManager.GetLong("minimum_portalspace_seconds").Item;
+
+            //If player hasn't been in the portal for at least 3 seconds before exiting
+            if (LastTeleportStartTimestamp > Time.GetUnixTime(DateTime.UtcNow.AddSeconds(-1*minPortalspaceSeconds)))
+            {
+                var delayTelport = new ActionChain();
+                delayTelport.AddDelaySeconds(1);
+                delayTelport.AddAction(this, OnTeleportComplete);
+                delayTelport.EnqueueChain();
+                return;
+            }
+            
             // set materialize physics state
             // this takes the player from pink bubbles -> fully materialized
             if (CloakStatus != CloakStatus.On)
