@@ -28,6 +28,7 @@ using System.Net.NetworkInformation;
 using ACE.Server.Entity.Actions;
 using Microsoft.Extensions.Logging;
 using ACE.Server.Entity;
+using log4net.Core;
 
 namespace ACE.Server.Managers
 {
@@ -246,13 +247,34 @@ namespace ACE.Server.Managers
                 //log.Info($"ArenaManager.MatchMake() - First Player = {firstArenaPlayer.CharacterName}, EventType = {firstArenaPlayer.EventType}");
 
                 //See if there's enough other players waiting for the same event type to create a match
-                //must be within 50 levels
+                //If you're lvl 150+, you can fight anyone up to lvl 275 and down to the greater of lvl 130 or 75 levels lower than you.
+                //If you're between levels 80 and 149, you can fight anyone up to 40 levels higher, or the greater of lvl 60 or 40 levels lower than you
+                //If you're below level 80, you can fight anyone that's +/ -20 levels from you
+
+                uint maxMatchLevel = 275;
+                uint minMatchLevel = 1;
+                if(firstArenaPlayer.CharacterLevel >= 150)
+                {
+                    maxMatchLevel = 275;
+                    minMatchLevel = Math.Max(firstArenaPlayer.CharacterLevel - 75, 130);
+                }
+                else if(firstArenaPlayer.CharacterLevel >= 80)
+                {
+                    maxMatchLevel = firstArenaPlayer.CharacterLevel + 40;
+                    minMatchLevel = Math.Max(firstArenaPlayer.CharacterLevel - 40, 60);
+                }
+                else if(firstArenaPlayer.CharacterLevel < 80)
+                {
+                    maxMatchLevel = firstArenaPlayer.CharacterLevel + 20;
+                    minMatchLevel = Math.Max(firstArenaPlayer.CharacterLevel - 20, 1);
+                }
+
                 var otherPlayers = queuedPlayers.Values?
                 .Where(x =>
                         firstArenaPlayer.EventType.Equals(x.EventType) &&
                         x.CharacterId != firstArenaPlayer.CharacterId &&
-                        x.CharacterLevel <= firstArenaPlayer.CharacterLevel + 75 &&
-                        x.CharacterLevel >= firstArenaPlayer.CharacterLevel - 75 &&
+                        x.CharacterLevel <= maxMatchLevel &&
+                        x.CharacterLevel >= minMatchLevel &&
                         (PropertyManager.GetBool("arena_allow_same_ip_match").Item || !firstArenaPlayer.PlayerIP.Equals(x.PlayerIP)))?
                 .OrderBy(x => x.CreateDateTime);
 
