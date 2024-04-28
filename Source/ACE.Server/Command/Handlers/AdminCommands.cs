@@ -5115,5 +5115,105 @@ namespace ACE.Server.Command.Handlers
             CommandHandlerHelper.WriteOutputInfo(session, $"{boss.Name} spawned at {boss.Location}");
 
         }
+
+        [CommandHandler("addwhitelist", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+            "Adds a monarch to the town control and arena whitelist")]
+        public static void HandleAddWhitelist(Session session, params string[] parameters)
+        {
+            try
+            {
+                if (parameters.Count() < 1)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /AddWhitelist {characterName}");
+                    return;
+                }
+
+                //Verify the player is a monarch
+                var playerName = string.Join(" ", parameters);
+                var player = PlayerManager.FindByName(playerName);
+                if (player == null)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"No player found with name = {playerName}");
+                    return;
+                }
+
+                if (player.Allegiance?.MonarchId != player.Guid.Full)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Player {playerName} is not a monarch");
+                    return;
+                }
+
+                //Check if already whitelisted
+                var whiteList = PropertyManager.GetString("town_control_alleglist").Item;
+                if(whiteList.Contains(player.Guid.Full.ToString()))
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} is already a whitelisted allegiance");
+                    return;
+                }
+
+                //Add to the whitelist
+                whiteList += "," + player.Guid.Full.ToString();
+                PropertyManager.ModifyString("town_control_alleglist", whiteList);
+                CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} has been added as a whitelisted allegiance");
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in call to AdminCommands.HandleAddWhitelist. ex: {ex}");
+            }
+        }
+
+        [CommandHandler("removewhitelist", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+            "Removes a monarch from the town control and arena whitelist")]
+        public static void HandleRemoveWhitelist(Session session, params string[] parameters)
+        {
+            try
+            {
+                if (parameters.Count() < 1)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /RemoveWhitelist {characterName}");
+                    return;
+                }
+
+                //Verify the player is a monarch
+                var playerName = string.Join(" ", parameters);
+                var player = PlayerManager.FindByName(playerName);
+                if (player == null)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"No player found with name = {playerName}");
+                    return;
+                }
+
+                //Check if already whitelisted
+                var whiteList = PropertyManager.GetString("town_control_alleglist").Item;
+                if (!whiteList.Contains(player.Guid.Full.ToString()))
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} is not a whitelisted allegiance");
+                    return;
+                }
+
+                //Remove from the whitelist
+                var whitelistArr = whiteList.Split(",");
+                string newWhitelist = string.Empty;
+                for(int i = 0; i < whitelistArr.Length; i++)
+                {
+                    if (!whitelistArr[i].Equals(player.Guid.Full.ToString()) && Int64.TryParse(whitelistArr[i], out long x))
+                    {
+                        newWhitelist += whitelistArr[i] + ",";
+                    }
+                }
+
+                if (newWhitelist.StartsWith(','))
+                    newWhitelist = newWhitelist.Substring(1);
+                if (newWhitelist.EndsWith(','))
+                    newWhitelist = newWhitelist.Substring(0, newWhitelist.Length - 1);
+
+                PropertyManager.ModifyString("town_control_alleglist", newWhitelist);
+                CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} has been removed from the whitelisted allegiance list");
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in call to AdminCommands.HandleRemoveWhitelist. ex: {ex}");
+            }
+        }
     }
 }
