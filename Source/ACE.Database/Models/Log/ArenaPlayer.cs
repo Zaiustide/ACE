@@ -96,6 +96,9 @@ namespace ACE.Database.Models.Log
 
         public uint TotalKills { get; set; }
 
-        public uint TotalDeaths { get; set; }        
+        public uint TotalDeaths { get; set; }
+
+        [NotMapped]
+        public int MaxOpposingTeamSize { get; set; }
     }
 }

@@ -576,23 +576,104 @@ namespace ACE.Server.Command.Handlers
                 case "join":
 
                     string eventType = "1v1";
+                    string param2 = string.Empty;
                     if (parameters.Length > 1)
                     {
-                        eventType = parameters[1];
-
-                        for (int i = 2; i < parameters.Length; i++)
-                        {
-                            eventType += parameters[i];
-                        }
+                        eventType = parameters[1];                        
 
                         if(!ArenaManager.IsValidEventType(eventType))
                         {
                             CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  The Join command does not support the event type {eventType}. Proper syntax is as follows...\n  To join a 1v1 arena match: /arena join\n  To join a specific type of arena match, replace eventType with the string code for the type of match you want to join, such as 1v1, 2v2, ffa. : /arena join eventType\n  To get your current character's stats: /arena stats\n  To get a named character's stats, replace characterName with the target character's name: /arena stats characterName");
                             return;
                         }
+
+                        if (parameters.Length > 2)
+                        {
+                            param2 = parameters[2];
+                        }                        
                     }
 
-                    string resultMsg = JoinArenaQueue(session, eventType.ToLower());
+                    if(eventType.ToLower().Equals("group"))
+                    {
+                        //Get a list of players in the fellowship
+                        Fellowship firstPlayerFellowship = session.Player.Fellowship;
+                        if (firstPlayerFellowship != null)
+                        {
+                            //Don't allow groups under 3 in size
+                            if(firstPlayerFellowship.FellowshipMembers.Count() < 3)
+                            {
+                                CommandHandlerHelper.WriteOutputInfo(session, $"You must have a fellowship with at least 3 members to queue for a group fight");
+                                return;
+                            }
+
+                            //For each player in the fellow, set the Team and add to queue
+                            //If any players don't meet criteria, report that back and don't allow to join queue
+                            List<string> failureMessages = new List<string>();
+                            Guid teamGuid = Guid.NewGuid();
+                            int maxOpposingTeamSize = int.TryParse(param2, out int result) ? result : 9;
+                            if (maxOpposingTeamSize > 9)
+                                maxOpposingTeamSize = 9;
+                            if (maxOpposingTeamSize < 3)
+                                maxOpposingTeamSize = 3;
+
+                            foreach (var fellowMemberId in firstPlayerFellowship.FellowshipMembers.Keys.OrderBy(x=> x == session.Player.CharacterTitleId))
+                            {
+                                var fellowMemberPlayer = PlayerManager.GetOnlinePlayer(fellowMemberId);
+                                if(fellowMemberPlayer == null)
+                                {
+                                    continue;
+                                }
+
+                                string queueResultMsg = JoinArenaQueue(fellowMemberPlayer, eventType.ToLower(), out bool queueIsSuccess, teamGuid, maxOpposingTeamSize);
+                                if (!queueIsSuccess)
+                                {
+                                    failureMessages.Add($"{fellowMemberPlayer.Character.Name}: {queueResultMsg}");
+                                }
+                            }
+
+                            if (failureMessages.Count() > 0)
+                            {
+                                //Remove all from queue if anyone in the fellow failed
+                                ArenaManager.RemoveTeamFromQueue(teamGuid);
+
+                                string returnMessage = "Your team failed to queue for the following reasons...\n\n";
+                                foreach(var msg in failureMessages)
+                                {
+                                    returnMessage += msg + "\n";
+                                }
+
+                                CommandHandlerHelper.WriteOutputInfo(session, returnMessage);
+                                return;
+                            }
+                            else
+                            {                                
+                                var successMessage = "Your team has successfully queued for a group arena match with the following team members. Please ensure your entire team remains elegible as an online player killer who is not PK tagged.\n\n";
+                                var globalMessage = $"{session.Player.Character.Name} has queued a new team of {firstPlayerFellowship.FellowshipMembers.Count()} players for a group arena match, accepting challenging teams with up to {maxOpposingTeamSize} players";
+                                foreach (var fellowMemberId in firstPlayerFellowship.FellowshipMembers.Keys)
+                                {
+                                    var fellowMemberPlayer = PlayerManager.GetOnlinePlayer(fellowMemberId);
+                                    if (fellowMemberPlayer == null)
+                                    {
+                                        continue;
+                                    }
+
+                                    successMessage += fellowMemberPlayer.Character.Name + "\n";
+                                }
+                                CommandHandlerHelper.WriteOutputInfo(session, successMessage);
+                                PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalMessage, ChatMessageType.Broadcast));
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            CommandHandlerHelper.WriteOutputInfo(session, $"You must have a fellowship with at least 3 members to queue for a group fight");
+                            return;
+                        }                            
+
+                        break;
+                    }
+
+                    string resultMsg = JoinArenaQueue(session.Player, eventType.ToLower(), out bool isSuccess);
                     if (resultMsg != null)
                     {
                         CommandHandlerHelper.WriteOutputInfo(session, resultMsg);
@@ -658,16 +739,26 @@ namespace ACE.Server.Command.Handlers
                     var queuedOnes = queuedPlayers.Where(x => x.EventType.ToLower().Equals("1v1"));
                     var queuedTwos = queuedPlayers.Where(x => x.EventType.ToLower().Equals("2v2"));
                     var queuedFFA = queuedPlayers.Where(x => x.EventType.ToLower().Equals("ffa"));
+                    var queuedGroup = queuedPlayers.Where(x => x.EventType.ToLower().Equals("group"));
                     var longestOnesWait = queuedOnes.Count() > 0 ? (DateTime.Now - queuedOnes.Min(x => x.CreateDateTime)) : new TimeSpan(0);
                     var longestTwosWait = queuedTwos.Count() > 0 ? (DateTime.Now - queuedTwos.Min(x => x.CreateDateTime)) : new TimeSpan(0);
-                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);
+                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);                    
 
-                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}";
+                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}\n  Group:";
+
+                    var queuedGroupTeams = queuedGroup.Select(x => x.TeamGuid).Distinct();
+                    foreach (var queuedTeam in queuedGroupTeams)
+                    {
+                        var teamMembers = queuedGroup.Where(x => x.TeamGuid == queuedTeam);
+                        var leader = teamMembers.OrderBy(x => x.CreateDateTime).First();
+                        queueInfo += $"\n\n    Team Leader: {leader.CharacterName}\n    Num Players: {teamMembers.Count()}\n    Max Opponents: {leader.MaxOpposingTeamSize}\n    Time Queued: {String.Format("{0:%h}h {0:%m}m {0:%s}s", DateTime.Now - leader.CreateDateTime)}";
+                    }
 
                     var activeEvents = ArenaManager.GetActiveEvents();
                     var eventsOnes = activeEvents.Where(x => x.EventType.ToLower().Equals("1v1"));
                     var eventsTwos = activeEvents.Where(x => x.EventType.ToLower().Equals("2v2"));
                     var eventsFFA = activeEvents.Where(x => x.EventType.ToLower().Equals("ffa"));
+                    var eventsGroup = activeEvents.Where(x => x.EventType.ToLower().Equals("group"));
 
                     string onesEventInfo = eventsOnes.Count() == 0 ? "No active events" : "";
                     foreach (var ev in eventsOnes)
@@ -696,7 +787,16 @@ namespace ACE.Server.Command.Handlers
                                          $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
                     }
 
-                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n";
+                    string groupEventInfo = eventsGroup.Count() == 0 ? "No active events" : "";
+                    foreach (var ev in eventsGroup)
+                    {
+                        groupEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
+                                         $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
+                                         $"    Players:\n    {ev.PlayersDisplay}\n" +
+                                         $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
+                    }
+
+                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n  Group: {groupEventInfo}\n";
 
                     CommandHandlerHelper.WriteOutputInfo(session, $"*********\n{queueInfo}\n\n{eventInfo}\n*********\n");
                     break;
@@ -771,28 +871,29 @@ namespace ACE.Server.Command.Handlers
                     break;
 
                 default:
-                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2 or FFA)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2, FFA or Group)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
                     return;
             }
         }
 
-        private static string JoinArenaQueue(Session session, string eventType)
+        private static string JoinArenaQueue(Player player, string eventType, out bool isSuccess, Guid? teamGuid = null, int maxOpposingTeamSize = 9)
         {
             //Whitelist specific clans to participate
-            uint? monarchId = session.Player.MonarchId;
-            string monarchName = session.Player.Name;
-            var playerAllegiance = AllegianceManager.GetAllegiance(session.Player);
+            uint? monarchId = player.MonarchId;
+            string monarchName = player.Name;
+            var playerAllegiance = AllegianceManager.GetAllegiance(player);
             if (playerAllegiance != null && playerAllegiance.MonarchId.HasValue)
             {
                 monarchId = playerAllegiance.MonarchId;
                 monarchName = playerAllegiance.Monarch.Player.Name;
             }
 
-            var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)session.Player.Character.Id;
+            var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)player.Character.Id;
             var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
 
             if (!isWhitelisted)
             {
+                isSuccess = false;
                 return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
             }
 
@@ -803,44 +904,59 @@ namespace ACE.Server.Command.Handlers
                 var blacklist = blacklistString.Split(',');
                 foreach (var charIdString in blacklist)
                 {
-                    if (uint.TryParse(charIdString, out uint charId) && session.Player.Character.Id == charId)
+                    if (uint.TryParse(charIdString, out uint charId) && player.Character.Id == charId)
                     {
+                        isSuccess = false;
                         return "You are blacklisted from joining Arena events, probably because you're a cunt who tried to abuse it or some shit.  Fuck yourself.  Or ask forgiveness from Doc Z.  Whatever, I don't care.";
                     }
                 }
             }            
 
             var minLevel = PropertyManager.GetLong("arenas_min_level").Item;
-            if (session.Player.Level < minLevel)
+            if (player.Level < minLevel)
             {
+                isSuccess = false;
                 return $"You must be at least level {minLevel} to join an arena match";
             }
 
-            if(session.Player.IsArenaObserver ||
-                session.Player.IsPendingArenaObserver ||
-                session.Player.CloakStatus == CloakStatus.On)
+            if (player.IsArenaObserver ||
+                player.IsPendingArenaObserver ||
+                player.CloakStatus == CloakStatus.On)
+            {
+                isSuccess = false;
                 return $"You cannot join an arena queue while you're watching an arena event. Use /arena cancel to stop watching the current event before you queue.";
+            }
 
-            if (!session.Player.IsPK)
+            if (!player.IsPK)
+            {
+                isSuccess = false;
                 return $"You cannot join an arena queue until you are in a PK state";
+            }
 
-            if(session.Player.PKTimerActive)
+            if (player.PKTimerActive)
+            {
+                isSuccess = false;
                 return $"You cannot join an arena queue while you are PK tagged";
+            }
 
             string returnMsg;
             if(!ArenaManager.AddPlayerToQueue(
-                session.Player.Character.Id,
-                session.Player.Character.Name,
-                session.Player.Level,
+                player.Character.Id,
+                player.Character.Name,
+                player.Level,
                 eventType,
-                monarchId.HasValue ? monarchId.Value : session.Player.Character.Id,
+                monarchId.HasValue ? monarchId.Value : player.Character.Id,
                 monarchName,
-                session.EndPointC2S?.Address?.ToString(),
-                out returnMsg))
+                player.Session.EndPointC2S?.Address?.ToString(),
+                out returnMsg,
+                teamGuid,
+                maxOpposingTeamSize))
             {
+                isSuccess = false;
                 return returnMsg;
             }
 
+            isSuccess = true;
             return $"You have successfully joined the {eventType} arena queue";
         }
 

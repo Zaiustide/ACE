@@ -127,7 +127,7 @@ namespace ACE.Server.Managers
             return isPlayerActive;
         }
 
-        public static bool AddPlayerToQueue(uint characterId, string characterName, int? characterLevel, string eventType, uint monarchId, string monarchName, string playerIP, out string returnMsg)
+        public static bool AddPlayerToQueue(uint characterId, string characterName, int? characterLevel, string eventType, uint monarchId, string monarchName, string playerIP, out string returnMsg, Guid? teamGuid = null, int maxOpposingTeamSize = 9)
         {
             returnMsg = string.Empty;
 
@@ -145,6 +145,21 @@ namespace ACE.Server.Managers
                 return false;
             }
 
+            switch(eventType.ToLower())
+            {
+                case "1v1":
+                    maxOpposingTeamSize = 1;
+                    break;
+                case "2v2":
+                    maxOpposingTeamSize = 2;
+                    break;
+                case "FFA":
+                    maxOpposingTeamSize = 1;
+                    break;
+                case "group":
+                    break;
+            }
+
             ArenaPlayer player = new ArenaPlayer();
             player.CharacterId = characterId;
             player.CharacterName = characterName;
@@ -154,14 +169,44 @@ namespace ACE.Server.Managers
             player.MonarchName = monarchName;
             player.CreateDateTime = DateTime.Now;
             player.PlayerIP = playerIP;
+            player.TeamGuid = teamGuid;
+            player.MaxOpposingTeamSize = maxOpposingTeamSize;
 
             queuedPlayers.Add(characterId, player);
 
             var queueCount = queuedPlayers.Values.Count(x => x.EventType.Equals(eventType));
 
-            PlayerManager.BroadcastToAll(new GameMessageSystemChat($"A new player has queued for a{(eventType.ToLower().Equals("ffa") ? "n" : "")} {eventType} arena match. There {(queueCount > 1 ? "are" : "is")} currently {queueCount} player{(queueCount > 1 ? "s" : "")} queued for {eventType}", ChatMessageType.Broadcast));
+            if (!eventType.ToLower().Equals("group"))
+            {
+                PlayerManager.BroadcastToAll(new GameMessageSystemChat($"A new player has queued for a{(eventType.ToLower().Equals("ffa") ? "n" : "")} {eventType} arena match. There {(queueCount > 1 ? "are" : "is")} currently {queueCount} player{(queueCount > 1 ? "s" : "")} queued for {eventType}", ChatMessageType.Broadcast));
+            }
 
             return true;
+        }
+
+        public static bool RemovePlayerFromQueue(uint characterId)
+        {            
+            if (queuedPlayers.ContainsKey(characterId))
+            {
+                queuedPlayers.Remove(characterId);
+                return true;
+            }
+
+            return false;            
+        }
+
+        public static bool RemoveTeamFromQueue(Guid teamGuid)
+        {
+            var teamPlayers = queuedPlayers.Values.Where(x => x.TeamGuid?.Equals(teamGuid) ?? false);
+            if(teamPlayers != null && teamPlayers.Count() > 0)
+            {
+                foreach(var teamPlayer in teamPlayers)
+                {
+                    queuedPlayers.Remove(teamPlayer.CharacterId);
+                }
+            }
+
+            return false;
         }
 
         public static void ReQueuePlayer(ArenaPlayer player)
@@ -228,6 +273,24 @@ namespace ACE.Server.Managers
 
                 if (!isPlayerValidState)
                 {
+                    if(arenaPlayer.EventType.ToLower().Equals("group"))
+                    {
+                        //If its a group fight and the player is part of a team, remove the whole team
+                        var teamMembers = queuedPlayers.Values.Where(x => x.TeamGuid == arenaPlayer.TeamGuid && x.CharacterId != arenaPlayer.CharacterId);
+                        if(teamMembers != null)
+                        {
+                            foreach(var teamMember in teamMembers)
+                            {
+                                queuedPlayers.Remove(teamMember.CharacterId);
+                                var teamMemberPlayer = PlayerManager.GetOnlinePlayer(teamMember.CharacterId);
+                                if(teamMemberPlayer != null)
+                                {
+                                    teamMemberPlayer.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have been removed from the arena queue because during match making one of your team mates was found to be either watching another arena event, is not PK status or is PK tagged.  Please join the queue again when your entire team is in a valid state.", ChatMessageType.System));
+                                }
+                            }
+                        }
+                    }
+
                     //If player is not in a valid state, message them and remove them from the queue
                     if (player != null)
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have been removed from the arena queue because during match making you were found to be either watching another arena event, are not PK status or you are PK tagged.  Please join the queue again when you're in a valid state.", ChatMessageType.System));
@@ -457,6 +520,52 @@ namespace ACE.Server.Managers
                             }
 
                             break;
+                        case "group":
+
+                            var firstPlayerTeamMembers = queueCopy.Where(x => x.TeamGuid == firstArenaPlayer.TeamGuid);
+                            Guid? secondTeamGuidGroup = null;
+
+                            var otherTeamPlayers = otherPlayers
+                            .Where(x => x.TeamGuid != firstArenaPlayer.TeamGuid)
+                            .OrderBy(x => x.CreateDateTime);
+
+                            if (otherTeamPlayers != null && otherTeamPlayers.Count() > 0)
+                            {
+                                foreach (var opponentPlayer in otherTeamPlayers)
+                                {
+                                    //Get this player's team members
+                                    var opponentPlayerTeam = queueCopy.Where(x => x.TeamGuid == opponentPlayer.TeamGuid);
+
+                                    if (opponentPlayerTeam == null || opponentPlayerTeam.Count() < 3)
+                                        continue;
+
+                                    //Check if this player's team is the right size
+                                    if (opponentPlayer.MaxOpposingTeamSize < firstPlayerTeamMembers.Count() ||
+                                        firstArenaPlayer.MaxOpposingTeamSize < opponentPlayerTeam.Count())
+                                    {
+                                        continue;
+                                    }
+
+                                    secondTeamGuidGroup = opponentPlayer.TeamGuid;
+                                    weHaveEnoughPlayers = true;
+                                }
+
+                                if(weHaveEnoughPlayers && secondTeamGuidGroup.HasValue)
+                                {
+                                    foreach(var firstTeamPlayer in firstPlayerTeamMembers)
+                                    {
+                                        finalPlayerList.Add(firstTeamPlayer);
+                                    }
+
+                                    var secondTeamMembers = otherTeamPlayers.Where(x => x.TeamGuid == secondTeamGuidGroup.Value);
+                                    foreach (var secondTeamPlayer in secondTeamMembers)
+                                    {
+                                        finalPlayerList.Add(secondTeamPlayer);
+                                    }
+                                }
+                            }
+
+                            break;
                     }
 
                     if (weHaveEnoughPlayers)
@@ -569,7 +678,8 @@ namespace ACE.Server.Managers
                 arenaLocation != null &&
                 (arenaLocation.ActiveEvent.EventType.Equals("1v1")) ||
                 (arenaLocation.ActiveEvent.EventType.Equals("1v1")) ||
-                (arenaLocation.ActiveEvent.EventType.Equals("ffa")))
+                (arenaLocation.ActiveEvent.EventType.Equals("ffa")) ||
+                (arenaLocation.ActiveEvent.EventType.Equals("group")))
             {
                 victim.IsEliminated = true;
                 victim.TotalDeaths++;
@@ -625,12 +735,27 @@ namespace ACE.Server.Managers
                 player?.EnqueueBroadcast(new GameMessageSystemChat("Your arena match is already started and cannot be cancelled.  To forfeit, you can leave the arena or log off.", ChatMessageType.Broadcast));
                 return;
             }
-
+            
             if (queuedPlayers.ContainsKey(characterId))
-            {
+            {                
+                var thisQueuedPlayer = queuedPlayers[characterId];
+
                 queuedPlayers.Remove(characterId);
                 player?.EnqueueBroadcast(new GameMessageSystemChat("You have cancelled and been removed from the arena queue.", ChatMessageType.Broadcast));
-            }
+
+                //For group matches, remove the rest of the team
+                if (thisQueuedPlayer.EventType.ToLower().Equals("group"))
+                {
+                    var queuedTeammates = queuedPlayers.Where(x => x.Value.TeamGuid == thisQueuedPlayer.TeamGuid);
+                    foreach(var teammatePlayer in queuedTeammates)
+                    {
+                        var thisPlayer = PlayerManager.GetOnlinePlayer(teammatePlayer.Key);
+
+                        queuedPlayers.Remove(teammatePlayer.Key);
+                        thisPlayer?.EnqueueBroadcast(new GameMessageSystemChat("You have been removed from the arena queue because one of your team members has cancelled", ChatMessageType.Broadcast));
+                    }
+                }
+            }            
 
             //Arena Observers need to be able to cancel out of observer mode
             if(player?.IsArenaObserver ?? false)
@@ -692,10 +817,9 @@ namespace ACE.Server.Managers
             switch (eventType.ToLower())
             {
                 case "1v1":
-                    return true;
                 case "2v2":
-                    return true;
                 case "ffa":
+                case "group":
                     return true;
                 default:
                     return false;

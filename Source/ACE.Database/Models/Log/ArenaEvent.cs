@@ -128,6 +128,8 @@ namespace ACE.Database.Models.Log
                             return new TimeSpan(0, 15, 0);
                         case "ffa":
                             return new TimeSpan(0, 25, 0);
+                        case "group":
+                            return new TimeSpan(0, 30, 0);
                         default:
                             return TimeSpan.Zero;
                     }
@@ -145,6 +147,8 @@ namespace ACE.Database.Models.Log
                             return this.StartDateTime.Value.AddMinutes(15) - DateTime.Now;
                         case "ffa":
                             return this.StartDateTime.Value.AddMinutes(25) - DateTime.Now;
+                        case "group":
+                            return this.StartDateTime.Value.AddMinutes(30) - DateTime.Now;
                         default:
                             return TimeSpan.Zero;
                     }
@@ -176,6 +180,8 @@ namespace ACE.Database.Models.Log
                         return this.StartDateTime.Value.AddMinutes(20) - DateTime.Now;
                     case "ffa":
                         return this.StartDateTime.Value.AddMinutes(30) - DateTime.Now;
+                    case "group":
+                        return this.StartDateTime.Value.AddMinutes(40) - DateTime.Now;
                     default:
                         return TimeSpan.Zero;
                 }
