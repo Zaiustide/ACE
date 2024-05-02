@@ -353,16 +353,7 @@ namespace ACE.Server.Managers
             if (olthoiPlayerReturnedToLifestone)
                 session.Network.EnqueueSend(new GameMessageSystemChat("You have returned to the Olthoi Queen to serve the hive.", ChatMessageType.Broadcast));
             else if (playerLoggedInOnNoLogLandblock) // see http://acpedia.org/wiki/Mount_Elyrii_Hive
-                session.Network.EnqueueSend(new GameMessageSystemChat("The currents of portal space cannot return you from whence you came. Your previous location forbids login.", ChatMessageType.Broadcast));
-
-            //try
-            //{
-            //    player.AssignPkQuests();
-            //}
-            //catch(Exception ex)
-            //{
-            //    log.Error($"Error assigning PK quests for player = {player?.Name}. ex: {ex}");
-            //}
+                session.Network.EnqueueSend(new GameMessageSystemChat("The currents of portal space cannot return you from whence you came. Your previous location forbids login.", ChatMessageType.Broadcast));            
         }
 
         private static string AppendLines(params string[] lines)
@@ -457,15 +448,15 @@ namespace ACE.Server.Managers
                     log.Error($"Exception executing ArenaManager Tick. ex: {ex}");
                 }
 
-                //World Boss logic
-                try
-                {
-                    WorldBossManager.Tick();
-                }
-                catch (Exception ex)
-                {
-                    log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
-                }
+                ////World Boss logic
+                //try
+                //{
+                //    WorldBossManager.Tick();
+                //}
+                //catch (Exception ex)
+                //{
+                //    log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
+                //}
 
                 ServerPerformanceMonitor.RestartEvent(ServerPerformanceMonitor.MonitorType.NetworkManager_InboundClientMessageQueueRun);
                 NetworkManager.InboundMessageQueue.RunActions();
