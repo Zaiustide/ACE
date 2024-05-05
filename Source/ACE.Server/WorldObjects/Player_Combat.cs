@@ -1253,6 +1253,19 @@ namespace ACE.Server.WorldObjects
                     if (spell == null || spell.IsHarmful || targetPlayer.PlayerKillerStatus != PlayerKillerStatus.NPK)
                         return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_NotSamePKType, WeenieErrorWithString._FailsToAffectYou_NotSamePKType };
                 }
+
+                //Disable most inepts in arenas
+                if(ArenaLocation.IsArenaLandblock(this.Location.Landblock) &&
+                    spell != null &&
+                    spell.IsHarmful &&
+                    ((spell.School == MagicSchool.CreatureEnchantment &&
+                    spell.Category != SpellCategory.MagicDefenseLowering &&
+                    spell.Category != SpellCategory.MeleeDefenseLowering &&
+                    spell.Category != SpellCategory.MissileDefenseLowering) ||
+                    spell.School == MagicSchool.ItemEnchantment))
+                {
+                    return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
+                }
             }
             else
             {
