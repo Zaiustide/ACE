@@ -1660,14 +1660,14 @@ namespace ACE.Server.Entity
             ypk.ArenaName = "Yaraq PK Arena";
             locList.Add(ypk.LandblockId, ypk);
 
-            //0xECEC //Pyramid -Admin Island
-            var pyramid = new ArenaLocation();
-            pyramid.LandblockId = 0xECEC;
-            pyramid.SupportedEventTypes = new List<string>();
-            pyramid.SupportedEventTypes.Add("ffa");
-            pyramid.SupportedEventTypes.Add("group");
-            pyramid.ArenaName = "Pyramid";
-            locList.Add(pyramid.LandblockId, pyramid);
+            ////0xECEC //Pyramid -Admin Island
+            //var pyramid = new ArenaLocation();
+            //pyramid.LandblockId = 0xECEC;
+            //pyramid.SupportedEventTypes = new List<string>();
+            //pyramid.SupportedEventTypes.Add("ffa");
+            //pyramid.SupportedEventTypes.Add("group");
+            //pyramid.ArenaName = "Pyramid";
+            //locList.Add(pyramid.LandblockId, pyramid);
 
             //Mad Cow Arena
             //var cow = new ArenaLocation();
@@ -1723,7 +1723,7 @@ namespace ACE.Server.Entity
                         0x0145, //Bone Lair
                         0x01AD, //Dungeon Galley Tower
                         0x02E3, //Yaraq PK Arena
-                        0xECEC, //Pyramid -Admin Island
+                        //0xECEC, //Pyramid -Admin Island
                         //0x00AF, //Mad Cow Arena
                         0x596A, //Fowl Basement
                         //0xD50E, //Landing Strip
@@ -1810,31 +1810,31 @@ namespace ACE.Server.Entity
                             //0x02E3015A[59.596912 -55.734844 12.054999] -0.696133 0.000000 0.000000 -0.717913
                         }); //Yaraq PK Arena
 
-                    _arenaLocationStartingPositions.Add(
-                        0xECEC,
-                        new List<Position>()
-                        {
-                            new Position(0xECEC012D, 84.326401f, 37.399399f, 0.205000f, 0.000000f, 0.000000f, -0.010572f, -0.999944f),
-                            //0xECEC012D[84.326401 37.399399 0.205000] -0.999944 0.000000 0.000000 -0.010572
-                            new Position(0xECEC011F, 131.125320f, 36.631672f, 0.205000f, 0.000000f, 0.000000f, -0.333597f, -0.942716f),
-                            //0xECEC011F[131.125320 36.631672 0.205000] -0.942716 0.000000 0.000000 -0.333597
-                            new Position(0xECEC012C, 132.890320f, 84.706825f, 0.205000f, 0.000000f, 0.000000f, -0.717156f, -0.696913f),
-                            //0xECEC012C[132.890320 84.706825 0.205000] -0.696913 0.000000 0.000000 -0.717156
-                            new Position(0xECEC0122, 131.195908f, 130.575638f, 0.205000f, 0.000000f, 0.000000f, -0.916779f, -0.399395f),
-                            //0xECEC0122[131.195908 130.575638 0.205000] -0.399395 0.000000 0.000000 -0.916779
-                            new Position(0xECEC012B, 83.108978f, 131.664230f, 0.205000f, 0.000000f, 0.000000f, -0.999970f, 0.007704f),
-                            //0xECEC012B[83.108978 131.664230 0.205000] 0.007704 0.000000 0.000000 -0.999970
-                            new Position(0xECEC0121, 37.388470f, 130.349777f, 0.205000f, 0.000000f, 0.000000f, -0.926284f, 0.376825f),
-                            //0xECEC0121[37.388470 130.349777 0.205000] 0.376825 0.000000 0.000000 -0.926284
-                            new Position(0xECEC012E, 36.323086f, 83.237755f, 0.205000f, 0.000000f, 0.000000f, -0.679018f, 0.734121f),
-                            //0xECEC012E[36.323086 83.237755 0.205000] 0.734121 0.000000 0.000000 -0.679018
-                            new Position(0xECEC0120, 37.112888f, 37.668873f, 0.205000f, 0.000000f, 0.000000f, -0.401558f, 0.915833f),
-                            //0xECEC0120[37.112888 37.668873 0.205000] 0.915833 0.000000 0.000000 -0.401558
-                            new Position(0xECEC0105, 72.137177f, 84.142395f, 0.205000f, 0.000000f, 0.000000f, -0.702030f, 0.712147f),
-                            //0xECEC0105[72.137177 84.142395 0.205000] 0.712147 0.000000 0.000000 -0.702030
-                            new Position(0xECEC0110, 97.596474f, 83.986618f, 0.205000f, 0.000000f, 0.000000f, 0.715533f, 0.698579f),
-                            //0xECEC0110[97.596474 83.986618 0.205000] 0.698579 0.000000 0.000000 0.715533
-                        }); //Pyramid -Admin Island
+                    //_arenaLocationStartingPositions.Add(
+                    //    0xECEC,
+                    //    new List<Position>()
+                    //    {
+                    //        new Position(0xECEC012D, 84.326401f, 37.399399f, 0.205000f, 0.000000f, 0.000000f, -0.010572f, -0.999944f),
+                    //        //0xECEC012D[84.326401 37.399399 0.205000] -0.999944 0.000000 0.000000 -0.010572
+                    //        new Position(0xECEC011F, 131.125320f, 36.631672f, 0.205000f, 0.000000f, 0.000000f, -0.333597f, -0.942716f),
+                    //        //0xECEC011F[131.125320 36.631672 0.205000] -0.942716 0.000000 0.000000 -0.333597
+                    //        new Position(0xECEC012C, 132.890320f, 84.706825f, 0.205000f, 0.000000f, 0.000000f, -0.717156f, -0.696913f),
+                    //        //0xECEC012C[132.890320 84.706825 0.205000] -0.696913 0.000000 0.000000 -0.717156
+                    //        new Position(0xECEC0122, 131.195908f, 130.575638f, 0.205000f, 0.000000f, 0.000000f, -0.916779f, -0.399395f),
+                    //        //0xECEC0122[131.195908 130.575638 0.205000] -0.399395 0.000000 0.000000 -0.916779
+                    //        new Position(0xECEC012B, 83.108978f, 131.664230f, 0.205000f, 0.000000f, 0.000000f, -0.999970f, 0.007704f),
+                    //        //0xECEC012B[83.108978 131.664230 0.205000] 0.007704 0.000000 0.000000 -0.999970
+                    //        new Position(0xECEC0121, 37.388470f, 130.349777f, 0.205000f, 0.000000f, 0.000000f, -0.926284f, 0.376825f),
+                    //        //0xECEC0121[37.388470 130.349777 0.205000] 0.376825 0.000000 0.000000 -0.926284
+                    //        new Position(0xECEC012E, 36.323086f, 83.237755f, 0.205000f, 0.000000f, 0.000000f, -0.679018f, 0.734121f),
+                    //        //0xECEC012E[36.323086 83.237755 0.205000] 0.734121 0.000000 0.000000 -0.679018
+                    //        new Position(0xECEC0120, 37.112888f, 37.668873f, 0.205000f, 0.000000f, 0.000000f, -0.401558f, 0.915833f),
+                    //        //0xECEC0120[37.112888 37.668873 0.205000] 0.915833 0.000000 0.000000 -0.401558
+                    //        new Position(0xECEC0105, 72.137177f, 84.142395f, 0.205000f, 0.000000f, 0.000000f, -0.702030f, 0.712147f),
+                    //        //0xECEC0105[72.137177 84.142395 0.205000] 0.712147 0.000000 0.000000 -0.702030
+                    //        new Position(0xECEC0110, 97.596474f, 83.986618f, 0.205000f, 0.000000f, 0.000000f, 0.715533f, 0.698579f),
+                    //        //0xECEC0110[97.596474 83.986618 0.205000] 0.698579 0.000000 0.000000 0.715533
+                    //    }); //Pyramid -Admin Island
 
                     _arenaLocationStartingPositions.Add(
                         0x01AD,
