@@ -327,7 +327,7 @@ namespace ACE.Server.WorldObjects
                 }
                 else
                 {
-                    if(player != null && targetPlayer != null && ProjectileLauncher.IsCaster)
+                    if(player != null && targetPlayer != null && IsWeaponSpell)
                     {
                         //Fuck you wand monkey
                         damage = 0;
