@@ -327,12 +327,6 @@ namespace ACE.Server.WorldObjects
                 }
                 else
                 {
-                    if(player != null && targetPlayer != null && ProjectileLauncher.IsCaster)
-                    {
-                        //Fuck you wand monkey
-                        damage = 0;
-                    }
-
                     DamageTarget(creatureTarget, damage.Value, critical, critDefended, overpower);
                 }
 
