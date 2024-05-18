@@ -69,7 +69,7 @@ namespace ACE.Server.Managers
             if(activeWorldBoss == null && DateTime.Now > nextBossSpawnTime)
             {
                 SpawnNewWorldBoss();                
-                nextBossSpawnTime = RollNextSpawnTime(4, 18);
+                nextBossSpawnTime = RollNextSpawnTime(6, 18);
             }
         }
 
