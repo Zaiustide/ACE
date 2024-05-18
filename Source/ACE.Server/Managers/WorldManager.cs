@@ -449,14 +449,14 @@ namespace ACE.Server.Managers
                 }
 
                 ////World Boss logic
-                //try
-                //{
-                //    WorldBossManager.Tick();
-                //}
-                //catch (Exception ex)
-                //{
-                //    log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
-                //}
+                try
+                {
+                    WorldBossManager.Tick();
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
+                }
 
                 ServerPerformanceMonitor.RestartEvent(ServerPerformanceMonitor.MonitorType.NetworkManager_InboundClientMessageQueueRun);
                 NetworkManager.InboundMessageQueue.RunActions();
