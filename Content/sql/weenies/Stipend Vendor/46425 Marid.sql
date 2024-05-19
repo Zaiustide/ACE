@@ -150,4 +150,5 @@ VALUES (46425, 2, 25641,  0, 4, 0, False) /* Create Leather Cuirass (25641) for 
      , (46425, 4, 46416, -1, 0, 0, False) /* Create Combat Spells Certificate (46416) for Shop */
      , (46425, 4, 53406, -1, 0, 0, False) /* Create Ring Spells Certificate (53406) for Shop */
      , (46425, 4, 53407, -1, 0, 0, False) /* Create Wall Spells Certificate (53407) for Shop */
-     , (46425, 4, 46415, -1, 0, 0, False) /* Create Experience Certificate (46415) for Shop */;
+     , (46425, 4, 46415, -1, 0, 0, False) /* Create Experience Certificate (46415) for Shop */
+, (46425, 4, 490307, -1, 0, 0, False) /* Create Experience Certificate (46415) for Shop */;

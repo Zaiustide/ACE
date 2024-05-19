@@ -18,7 +18,7 @@ VALUES (490172,   1,         16) /* ItemType - Creature */
      , (490172, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490172, 146,    10000000) /* XpOverride */
      , (490172, 332,        300) /* LuminanceAward */
-     , (490172, 386,         20) /* Overpower */;
+     , (490172, 386,         40) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490172,   1, True ) /* Stuck */
@@ -111,7 +111,7 @@ VALUES (490172,  0,  2, 500, 0.75,  650,  683,  650,  618,  618,  780,  780,  61
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490172,  4312,   2.05)  /* Incantation of Imperil Other */
-     , (490172,  4483,  2.053)  /* Incantation of Lightning Vulnerability Other */;
+     , (490172,  4475,  2.053)  /* Incantation of Blade Vulnerability Other */;
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (490172,  5 /* HeartBeat */,   0.05, NULL, 0x8000003C /* HandCombat */, 0x41000003 /* Ready */, NULL, NULL, NULL, NULL);
@@ -194,7 +194,7 @@ INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `dela
 VALUES (@parent_id,  0,   6 /* Move */, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 0, 0);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (490172, 9, 490237,  5, 0, 0.05, False) /* Trinket */
+VALUES (490172, 9, 490237,  3, 0, 0.05, False) /* Trinket */
 	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
-	 , (490172, 9, 1000002,  5, 0, 0.04, False) /* Trinket */
+	 , (490172, 9, 1000002,  3, 0, 0.04, False) /* Trinket */
 	 , (490172, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */;

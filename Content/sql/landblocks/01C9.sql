@@ -274,3 +274,11 @@ VALUES (0x701C904E, 480480, 0x01C901D1, 57.2893, -82.9873, -5.99, 0.92388, 0, 0,
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x701C9050, 490076, 0x01C901D1, 56.7019, -76.3966, -5.992, 0.382684, 0, 0, -0.92388, False, '2023-12-16 12:52:44'); /* Aidoneus */
 /* @teleloc 0x01C901D1 [56.701900 -76.396599 -5.992000] 0.382684 0.000000 0.000000 -0.923880 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9051, 45489, 0x01C901D7, 73.9964, -75.7237, -5.9935, 0.407497, 0, 0, 0.913206, False, '2024-05-19 01:31:04'); /* Free Weapon Vendor */
+/* @teleloc 0x01C901D7 [73.996399 -75.723701 -5.993500] 0.407497 0.000000 0.000000 0.913206 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9052, 45501, 0x01C901D7, 74.16669, -83.96815, -5.9935, 0.905944, 0, 0, 0.423397, False, '2024-05-19 01:31:18'); /* Weapon Imbue Vendor */
+/* @teleloc 0x01C901D7 [74.166687 -83.968147 -5.993500] 0.905944 0.000000 0.000000 0.423397 */

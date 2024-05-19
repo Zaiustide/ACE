@@ -16,7 +16,8 @@ VALUES (450323,   1,          1) /* ItemType - MeleeWeapon */
      , (450323,  45,          4) /* DamageType - Bludgeon */
      , (450323,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (450323,  47,          6) /* AttackType - Thrust, Slash */
-     , (450323,  48,         10) /* WeaponSkill - Staff */
+     , (450323,  48,         45) /* WeaponSkill - Staff */
+	 , (450323,  353,         7) /* WeaponSkill - Staff */
      , (450323,  49,         25) /* WeaponTime */
      , (450323,  51,          1) /* CombatUse - Melee */
      , (450323,  93,       3092) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, LightingOn */

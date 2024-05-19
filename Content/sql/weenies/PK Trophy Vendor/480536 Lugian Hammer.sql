@@ -14,7 +14,8 @@ VALUES (480536,   1,          1) /* ItemType - MeleeWeapon */
      , (480536,  45,          4) /* DamageType - Bludgeon */
      , (480536,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (480536,  47,          4) /* AttackType - Slash */
-     , (480536,  48,          1) /* WeaponSkill - Axe */
+     , (480536,  48,          45) /* WeaponSkill - Axe */
+	 , (480536,  353,          3) /* WeaponSkill - Axe */
      , (480536,  49,        100) /* WeaponTime */
      , (480536,  51,          1) /* CombatUse - Melee */
      , (480536,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */

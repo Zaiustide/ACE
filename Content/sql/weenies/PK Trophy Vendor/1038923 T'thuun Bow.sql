@@ -11,6 +11,7 @@ VALUES (1038923,   1,        256) /* ItemType - MissileWeapon */
      , (1038923,  19,         20) /* Value */
      , (1038923,  44,          1) /* Damage */
      , (1038923,  46,         16) /* DefaultCombatStyle - Bow */
+	 , (1038923,  48,         47) /* WeaponSkill - MissileWeapons */
      , (1038923,  50,          1) /* AmmoType - Arrow */
      , (1038923,  51,          2) /* CombatUse - Missle */
      , (1038923,  52,          2) /* ParentLocation - LeftHand */

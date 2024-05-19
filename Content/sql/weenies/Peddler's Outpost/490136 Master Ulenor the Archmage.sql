@@ -10,7 +10,7 @@ VALUES (490136,   1,         16) /* ItemType - Creature */
      , (490136,   7,         -1) /* ContainersCapacity */
      , (490136,   8,        120) /* Mass */
      , (490136,  16,         32) /* ItemUseable - Remote */
-     , (490136,  25,        126) /* Level */
+     , (490136,  25,        300) /* Level */
      , (490136,  27,          0) /* ArmorType - None */
      , (490136,  74,     833536) /* MerchandiseItemTypes - Gem, SpellComponents, Writable, Caster, PromissoryNote, ManaStone */
      , (490136,  75,          0) /* MerchandiseMinValue */
@@ -24,16 +24,12 @@ VALUES (490136,   1,         16) /* ItemType - Creature */
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490136,   1, True ) /* Stuck */
-     , (490136,   6, False) /* AiUsesMana */
-	 , (490136,   14, False) /* AiUsesMana */
      , (490136,  12, True ) /* ReportCollisions */
      , (490136,  13, False) /* Ethereal */
      , (490136,  19, False) /* Attackable */
      , (490136,  39, True ) /* DealMagicalItems */
-     , (490136,  41, True ) /* ReportCollisionsAsEnvironment */
-     , (490136,  50, True ) /* NeverFailCasting */
-     , (490136,  51, True ) /* VendorService */
-     , (490136,  52, True ) /* AiImmobile */;
+     , (490136,  41, True ) /* ReportCollisionsAsEnvironment */;
+
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490136,   1,       5) /* HeartbeatInterval */

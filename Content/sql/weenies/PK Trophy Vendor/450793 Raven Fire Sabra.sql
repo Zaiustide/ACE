@@ -15,7 +15,7 @@ VALUES (450793,   1,          1) /* ItemType - MeleeWeapon */
      , (450793,  45,         16) /* DamageType - Fire */
      , (450793,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (450793,  47,        486) /* AttackType - Thrust, Slash, DoubleSlash, TripleSlash, DoubleThrust, TripleThrust */
-     , (450793,  48,         6) /* WeaponSkill - FinesseWeapons */
+     , (450793,  48,         46) /* WeaponSkill - FinesseWeapons */
      , (450793,  51,          1) /* CombatUse - Melee */
      , (450793,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (450793, 353,          2) /* WeaponType - Sword */;

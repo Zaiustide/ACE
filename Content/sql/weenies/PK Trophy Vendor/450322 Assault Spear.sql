@@ -16,7 +16,8 @@ VALUES (450322,   1,          1) /* ItemType - MeleeWeapon */
      , (450322,  45,          2) /* DamageType - Pierce */
      , (450322,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (450322,  47,          2) /* AttackType - Thrust */
-     , (450322,  48,          9) /* WeaponSkill - Spear */
+     , (450322,  48,          45) /* WeaponSkill - Spear */
+	 , (450322,  353,          5) /* WeaponSkill - Spear */
      , (450322,  49,         25) /* WeaponTime */
      , (450322,  51,          1) /* CombatUse - Melee */
      , (450322,  93,       3092) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, LightingOn */

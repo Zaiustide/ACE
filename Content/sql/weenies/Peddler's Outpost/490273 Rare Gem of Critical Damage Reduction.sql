@@ -27,14 +27,14 @@ VALUES (490273,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490273,   1, 'Rare Gem of Critical Damage Reduction') /* Name */
-     , (490273,  14, 'An absolutely flawless diamond. Applying this to a piece of rare armor will grant it two additional Critical Damage Reduction rating.') /* Use */
-     , (490273,  16, 'There is room for only one gem, this can not be applied if the piece of rare armor has already been imbued.') /* LongDesc */;
+     , (490273,  14, 'An absolutely flawless gem. Applying this to a piece of armor will grant it two additional Critical Damage Reduction rating.') /* Use */
+     , (490273,  16, 'There is room for only one gem, will not stack with existing rating.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490273,   1, 0x02000179) /* Setup */
      , (490273,   3, 0x20000014) /* SoundTable */
      , (490273,   6, 0x04000BEF) /* PaletteBase */
      , (490273,   7, 0x1000010B) /* ClothingBase */
-     , (490273,   8, 0x06002CAA) /* Icon */
+     , (490273,   8, 0x06006817) /* Icon */
      , (490273,  22, 0x3400002B) /* PhysicsEffectTable */
 	 , (490273,  52, 0x06005B0C) /* IconUnderlay */;

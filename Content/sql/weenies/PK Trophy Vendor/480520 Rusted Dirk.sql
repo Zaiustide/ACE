@@ -15,7 +15,8 @@ VALUES (480520,   1,          1) /* ItemType - MeleeWeapon */
      , (480520,  45,          3) /* DamageType - Slash, Pierce */
      , (480520,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (480520,  47,          6) /* AttackType - Thrust, Slash */
-     , (480520,  48,          4) /* WeaponSkill - Dagger */
+     , (480520,  48,          45) /* WeaponSkill - Dagger */
+	 , (480520,  353,          6) /* WeaponSkill - Dagger */
      , (480520,  49,         40) /* WeaponTime */
      , (480520,  51,          1) /* CombatUse - Melee */
      , (480520,  92,        100) /* Structure */

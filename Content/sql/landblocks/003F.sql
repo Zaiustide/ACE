@@ -420,5 +420,65 @@ VALUES (0x7003F056, 490227, 0x003F0126, 47.4764, -205.598, -47.945, 0.236272, 0,
 /* @teleloc 0x003F0126 [47.476398 -205.598007 -47.945000] 0.236272 0.000000 0.000000 -0.971687 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7003F057, 490227, 0x003F0125, 53.12351, -199.3058, -47.945, 0.727835, 0, 0, 0.685752, False, '2024-03-23 14:28:11'); /* Dragon Egg Generator */
-/* @teleloc 0x003F0125 [53.123508 -199.305801 -47.945000] 0.727835 0.000000 0.000000 0.685752 */
+VALUES (0x7003F057, 490227, 0x003F0125, 53.1235, -199.306, -47.945, 0.727835, 0, 0, 0.685752, False, '2024-03-23 14:28:11'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0125 [53.123501 -199.306000 -47.945000] 0.727835 0.000000 0.000000 0.685752 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F058, 490227, 0x003F0288, 135.843, -194.037, -23.945, -0.947941, 0, 0, 0.318445, False, '2024-05-18 21:42:41'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0288 [135.843002 -194.037003 -23.945000] -0.947941 0.000000 0.000000 0.318445 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F059, 490227, 0x003F0288, 138.107, -194.226, -23.945, -0.990114, 0, 0, -0.140263, False, '2024-05-18 21:42:44'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0288 [138.106995 -194.225998 -23.945000] -0.990114 0.000000 0.000000 -0.140263 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F05A, 490227, 0x003F0286, 135.611, -165.96, -23.945, -0.35451, 0, 0, 0.935052, False, '2024-05-18 21:42:51'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0286 [135.610992 -165.960007 -23.945000] -0.354510 0.000000 0.000000 0.935052 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F05C, 490227, 0x003F027F, 99.5114, -191.557, -23.945, 0.221328, 0, 0, 0.9752, False, '2024-05-18 21:43:00'); /* Dragon Egg Generator */
+/* @teleloc 0x003F027F [99.511398 -191.557007 -23.945000] 0.221328 0.000000 0.000000 0.975200 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F05D, 490227, 0x003F027F, 100.105, -188.538, -23.945, 0.221328, 0, 0, 0.9752, False, '2024-05-18 21:43:01'); /* Dragon Egg Generator */
+/* @teleloc 0x003F027F [100.105003 -188.537994 -23.945000] 0.221328 0.000000 0.000000 0.975200 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F05F, 490227, 0x003F027F, 101.939, -189.854, -23.945, 0.593721, 0, 0, 0.804671, False, '2024-05-18 21:43:04'); /* Dragon Egg Generator */
+/* @teleloc 0x003F027F [101.939003 -189.854004 -23.945000] 0.593721 0.000000 0.000000 0.804671 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F061, 490227, 0x003F027F, 97.9125, -190.03, -23.945, -0.706143, 0, 0, 0.708069, False, '2024-05-18 21:43:09'); /* Dragon Egg Generator */
+/* @teleloc 0x003F027F [97.912498 -190.029999 -23.945000] -0.706143 0.000000 0.000000 0.708069 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F062, 490227, 0x003F027F, 97.6185, -192.769, -23.945, -0.850859, 0, 0, 0.525394, False, '2024-05-18 21:43:16'); /* Dragon Egg Generator */
+/* @teleloc 0x003F027F [97.618500 -192.768997 -23.945000] -0.850859 0.000000 0.000000 0.525394 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F063, 490227, 0x003F02B5, 186.877, -150.373, -17.945, 0.71404, 0, 0, 0.700105, False, '2024-05-18 21:44:15'); /* Dragon Egg Generator */
+/* @teleloc 0x003F02B5 [186.876999 -150.373001 -17.945000] 0.714040 0.000000 0.000000 0.700105 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F064, 490227, 0x003F0145, 285.328, -132.084, -47.945, 0.97566, 0, 0, -0.219291, False, '2024-05-18 21:44:32'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0145 [285.328003 -132.084000 -47.945000] 0.975660 0.000000 0.000000 -0.219291 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F065, 490227, 0x003F0136, 259.287, -132.692, -47.945, 0.233486, 0, 0, 0.97236, False, '2024-05-18 21:44:37'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0136 [259.286987 -132.692001 -47.945000] 0.233486 0.000000 0.000000 0.972360 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F066, 490227, 0x003F0136, 256.879, -131.366, -47.945, 0.233486, 0, 0, 0.97236, False, '2024-05-18 21:44:39'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0136 [256.878998 -131.365997 -47.945000] 0.233486 0.000000 0.000000 0.972360 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F067, 490227, 0x003F0132, 256.927, -87.6872, -47.945, -0.446956, 0, 0, 0.894556, False, '2024-05-18 21:44:46'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0132 [256.927002 -87.687202 -47.945000] -0.446956 0.000000 0.000000 0.894556 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F068, 490227, 0x003F013C, 284.211, -87.3285, -47.945, -0.215031, 0, 0, 0.976607, False, '2024-05-18 21:44:51'); /* Dragon Egg Generator */
+/* @teleloc 0x003F013C [284.210999 -87.328499 -47.945000] -0.215031 0.000000 0.000000 0.976607 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7003F069, 490227, 0x003F0142, 293.2296, -96.0504, -47.945, 0.520722, 0, 0, 0.853726, False, '2024-05-18 21:44:54'); /* Dragon Egg Generator */
+/* @teleloc 0x003F0142 [293.229614 -96.050400 -47.945000] 0.520722 0.000000 0.000000 0.853726 */

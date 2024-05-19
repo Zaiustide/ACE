@@ -14,6 +14,7 @@ VALUES (1030351,   1,        256) /* ItemType - MissileWeapon */
      , (1030351,  19,         20) /* Value */
      , (1030351,  44,          1) /* Damage */
      , (1030351,  46,         16) /* DefaultCombatStyle - Bow */
+	 , (1030351,  48,         47) /* WeaponSkill - MissileWeapons */
      , (1030351,  49,         70) /* WeaponTime */
      , (1030351,  50,          1) /* AmmoType - Arrow */
      , (1030351,  51,          2) /* CombatUse - Missle */

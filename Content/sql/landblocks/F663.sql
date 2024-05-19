@@ -241,8 +241,8 @@ VALUES (0x7F663040, 490169, 0xF6630016, 58.0762, 143.26, 0.055, -0.200632, 0, 0,
 /* @teleloc 0xF6630016 [58.076199 143.259995 0.055000] -0.200632 0.000000 0.000000 0.979667 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F663041, 490169, 0xF6630005, 22.6321, 101.754, -0.045, -0.912998, 0, 0, 0.407964, False, '2024-01-06 12:53:33'); /* Drudge Aviator Generator */
-/* @teleloc 0xF6630005 [22.632099 101.753998 -0.045000] -0.912998 0.000000 0.000000 0.407964 */
+VALUES (0x7F663041, 490169, 0xF6630005, 20.62249, 100.3293, -0.1, 0.878654, 0, 0, -0.47746, False, '2024-01-06 12:53:33'); /* Drudge Aviator Generator */
+/* @teleloc 0xF6630005 [20.622490 100.329300 -0.100000] 0.878654 0.000000 0.000000 -0.477460 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F663042, 490169, 0xF663001E, 92.604, 122.643, 0.055, 0.956097, 0, 0, -0.293051, False, '2024-01-06 12:55:45'); /* Drudge Aviator Generator */
@@ -341,5 +341,5 @@ VALUES (0x7F66305C, 490161, 0xF6630028, 117.936, 177.324, 2.60502, 0.121206, 0, 
 /* @teleloc 0xF6630028 [117.935997 177.324005 2.605020] 0.121206 0.000000 0.000000 -0.992627 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F66305D, 490161, 0xF6630028, 100.3201, 172.109, 0.702419, -0.974231, 0, 0, -0.225551, False, '2024-02-11 13:22:22'); /* Hay Stack */
-/* @teleloc 0xF6630028 [100.320099 172.108994 0.702419] -0.974231 0.000000 0.000000 -0.225551 */
+VALUES (0x7F66305D, 490161, 0xF6630028, 100.32, 172.109, 0.702419, -0.974231, 0, 0, -0.225551, False, '2024-02-11 13:22:22'); /* Hay Stack */
+/* @teleloc 0xF6630028 [100.320000 172.108994 0.702419] -0.974231 0.000000 0.000000 -0.225551 */
