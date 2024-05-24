@@ -19,7 +19,7 @@ VALUES (490173,   1,         16) /* ItemType - Creature */
      , (490173, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490173, 140,          1) /* AiOptions - CanOpenDoors */
      , (490173, 146,      5000000) /* XpOverride */
-	 , (490173, 386,         10) /* Overpower */
+	 , (490173, 386,         40) /* Overpower */
 	 , (490173, 332,   200); /* LuminanceAward */
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -31,7 +31,8 @@ VALUES (490173,   1, True ) /* Stuck */
      , (490173,  14, True ) /* GravityStatus */
      , (490173,  19, True ) /* Attackable */
      , (490173,  50, True ) /* NeverFailCasting */
-     , (490173,  66, True ) /* IgnoreMagicArmor */;
+     , (490173,  66, True ) /* IgnoreMagicArmor */
+	 , (490173,  65, True ) /* IgnoreMagicResist */; 
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490173,   1,       5) /* HeartbeatInterval */
@@ -79,6 +80,10 @@ VALUES (490173,   1, 0x020017C8) /* Setup */
      , (490173,   4, 0x30000004) /* CombatTable */
      , (490173,   8, 0x06001035) /* Icon */
      , (490173,  22, 0x34000017) /* PhysicsEffectTable */
+	 , (490173,  32,        272) /* WieldedTreasureType - 
+                                   Wield Tachi (23699) | Probability: 33%
+                                   Wield Yaoji (23709) | Probability: 33%
+                                   Wield Acid Yari (23721) | Probability: 34% */
      , (490173,  35,       10002) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
@@ -202,11 +207,11 @@ VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 268435537 /* Twitch1 */, NULL, N
 
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES   (490173, 2, 25632,  1, 2, 1, False) /* Create The Fist of Bellenesse (31199) for Wield */
-, (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
+VALUES  (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
      , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 43901,  5, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490173, 9, 1000002, 2, 0, 0.2, False) /* 42127923 Tears */
+	 , (490173, 9, 490184,  5, 0, 0.10, False) /* Create Prom Note */ 
+	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 480608,  0, 0, 0.01, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (490173, 9,     0,  0, 0, 0.979, False)    /* Create nothing for ContainTreasure */
+	 , (490173, 9,     0,  0, 0, 0.99, False)    /* Create nothing for ContainTreasure */;

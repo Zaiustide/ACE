@@ -10,16 +10,12 @@ VALUES (490166,   1,         16) /* ItemType - Creature */
      , (490166,   6,         -1) /* ItemsCapacity */
      , (490166,   7,         -1) /* ContainersCapacity */
      , (490166,  16,          1) /* ItemUseable - No */
-     , (490166,  25,        499) /* Level */
-     , (490166,  27,          0) /* ArmorType - None */
-     , (490166,  40,          2) /* CombatMode - Melee */
+     , (490166,  25,        500) /* Level */
      , (490166,  68,          9) /* TargetingTactic - Random, TopDamager */
-     , (490166,  81,          1) /* MaxGeneratedObjects */
-     , (490166,  82,          0) /* InitGeneratedObjects */
-     , (490166,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
-     , (490166, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */
+     , (490166,  93,    4195336) /* PhysicsState - ReportCollisions, Gravity, EdgeSlide */
      , (490166, 133,          2) /* ShowableOnRadar - ShowMovement */
-     , (490166, 140,          1) /* AiOptions - CanOpenDoors */
+     , (490166, 386,         50) /* Overpower */
+	 , (490166, 332,        3000) /* LuminanceAward */
      , (490166, 146,    150000000) /* XpOverride */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -48,7 +44,7 @@ VALUES (490166,   1,       5) /* HeartbeatInterval */
      , (490166,  31,      65) /* VisualAwarenessRange */
      , (490166,  34,       1) /* PowerupTime */
      , (490166,  36,       1) /* ChargeSpeed */
-     , (490166,  39,    3.5) /* DefaultScale */
+     , (490166,  39,    2) /* DefaultScale */
      , (490166,  64,     1.1) /* ResistSlash */
      , (490166,  65,     1.1) /* ResistPierce */
      , (490166,  66,    0.89) /* ResistBludgeon */
@@ -117,7 +113,10 @@ VALUES (490166,  0,  4,  0,    0,  250,  213,  213,  250,  300,  300,  300,  300
      , (490166,  8,  4, 300, 0.75,  250,  213,  213,  250,  300,  300,  300,  300,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
-VALUES (490166,  4096,   2.05)  /* Flame Chain */;
+VALUES (490166,  4312,   2.10)  /* Incantation of Imperil Other */
+     , (490166,  4483,  2.20)  /* Incantation of Lightning Vulnerability Other */
+     , (490166,  6198,  2.18)  /* Incantation of Lightning Bolt */
+     , (490166,  6199,  2.17)  /* Incantation of Lightning Arc */;
 
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
 VALUES (490166, 414) /* PLAYER_DEATH_EVENT */;

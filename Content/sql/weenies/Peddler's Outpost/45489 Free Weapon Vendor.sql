@@ -158,4 +158,5 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 51988, -1, 0, 0, False) /* Create Shadowfire Isparian Spear (32645) for Shop */
      , (45489, 4, 51989, -1, 0, 0, False) /* Create Shadowfire Isparian Staff (32646) for Shop */
      , (45489, 4, 51990, -1, 0, 0, False) /* Create Shadowfire Isparian Sword (32600) for Shop */
-	   , (45489, 4, 51991, -1, 0, 0, False) /* Create Shadowfire Isparian Spear (32645) for Shop */;
+	   , (45489, 4, 51991, -1, 0, 0, False) /* Create Shadowfire Isparian Spear (32645) for Shop */
+	   , (45489, 4, 37585, -1, 0, 0, False) /* Create Shadowfire Isparian Spear (32645) for Shop */;

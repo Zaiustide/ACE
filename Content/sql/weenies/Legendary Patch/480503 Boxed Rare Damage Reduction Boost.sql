@@ -29,8 +29,8 @@ VALUES (480503,   1, 'Boxed Gem of Rare Damage Reduction Boost V') /* Name */
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (480503,   1, 0x0200011E) /* Setup */
      , (480503,   3, 0x20000014) /* SoundTable */
-     , (480503,   8, 0x060072E9) /* Icon */
-	 , (480503,  50,  100668293) /* IconOverlay */
+     , (480503,   52, 0x060012F8) /* IconUnderlay */
+	 , (480503,  8,  100668293) /* Icon */
      , (480503,  22, 0x3400002B) /* PhysicsEffectTable */
      , (480503,  38,      52025) /* UseCreateItem - Blank Augmentation Gem */;
 

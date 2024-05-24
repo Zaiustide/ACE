@@ -13,6 +13,7 @@ VALUES (10416111,   1,          1) /* ItemType - MeleeWeapon */
      , (10416111,  45,         16) /* DamageType - Fire */
      , (10416111,  46,          8) /* DefaultCombatStyle - TwoHanded */
      , (10416111,  47,        160) /* AttackType - DoubleSlash, DoubleThrust */
+	 , (10416111,  48,        41) /* AttackType - DoubleSlash, DoubleThrust */
      , (10416111,  51,          5) /* CombatUse - TwoHanded */
      , (10416111,  52,          1) /* ParentLocation - RightHand */
      , (10416111,  93,       3092) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, LightingOn */

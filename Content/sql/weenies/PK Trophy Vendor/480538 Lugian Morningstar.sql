@@ -14,7 +14,8 @@ VALUES (480538,   1,          1) /* ItemType - MeleeWeapon */
      , (480538,  45,          2) /* DamageType - Pierce */
      , (480538,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (480538,  47,          4) /* AttackType - Slash */
-     , (480538,  48,          5) /* WeaponSkill - Mace */
+     , (480538,  48,          45) /* WeaponSkill - Mace */
+	 , (480538,  353,          4) /* WeaponSkill - Mace */
      , (480538,  49,        140) /* WeaponTime */
      , (480538,  51,          1) /* CombatUse - Melee */
      , (480538,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */

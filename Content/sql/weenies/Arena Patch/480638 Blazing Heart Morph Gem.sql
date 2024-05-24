@@ -32,7 +32,7 @@ VALUES (480638,   1, 0x02000179) /* Setup */
      , (480638,   6, 0x04000BEF) /* PaletteBase */
      , (480638,   7, 0x1000010B) /* ClothingBase */
      , (480638,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (480638,  50, 0x06003328) /* IconOverlay */
+     , (480638,  8, 0x06003328) /* Icon */
      , (480638,  52, 100689403) /* IconUnderlay */;
 
 /* Lifestoned Changelog:

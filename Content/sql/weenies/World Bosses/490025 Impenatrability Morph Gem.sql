@@ -32,7 +32,7 @@ VALUES (490025,   1, 0x02000179) /* Setup */
      , (490025,   6, 0x04000BEF) /* PaletteBase */
      , (490025,   7, 0x1000010B) /* ClothingBase */
      , (490025,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (490025,  50, 100668271) /* IconOverlay */
+     , (490025,  8, 100668271) /* Icon */
      , (490025,  52, 0x06005B0C) /* IconUnderlay */;
 
 /* Lifestoned Changelog:

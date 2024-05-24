@@ -31,9 +31,8 @@ VALUES  (490027,   1, 0x02000179) /* Setup */
      , (490027,   3, 0x20000014) /* SoundTable */
      , (490027,   6, 0x04000BEF) /* PaletteBase */
      , (490027,   7, 0x1000010B) /* ClothingBase */
-     , (490027,   8, 0x06002971) /* Icon */
      , (490027,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (490027,  50, 0x060026BA) /* IconOverlay */
+     , (490027,  8, 0x060026BA) /* Icon */
      , (490027,  52, 0x060065FB) /* IconUnderlay */;
 
 /* Lifestoned Changelog:
