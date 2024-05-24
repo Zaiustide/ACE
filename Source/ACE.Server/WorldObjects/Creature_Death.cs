@@ -59,10 +59,10 @@ namespace ACE.Server.WorldObjects
                 HandleTownControlBossDeath();
             }
 
-            //if(WorldBosses.IsWorldBoss(this.WeenieClassId))
-            //{
-            //    HandleWorldBossDeath();
-            //}
+            if (WorldBosses.IsWorldBoss(this.WeenieClassId))
+            {
+                HandleWorldBossDeath();
+            }
 
             return GetDeathMessage(lastDamager, damageType, criticalHit);
         }
