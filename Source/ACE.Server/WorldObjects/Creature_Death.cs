@@ -145,6 +145,13 @@ namespace ACE.Server.WorldObjects
             {
                 CreateCorpse(topDamager);
                 Destroy();
+
+                //// World Bosses don't currently spawn in any T8 locations,
+                ////but if we ever do, we'd want to remove the ratings whitelist on world boss death
+                //if (WorldBosses.IsWorldBoss(this.WeenieClassId))
+                //{
+                //    Whitelist.RemoveLandblockFromRatingsWhitelist(this.Location.Landblock);
+                //}
             });
 
             dieChain.EnqueueChain();
@@ -439,7 +446,7 @@ namespace ACE.Server.WorldObjects
         /// Create a corpse for both creatures and players currently
         /// </summary>
         protected void CreateCorpse(DamageHistoryInfo killer, bool hadVitae = false)
-        {
+        {           
             if (NoCorpse)
             {
                 if (killer != null && killer.IsOlthoiPlayer) return;
@@ -643,6 +650,15 @@ namespace ACE.Server.WorldObjects
             {
                 if (this.CurrentLandblock != null)
                 {
+                    if (PropertyManager.GetBool("ratings_whitelist_enabled").Item)
+                    {
+                        DeathTreasure.DisableRatings = !Whitelist.IsRatingsWhitelistedLandblock(this.CurrentLandblock.Id.Landblock);
+                    }
+                    else
+                    {
+                        DeathTreasure.DisableRatings = false;
+                    }
+
                     if (PropertyManager.GetBool("equipmentset_whitelist_enabled").Item)
                     {
                         DeathTreasure.DisableSets = !Whitelist.IsEquipmentSetWhitelistedLandblock(this.CurrentLandblock.Id.Landblock);

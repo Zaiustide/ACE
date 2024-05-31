@@ -34,6 +34,11 @@ namespace ACE.Server.Factories.Tables
 
         public static int Roll(WorldObject wo, TreasureDeath profile, TreasureRoll roll)
         {
+            if (profile.DisableRatings)
+            {
+                return 0;
+            }
+
             var rating_drop_rate = (float)Math.Max(0.0f, PropertyManager.GetDouble("rating_drop_rate").Item);
             if (rating_drop_rate > 1.0f)
             {

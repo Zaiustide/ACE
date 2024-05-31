@@ -1,3 +1,4 @@
+using ACE.Server.Physics.Animation.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,118 @@ namespace ACE.Server.Entity
         {
             return LegendaryWhitelistedLandblocks.Contains(landblockId);
         }
+
+        private static List<uint> _ratingsWhitelistedLandblocks;
+        private static List<uint> RatingsWhitelistedLandblocks
+        {
+            get
+            {
+                if (_ratingsWhitelistedLandblocks == null)
+                {
+                    _ratingsWhitelistedLandblocks = new List<uint>()
+                    {
+                        0x0174, //Ancient Temple
+                        0x003F, //Dragon's Den
+                        0x0026, //Drudge Stronghold
+                        0x00AE, //Swarm Hive
+                        0x00C8, //Shreth Caverns
+                        0x00E1, //Mite Hole
+                        0x7E04, //Rat Nest
+                        //Island landblocks
+                        0xF56A,
+                        0xF56B,
+                        0xF56C,
+                        0xF562,
+                        0xF563,
+                        0xF567,
+                        0xF568,
+                        0xF569,
+                        0xF662,
+                        0xF663,
+                        0xF664,
+                        0xF665,
+                        0xF667,
+                        0xF668,
+                        0xF669,
+                        0xF76A,
+                        0xF76B,
+                        0xF76C,
+                        0xF762,
+                        0xF763,
+                        0xF764,
+                        0xF765,
+                        0xF766,
+                        0xF767,
+                        0xF768,
+                        0xF769,
+                        0xF86A,
+                        0xF86B,
+                        0xF862,
+                        0xF863,
+                        0xF864,
+                        0xF865,
+                        0xF866,
+                        0xF867,
+                        0xF868,
+                        0xF869,
+                        0xF96A,
+                        0xF962,
+                        0xF963,
+                        0xF964,
+                        0xF965,
+                        0xF966,
+                        0xF967,
+                        0xF968,
+                        0xF969
+                    };
+                }
+
+                return _ratingsWhitelistedLandblocks;
+            }
+        }
+
+        public static bool IsRatingsWhitelistedLandblock(uint landblockId)
+        {
+            return RatingsWhitelistedLandblocks.Contains(landblockId);
+        }
+
+        public static void AddLandblockToRatingsWhitelist(uint landblockId)
+        {
+            if (!RatingsWhitelistedLandblocks.Contains(landblockId))
+            {
+                RatingsWhitelistedLandblocks.Add(landblockId);
+            }
+        }
+
+        public static void RemoveLandblockFromRatingsWhitelist(uint landblockId)
+        {
+            if (RatingsWhitelistedLandblocks.Contains(landblockId))
+            {
+                RatingsWhitelistedLandblocks.Remove(landblockId);
+            }
+        }
+
+        private static List<uint> _ratingsWhitelistedChestWeenies;
+        private static List<uint> RatingsWhitelistedChestWeenies
+        {
+            get
+            {
+                if (_ratingsWhitelistedChestWeenies == null)
+                {
+                    _ratingsWhitelistedChestWeenies = new List<uint>()
+                    {
+                        480607
+                    };
+                }
+
+                return _ratingsWhitelistedChestWeenies;
+            }
+        }
+
+        public static bool IsRatingsWhitelistedChestWeenie(uint weenieId)
+        {
+            return RatingsWhitelistedChestWeenies.Contains(weenieId);
+        }        
 
         private static List<uint> _equipmentSetWhitelistedLandblocks;
         private static List<uint> EquipmentSetWhitelistedLandblocks
@@ -168,7 +281,7 @@ namespace ACE.Server.Entity
 
                 return _equipmentSetWhitelistedLandblocks;
             }
-        }
+        }        
 
         public static bool IsEquipmentSetWhitelistedLandblock(uint landblockId)
         {

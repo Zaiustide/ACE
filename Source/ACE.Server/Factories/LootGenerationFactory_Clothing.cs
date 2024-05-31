@@ -985,6 +985,9 @@ namespace ACE.Server.Factories
 
         private static bool TryMutateGearRating(WorldObject wo, TreasureDeath profile, TreasureRoll roll)
         {
+            if (profile.DisableRatings)
+                return false;
+
             if (profile.Tier != 8)
                 return false;
 

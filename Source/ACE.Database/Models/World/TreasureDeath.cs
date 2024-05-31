@@ -28,6 +28,9 @@ namespace ACE.Database.Models.World
         public DateTime LastModified { get; set; }
 
         [NotMapped]
+        public bool DisableRatings { get; set; }
+
+        [NotMapped]
         public bool DisableSets { get; set; }
 
         [NotMapped]

@@ -99,6 +99,9 @@ namespace ACE.Server.Managers
             bossWorldObj.CurrentLandblock = landblock;
             bossWorldObj.EnterWorld();
 
+            //Add landblock as whitelisted for ratings
+            Whitelist.AddLandblockToRatingsWhitelist(spawnLoc.Key);
+
             //Send global message
             PlayerManager.BroadcastToAll(new GameMessageSystemChat(boss.SpawnMsg, ChatMessageType.Broadcast));
 
