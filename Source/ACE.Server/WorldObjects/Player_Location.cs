@@ -913,7 +913,9 @@ namespace ACE.Server.WorldObjects
             0x4FF1,     //Town Control Conflict Area - Holt
             0xE9F0,     //Town Control Conflict Area - Shoushi - Hidden Forest
             0xE9F1,     //Town Control Conflict Area - Shoushi - Hidden Forest
-            0xE8F1      //Town Control Conflict Area - Shoushi - Hidden Forest
+            0xE8F1,     //Town Control Conflict Area - Shoushi - Hidden Forest
+            0x0026,     //Drudge Dungeon
+            0x003F      //Dragon Cave
         };
 
         /// <summary>
