@@ -440,7 +440,7 @@ namespace ACE.Server.WorldObjects
 
                     this.ProcSpellRate = 0.15f;
                     this.ProcSpellSelfTargeted = false;
-                    this.ItemSpellcraft = 450;
+                    this.ItemSpellcraft = 525;
                     if (this.ItemType == ItemType.Caster)
                     {
                         this.ProcSpell = (uint)SpellId.MagicYieldOther8;
@@ -586,122 +586,7 @@ namespace ACE.Server.WorldObjects
 
         private string TinkeringLotto_ApplySlayerMutation()
         {
-            var selectSlayerType = ThreadSafeRandom.Next(1, 27);
-            this.SlayerDamageBonus = 1.20f;
-
-            switch (selectSlayerType)
-            {
-                case 1:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Banderling;
-                    break;
-
-                case 2:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Drudge;
-                    break;
-
-                case 3:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Gromnie;
-                    break;
-
-                case 4:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Lugian;
-                    break;
-
-                case 5:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Grievver;
-                    break;
-
-                case 6:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mattekar;
-                    break;
-
-                case 7:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.GearKnight;
-                    break;
-
-                case 8:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mosswart;
-                    break;
-
-                case 9:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Monouga;
-                    break;
-
-                case 10:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Olthoi;
-                    break;
-
-                case 11:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.PhyntosWasp;
-                    break;
-
-                case 12:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Shadow;
-                    break;
-
-                case 13:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Shreth;
-                    break;
-
-                case 14:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Skeleton;
-                    break;
-
-                case 15:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Tumerok;
-                    break;
-
-                case 16:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Tusker;
-                    break;
-
-                case 17:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Virindi;
-                    break;
-
-                case 18:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Wisp;
-                    break;
-
-                case 19:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Zefir;
-                    break;
-
-                case 20:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Golem;
-                    break;
-
-                case 21:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Gurog;
-                    break;
-
-                case 22:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Burun;
-                    break;
-
-                case 23:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Remoran;
-                    break;
-
-                case 24:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Reedshark;
-                    break;
-
-                case 25:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Eater;
-                    break;
-
-                case 26:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Sclavus;
-                    break;
-
-                case 27:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Moarsman;
-                    break;
-
-                default:
-                    return "";
-            }
+            ApplyRandomSlayer(1.2);
 
             HandleTinkerLottoLog($"{this.SlayerCreatureType}Slayer");
 
@@ -876,7 +761,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private void HandleTinkerLottoLog(string lottoResult)
+        public void HandleTinkerLottoLog(string lottoResult)
         {
             if (!string.IsNullOrEmpty(this.TinkerLottoLog))
                 this.TinkerLottoLog += ",";
@@ -926,6 +811,142 @@ namespace ACE.Server.WorldObjects
             }
 
             return dmgBonusCount;
+        }
+
+        public void ApplyRandomSlayer(double slayerDamageBonus = 1.2f)
+        {
+            var selectSlayerType = ThreadSafeRandom.Next(1, 31);
+            this.SlayerDamageBonus = slayerDamageBonus;
+
+            switch (selectSlayerType)
+            {
+                case 1:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Banderling;
+                    break;
+
+                case 2:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Drudge;
+                    break;
+
+                case 3:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Gromnie;
+                    break;
+
+                case 4:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Lugian;
+                    break;
+
+                case 5:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Grievver;
+                    break;
+
+                case 6:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mattekar;
+                    break;
+
+                case 7:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.GearKnight;
+                    break;
+
+                case 8:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mosswart;
+                    break;
+
+                case 9:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Monouga;
+                    break;
+
+                case 10:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Olthoi;
+                    break;
+
+                case 11:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.PhyntosWasp;
+                    break;
+
+                case 12:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Shadow;
+                    break;
+
+                case 13:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Shreth;
+                    break;
+
+                case 14:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Skeleton;
+                    break;
+
+                case 15:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Tumerok;
+                    break;
+
+                case 16:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Tusker;
+                    break;
+
+                case 17:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Virindi;
+                    break;
+
+                case 18:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Wisp;
+                    break;
+
+                case 19:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Zefir;
+                    break;
+
+                case 20:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Golem;
+                    break;
+
+                case 21:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Gurog;
+                    break;
+
+                case 22:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Burun;
+                    break;
+
+                case 23:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Remoran;
+                    break;
+
+                case 24:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Reedshark;
+                    break;
+
+                case 25:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Eater;
+                    break;
+
+                case 26:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Sclavus;
+                    break;
+
+                case 27:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Moarsman;
+                    break;
+
+                case 28:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.GotrokLugian;
+                    break;
+
+                case 29:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Sleech;
+                    break;
+
+                case 30:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Rat;
+                    break;
+
+                case 31:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Moar;
+                    break;
+
+                default:
+                    return;
+            }
         }
     }
 }
