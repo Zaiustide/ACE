@@ -15,9 +15,8 @@ VALUES (490267,   1,         16) /* ItemType - Creature */
      , (490267,  68,          9) /* TargetingTactic - Random, TopDamager */
      , (490267,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (490267, 133,          4) /* ShowableOnRadar - ShowAlways */
-     , (490267, 386,          20) /* Overpower */
 	 , (490267, 146,    2400000) /* XpOverride */
-	 , (490267, 386,         10) /* Overpower */
+	 , (490267, 386,         20) /* Overpower */
 	 , (490267, 332,        200) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)

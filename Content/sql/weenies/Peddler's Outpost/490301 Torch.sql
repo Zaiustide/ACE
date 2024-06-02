@@ -28,7 +28,7 @@ INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490301,  11,     300) /* ResetInterval */
      , (490301,  39,       1) /* DefaultScale */
      , (490301,  54,       1) /* UseRadius */;
-;
+	 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490301,   1, 'Torch') /* Name */
      , (490301,  15, 'A torch.') /* ShortDesc */;
