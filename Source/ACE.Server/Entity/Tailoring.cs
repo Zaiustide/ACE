@@ -16,6 +16,7 @@ using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Structure;
 using ACE.Server.WorldObjects;
 using ACE.Server.WorldObjects.Managers;
+using Lifestoned.DataModel.Shared;
 using log4net;
 using EquipMask = ACE.Entity.Enum.EquipMask;
 using ItemType = ACE.Entity.Enum.ItemType;
@@ -1535,11 +1536,13 @@ namespace ACE.Server.Entity
                         {
                             playerMsg = $"You successfully apply the {source.Name} to reduce your {target.NameWithMaterial} to cover only your chest.";
                             player.UpdateProperty(target, PropertyInt.ValidLocations, (int)EquipMask.ChestArmor);
+                            player.UpdateProperty(target, PropertyInt.ClothingPriority, (int)CoverageMask.OuterwearChest);
                         }
                         else if (targetValidLocations.HasFlag(EquipMask.UpperLegArmor))
                         {
                             playerMsg = $"You successfully apply the {source.Name} to reduce your {target.NameWithMaterial} to cover only your upper legs.";
                             player.UpdateProperty(target, PropertyInt.ValidLocations, (int)EquipMask.UpperLegArmor);
+                            player.UpdateProperty(target, PropertyInt.ClothingPriority, (int)CoverageMask.OuterwearUpperLegs);
                         }
                         else
                         {
