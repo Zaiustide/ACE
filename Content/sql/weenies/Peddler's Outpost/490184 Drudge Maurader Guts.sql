@@ -18,7 +18,8 @@ VALUES (490184,   1,        128) /* ItemType - Misc */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490184,   1, 'Drudge Maurader Guts') /* Name */
-     , (490184,  16, 'The guts of a departed Drudge Maurader.') /* LongDesc */;
+     , (490184,  16, 'The guts of a departed Drudge Maurader.') /* LongDesc */
+	 , (490184,  20, 'Drudge Maurader Guts') /* PluralName */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490184,   1, 0x02000181) /* Setup */

@@ -45,7 +45,7 @@ VALUES (490287,  21,       0) /* WeaponLength */
      , (490287,  79,       0) /* Elasticity */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490287,   1, 'Dragon Scale Atlatl Dart') /* Name */
+VALUES (490287,   1, 'Infinite Dragon Scale Atlatl Dart') /* Name */
      , (490287,  16, 'Deadly, dragon scale atlatl dart that draw the elemental energies from elementally attuned atlatls to damage their target.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)

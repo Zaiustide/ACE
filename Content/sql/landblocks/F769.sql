@@ -1,14 +1,6 @@
 DELETE FROM `landblock_instance` WHERE `landblock` = 0xF769;
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F769001, 490116, 0xF7690036, 167.501, 133.765, 0.055, 0.219345, 0, 0, 0.975647, False, '2023-12-30 12:55:05'); /* Outpost Small Tree */
-/* @teleloc 0xF7690036 [167.501007 133.764999 0.055000] 0.219345 0.000000 0.000000 0.975647 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F769002, 490116, 0xF7690036, 167.501, 133.765, 0.055, 0.219345, 0, 0, 0.975647, False, '2023-12-30 12:55:05'); /* Outpost Small Tree */
-/* @teleloc 0xF7690036 [167.501007 133.764999 0.055000] 0.219345 0.000000 0.000000 0.975647 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F769003, 490116, 0xF7690036, 167.501, 133.765, 0.055, 0.219345, 0, 0, 0.975647, False, '2023-12-30 12:55:06'); /* Outpost Small Tree */
 /* @teleloc 0xF7690036 [167.501007 133.764999 0.055000] 0.219345 0.000000 0.000000 0.975647 */
 

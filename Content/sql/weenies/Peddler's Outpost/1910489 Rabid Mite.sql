@@ -27,9 +27,7 @@ VALUES (1910489,   1, True ) /* Stuck */
      , (1910489,  12, True ) /* ReportCollisions */
      , (1910489,  13, False) /* Ethereal */
      , (1910489,  14, True ) /* GravityStatus */
-     , (1910489,  19, True ) /* Attackable */
-	 , (1910489,  65, True ) /* IgnoreMagicResist */
-     , (1910489,  66, True ) /* IgnoreMagicArmor */;
+     , (1910489,  19, True ) /* Attackable */;
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (1910489,   1,       5) /* HeartbeatInterval */
@@ -48,7 +46,7 @@ VALUES (1910489,   1,       5) /* HeartbeatInterval */
      , (1910489,  31,      16) /* VisualAwarenessRange */
      , (1910489,  34,       2) /* PowerupTime */
      , (1910489,  36,       1) /* ChargeSpeed */
-     , (1910489,  39,     2) /* DefaultScale */
+     , (1910489,  39,     1.5) /* DefaultScale */
      , (1910489,  64, 1) /* ResistSlash */
      , (1910489,  65, 1) /* ResistPierce */
      , (1910489,  66, 1) /* ResistBludgeon */

@@ -14,7 +14,7 @@ VALUES (490261,   1,         16) /* ItemType - Creature */
      , (490261,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (490261, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490261, 146,    2400000) /* XpOverride */
-	 , (490261, 386,         30) /* Overpower */
+	 , (490261, 386,         20) /* Overpower */
 	 , (490261, 332,        200) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -52,7 +52,7 @@ VALUES (490261,   1,       5) /* HeartbeatInterval */
      , (490261,  74,       1) /* ResistManaDraain */
      , (490261,  75,       1) /* ResistManaBoost */
      , (490261,  77,       1) /* PhysicsScriptIntensity */
-     , (490261, 104,      10) /* ObviousRadarRange */
+     , (490261, 104,      20) /* ObviousRadarRange */
      , (490261, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
@@ -95,7 +95,7 @@ VALUES (490261,  6, 0, 3, 0, 280, 0, 0) /* MeleeDefense        Specialized */
      , (490261, 46, 0, 3, 0, 530, 0, 0) /* FinesseWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
-VALUES (490261,  0,  0, 100, 0.75,  420,  273,  357,  357,  273,  357,  273,  315,    0, 2,  0.4,  0.1,    0,  0.4,  0.1,    0,    0,    0,    0,    0,    0,    0) /* Head */
+VALUES (490261,  0,  2, 100, 0.75,  420,  273,  357,  357,  273,  357,  273,  315,    0, 2,  0.4,  0.1,    0,  0.4,  0.1,    0,    0,    0,    0,    0,    0,    0) /* Head */
      , (490261, 10,  2, 300,  0.3,  400,  260,  340,  340,  260,  340,  260,  300,    0, 3,    0,  0.2,  0.8,    0,  0.2,  0.8,    0,    0,    0,    0,    0,    0) /* FrontLeg */
      , (490261, 13,  2, 300,  0.3,  400,  260,  340,  340,  260,  340,  260,  300,    0, 3,    0,    0,    0,    0,    0,    0,  0.1,  0.3,  0.7,  0.1,  0.3,  0.7) /* RearLeg */
      , (490261, 16,  2, 300, 0.75,  420,  273,  357,  357,  273,  357,  273,  315,    0, 2,  0.6,  0.7,  0.2,  0.6,  0.7,  0.2,  0.8,  0.6,  0.3,  0.8,  0.6,  0.3) /* Torso */

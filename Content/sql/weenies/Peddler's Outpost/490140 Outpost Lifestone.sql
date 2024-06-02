@@ -16,7 +16,7 @@ VALUES (490140,   1, True ) /* Stuck */
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490140,  54,       2) /* UseRadius */
-, (490140,  39,    1.5) /* DefaultScale */;
+, (490140,  39,    1) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490140,   1, 'Life Stone') /* Name */

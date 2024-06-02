@@ -24,12 +24,10 @@ VALUES (490151,   1, True ) /* Stuck */
      , (490151,  11, False) /* IgnoreCollisions */
      , (490151,  12, True ) /* ReportCollisions */
      , (490151,  13, False) /* Ethereal */
-     , (490151,  52, False) /* AiImmobile */
-	 , (490151,  65, True ) /* IgnoreMagicResist */
-     , (490151,  66, True ) /* IgnoreMagicArmor */;
+     , (490151,  52, False) /* AiImmobile */;
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
-VALUES (490151,   1,       5) /* HeartbeatInterval */
+VALUES (490151,   1,      1.5) /* HeartbeatInterval */
      , (490151,   2,       0) /* HeartbeatTimestamp */
      , (490151,   3,     100) /* HealthRate */
      , (490151,   4,       100) /* StaminaRate */
@@ -45,7 +43,7 @@ VALUES (490151,   1,       5) /* HeartbeatInterval */
      , (490151,  34,       1) /* PowerupTime */
 	 , (490151,  39,       5) /* DefaultScale */
      , (490151,  36,       1) /* ChargeSpeed */
-	 , (490151,  55,      210) /* HomeRadius */
+	 , (490151,  55,      30) /* HomeRadius */
      , (490151,  64,    0.15) /* ResistSlash */
      , (490151,  65,    0.75) /* ResistPierce */
      , (490151,  66,    0.85) /* ResistBludgeon */
@@ -132,6 +130,14 @@ SET @parent_id = LAST_INSERT_ID();
 INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `delay`, `extent`, `motion`, `message`, `test_String`, `min`, `max`, `min_64`, `max_64`, `min_Dbl`, `max_Dbl`, `stat`, `display`, `amount`, `amount_64`, `hero_X_P_64`, `percent`, `spell_Id`, `wealth_Rating`, `treasure_Class`, `treasure_Type`, `p_Script`, `sound`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
 VALUES (@parent_id,  0,  16 /* WorldBroadcast */, 0, 1, NULL, '%s has struck down the Island Dragon! The ground trembles as she falls. The Dragon''s Den entrance has been revealed. Keep your eyes peeled as the island may not have been cleared of these large beasts.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
 , (@parent_id,  1,  15 /* Activate */, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
+VALUES (490151, 19 /* Homesick */,      1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+SET @parent_id = LAST_INSERT_ID();
+
+INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `delay`, `extent`, `motion`, `message`, `test_String`, `min`, `max`, `min_64`, `max_64`, `min_Dbl`, `max_Dbl`, `stat`, `display`, `amount`, `amount_64`, `hero_X_P_64`, `percent`, `spell_Id`, `wealth_Rating`, `treasure_Class`, `treasure_Type`, `p_Script`, `sound`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
+VALUES (@parent_id,  0,  14 /* CastSpell */, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2343 /* Rushed Recovery */, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (490151, 9, 490235,  0, 0, 1, False) /* Create Splinter of Anger Gen (72104) for ContainTreasure */

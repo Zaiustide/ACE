@@ -19,7 +19,7 @@ VALUES (490260,   1,         16) /* ItemType - Creature */
      , (490260, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490260, 140,          1) /* AiOptions - CanOpenDoors */
      , (490260, 146,     290000) /* XpOverride */
-	 , (490260, 386,         40) /* Overpower */
+	 , (490260, 386,         20) /* Overpower */
 	 , (490260, 332,        200) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -61,7 +61,7 @@ VALUES (490260,   1,       5) /* HeartbeatInterval */
      , (490260,  74,       1) /* ResistManaDrain */
      , (490260,  75,       1) /* ResistManaBoost */
      , (490260,  80,       2) /* AiUseMagicDelay */
-     , (490260, 104,      10) /* ObviousRadarRange */
+     , (490260, 104,      20) /* ObviousRadarRange */
      , (490260, 125,       1) /* ResistHealthDrain */
      , (490260, 166,     0.6) /* ResistNether */;
 

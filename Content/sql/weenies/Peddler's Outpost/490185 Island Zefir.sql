@@ -16,7 +16,7 @@ VALUES (490185,   1,         16) /* ItemType - Creature */
      , (490185, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490185, 146,    2500000) /* XpOverride */
      , (490185, 332,        200) /* LuminanceAward */
-     , (490185, 386,         30) /* Overpower */;
+     , (490185, 386,         20) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490185,   1, True ) /* Stuck */
@@ -52,7 +52,7 @@ VALUES (490185,   1,       5) /* HeartbeatInterval */
      , (490185,  69,     0.7) /* ResistAcid */
      , (490185,  70,     0.4) /* ResistElectric */
      , (490185,  80,       3) /* AiUseMagicDelay */
-     , (490185, 104,      10) /* ObviousRadarRange */
+     , (490185, 104,      20) /* ObviousRadarRange */
      , (490185, 122,       2) /* AiAcquireHealth */
      , (490185, 125,       1) /* ResistHealthDrain */
      , (490185, 166,       1) /* ResistNether */;

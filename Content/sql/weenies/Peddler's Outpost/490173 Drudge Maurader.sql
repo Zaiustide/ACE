@@ -19,7 +19,7 @@ VALUES (490173,   1,         16) /* ItemType - Creature */
      , (490173, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490173, 140,          1) /* AiOptions - CanOpenDoors */
      , (490173, 146,      5000000) /* XpOverride */
-	 , (490173, 386,         40) /* Overpower */
+	 , (490173, 386,         30) /* Overpower */
 	 , (490173, 332,   200); /* LuminanceAward */
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -211,7 +211,7 @@ VALUES  (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
      , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 43901,  5, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490173, 9, 490184,  5, 0, 0.10, False) /* Create Prom Note */ 
+	 , (490173, 9, 490184,  1, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490173, 9, 480608,  0, 0, 0.01, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (490173, 9,     0,  0, 0, 0.99, False)    /* Create nothing for ContainTreasure */;
+	 , (490173, 9, 480608,  1, 0, 0.02, False) /* 4200028 Set Randomizer Morph Gem */
+	 , (490173, 9,     0,  0, 0, 0.98, False)    /* Create nothing for ContainTreasure */;
