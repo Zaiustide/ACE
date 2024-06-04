@@ -815,7 +815,7 @@ namespace ACE.Server.WorldObjects
 
         public void ApplyRandomSlayer(double slayerDamageBonus = 1.2f)
         {
-            var selectSlayerType = ThreadSafeRandom.Next(1, 31);
+            var selectSlayerType = ThreadSafeRandom.Next(1, 33);
             this.SlayerDamageBonus = slayerDamageBonus;
 
             switch (selectSlayerType)
@@ -942,6 +942,14 @@ namespace ACE.Server.WorldObjects
 
                 case 31:
                     this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Moar;
+                    break;
+
+                case 32:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Niffis;
+                    break;
+
+                case 33:
+                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mite;
                     break;
 
                 default:
