@@ -517,20 +517,26 @@ namespace ACE.Server.Entity
             player.SendUseDoneEvent();
         }
 
+        private static readonly List<uint> morphGemsAllowedNonLootGen = new List<uint>()
+        {
+            MorphGemRemoveLevelReq,
+            MorphGemRemovePlayerReq,
+            MorphGemRareUpgrade,
+            MorphGemRareReduction,
+            MorphGemCD,
+            MorphGemCDR,
+            MorphGemJewelersSawblade
+        };
+
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
         {                        
 
             try
             {
-                //Only allow loot gen items to be morphed, except for player req, level req ones, ratings ones and rare armor gems
+                //Only allow loot gen items to be morphed, except for gems that are allowed to be applied to quest / rare items
                 if ((target.ItemWorkmanship == null || target.IsAttunedOrContainsAttuned || target.ResistMagic == 9999)
-                    && source.WeenieClassId != MorphGemRemoveLevelReq
-                    && source.WeenieClassId != MorphGemRemovePlayerReq
-                    && source.WeenieClassId != MorphGemRareUpgrade
-                    && source.WeenieClassId != MorphGemRareReduction
-                    && source.WeenieClassId != MorphGemCD
-                    && source.WeenieClassId != MorphGemCDR)
+                    && !morphGemsAllowedNonLootGen.Contains(source.WeenieClassId))
                 {
                     player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                     return;
