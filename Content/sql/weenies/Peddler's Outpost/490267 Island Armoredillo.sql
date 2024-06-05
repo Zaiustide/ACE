@@ -15,9 +15,9 @@ VALUES (490267,   1,         16) /* ItemType - Creature */
      , (490267,  68,          9) /* TargetingTactic - Random, TopDamager */
      , (490267,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (490267, 133,          4) /* ShowableOnRadar - ShowAlways */
-	 , (490267, 146,    2400000) /* XpOverride */
+	 , (490267, 146,    14000000) /* XpOverride */
 	 , (490267, 386,         20) /* Overpower */
-	 , (490267, 332,        200) /* LuminanceAward */;
+	 , (490267, 332,        400) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490267,   1, True ) /* Stuck */
@@ -56,7 +56,7 @@ VALUES (490267,   1,       5) /* HeartbeatInterval */
      , (490267,  73,       1) /* ResistStaminaBoost */
      , (490267,  74,       1) /* ResistManaDrain */
      , (490267,  75,       1) /* ResistManaBoost */
-     , (490267, 104,      10) /* ObviousRadarRange */
+     , (490267, 104,      20) /* ObviousRadarRange */
      , (490267, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
@@ -82,25 +82,25 @@ VALUES (490267,   1, 360, 0, 0) /* Strength */
      , (490267,   6, 130, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (490267,   1, 52230, 0, 0, 52390) /* MaxHealth */
+VALUES (490267,   1, 32230, 0, 0, 32390) /* MaxHealth */
      , (490267,   3, 49680, 0, 0, 50000) /* MaxStamina */
      , (490267,   5,     0, 0, 0, 130) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
 VALUES (490267,  6, 0, 3, 0, 499, 0, 0) /* MeleeDefense        Specialized */
      , (490267,  7, 0, 3, 0, 544, 0, 0) /* MissileDefense      Specialized */
-     , (490267, 15, 0, 3, 0, 550, 0, 0) /* MagicDefense        Specialized */
+     , (490267, 15, 0, 3, 0, 450, 0, 0) /* MagicDefense        Specialized */
      , (490267, 20, 0, 3, 0, 500, 0, 0) /* Deception           Specialized */
      , (490267, 22, 0, 3, 0, 450, 0, 0) /* Jump                Specialized */
      , (490267, 24, 0, 3, 0, 440, 0, 0) /* Run                 Specialized */
      , (490267, 45, 0, 3, 0, 555, 0, 0) /* LightWeapons        Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
-VALUES (490267,  0,  1, 175, 0.75,  550,  440,  550,  523,  495,  440,  495,  495,    0, 1,  0.7, 0.34,    0,  0.7, 0.34,    0,    0,    0,    0,    0,    0,    0) /* Head */
-     , (490267,  9,  1, 175, 0.75,  550,  440,  550,  523,  495,  440,  495,  495,    0, 1,  0.3, 0.33,    0,  0.3, 0.33,    0,    0,    0,    0,    0,    0,    0) /* Horn */
-     , (490267, 16,  1, 175,  0.5,  400,  320,  400,  380,  360,  320,  360,  360,    0, 2,    0, 0.33,  0.3,    0, 0.33,  0.3,  0.5, 0.34,  0.3,  0.5, 0.34,  0.3) /* Torso */
-     , (490267, 17,  4,  0,    0,  400,  320,  400,  380,  360,  320,  360,  360,    0, 2,    0,    0,    0,    0,    0,    0,  0.5, 0.33,    0,  0.5, 0.33,    0) /* Tail */
-     , (490267, 19,  4,  0,    0,  400,  320,  400,  380,  360,  320,  360,  360,    0, 3,    0,    0,  0.7,    0,    0,  0.7,    0, 0.33,  0.7,    0, 0.33,  0.7) /* Leg */;
+VALUES (490267,  0,  1, 600, 0.75,  520,  312,  260,  390,  520,  494,  494,  520,    0, 1,  0.7, 0.34,    0,  0.7, 0.34,    0,    0,    0,    0,    0,    0,    0) /* Head */
+     , (490267,  9,  1, 600, 0.75,  520,  312,  260,  390,  520,  494,  494,  520,    0, 1,  0.3, 0.33,    0,  0.3, 0.33,    0,    0,    0,    0,    0,    0,    0) /* Horn */
+     , (490267, 16,  1, 600,  0.5,  520,  312,  260,  390,  520,  494,  494,  520,    0, 2,    0, 0.33,  0.3,    0, 0.33,  0.3,  0.5, 0.34,  0.3,  0.5, 0.34,  0.3) /* Torso */
+     , (490267, 17,  4,  0,    0,  520,  312,  260,  390,  520,  494,  494,  520,    0, 2,    0,    0,    0,    0,    0,    0,  0.5, 0.33,    0,  0.5, 0.33,    0) /* Tail */
+     , (4902673, 19,  4,  0,    0,  520,  312,  260,  390,  520,  494,  494,  520,    0, 3,    0,    0,  0.7,    0,    0,  0.7,    0, 0.33,  0.7,    0, 0.33,  0.7) /* Leg */;
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (490267,  5 /* HeartBeat */,   0.05, NULL, 0x8000003C /* HandCombat */, 0x41000003 /* Ready */, NULL, NULL, NULL, NULL);

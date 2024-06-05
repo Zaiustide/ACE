@@ -146,6 +146,7 @@ VALUES (490212, 2, 450032,  0, 4, 0, False) /* Create Leather Cuirass (25641) fo
      , (490212, 4, 490219, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
      , (490212, 4, 490218, -1, 0, 0, False) /* Create Item Spells Certificate (46418) for Shop */
 	 , (490212, 4, 490217, -1, 0, 0, False) /* Create Skill Reset Certificate (46420) for Shop */
+	, (490212, 4, 490313, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
      , (490212, 4, 490221, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
 	 , (490212, 4, 490275, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
 	 , (490212, 4, 490276, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
