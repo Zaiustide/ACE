@@ -16,7 +16,7 @@ VALUES (490172,   1,         16) /* ItemType - Creature */
      , (490172,  68,          3) /* TargetingTactic - Random, Focused */
      , (490172,  93,    4195336) /* PhysicsState - ReportCollisions, Gravity, EdgeSlide */
      , (490172, 133,          2) /* ShowableOnRadar - ShowMovement */
-     , (490172, 146,    10000000) /* XpOverride */
+     , (490172, 146,    20000000) /* XpOverride */
      , (490172, 332,        300) /* LuminanceAward */
      , (490172, 386,         40) /* Overpower */;
 
@@ -82,7 +82,7 @@ VALUES (490172,   1, 400, 0, 0) /* Strength */
      , (490172,   6, 500, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (490172,   1, 15000, 0, 0, 5) /* MaxHealth */
+VALUES (490172,   1, 10000, 0, 0, 10000) /* MaxHealth */
      , (490172,   3,  3600, 0, 0, 0) /* MaxStamina */
      , (490172,   5,  1500, 0, 0, 0) /* MaxMana */;
 

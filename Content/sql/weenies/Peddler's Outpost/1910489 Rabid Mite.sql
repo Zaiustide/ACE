@@ -18,7 +18,7 @@ VALUES (1910489,   1,         16) /* ItemType - Creature */
      , (1910489, 101,        129) /* AiAllowedCombatStyle - Unarmed, ThrownWeapon */
      , (1910489, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (1910489, 146,    5000000) /* XpOverride */
-	 , (1910489, 332,        200) /* LuminanceAward */
+	 , (1910489, 332,        300) /* LuminanceAward */
 	 , (1910489, 386,         30) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -97,7 +97,7 @@ VALUES (1910489,  6, 0, 3, 0, 390, 0, 0) /* MeleeDefense        Specialized */
      , (1910489, 20, 0, 3, 0,  20, 0, 0) /* Deception           Specialized */
      , (1910489, 22, 0, 3, 0,  70, 0, 0) /* Jump                Specialized */
      , (1910489, 24, 0, 3, 0, 150, 0, 0) /* Run                 Specialized */
-     , (1910489, 45, 0, 3, 0, 560, 0, 0) /* LightWeapons        Specialized */
+     , (1910489, 45, 0, 3, 0, 650, 0, 0) /* LightWeapons        Specialized */
      , (1910489, 47, 0, 3, 0, 580, 0, 0) /* MissileWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
@@ -106,11 +106,11 @@ VALUES (1910489,  0,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  42
      , (1910489,  2,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen */
      , (1910489,  3,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  425,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm */
      , (1910489,  4,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  425,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm */
-     , (1910489,  5,  4, 180, 0.35,  425,  276,  319,  319,  425,  425,  425,  425,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand */
+     , (1910489,  5,  4, 350, 0.35,  425,  276,  319,  319,  425,  425,  425,  425,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand */
      , (1910489,  6,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg */
      , (1910489,  7,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg */
-     , (1910489,  8,  4, 180, 0.35,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
+     , (1910489,  8,  4, 350, 0.35,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (1910489, 9, 490244,  0, 0, 0.025, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (1910489, 9,     0,  0, 0, 0.975, False)    /* Create nothing for ContainTreasure */;
+VALUES (1910489, 9, 490244,  0, 0, 0.04, False) /* 4200028 Set Randomizer Morph Gem */
+	 , (1910489, 9,     0,  0, 0, 0.96, False)    /* Create nothing for ContainTreasure */;

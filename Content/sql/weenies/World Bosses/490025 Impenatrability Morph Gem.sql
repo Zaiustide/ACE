@@ -24,7 +24,7 @@ VALUES (490025,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490025,   1, 'Impenatrability Morph Gem') /* Name */
-     , (490025,  14, 'Applying this gem to loot generated armor has a 33% chance to add an additional spell, either Minor Impenatrability, Major Impenatrability or Epic Impenatrability. If this fails to land, the target will be destroyed.') /* Use */;
+     , (490025,  14, 'Applying this gem to loot generated armor will add an additional spell, either Minor Impenatrability, Major Impenatrability, Epic Impenatrability or Legendary Impenatrability.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490025,   1, 0x02000179) /* Setup */
