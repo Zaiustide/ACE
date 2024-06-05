@@ -1391,20 +1391,20 @@ namespace ACE.Server.Entity
                 return false;
             }
 
-            //You can't get more than 20 rewards per day
-            if (player.ArenaDailyRewardCount >= 20 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
+            //You can't get more than 40 rewards per day
+            if (player.ArenaDailyRewardCount >= 40 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
             {
                 return false;
             }
 
-            //You can't get more than 6 rewards per hour
-            if (player.ArenaHourlyCount >= 6 && (player.ArenaHourlyTimestamp ?? 0) >= Time.GetUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0)))
+            //You can't get more than 12 rewards per hour
+            if (player.ArenaHourlyCount >= 12 && (player.ArenaHourlyTimestamp ?? 0) >= Time.GetUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0)))
             {
                 return false;
             }
 
-            //You can't get more than 5 rewards playing against a clanmate per day
-            if (player.ArenaSameClanDailyRewardCount >= 5 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
+            //You can't get more than 15 rewards playing against a clanmate per day
+            if (player.ArenaSameClanDailyRewardCount >= 15 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
             {
                 var sameClanOpponents = allArenaPlayers
                     .Where(x =>
@@ -1418,21 +1418,21 @@ namespace ACE.Server.Entity
                 }
             }
 
-            //You can't get more than 3 rewards from same person per day
-            if ((player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
-            {
-                var todaysArenaRewardsByOpponent = player.ArenaRewardsByOpponent;
-                foreach (var opponent in allArenaPlayers)
-                {
-                    if (arenaPlayer.CharacterId != opponent.CharacterId &&
-                        arenaPlayer.TeamGuid != opponent.TeamGuid &&
-                        todaysArenaRewardsByOpponent.ContainsKey(opponent.CharacterId) &&
-                        todaysArenaRewardsByOpponent[opponent.CharacterId] >= 3)
-                    {
-                        return false;
-                    }
-                }
-            }
+            ////You can't get more than 3 rewards from same person per day
+            //if ((player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
+            //{
+            //    var todaysArenaRewardsByOpponent = player.ArenaRewardsByOpponent;
+            //    foreach (var opponent in allArenaPlayers)
+            //    {
+            //        if (arenaPlayer.CharacterId != opponent.CharacterId &&
+            //            arenaPlayer.TeamGuid != opponent.TeamGuid &&
+            //            todaysArenaRewardsByOpponent.ContainsKey(opponent.CharacterId) &&
+            //            todaysArenaRewardsByOpponent[opponent.CharacterId] >= 3)
+            //        {
+            //            return false;
+            //        }
+            //    }
+            //}
 
             return true;
         }
