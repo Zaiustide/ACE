@@ -16,7 +16,7 @@ VALUES (490267,   1,         16) /* ItemType - Creature */
      , (490267,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (490267, 133,          4) /* ShowableOnRadar - ShowAlways */
 	 , (490267, 146,    14000000) /* XpOverride */
-	 , (490267, 386,         20) /* Overpower */
+	 , (490267, 386,         30) /* Overpower */
 	 , (490267, 332,        400) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -41,6 +41,7 @@ VALUES (490267,   1,       5) /* HeartbeatInterval */
      , (490267,  17,     0.8) /* ArmorModVsFire */
      , (490267,  18,     0.9) /* ArmorModVsAcid */
      , (490267,  19,     0.9) /* ArmorModVsElectric */
+	 , (490267,  31,      32) /* VisualAwarenessRange */
 	 , (490267,  39,     1.5) /* DefaultScale */
      , (490267,  34,       1) /* PowerupTime */
      , (490267,  36,       1) /* ChargeSpeed */
@@ -56,7 +57,7 @@ VALUES (490267,   1,       5) /* HeartbeatInterval */
      , (490267,  73,       1) /* ResistStaminaBoost */
      , (490267,  74,       1) /* ResistManaDrain */
      , (490267,  75,       1) /* ResistManaBoost */
-     , (490267, 104,      20) /* ObviousRadarRange */
+     , (490267, 104,      30) /* ObviousRadarRange */
      , (490267, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)

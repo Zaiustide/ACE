@@ -44,7 +44,7 @@ VALUES (490256,   1,       5) /* HeartbeatInterval */
      , (490256,  17,     0.9) /* ArmorModVsFire */
      , (490256,  18,     0.9) /* ArmorModVsAcid */
      , (490256,  19,       1) /* ArmorModVsElectric */
-     , (490256,  31,      40) /* VisualAwarenessRange */
+     , (490256,  31,      30) /* VisualAwarenessRange */
 	 , (490256,  39,     1.4) /* DefaultScale */
 	 , (490256,  55,      70) /* HomeRadius */
      , (490256,  34,       1) /* PowerupTime */
@@ -57,7 +57,7 @@ VALUES (490256,   1,       5) /* HeartbeatInterval */
      , (490256,  69,     0.7) /* ResistAcid */
      , (490256,  70,     0.4) /* ResistElectric */
      , (490256,  80,       3) /* AiUseMagicDelay */
-     , (490256, 104,      40) /* ObviousRadarRange */
+     , (490256, 104,      30) /* ObviousRadarRange */
      , (490256, 122,       2) /* AiAcquireHealth */
      , (490256, 125,       1) /* ResistHealthDrain */
      , (490256, 165,       1) /* ArmorModVsNether */
@@ -88,7 +88,7 @@ VALUES (490256,   1, 350, 0, 0) /* Strength */
      , (490256,   6, 480, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (490256,   1,  95000, 0, 0, 50000) /* MaxHealth */
+VALUES (490256,   1,  10000, 0, 0, 10000) /* MaxHealth */
      , (490256,   3,  30000, 0, 0, 50) /* MaxStamina */
      , (490256,   5,  48000, 0, 0, 30) /* MaxMana */;
 

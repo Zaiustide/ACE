@@ -44,7 +44,7 @@ VALUES (490259,   1,       5) /* HeartbeatInterval */
      , (490259,  17,    0.85) /* ArmorModVsFire */
      , (490259,  18,    0.95) /* ArmorModVsAcid */
      , (490259,  19,    0.85) /* ArmorModVsElectric */
-     , (490259,  31,      24) /* VisualAwarenessRange */
+     , (490259,  31,      30) /* VisualAwarenessRange */
      , (490259,  34,       1) /* PowerupTime */
      , (490259,  36,       1) /* ChargeSpeed */
      , (490259,  39,     3) /* DefaultScale */
@@ -61,7 +61,7 @@ VALUES (490259,   1,       5) /* HeartbeatInterval */
      , (490259,  74,       1) /* ResistManaDrain */
      , (490259,  75,       1) /* ResistManaBoost */
      , (490259,  80,       2) /* AiUseMagicDelay */
-     , (490259, 104,      20) /* ObviousRadarRange */
+     , (490259, 104,      30) /* ObviousRadarRange */
      , (490259, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)

@@ -20,7 +20,7 @@ VALUES (490255,   1,         16) /* ItemType - Creature */
      , (490255, 140,          1) /* AiOptions - CanOpenDoors */
 	 , (490255, 386,         10) /* Overpower */
      , (490255, 146,      2500000) /* XpOverride */
-	 , (490255, 332,        140) /* LuminanceAward */;
+	 , (490255, 332,        240) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490255,   1, True ) /* Stuck */

@@ -19,7 +19,7 @@ VALUES (490247,   1,         16) /* ItemType - Creature */
      , (490247, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490247, 146,    7000000) /* XpOverride */
 	 , (490247, 386,         30) /* Overpower */
-	 , (490247, 332,        350) /* LuminanceAward */;
+	 , (490247, 332,        450) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490247,   1, True ) /* Stuck */
@@ -98,7 +98,7 @@ VALUES (490247,  6, 0, 3, 0, 390, 0, 0) /* MeleeDefense        Specialized */
      , (490247, 20, 0, 3, 0,  20, 0, 0) /* Deception           Specialized */
      , (490247, 22, 0, 3, 0,  70, 0, 0) /* Jump                Specialized */
      , (490247, 24, 0, 3, 0, 150, 0, 0) /* Run                 Specialized */
-     , (490247, 45, 0, 3, 0, 650, 0, 0) /* LightWeapons        Specialized */
+     , (490247, 45, 0, 3, 0, 550, 0, 0) /* LightWeapons        Specialized */
      , (490247, 47, 0, 3, 0, 580, 0, 0) /* MissileWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)

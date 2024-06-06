@@ -44,7 +44,7 @@ VALUES (490260,   1,       5) /* HeartbeatInterval */
      , (490260,  17,       1) /* ArmorModVsFire */
      , (490260,  18,       1) /* ArmorModVsAcid */
      , (490260,  19,       1) /* ArmorModVsElectric */
-     , (490260,  31,      18) /* VisualAwarenessRange */
+     , (490260,  31,      30) /* VisualAwarenessRange */
      , (490260,  34,       1) /* PowerupTime */
      , (490260,  36,       1) /* ChargeSpeed */
      , (490260,  39,     1.5) /* DefaultScale */
@@ -61,7 +61,7 @@ VALUES (490260,   1,       5) /* HeartbeatInterval */
      , (490260,  74,       1) /* ResistManaDrain */
      , (490260,  75,       1) /* ResistManaBoost */
      , (490260,  80,       2) /* AiUseMagicDelay */
-     , (490260, 104,      20) /* ObviousRadarRange */
+     , (490260, 104,      30) /* ObviousRadarRange */
      , (490260, 125,       1) /* ResistHealthDrain */
      , (490260, 166,     0.6) /* ResistNether */;
 

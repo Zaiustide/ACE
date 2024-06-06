@@ -57,5 +57,9 @@ VALUES (0x7F96900D, 490262, 0xF9690037, 159.618, 147.154, -0.845, -0.98195, 0, 0
 /* @teleloc 0xF9690037 [159.617996 147.154007 -0.845000] -0.981950 0.000000 0.000000 0.189143 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F96900E, 490262, 0xF9690028, 113.5389, 173.9912, -0.845, -0.809508, 0, 0, -0.58711, False, '2024-04-01 21:40:18'); /* Upper Outpost Isle Generator */
-/* @teleloc 0xF9690028 [113.538902 173.991196 -0.845000] -0.809508 0.000000 0.000000 -0.587110 */
+VALUES (0x7F96900E, 490262, 0xF9690028, 113.539, 173.991, -0.845, -0.809508, 0, 0, -0.58711, False, '2024-04-01 21:40:18'); /* Upper Outpost Isle Generator */
+/* @teleloc 0xF9690028 [113.539001 173.990997 -0.845000] -0.809508 0.000000 0.000000 -0.587110 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F96900F, 490261, 0xF969003D, 182.2775, 107.9612, -0.855, 0.082591, 0, 0, 0.996584, False, '2024-06-06 15:08:14'); /* Venomous Moar */
+/* @teleloc 0xF969003D [182.277496 107.961197 -0.855000] 0.082591 0.000000 0.000000 0.996584 */

@@ -17,8 +17,8 @@ VALUES (1910489,   1,         16) /* ItemType - Creature */
      , (1910489,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (1910489, 101,        129) /* AiAllowedCombatStyle - Unarmed, ThrownWeapon */
      , (1910489, 133,          2) /* ShowableOnRadar - ShowMovement */
-     , (1910489, 146,    5000000) /* XpOverride */
-	 , (1910489, 332,        300) /* LuminanceAward */
+     , (1910489, 146,    10000000) /* XpOverride */
+	 , (1910489, 332,        500) /* LuminanceAward */
 	 , (1910489, 386,         30) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -59,7 +59,7 @@ VALUES (1910489,   1,       5) /* HeartbeatInterval */
      , (1910489,  73,       1) /* ResistStaminaBoost */
      , (1910489,  74,       1) /* ResistManaDrain */
      , (1910489,  75,       1) /* ResistManaBoost */
-     , (1910489, 104,      10) /* ObviousRadarRange */
+     , (1910489, 104,      30) /* ObviousRadarRange */
      , (1910489, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
@@ -97,7 +97,7 @@ VALUES (1910489,  6, 0, 3, 0, 390, 0, 0) /* MeleeDefense        Specialized */
      , (1910489, 20, 0, 3, 0,  20, 0, 0) /* Deception           Specialized */
      , (1910489, 22, 0, 3, 0,  70, 0, 0) /* Jump                Specialized */
      , (1910489, 24, 0, 3, 0, 150, 0, 0) /* Run                 Specialized */
-     , (1910489, 45, 0, 3, 0, 650, 0, 0) /* LightWeapons        Specialized */
+     , (1910489, 45, 0, 3, 0, 550, 0, 0) /* LightWeapons        Specialized */
      , (1910489, 47, 0, 3, 0, 580, 0, 0) /* MissileWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
