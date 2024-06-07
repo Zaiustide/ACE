@@ -22,7 +22,8 @@ VALUES (490258,   1, True ) /* Stuck */
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490258,  41,       0) /* RegenerationInterval */
-     , (490258,  43,       5) /* GeneratorRadius */;
+     , (490258,  43,       5) /* GeneratorRadius */
+	 , (490258,  39,     0.75) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490258,   1, 'Pile of Rocks') /* Name */

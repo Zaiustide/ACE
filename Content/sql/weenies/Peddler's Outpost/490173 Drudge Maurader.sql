@@ -1,4 +1,4 @@
-DELETE FROM `weenie` WHERE `class_Id` = 490173;
+55DELETE FROM `weenie` WHERE `class_Id` = 490173;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
 VALUES (490173, 'Drudge Maurader', 10, '2019-09-13 00:00:00') /* Creature */;
@@ -213,5 +213,5 @@ VALUES  (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 490184,  1, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490173, 9, 480608,  1, 0, 0.04, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (490173, 9,     0,  0, 0, 0.96, False)    /* Create nothing for ContainTreasure */;
+5	 , (490173, 9, 480608,  1, 0, 0.075, False) /* 4200028 Set Randomizer Morph Gem */
+	 , (490173, 9,     0,  0, 0, 0.925, False)    /* Create nothing for ContainTreasure */;

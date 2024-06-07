@@ -10,6 +10,8 @@ VALUES (490183,   1,        128) /* ItemType - Misc */
      , (490183,  12,          1) /* StackSize */
      , (490183,  13,        100) /* StackUnitEncumbrance */
      , (490183,  15,      10000) /* StackUnitValue */
+	 , (490183,  33,          1) /* Bonded - Bonded */
+     , (490183, 114,          1) /* Attuned - Attuned */
      , (490183,  16,          1) /* ItemUseable - No */
      , (490183,  19,      10000) /* Value */
      , (490183,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */;
