@@ -1082,7 +1082,7 @@ namespace ACE.Server.Entity
                         var origImbueEffect = target.ImbuedEffect;
 
                         var wepImbueRandom = new Random();
-                        var roll = wepImbueRandom.Next(0, 1);
+                        var roll = wepImbueRandom.Next(0, 2);
                         if(target.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
                         {
                             target.ImbuedEffect = roll == 0 ? ImbuedEffectType.ArmorRending : ImbuedEffectType.CriticalStrike;
