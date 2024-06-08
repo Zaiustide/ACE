@@ -888,14 +888,14 @@ namespace ACE.Server.Command.Handlers
                 monarchName = playerAllegiance.Monarch.Player.Name;
             }
 
-            var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)player.Character.Id;
-            var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
+            //var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)player.Character.Id;
+            //var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
 
-            if (!isWhitelisted)
-            {
-                isSuccess = false;
-                return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
-            }
+            //if (!isWhitelisted)
+            //{
+            //    isSuccess = false;
+            //    return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
+            //}
 
             //Blacklist specific players
             var blacklistString = PropertyManager.GetString("arenas_blacklist").Item;
@@ -904,7 +904,7 @@ namespace ACE.Server.Command.Handlers
                 var blacklist = blacklistString.Split(',');
                 foreach (var charIdString in blacklist)
                 {
-                    if (uint.TryParse(charIdString, out uint charId) && player.Character.Id == charId)
+                    if (uint.TryParse(charIdString, out uint charId) && (player.Character.Id == charId || monarchId == charId))
                     {
                         isSuccess = false;
                         return "You are blacklisted from joining Arena events, probably because you're a cunt who tried to abuse it or some shit.  Fuck yourself.  Or ask forgiveness from Doc Z.  Whatever, I don't care.";
