@@ -19,7 +19,7 @@ VALUES (490247,   1,         16) /* ItemType - Creature */
      , (490247, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490247, 146,    7000000) /* XpOverride */
 	 , (490247, 386,         30) /* Overpower */
-	 , (490247, 332,        450) /* LuminanceAward */;
+	 , (490247, 332,        250) /* LuminanceAward */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490247,   1, True ) /* Stuck */

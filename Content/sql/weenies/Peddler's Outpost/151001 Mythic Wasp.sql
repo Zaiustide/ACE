@@ -47,7 +47,7 @@ VALUES (151001,   1,       5) /* HeartbeatInterval */
      , (151001,  17,     1.7) /* ArmorModVsFire */
      , (151001,  18,     1.7) /* ArmorModVsAcid */
      , (151001,  19,     1.5) /* ArmorModVsElectric */
-     , (151001,  31,      30) /* VisualAwarenessRange */
+     , (151001,  31,      20) /* VisualAwarenessRange */
      , (151001,  34,       1) /* PowerupTime */
      , (151001,  39,     1.5) /* DefaultScale */
      , (151001,  64,     1.4) /* ResistSlash */
@@ -63,7 +63,7 @@ VALUES (151001,   1,       5) /* HeartbeatInterval */
      , (151001,  74,       1) /* ResistManaDrain */
      , (151001,  75,       1) /* ResistManaBoost */
      , (151001,  80,       3) /* AiUseMagicDelay */
-     , (151001, 104,       20) /* ObviousRadarRange */
+     , (151001, 104,       15) /* ObviousRadarRange */
      , (151001, 122,       2) /* AiAcquireHealth */
      , (151001, 125,       1) /* ResistHealthDrain */
      , (151001, 166,       1.8) /* ResistNether */;
