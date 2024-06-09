@@ -164,4 +164,4 @@ INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `w
 VALUES (490247, 9, 34276,  3, 0, 0.04, False) /* MMD */
      , (490247, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */
 	 , (490247, 9, 490248,  0, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (490247, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */
+	 , (490247, 9,     0,  0, 0, 0.95, False);    /* Create nothing for ContainTreasure */

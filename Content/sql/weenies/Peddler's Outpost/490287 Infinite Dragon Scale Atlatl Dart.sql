@@ -19,7 +19,7 @@ VALUES (490287,   1,        256) /* ItemType - MissileWeapon */
      , (490287,  19,        2) /* Value */
      , (490287,  44,         52) /* Damage */
      , (490287,  45,  268435456) /* DamageType - Base */
-     , (490287,  50,          2) /* AmmoType - Bolt */
+     , (490287,  50,          4) /* AmmoType - Bolt */
      , (490287,  51,          3) /* CombatUse - Ammo */
      , (490287,  93,     132116) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, Inelastic */
      , (490287, 150,        103) /* HookPlacement - Hook */
