@@ -196,5 +196,5 @@ VALUES (@parent_id,  0,   6 /* Move */, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (490172, 9, 490237,  3, 0, 0.05, False) /* Trinket */
 	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
-	 , (490172, 9, 1000002,  3, 0, 0.07, False) /* Trinket */
-	 , (490172, 9,     0,  0, 0, 0.93, False) /* Create nothing for ContainTreasure */;
+	 , (490172, 9, 1000002,  3, 0, 0.05, False) /* Trinket */
+	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */;
