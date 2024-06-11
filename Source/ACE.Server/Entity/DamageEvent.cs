@@ -78,7 +78,8 @@ namespace ACE.Server.Entity
         public float SlayerMod;
 
         public float DamageRatingBaseMod;
-        public float RecklessnessMod;
+        public int RecklessAttackerDmgRatingBonus;
+        public int RecklessDefenderDmgResistRatingPenalty;
         public float SneakAttackMod;
         public float HeritageMod;
         public float PkDamageMod;
@@ -293,11 +294,11 @@ namespace ACE.Server.Entity
 
             // ratings
             DamageRatingBaseMod = Creature.GetPositiveRatingMod(attacker.GetDamageRating());
-            RecklessnessMod = Creature.GetRecklessnessMod(attacker, defender);
+            RecklessAttackerDmgRatingBonus = attacker.GetRecklessAttackerDmgRatingBonus();
             SneakAttackMod = attacker.GetSneakAttackMod(defender);
             HeritageMod = attacker.GetHeritageBonus(Weapon) ? 1.05f : 1.0f;
 
-            DamageRatingMod = Creature.AdditiveCombine(DamageRatingBaseMod, RecklessnessMod, SneakAttackMod, HeritageMod);
+            DamageRatingMod = Creature.AdditiveCombine(DamageRatingBaseMod, SneakAttackMod, HeritageMod, Creature.GetPositiveRatingMod(RecklessAttackerDmgRatingBonus));
 
             if (pkBattle)
             {
@@ -341,7 +342,7 @@ namespace ACE.Server.Entity
                     CriticalDamageRatingMod = Creature.GetPositiveRatingMod(attacker.GetCritDamageRating());
 
                     // recklessness excluded from crits
-                    RecklessnessMod = 1.0f;
+                    RecklessAttackerDmgRatingBonus = 0;
                     DamageRatingMod = Creature.AdditiveCombine(DamageRatingBaseMod, CriticalDamageRatingMod, SneakAttackMod, HeritageMod);
 
                     if (pkBattle)
@@ -412,7 +413,7 @@ namespace ACE.Server.Entity
             }
 
             // damage resistance rating
-            DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);
+            DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);            
 
             if (IsCritical)
             {
@@ -420,6 +421,13 @@ namespace ACE.Server.Entity
 
                 DamageResistanceRatingMod = Creature.AdditiveCombine(DamageResistanceRatingBaseMod, CriticalDamageResistanceRatingMod);
             }
+
+            //Apply a penalty to damage resist rating for defenders who are in a reckless state
+            RecklessDefenderDmgResistRatingPenalty = defender.GetRecklessDefenderDmgRatingPenalty();
+            if(RecklessDefenderDmgResistRatingPenalty > 0)
+            {
+                DamageResistanceRatingMod = Creature.AdditiveCombine(DamageResistanceRatingMod, Creature.GetPositiveRatingMod(RecklessDefenderDmgResistRatingPenalty));
+            }            
 
             if (pkBattle)
             {
@@ -949,8 +957,11 @@ namespace ACE.Server.Entity
             if (HeritageMod != 0.0f && HeritageMod != 1.0f)
                 info += $"HeritageMod: {HeritageMod}\n";
 
-            if (RecklessnessMod != 0.0f && RecklessnessMod != 1.0f)
-                info += $"RecklessnessMod: {RecklessnessMod}\n";
+            if (RecklessAttackerDmgRatingBonus > 0)
+                info += $"RecklessAttackerDmgRatingBonus: {RecklessAttackerDmgRatingBonus}\n";
+
+            if (RecklessDefenderDmgResistRatingPenalty > 0)
+                info += $"RecklessDefenderDmgResistRatingPenalty: {RecklessDefenderDmgResistRatingPenalty}\n";
 
             if (SneakAttackMod != 0.0f && SneakAttackMod != 1.0f)
                 info += $"SneakAttackMod: {SneakAttackMod}\n";
@@ -1038,7 +1049,7 @@ namespace ACE.Server.Entity
 
                 if (CriticalDefended)
                     attackConditions |= AttackConditions.CriticalProtectionAugmentation;
-                if (RecklessnessMod > 1.0f)
+                if (RecklessAttackerDmgRatingBonus > 0)
                     attackConditions |= AttackConditions.Recklessness;
                 if (SneakAttackMod > 1.0f)
                     attackConditions |= AttackConditions.SneakAttack;

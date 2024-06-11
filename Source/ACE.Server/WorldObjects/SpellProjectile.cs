@@ -635,7 +635,7 @@ namespace ACE.Server.WorldObjects
                 // if attacker/weapon has IgnoreMagicResist directly, do not transfer to spell projectile
                 // only pass if SpellProjectile has it directly, such as 2637 - Invoking Aun Tanua
 
-                resistanceMod = (float)Math.Max(0.0f, target.GetResistanceMod(resistanceType, this, null, weaponResistanceMod));                                
+                resistanceMod = (float)Math.Max(0.0f, target.GetResistanceMod(resistanceType, this, null, weaponResistanceMod));
 
                 finalDamage = baseDamage + critDamageBonus + skillBonus;
 
@@ -863,6 +863,7 @@ namespace ACE.Server.WorldObjects
             var damageResistRatingMod = 1.0f;
             var critDamageResistRatingMod = 1.0f;
             var pkDamageResistRatingMod = 1.0f;
+            int recklessDefenderDmgResistRatingPenalty = 0;
 
             WorldObject equippedCloak = null;
 
@@ -911,6 +912,13 @@ namespace ACE.Server.WorldObjects
 
                     damageRatingMod = Creature.AdditiveCombine(damageRatingMod, pkDamageRatingMod);
                     damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, pkDamageResistRatingMod);
+                }
+
+                //If target is in reckless state apply DRR penalty
+                recklessDefenderDmgResistRatingPenalty = target.GetRecklessDefenderDmgRatingPenalty();
+                if (recklessDefenderDmgResistRatingPenalty > 0)
+                {
+                    damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, Creature.GetPositiveRatingMod(recklessDefenderDmgResistRatingPenalty));
                 }
 
                 damage *= damageRatingMod * damageResistRatingMod;
