@@ -12,10 +12,8 @@ VALUES (490206,   1,        128) /* ItemType - Misc */
      , (490206,  15,          2) /* StackUnitValue */
      , (490206,  16,          8) /* ItemUseable - Contained */
      , (490206,  19,          2) /* Value */
-     , (490206,  33,          1) /* Bonded - Bonded */
      , (490206,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (490206,  94,         16) /* TargetType - Creature */
-     , (490206, 114,          1) /* Attuned - Attuned */
      , (490206, 269,          10) /* UseCreateQuantity */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)

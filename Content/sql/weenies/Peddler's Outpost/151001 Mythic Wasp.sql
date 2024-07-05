@@ -1,4 +1,4 @@
-DELETE FROM `weenie` WHERE `class_Id` = 151001;
+5DELETE FROM `weenie` WHERE `class_Id` = 151001;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
 VALUES (151001, 'mythicwasp', 10, '2019-09-13 00:00:00') /* Creature */;
@@ -145,5 +145,5 @@ VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 1090519043 /* Ready */, NULL, NU
      , (@parent_id,  1,   5 /* Motion */, 0, 1, 1090519060 /* Sleeping */, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (151001, 9, 490155,  1, 0, 0.02, False) /* Create Prom Note */ 
-	 , (151001, 9,     0,  0, 0, 0.98, False)    /* Create nothing for ContainTreasure */ ;
+VALUES (151001, 9, 490155,  1, 0, 0.05, False) /* Create Prom Note */ 
+	 , (151001, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */ ;

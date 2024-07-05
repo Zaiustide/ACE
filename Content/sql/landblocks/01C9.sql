@@ -108,10 +108,6 @@ VALUES (0x701C901A,   419, 0x01C901B7, 79.9582, -98.5506, -24, 0, 0, 0, -1, Fals
 /* @teleloc 0x01C901B7 [79.958199 -98.550598 -24.000000] 0.000000 0.000000 0.000000 -1.000000 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C9022,   568, 0x01C901D6, 60, -125.25, -6, 1, 0, 0, 0, False, '2005-02-09 10:00:00'); /* Door */
-/* @teleloc 0x01C901D6 [60.000000 -125.250000 -6.000000] 1.000000 0.000000 0.000000 0.000000 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x701C9026,   953, 0x01C901E3, 90.7528, -81.5298, -6, 1, 0, 0, 0, False, '2005-02-09 10:00:00'); /* Young Banderling Generator */
 /* @teleloc 0x01C901E3 [90.752800 -81.529800 -6.000000] 1.000000 0.000000 0.000000 0.000000 */
 
@@ -276,9 +272,29 @@ VALUES (0x701C9050, 490076, 0x01C901D1, 56.7019, -76.3966, -5.992, 0.382684, 0, 
 /* @teleloc 0x01C901D1 [56.701900 -76.396599 -5.992000] 0.382684 0.000000 0.000000 -0.923880 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C9051, 45489, 0x01C901D7, 73.9964, -75.7237, -5.9935, 0.407497, 0, 0, 0.913206, False, '2024-05-19 01:31:04'); /* Free Weapon Vendor */
+VALUES (0x701C9051, 45489, 0x01C901D7, 73.9964, -75.7237, -5.9935, 0.407497, 0, 0, 0.913206, False, '2024-05-19 01:31:04'); /* Quest Weapon Vendor */
 /* @teleloc 0x01C901D7 [73.996399 -75.723701 -5.993500] 0.407497 0.000000 0.000000 0.913206 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C9052, 45501, 0x01C901D7, 74.16669, -83.96815, -5.9935, 0.905944, 0, 0, 0.423397, False, '2024-05-19 01:31:18'); /* Weapon Imbue Vendor */
-/* @teleloc 0x01C901D7 [74.166687 -83.968147 -5.993500] 0.905944 0.000000 0.000000 0.423397 */
+VALUES (0x701C9052, 45501, 0x01C901D7, 74.1667, -83.9681, -5.9935, 0.905944, 0, 0, 0.423397, False, '2024-05-19 01:31:18'); /* Weapon Imbue Vendor */
+/* @teleloc 0x01C901D7 [74.166702 -83.968102 -5.993500] 0.905944 0.000000 0.000000 0.423397 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9053, 42711, 0x01C90119, 89.8693, -215.976, -72.063, -0.999942, 0, 0, 0.010805, False, '2024-07-04 11:44:01'); /* Empyrean Facility Upper Level */
+/* @teleloc 0x01C90119 [89.869301 -215.975998 -72.063004] -0.999942 0.000000 0.000000 0.010805 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9054, 25602, 0x01C901D4, 62.4985, -127.423, -5.945, 0.386505, 0, 0, 0.922287, False, '2024-07-04 11:48:40'); /* Electric Elemental Pool */
+/* @teleloc 0x01C901D4 [62.498501 -127.422997 -5.945000] 0.386505 0.000000 0.000000 0.922287 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9055, 25601, 0x01C901D4, 57.3629, -132.842, -5.945, -0.922185, 0, 0, 0.386749, False, '2024-07-04 11:48:56'); /* Acidic Elemental Pool */
+/* @teleloc 0x01C901D4 [57.362900 -132.841995 -5.945000] -0.922185 0.000000 0.000000 0.386749 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9056, 25603, 0x01C901D4, 62.43521, -132.721, -5.945, 0.994229, 0, 0, 0.107279, False, '2024-07-04 11:49:04'); /* Flaming Elemental Pool */
+/* @teleloc 0x01C901D4 [62.435211 -132.720993 -5.945000] 0.994229 0.000000 0.000000 0.107279 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9057, 25604, 0x01C901D4, 57.3144, -127.255, -5.945, 0.27193, 0, 0, -0.962317, False, '2024-07-04 11:49:10'); /* Freezing Elemental Pool */
+/* @teleloc 0x01C901D4 [57.314400 -127.254997 -5.945000] 0.271930 0.000000 0.000000 -0.962317 */

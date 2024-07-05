@@ -6,7 +6,7 @@ VALUES (490248, 'ace490248-Maniacal Shreth Hide', 51, '2021-11-01 00:00:00') /* 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490248,   1,        128) /* ItemType - Misc */
      , (490248,   5,        10) /* EncumbranceVal */
-     , (490248,  11,        10) /* MaxStackSize */
+     , (490248,  11,        100) /* MaxStackSize */
      , (490248,  12,          1) /* StackSize */
      , (490248,  13,        10) /* StackUnitEncumbrance */
      , (490248,  15,      10000) /* StackUnitValue */

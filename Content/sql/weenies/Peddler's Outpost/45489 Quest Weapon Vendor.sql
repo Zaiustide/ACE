@@ -108,16 +108,19 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 45527, -1, 0, 0, False) /* Create Soul Bound Spear (45527) for Shop */
      , (45489, 4, 45528, -1, 0, 0, False) /* Create Soul Bound Staff (45528) for Shop */
      , (45489, 4, 45529, -1, 0, 0, False) /* Create Soul Bound Sword (45529) for Shop */
+	 , (45489, 4, 37574, -1, 0, 0, False) /* Create Soul Bound Great Sword for Shop	 */
 	 , (45489, 4, 37577, -1, 0, 0, False) /* Create Soul Bound Bow for Shop */
 	 , (45489, 4, 37579, -1, 0, 0, False) /* Create Soul Bound Crossbow for Shop */
-	 , (45489, 4, 37574, -1, 0, 0, False) /* Create Soul Bound Atlatl for Shop */
+	 , (45489, 4, 41927, -1, 0, 0, False) /* Create Soul Bound Atlatl for Shop */
      , (45489, 4, 21353, -1, 0, 0, False) /* Create Phantom Axe (21353) for Shop */
      , (45489, 4, 21354, -1, 0, 0, False) /* Create Phantom Dagger (21354) for Shop */
      , (45489, 4, 21355, -1, 0, 0, False) /* Create Phantom Katar (21355) for Shop */
      , (45489, 4, 21356, -1, 0, 0, False) /* Create Phantom Mace (21356) for Shop */
      , (45489, 4, 21357, -1, 0, 0, False) /* Create Phantom Staff (21357) for Shop */
      , (45489, 4, 21358, -1, 0, 0, False) /* Create Phantom Spear (21358) for Shop */
-     , (45489, 4, 21359, -1, 0, 0, False) /* Create Phantom Sword (21359) for Shop */
+     , (45489, 4, 21359, -1, 0, 0, False) /* Create Phantom Sword (21359) for 
+	Shop */
+	, (45489, 4, 41708, -1, 0, 0, False) /* Create Phantom Two Handed Spear for Shop */
 	 , (45489, 4, 21964, -1, 0, 0, False) /* Create Phantom Bow (21359) for Shop */
 	 , (45489, 4, 21965, -1, 0, 0, False) /* Create Phantom Crossbow (21359) for Shop */
 	 , (45489, 4, 21963, -1, 0, 0, False) /* Create Phantom Ataltl (21359) for Shop */
@@ -129,6 +132,7 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 24205, -1, 0, 0, False) /* Create Weeping Staff (24205) for Shop */
      , (45489, 4, 24206, -1, 0, 0, False) /* Create Weeping Sword (24206) for Shop */
      , (45489, 4, 24207, -1, 0, 0, False) /* Create Weeping Wand (24207) for Shop */
+	  , (45489, 4, 41638, -1, 0, 0, False) /* Create Weeping Two Handed Spear for Shop */
 	 , (45489, 4, 24199, -1, 0, 0, False) /* Create Weeping Bow (24207) for Shop */
 	 , (45489, 4, 24201, -1, 0, 0, False) /* Create Weeping Crossbow for Shop */
 	 , (45489, 4, 24197, -1, 0, 0, False) /* Create Weeping Atlatl for Shop */
@@ -139,6 +143,7 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 41887, -1, 0, 0, False) /* Create Ultimate Singularity Spear (41887) for Shop */
      , (45489, 4, 41888, -1, 0, 0, False) /* Create Ultimate Singularity Staff (41888) for Shop */
      , (45489, 4, 41889, -1, 0, 0, False) /* Create Ultimate Singularity Sword (41889) for Shop */
+	 , (45489, 4, 41788, -1, 0, 0, False) /* Create Ultimate Ultimate Singularity Greatsword for Shop */
      , (45489, 4, 41885, -1, 0, 0, False) /* Create Ultimate Singularity Scepter of Life Magic (41885) for Shop */
      , (45489, 4, 41886, -1, 0, 0, False) /* Create Ultimate Singularity Scepter of War Magic (41886) for Shop */
 	  , (45489, 4, 41880, -1, 0, 0, False) /* Create Ultimate Singularity Bow for Shop */
@@ -153,9 +158,11 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 35916, -1, 0, 0, False) /* Create Paradox-touched Olthoi Sword (35916) for Shop */
      , (45489, 4, 43043, -1, 0, 0, False) /* Create Paradox-touched Olthoi Wand (43043) for Shop */
      , (45489, 4, 43056, -1, 0, 0, False) /* Create Paradox-touched Olthoi Wand (43056) for Shop */
+	 , (45489, 4, 43042, -1, 0, 0, False) /* Create Paradox-touched Olthoi Great Sword for Shop */
 	 , (45489, 4, 43044, -1, 0, 0, False) /* Create Paradox-touched Olthoi Bow for Shop */
 	 , (45489, 4, 43045, -1, 0, 0, False) /* Create Paradox-touched Olthoi Crossbow for Shop */
 	 , (45489, 4, 35912, -1, 0, 0, False) /* Create Paradox-touched Olthoi Atlatl for Shop */
+
      , (45489, 4, 32638, -1, 0, 0, False) /* Create Shadowfire Isparian Axe (32638) for Shop */
      , (45489, 4, 32643, -1, 0, 0, False) /* Create Shadowfire Isparian Dagger (32643) for Shop */
      , (45489, 4, 32641, -1, 0, 0, False) /* Create Shadowfire Isparian Claw (32641) for Shop */
@@ -163,6 +170,7 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 32645, -1, 0, 0, False) /* Create Shadowfire Isparian Spear (32645) for Shop */
      , (45489, 4, 32646, -1, 0, 0, False) /* Create Shadowfire Isparian Staff (32646) for Shop */
      , (45489, 4, 32600, -1, 0, 0, False) /* Create Shadowfire Isparian Sword (32600) for Shop */
+	 , (45489, 4, 46394, -1, 0, 0, False) /* Create Shadowfire Isparian Two Handed Sword for Shop 
 	 , (45489, 4, 46390, -1, 0, 0, False) /* Create Shadowfire Isparian Crossbow for Shop */
      , (45489, 4, 46396, -1, 0, 0, False) /* Create Shadowfire Isparian Wand (46396) for Shop */
      , (45489, 4, 46395, -1, 0, 0, False) /* Create Life-attuned Shadowfire Isparian Wand (46395) for Shop */

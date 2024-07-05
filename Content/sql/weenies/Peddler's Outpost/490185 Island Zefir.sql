@@ -14,7 +14,7 @@ VALUES (490185,   1,         16) /* ItemType - Creature */
      , (490185,  68,         13) /* TargetingTactic - Random, LastDamager, TopDamager */
      , (490185,  93,    4195336) /* PhysicsState - ReportCollisions, Gravity, EdgeSlide */
      , (490185, 133,          2) /* ShowableOnRadar - ShowMovement */
-     , (490185, 146,    2500000) /* XpOverride */
+     , (490185, 146,    50005000) /* XpOverride */
      , (490185, 332,        200) /* LuminanceAward */
      , (490185, 386,         20) /* Overpower */;
 
@@ -116,5 +116,7 @@ VALUES (490185,  6159,   2.05)  /* Thorn Volley */
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (490185, 9, 34277,  1, 0, 0.20, False) /* Create Ancient Falatacot Trinket (34277) for ContainTreasure */
-     , (490185, 9,     0,  0, 0, 0.80, False) /* Create nothing for ContainTreasure */;
+     , (490185, 9,     0,  0, 0, 0.80, False) /* Create nothing for ContainTreasure */
+	 , (490185, 9, 490608,  1, 0, 0.05, False) /* MMD */
+     , (490185, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */;
 

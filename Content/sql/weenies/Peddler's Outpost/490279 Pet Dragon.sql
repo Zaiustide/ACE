@@ -20,7 +20,8 @@ VALUES (490279,   1,         16) /* ItemType - Creature */
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490279,   1, True ) /* Stuck */
      , (490279,   8, True ) /* AllowGive */
-     , (490279,  19, False) /* Attackable */;
+     , (490279,  19, False) /* Attackable */
+     , (490279,  79, True ) /* AiAcceptEverything */;
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490279,   1,       5) /* HeartbeatInterval */
