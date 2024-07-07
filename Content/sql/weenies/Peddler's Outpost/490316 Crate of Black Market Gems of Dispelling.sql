@@ -25,9 +25,9 @@ INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490316,  39,     0.5) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490316,   1, 'Crate of Encapsulated Spirits') /* Name */
+VALUES (490316,   1, 'Crate of Black Market Gems of Dispelling') /* Name */
      , (490316,  14, 'Use this crate to retrieve its contents.') /* Use */
-     , (490316,  16, 'A box containing 50 Encapsulated Spirits.') /* LongDesc */;
+     , (490316,  16, 'A box containing 10 Black Market Gems of Dispelling.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490316,   1, 0x0200011E) /* Setup */
