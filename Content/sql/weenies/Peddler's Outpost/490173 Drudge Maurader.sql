@@ -68,7 +68,8 @@ VALUES (490173,   1,       5) /* HeartbeatInterval */
      , (490173, 104,      30) /* ObviousRadarRange */
      , (490173, 122,       2) /* AiAcquireHealth */
      , (490173, 125,       1) /* ResistHealthDrain */
-     , (490173, 155,       2) /* IgnoreArmor */;
+     , (490173, 155,       2) /* IgnoreArmor */
+	 , (490173, 166,       0.5) /* ResistNether */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490173,   1, 'Drudge Maurader') /* Name */;
@@ -129,8 +130,6 @@ INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490173,  6199,  2.085)  /* Incantation of Lightning Arc */
      , (490173,  4483,   2.03)  /* Incantation of Lightning Vulnerability Other */
      , (490173,  4312,   2.04)  /* Incantation of Imperil Other */
-     , (490173,  4326,   2.03)  /* Incantation of Weakness Other */
-     , (490173,  4294,   2.03)  /* Incantation of Clumsiness Other */
      , (490173,  4322,   2.03)  /* Incantation of Slowness Other */;
 
      INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
@@ -213,5 +212,5 @@ VALUES  (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 490184,  1, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490173, 9, 1000002,  3, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
+	 , (490173, 9, 1000002,  5, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
 	 , (490173, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */;

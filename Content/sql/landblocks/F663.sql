@@ -229,10 +229,6 @@ VALUES (0x7F66303D, 490161, 0xF663000C, 42.4994, 85.6726, 0.458383, -0.052342, 0
 /* @teleloc 0xF663000C [42.499401 85.672600 0.458383] -0.052342 0.000000 0.000000 0.998629 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F66303E, 490168, 0xF6630016, 48.4597, 120.473, 0.055, 0.707107, 0, 0, -0.707107, False, '2024-01-06 12:37:41'); /* Drudge Commander Generator */
-/* @teleloc 0xF6630016 [48.459702 120.473000 0.055000] 0.707107 0.000000 0.000000 -0.707107 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F66303F, 490169, 0xF6630015, 53.9782, 101.639, 0.055, -0.842031, 0, 0, 0.539429, False, '2024-01-06 12:53:20'); /* Drudge Aviator Generator */
 /* @teleloc 0xF6630015 [53.978199 101.639000 0.055000] -0.842031 0.000000 0.000000 0.539429 */
 
@@ -241,8 +237,8 @@ VALUES (0x7F663040, 490169, 0xF6630016, 58.0762, 143.26, 0.055, -0.200632, 0, 0,
 /* @teleloc 0xF6630016 [58.076199 143.259995 0.055000] -0.200632 0.000000 0.000000 0.979667 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F663041, 490169, 0xF6630005, 20.62249, 100.3293, -0.1, 0.878654, 0, 0, -0.47746, False, '2024-01-06 12:53:33'); /* Drudge Aviator Generator */
-/* @teleloc 0xF6630005 [20.622490 100.329300 -0.100000] 0.878654 0.000000 0.000000 -0.477460 */
+VALUES (0x7F663041, 490169, 0xF6630005, 20.6225, 100.329, -0.1, 0.878654, 0, 0, -0.47746, False, '2024-01-06 12:53:33'); /* Drudge Aviator Generator */
+/* @teleloc 0xF6630005 [20.622499 100.329002 -0.100000] 0.878654 0.000000 0.000000 -0.477460 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F663042, 490169, 0xF663001E, 92.604, 122.643, 0.055, 0.956097, 0, 0, -0.293051, False, '2024-01-06 12:55:45'); /* Drudge Aviator Generator */
@@ -343,3 +339,14 @@ VALUES (0x7F66305C, 490161, 0xF6630028, 117.936, 177.324, 2.60502, 0.121206, 0, 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F66305D, 490161, 0xF6630028, 100.32, 172.109, 0.702419, -0.974231, 0, 0, -0.225551, False, '2024-02-11 13:22:22'); /* Hay Stack */
 /* @teleloc 0xF6630028 [100.320000 172.108994 0.702419] -0.974231 0.000000 0.000000 -0.225551 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F66305E,  3951, 0xF6630015, 52.4201, 116.708, 0.055, 0.999501, 0, 0, 0.031577, False, '2024-07-04 11:38:53'); /* Linkable Monster Gen (1 hour) */
+/* @teleloc 0xF6630015 [52.420101 116.708000 0.055000] 0.999501 0.000000 0.000000 0.031577 */
+
+INSERT INTO `landblock_instance_link` (`parent_GUID`, `child_GUID`, `last_Modified`)
+VALUES (0x7F66305E, 0x7F66305F, '2024-07-04 11:40:16') /* Drudge Commander (490166) */;
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F66305F, 490166, 0xF6630016, 57.893, 124.293, 0.007, -0.798744, 0, 0, 0.601671,  True, '2024-07-04 11:40:16'); /* Drudge Commander */
+/* @teleloc 0xF6630016 [57.893002 124.292999 0.007000] -0.798744 0.000000 0.000000 0.601671 */

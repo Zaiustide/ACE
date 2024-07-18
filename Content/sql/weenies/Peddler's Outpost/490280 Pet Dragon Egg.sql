@@ -23,8 +23,7 @@ VALUES (490280,  39,       2) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490280,   1, 'Pet Dragon Egg') /* Name */
-     , (490280,  14, 'Use this Egg to summon your pet Island Dragon. Handing it a PK Trophy will clear your Vitae!') /* Use */
-     , (490280,  16, 'A small igloo that the cookie loving pet penguin Mouf lives in. ') /* LongDesc */;
+     , (490280,  14, 'Use this Egg to summon your pet Island Dragon. Handing it a PK Trophy will clear your Vitae!') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490280,   1, 0x02001655) /* Setup */

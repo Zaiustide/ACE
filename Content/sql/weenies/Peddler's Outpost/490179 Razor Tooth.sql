@@ -107,6 +107,9 @@ VALUES (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) f
 , (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */
 , (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */
 , (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */
+, (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */
+, (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */
+, (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */
 , (490179, 9, 490239,  0, 0, 0, False) /* Create DeathTail's Fang (36171) for ContainTreasure */;
 
 INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)

@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490297;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490297, 'ace490297-Crate of Platinum Spirits', 38, '2021-11-01 00:00:00') /* Gem */;
+VALUES (490297, 'ace490297-Boxed Quest Weapon Token', 38, '2021-11-01 00:00:00') /* Gem */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490297,   1,        128) /* ItemType - Misc */
@@ -9,9 +9,9 @@ VALUES (490297,   1,        128) /* ItemType - Misc */
      , (490297,  11,          1) /* MaxStackSize */
      , (490297,  12,          1) /* StackSize */
      , (490297,  13,         50) /* StackUnitEncumbrance */
-     , (490297,  15,          10) /* StackUnitValue */
+     , (490297,  15,          5) /* StackUnitValue */
      , (490297,  16,          8) /* ItemUseable - Contained */
-     , (490297,  19,          10) /* Value */
+     , (490297,  19,          5) /* Value */
      , (490297,  33,          1) /* Bonded - Bonded */
      , (490297,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (490297,  94,         16) /* TargetType - Creature */

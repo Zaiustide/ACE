@@ -13,7 +13,7 @@ VALUES (490261,   1,         16) /* ItemType - Creature */
      , (490261,  25,        220) /* Level */
      , (490261,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (490261, 133,          2) /* ShowableOnRadar - ShowMovement */
-     , (490261, 146,    2400000) /* XpOverride */
+     , (490261, 146,    5000000) /* XpOverride */
 	 , (490261, 386,         20) /* Overpower */
 	 , (490261, 332,        200) /* LuminanceAward */;
 
@@ -34,6 +34,7 @@ VALUES (490261,   1,       5) /* HeartbeatInterval */
      , (490261,  18,    0.65) /* ArmorModVsAcid */
      , (490261,  19,    0.75) /* ArmorModVsElectric */
      , (490261,  31,      30) /* VisualAwarenessRange */
+	 , (490261,  55,      100) /* HomeRadius */
      , (490261,  34,       1) /* PowerupTime */
      , (490261,  36,       1) /* ChargeSpeed */
      , (490261,  39,       2.5) /* DefaultScale */

@@ -45,7 +45,7 @@ VALUES (490162,   1,       5) /* HeartbeatInterval */
      , (490162,  17,    0.83) /* ArmorModVsFire */
      , (490162,  18,    0.72) /* ArmorModVsAcid */
      , (490162,  19,     0.9) /* ArmorModVsElectric */
-     , (490162,  31,      65) /* VisualAwarenessRange */
+     , (490162,  31,      50) /* VisualAwarenessRange */
      , (490162,  34,       1) /* PowerupTime */
 	 , (490162,  41,     600) /* RegenerationInterval */
 	 , (490162,  43,       5) /* GeneratorRadius */
@@ -63,7 +63,7 @@ VALUES (490162,   1,       5) /* HeartbeatInterval */
      , (490162,  74,       1) /* ResistManaDrain */
      , (490162,  75,       1) /* ResistManaBoost */
      , (490162,  80,       3) /* AiUseMagicDelay */
-     , (490162, 104,      65) /* ObviousRadarRange */
+     , (490162, 104,      50) /* ObviousRadarRange */
      , (490162, 122,       2) /* AiAcquireHealth */
      , (490162, 125,       1) /* ResistHealthDrain */;
 

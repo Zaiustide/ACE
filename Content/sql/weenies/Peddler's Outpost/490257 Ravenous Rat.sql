@@ -110,5 +110,5 @@ VALUES (490257,  4312,   2.04)  /* Gossamer Flesh */
 	 , (490257,  4005,   2.04)  /* Incantation of Acid Vulnerability Other */;
 	 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (490257, 9, 490183,  1, 0, 0.20, False) /* MMD */
-     , (490257, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
+VALUES (490257, 9, 490183,  1, 0, 0.50, False) /* MMD */
+     , (490257, 9,     0,  0, 0, 0.50, False); /* Create nothing for ContainTreasure */

@@ -18,7 +18,7 @@ VALUES (490260,   1,         16) /* ItemType - Creature */
      , (490260, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */
      , (490260, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490260, 140,          1) /* AiOptions - CanOpenDoors */
-     , (490260, 146,     290000) /* XpOverride */
+     , (490260, 146,     5000000) /* XpOverride */
 	 , (490260, 386,         20) /* Overpower */
 	 , (490260, 332,        200) /* LuminanceAward */;
 
@@ -45,6 +45,7 @@ VALUES (490260,   1,       5) /* HeartbeatInterval */
      , (490260,  18,       1) /* ArmorModVsAcid */
      , (490260,  19,       1) /* ArmorModVsElectric */
      , (490260,  31,      30) /* VisualAwarenessRange */
+	 , (490260,  55,      100) /* HomeRadius */
      , (490260,  34,       1) /* PowerupTime */
      , (490260,  36,       1) /* ChargeSpeed */
      , (490260,  39,     1.5) /* DefaultScale */

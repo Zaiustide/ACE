@@ -50,7 +50,7 @@ VALUES (490039,   1,       1.5) /* HeartbeatInterval */
      , (490039,  31,      35) /* VisualAwarenessRange */
      , (490039,  34,     1) /* PowerupTime */
      , (490039,  36,       1) /* ChargeSpeed */
-     , (490039,  39,       1.5) /* DefaultScale */
+     , (490039,  39,       2.5) /* DefaultScale */
 	 , (490039,  55,      100) /* HomeRadius */
      , (490039,  64,       1) /* ResistSlash */
      , (490039,  65,       1) /* ResistPierce */

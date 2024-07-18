@@ -55,7 +55,7 @@ VALUES (490172,   1,       5) /* HeartbeatInterval */
      , (490172,  77,       1) /* PhysicsScriptIntensity */
      , (490172, 104,      10) /* ObviousRadarRange */
      , (490172, 125,       1) /* ResistHealthDrain */
-     , (490172, 166,       1) /* ResistNether */;
+     , (490172, 166,       0.5) /* ResistNether */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490172,   1, 'Adolescent Island Dragon') /* Name */;
@@ -103,11 +103,11 @@ VALUES (490172,  6, 0, 2, 0, 540, 0, 0) /* MeleeDefense        Trained */
      , (490172, 52, 0, 2, 0, 550, 0, 0) /* DirtyFighting       Trained */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
-VALUES (490172,  0,  2, 500, 0.75,  650,  683,  650,  618,  618,  780,  780,  618,    0, 1,  0.4,  0.1,    0,  0.4,  0.1,    0,    0,    0,    0,    0,    0,    0) /* Head */
-     , (490172, 10,  1, 500, 0.75,  650,  683,  650,  618,  618,  780,  780,  618,    0, 3,    0,  0.2,  0.8,    0,  0.2,  0.8,    0,    0,    0,    0,    0,    0) /* FrontLeg */
-     , (490172, 13,  1, 500, 0.75,  650,  683,  650,  618,  618,  780,  780,  618,    0, 3,    0,    0,    0,    0,    0,    0,  0.1,  0.3,  0.7,  0.1,  0.3,  0.7) /* RearLeg */
+VALUES (490172,  0,  2, 250, 0.75,  650,  683,  650,  618,  618,  780,  780,  618,    0, 1,  0.4,  0.1,    0,  0.4,  0.1,    0,    0,    0,    0,    0,    0,    0) /* Head */
+     , (490172, 10,  1, 250, 0.75,  650,  683,  650,  618,  618,  780,  780,  618,    0, 3,    0,  0.2,  0.8,    0,  0.2,  0.8,    0,    0,    0,    0,    0,    0) /* FrontLeg */
+     , (490172, 13,  1, 250, 0.75,  650,  683,  650,  618,  618,  780,  780,  618,    0, 3,    0,    0,    0,    0,    0,    0,  0.1,  0.3,  0.7,  0.1,  0.3,  0.7) /* RearLeg */
      , (490172, 16,  4,  0,    0,  650,  683,  650,  618,  618,  780,  780,  618,    0, 2,  0.6,  0.7,  0.2,  0.6,  0.7,  0.2,  0.9,  0.7,  0.3,  0.9,  0.7,  0.3) /* Torso */
-     , (490172, 22,  8, 400,  0.5,    0,    0,    0,    0,    0,    0,    0,    0,    0, 0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0) /* Breath */;
+     , (490172, 22,  8, 200,  0.5,    0,    0,    0,    0,    0,    0,    0,    0,    0, 0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0) /* Breath */;
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490172,  4312,   2.05)  /* Incantation of Imperil Other */
@@ -196,5 +196,5 @@ VALUES (@parent_id,  0,   6 /* Move */, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (490172, 9, 490237,  3, 0, 0.05, False) /* Trinket */
 	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
-	 , (490172, 9, 1000002,  3, 0, 0.05, False) /* Trinket */
+	 , (490172, 9, 1000002,  5, 0, 0.05, False) /* Trinket */
 	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */;

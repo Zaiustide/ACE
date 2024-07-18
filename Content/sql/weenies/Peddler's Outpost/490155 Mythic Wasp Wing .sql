@@ -5,10 +5,10 @@ VALUES (490155, 'ace490155-mythicwaspwing', 51, '2021-11-01 00:00:00') /* Stacka
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490155,   1,        128) /* ItemType - Misc */
-     , (490155,   5,        100) /* EncumbranceVal */
+     , (490155,   5,        10) /* EncumbranceVal */
      , (490155,  11,        100) /* MaxStackSize */
      , (490155,  12,          1) /* StackSize */
-     , (490155,  13,        100) /* StackUnitEncumbrance */
+     , (490155,  13,        10) /* StackUnitEncumbrance */
      , (490155,  15,      10000) /* StackUnitValue */
      , (490155,  16,          1) /* ItemUseable - No */
      , (490155,  19,      10000) /* Value */
