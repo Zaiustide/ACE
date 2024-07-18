@@ -1262,7 +1262,7 @@ namespace ACE.Server.WorldObjects
                 //var deadBossNameProp = deadBossWeenie.WeeniePropertiesString.FirstOrDefault(x => x.Type == (ushort)PropertyString.Name);
                 //var deadBossName = deadBossNameProp?.Value;
 
-                if (!killer.IsPlayer)
+                if (killer == null || !killer.IsPlayer)
                 {
                     //TODO - what to do if the killer isn't a player?                        
                     log.DebugFormat("World Boss - {0} killer is not a player", deadBoss.Name);  
@@ -1271,7 +1271,7 @@ namespace ACE.Server.WorldObjects
                 WorldBossManager.HandleBossDeath();
 
                 //Global broadcast the kill
-                var globalMsg = $"{deadBoss.Name} has been slain by {killer.Name} and the land is once again safe from {deadBoss.Name}'s terror... for now";
+                var globalMsg = $"{deadBoss.Name} has been slain by {(killer == null ? "NULL" : killer.Name)} and the land is once again safe from {deadBoss.Name}'s terror... for now";
                 PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalMsg, ChatMessageType.Broadcast));
 
                 //Send global to webhook

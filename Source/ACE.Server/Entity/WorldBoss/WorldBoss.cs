@@ -184,6 +184,31 @@ namespace ACE.Server.Entity.WorldBoss
             return WorldBosses.WorldBossMap.ContainsKey(weenieId);
         }
 
+        private static List<uint> _worldBossTrophies;
+
+        public static List<uint> WorldBossTrophies
+        {
+            get
+            {
+                if (_worldBossTrophies == null)
+                {
+                    _worldBossTrophies = new List<uint>()
+                    {
+                        490028,
+                        490029,
+                        490030
+                    };
+                }
+
+                return _worldBossTrophies;
+            }
+        }
+
+        public static bool IsWorldBossTrophy(uint weenieId)
+        {
+            return WorldBossTrophies.Contains(weenieId);
+        }
+
         public static WorldBoss GetRandomWorldBoss()
         {
             var i = ThreadSafeRandom.Next(0, WorldBosses.WorldBossMap.Count - 1);

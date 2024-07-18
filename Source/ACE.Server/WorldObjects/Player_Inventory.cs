@@ -13,6 +13,7 @@ using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
 using ACE.Server.Network;
@@ -1050,6 +1051,15 @@ namespace ACE.Server.WorldObjects
                         if (!VerifyQuest(item, itemRootOwner, out bool questSolve, out bool isFromAPlayerCorpse))
                         {
                             // InventoryServerSaveFailed previously sent in QuestManager
+                            EnqueuePickupDone(pickupMotion);
+                            return;
+                        }
+
+                        //Don't let NPK players pick up world boss trophies
+                        if(WorldBosses.IsWorldBossTrophy(item.WeenieClassId) && !this.IsPK)
+                        {
+                            var error = new GameEventInventoryServerSaveFailed(this.Session, item.Guid.Full, WeenieError.InvalidPkStatus);
+                            this.Session.Network.EnqueueSend(error);
                             EnqueuePickupDone(pickupMotion);
                             return;
                         }
