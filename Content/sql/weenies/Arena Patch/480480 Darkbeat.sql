@@ -232,4 +232,28 @@ VALUES  (480480, 2,   6046, 0, 93, 1.1, False) /* Greater Shadow Amuli Coat (660
 	 , (480480, 4, 490289,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 490296,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 490297,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
-	 , (480480, 4, 490304,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */;
+	 , (480480, 4, 490304,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490327,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490328,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490329,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490330,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+     , (480480, 4, 490331,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490332,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490333,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490334,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490335,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490336,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490337,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490338,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490339,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490340,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490341,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490342,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490343,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490344,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490345,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	  , (480480, 4, 490346,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490347,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490348,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490349,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */;
+				   
