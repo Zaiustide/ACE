@@ -8,7 +8,7 @@ VALUES (490336,   1,       2048) /* ItemType - Gem */
      , (490336,   3,         82) /* PaletteTemplate - PinkPurple */
      , (490336,   5,         10) /* EncumbranceVal */
      , (490336,   8,         10) /* Mass */
-     , (490336,   9,          0) /* ValidLocations - None *//
+     , (490336,   9,          0) /* ValidLocations - None */
      , (490336,  16,          8) /* ItemUseable - Contained */
      , (490336,  18,          1) /* UiEffects - Magical */
      , (490336,  19,        10) /* Value */
