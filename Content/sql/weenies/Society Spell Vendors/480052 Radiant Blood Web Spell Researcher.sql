@@ -200,4 +200,19 @@ VALUES (480052, 2,  38481,  1, 0, 1, False) /* Create Hoary Mattekar Robe (5893)
 ,(480052, 4, 480063,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
 ,(480052, 4, 480064,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
 ,(480052, 4, 480065,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
-,(480052, 4, 480015,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */;
+,(480052, 4, 480015,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 8530,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 22078,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 22863,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 22932,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 32492,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 35479,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 35981,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 36377,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 36537,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 43143,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 44312,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 490350,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 490351,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */
+,(480052, 4, 490352,  0, 0, 0, False) /* Create Gelidite Robe (450531) for Shop */;
+
