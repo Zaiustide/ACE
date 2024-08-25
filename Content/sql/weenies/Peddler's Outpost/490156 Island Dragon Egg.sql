@@ -25,8 +25,7 @@ VALUES (490156,  39,       7) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490156,   1, 'Island Dragon Egg') /* Name */
-     , (490156,  16, 'A large Dragon Egg from the rare Island Dragon ') /* LongDesc */
-	 , (490156,  33, 'Dragoneggpickup') /* Quest */;
+     , (490156,  16, 'A large Dragon Egg from the rare Island Dragon ') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490156,   1, 0x02001265) /* Setup */

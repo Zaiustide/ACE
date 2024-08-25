@@ -19,8 +19,7 @@ VALUES (490237,   1,        128) /* ItemType - Misc */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490237,   1, 'Island Dragon Wing') /* Name */
-     , (490237,  16, 'The wings of a departed Adolescent Island Dragon.') /* LongDesc */
-	 , (490237,  33, 'Dragonwingpickup') /* Quest */;
+     , (490237,  16, 'The wings of a departed Adolescent Island Dragon.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490237,   1, 0x02000181) /* Setup */

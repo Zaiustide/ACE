@@ -62,6 +62,13 @@ namespace ACE.Server.Entity
         public const uint MorphGemJewelersSawblade = 490271;
         public const uint MorphGemAddSlayer = 490304;
         public const int MorphGemMinValue = 20000;
+		public const uint MorphGemHematite = 490284;
+		public const uint MorphGemStrengthbeer = 490327;
+		public const uint MorphGemEndurancebeer = 490328;
+		public const uint MorphGemCoordinationbeer = 490329;
+		public const uint MorphGemQuicknessbeer = 490330;
+		public const uint MorphGemFocusbeer = 490331;
+		public const uint MorphGemWillpowerbeer = 490332;
 
         // Some WCIDs have Overlay Icons that need to be removed (e.g. Olthoi Alduressa Gauntlets or Boots)
         // There are other examples not here, like some stamped shields that might need to be added, as well.
@@ -234,6 +241,13 @@ namespace ACE.Server.Entity
                 case MorphGemRareReduction:
                 case MorphGemJewelersSawblade:
                 case MorphGemAddSlayer:
+				case MorphGemHematite:
+				case MorphGemStrengthbeer:
+				case MorphGemEndurancebeer:
+				case MorphGemCoordinationbeer:
+				case MorphGemQuicknessbeer:
+				case MorphGemFocusbeer:
+				case MorphGemWillpowerbeer:
                     ApplyMorphGem(player, source, target);
                     return;
             }
@@ -543,6 +557,8 @@ namespace ACE.Server.Entity
                 }
 
                 string playerMsg = string.Empty;
+
+                var targetItemSpells = target.Biota.GetKnownSpellsIds(target.BiotaDatabaseLock);
 
                 switch (source.WeenieClassId)
                 {
@@ -1233,17 +1249,15 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        //Check if the item already has Blazing Heart (3204) on it
-                        var spells = target.Biota.GetKnownSpellsIds(target.BiotaDatabaseLock);
-
-                        if(spells == null || spells.Count < 1)
+                        //Check if the item already has Blazing Heart (3204) on it                        
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(spells != null && spells.Contains(3204))
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3204))
                         {
                             playerMsg = "Your target item already has Blazing Heart on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1288,8 +1302,7 @@ namespace ACE.Server.Entity
                             return;
                         }    
 
-                        //Check if an Impen already exists on this item
-                        var targetItemSpells = target.Biota.GetKnownSpellsIds(target.BiotaDatabaseLock);
+                        //Check if an Impen already exists on this item                        
                         if(!target.ItemMaxMana.HasValue || targetItemSpells == null || targetItemSpells.Count == 0)
                         {
                             playerMsg = "The gem can only be applied to magical items";
@@ -1658,6 +1671,265 @@ namespace ACE.Server.Entity
                         break;
                     #endregion MorphGemAddSlayer
 
+					#region MorphGemHematite
+
+                    case MorphGemHematite:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Warrior's Vitality (2004) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(2004))
+                        {
+                            playerMsg = "Your target item already has Warrior's Vitality on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(2004, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Warrior's Vitality";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemHematite
+
+					#region MorphGemStrengthbeer
+
+                    case MorphGemStrengthbeer:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Zongo's Fist (3864) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3864))
+                        {
+                            playerMsg = "Your target item already has Zongo's Fist on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(3864, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Zongo's Fist";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemStrengthbeer
+					
+					#region MorphGemEndurancebeer
+
+                    case MorphGemEndurancebeer:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Hunter's Hardiness (3863) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3863))
+                        {
+                            playerMsg = "Your target item already has Hunter's Hardiness on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(3863, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Hunter's Hardiness";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemEndurancebeer
+			
+			        #region MorphGemCoordinationbeer
+
+                    case MorphGemCoordinationbeer:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Brighteyes' Favor (3533) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3533))
+                        {
+                            playerMsg = "Your target item already has Brighteyes' Favor on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(3533, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Brighteyes' Favor";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemCoordinationbeer
+			
+					#region MorphGemQuicknessbeer
+
+                    case MorphGemQuicknessbeer:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Bobo's Quickening (3531) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3531))
+                        {
+                            playerMsg = "Your target item already has Bobo's Quickening on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(3531, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Bobo's Quickening";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemQuicknessbeer
+			
+			        #region MorphGemFocusbeer
+
+                    case MorphGemFocusbeer:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Ketnan's Eye (3530) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3530))
+                        {
+                            playerMsg = "Your target item already has Ketnan's Eye on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(3530, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Ketnan's Eye";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemFocusbeer
+					
+					#region MorphGemWillpowerbeer
+
+                    case MorphGemWillpowerbeer:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Duke Raoul's Pride (3862) on it
+                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if(targetItemSpells != null && targetItemSpells.Contains(3862))
+                        {
+                            playerMsg = "Your target item already has Duke Raoul's Pride on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.Biota.GetOrAddKnownSpell(3862, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Duke Raoul's Pride";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                 
+                        break;
+
+                    #endregion MorphGemWillpowerbeer
+					
                     default:
                         player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                         return;
@@ -1934,6 +2206,13 @@ namespace ACE.Server.Entity
                 case MorphGemCD:
                 case MorphGemRareReduction:
                 case MorphGemAddSlayer:
+				case MorphGemHematite:
+				case MorphGemStrengthbeer:
+				case MorphGemEndurancebeer:
+				case MorphGemCoordinationbeer:
+				case MorphGemQuicknessbeer:
+				case MorphGemFocusbeer:
+				case MorphGemWillpowerbeer:
                     return true;
                 default:
                     return false;

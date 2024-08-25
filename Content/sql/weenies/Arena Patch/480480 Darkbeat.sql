@@ -222,6 +222,7 @@ VALUES  (480480, 2,   6046, 0, 93, 1.1, False) /* Greater Shadow Amuli Coat (660
 	 , (480480, 4, 480485,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 480486,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 480638,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 490284,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490224,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490286,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490287,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */

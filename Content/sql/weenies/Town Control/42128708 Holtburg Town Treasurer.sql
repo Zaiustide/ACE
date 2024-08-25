@@ -1,3 +1,4 @@
+
 DELETE FROM `weenie` WHERE `class_Id` = 42128708;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
@@ -201,8 +202,8 @@ VALUES (42128708, 2, 22015,  0, 21, 0.9, False) /* Create Pwyll's Guard (22015) 
 	, (42128708, 4, 480010,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
 	, (42128708, 4, 480011,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
 	 , (42128708, 4, 480014,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
-	 , (42128708, 4, 30092,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
-	, (42128708, 4, 30093,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
+	 , (42128708, 4, 490354,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
+	, (42128708, 4, 490355,  0, 0, 0, False) /* Create A Fuckin' Bang (4200019) for Shop */
 	, (42128708, 4, 4200141,  0, 0, 0, False) /* Create Town Control Trinket of Experience (4200017) for Shop */
 	, (42128708, 4, 480600,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */
 	, (42128708, 4, 8037,  0, 0, 0, False) /* Create Town Control Trinket of Experience (4200017) for Shop */
@@ -237,7 +238,9 @@ VALUES (42128708, 2, 22015,  0, 21, 0.9, False) /* Create Pwyll's Guard (22015) 
 	, (42128708, 4, 480623,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */
 	, (42128708, 4, 480502,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */
 	 , (42128708, 4, 480503,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */
-	 , (42128708, 4, 490027,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */;
+	 , (42128708, 4, 490027,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */
+    , (42128708, 4, 490353,  0, 0, 0, False) /* Create Asteliary Orb (450754) for Shop */;
+
 	
 /* Lifestoned Changelog:
 {

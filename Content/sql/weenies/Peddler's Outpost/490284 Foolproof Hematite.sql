@@ -25,7 +25,7 @@ VALUES (490284,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490284,   1, 'Foolproof Hematite') /* Name */
-     , (490284,  14, 'Apply this bag of salvage to a piece of jewelry for a 100% chance to land.') /* Use */;
+     , (490284,  14, 'Apply this bag of salvage to loot type items for a 100% chance to land Warrior''s Vitality.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490284,   1, 0x02000181) /* Setup */

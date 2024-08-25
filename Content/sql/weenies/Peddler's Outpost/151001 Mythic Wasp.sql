@@ -146,4 +146,6 @@ VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 1090519043 /* Ready */, NULL, NU
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (151001, 9, 490155,  1, 0, 0.05, False) /* Create Prom Note */ 
-	 , (151001, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */ ;
+	 , (151001, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */
+     , (151001, 9, 490237,  3, 0, 0.05, False) /* Trinket */
+	 , (151001, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */	 ;
