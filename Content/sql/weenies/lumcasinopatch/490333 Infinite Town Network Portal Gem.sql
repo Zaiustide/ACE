@@ -14,6 +14,7 @@ VALUES (490333,   1,       2048) /* ItemType - Gem */
      , (490333, 106,        210) /* ItemSpellcraft */
      , (490333, 107,         50) /* ItemCurMana */
      , (490333, 108,         50) /* ItemMaxMana */
+	 , (490333,  33,          1) /* Bonded - Normal */
      , (490333, 109,          0) /* ItemDifficulty */
      , (490333, 110,          0) /* ItemAllegianceRankLimit */
      , (490333, 151,          2) /* HookType - Wall */

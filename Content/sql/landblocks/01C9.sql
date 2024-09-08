@@ -168,9 +168,13 @@ VALUES (0x701C9058, 490320, 0x01C901EF, 106.768, -83.2043, -5.99, -0.991492, 0, 
 /* @teleloc 0x01C901EF [106.767998 -83.204300 -5.990000] -0.991492 0.000000 0.000000 -0.130172 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C9059, 10706, 0x01C901EF, 110.968, -83.646, -5.9985, -0.994987, 0, 0, -0.100005, False, '2024-08-17 13:06:11'); /* Wheel of Fortune */
-/* @teleloc 0x01C901EF [110.968002 -83.646004 -5.998500] -0.994987 0.000000 0.000000 -0.100005 */
+VALUES (0x701C9059, 10706, 0x01C901EF, 112.804, -83.646, -5.9985, 0, 0, 0, -1, False, '2024-08-17 13:06:11'); /* Wheel of Fortune */
+/* @teleloc 0x01C901EF [112.804001 -83.646004 -5.998500] 0.000000 0.000000 0.000000 -1.000000 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C905A, 490325, 0x01C901F9, 118.2511, -92.44445, -5.99, 0.999987, 0, 0, -0.005199, False, '2024-08-17 18:51:57');
-/* @teleloc 0x01C901F9 [118.251099 -92.444450 -5.990000] 0.999987 0.000000 0.000000 -0.005199 */
+VALUES (0x701C905A, 490325, 0x01C901F9, 118.251, -92.4445, -5.99, 0.999987, 0, 0, -0.005199, False, '2024-08-17 18:51:57'); /* Baldur */
+/* @teleloc 0x01C901F9 [118.250999 -92.444504 -5.990000] 0.999987 0.000000 0.000000 -0.005199 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C905B, 490356, 0x01C901EF, 109.4311, -83.51734, -5.956726, 0.043307, 0, 0, -0.999062, False, '2024-09-04 14:42:17'); /* Hera's Vault */
+/* @teleloc 0x01C901EF [109.431099 -83.517342 -5.956726] 0.043307 0.000000 0.000000 -0.999062 */

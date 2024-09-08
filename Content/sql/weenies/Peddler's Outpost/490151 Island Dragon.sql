@@ -23,7 +23,7 @@ VALUES (490151,   1, True ) /* Stuck */
      , (490151,   6, False) /* AiUsesMana */
      , (490151,  11, False) /* IgnoreCollisions */
      , (490151,  12, True ) /* ReportCollisions */
-     , (490151,  13, False) /* Ethereal */
+     , (490151,  13, True) /* Ethereal */
      , (490151,  52, False) /* AiImmobile */;
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)

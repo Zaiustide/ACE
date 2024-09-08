@@ -5,13 +5,13 @@ VALUES (490321, 'luminanceexchangetoken', 38, '2021-11-03 08:49:59') /* Stackabl
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490321,   1,     2048) /* ItemType - PromissoryNote */
-     , (490321,   5,          1) /* EncumbranceVal */
-     , (490321,   8,          1) /* Mass */
+     , (490321,   5,          10) /* EncumbranceVal */
+     , (490321,   8,          10) /* Mass */
      , (490321,   9,          0) /* ValidLocations - None */
      , (490321,  11,        100) /* MaxStackSize */
      , (490321,  12,          1) /* StackSize */
-     , (490321,  13,          1) /* StackUnitEncumbrance */
-     , (490321,  14,          1) /* StackUnitMass */
+     , (490321,  13,          10) /* StackUnitEncumbrance */
+     , (490321,  14,          10) /* StackUnitMass */
      , (490321,  15,          10) /* StackUnitValue */
      , (490321,  16,          1) /* ItemUseable - No */
      , (490321,  19,          10) /* Value */

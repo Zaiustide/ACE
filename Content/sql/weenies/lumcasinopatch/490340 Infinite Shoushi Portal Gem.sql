@@ -11,9 +11,10 @@ VALUES (490340,   1,       2048) /* ItemType - Gem */
      , (490340,   9,          0) /* ValidLocations - None */
      , (490340,  16,          8) /* ItemUseable - Contained */
      , (490340,  18,          1) /* UiEffects - Magical */
-     , (490340,  19,        500) /* Value */
+     , (490340,  19,        10) /* Value */
      , (490340,  93,       3092) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, LightingOn */
      , (490340,  94,         16) /* TargetType - Creature */
+	 , (490340,  33,          1) /* Bonded - Normal */
      , (490340, 106,        210) /* ItemSpellcraft */
      , (490340, 107,         50) /* ItemCurMana */
      , (490340, 108,         50) /* ItemMaxMana */

@@ -15,6 +15,7 @@ VALUES (490334,   1,       2048) /* ItemType - Gem */
      , (490334,  93,       3092) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, LightingOn */
      , (490334,  94,         16) /* TargetType - Creature */
      , (490334, 106,        210) /* ItemSpellcraft */
+	 , (490334,  33,          1) /* Bonded - Normal */
      , (490334, 107,         50) /* ItemCurMana */
      , (490334, 108,         50) /* ItemMaxMana */
      , (490334, 109,          0) /* ItemDifficulty */
