@@ -27,8 +27,8 @@ VALUES (490362,   1, 'Boxed Hera''s Vault Key') /* Name */
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490362,   1, 0x0200011E) /* Setup */
      , (490362,   3, 0x20000014) /* SoundTable */
-     , (490362,   8, 0x06006BB0) /* Icon */
-	 , (490362,  50, 0x060033A9) /* IconOverlay */
+     , (490362,   8, 0x060012F8) /* Icon */
+	 , (490362,  50, 0x06006BB0) /* IconOverlay */
      , (490362,  22, 0x3400002B) /* PhysicsEffectTable */
      , (490362,  38,      490364) /* UseCreateItem - Blank Augmentation Gem */;
 	 
