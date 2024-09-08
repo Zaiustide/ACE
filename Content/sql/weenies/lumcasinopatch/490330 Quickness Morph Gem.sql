@@ -8,7 +8,7 @@ VALUES (490330,   1,       2048) /* ItemType - Gem */
      , (490330,   5,         10) /* EncumbranceVal */
      , (490330,  16,     524296) /* ItemUseable - SourceContainedTargetContained */
      , (490330,  18,          1) /* UiEffects - Magical */
-     , (490330,  19,         25) /* Value */
+     , (490330,  19,         50) /* Value */
      , (490330,  65,        101) /* Placement - Resting */
      , (490330,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (490330,  94,          35215) /* TargetType - Vestements */;
