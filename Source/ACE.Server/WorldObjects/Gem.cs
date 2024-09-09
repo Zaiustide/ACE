@@ -134,8 +134,9 @@ namespace ACE.Server.WorldObjects
                 return;
             }
 
+            #region custom gems
             //Custom XP gems
-            if(WeenieClassId == 490070)
+            if (WeenieClassId == 490070)
             {
                 player.EarnXP(1000000000, XpType.Kill, ShareType.None, false);
                 player.TryConsumeFromInventoryWithNetworking(this, 1);
@@ -143,7 +144,7 @@ namespace ACE.Server.WorldObjects
             }
 
             //Custom XP Bottle
-            if (WeenieClassId == 490071)
+            else if (WeenieClassId == 490071)
             {
                 if(!ItemTotalXp.HasValue || ItemTotalXp < 1)
                 {
@@ -164,7 +165,7 @@ namespace ACE.Server.WorldObjects
 
             //Custom Tinkering Tool
             //Check if player has at least one tinkering skill trained
-            if (WeenieClassId == 490298)
+            else if (WeenieClassId == 490298)
             {
                 string playerMsg = "";
 
@@ -206,6 +207,27 @@ namespace ACE.Server.WorldObjects
                 player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
             }
 
+            //Custom Island Gem
+            else if(WeenieClassId == 490322)
+            {
+                //Don't allow gem to be used if PK tagged
+                if(player.PKTimerActive)
+                {
+                    var playerMsg = $"You have been involved in a PK battle too recently to use your {this.Name}.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                    return;
+                }
+                else
+                {
+                    var islandLoc = new Position(0xF76B0036, 148.463013f, 138.334213f, 0.00500f, 0f, 0f, -0.530781f, -0.847509f);                    
+                    player.Teleport(islandLoc);
+                    var playerMsg = $"The {this.Name} has teleported you to Peddler's Outpost.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                }
+            }
+
+            #endregion Custom gems
 
             // trying to use a dispel potion while pk timer is active
             // send error message and cancel - do not consume item
