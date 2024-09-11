@@ -1706,6 +1706,16 @@ namespace ACE.Server.Entity
             //heptagon.ArenaName = "The Heptagon";
             //locList.Add(heptagon.LandblockId, heptagon);
 
+            //oneTen
+            var oneTen = new ArenaLocation();
+            oneTen.LandblockId = 0x039D;
+            oneTen.SupportedEventTypes = new List<string>();
+            oneTen.SupportedEventTypes.Add("1v1");
+            oneTen.SupportedEventTypes.Add("2v2");
+            oneTen.SupportedEventTypes.Add("ffa");
+            oneTen.ArenaName = "One Ten";
+            locList.Add(oneTen.LandblockId, oneTen);
+
             return locList;
         }
 
@@ -1728,6 +1738,7 @@ namespace ACE.Server.Entity
                         0x596A, //Fowl Basement
                         //0xD50E, //Landing Strip
                         //0x7222  //The Heptagon
+                        0x039D, //One Ten
                     };
                 }
 
@@ -1943,6 +1954,20 @@ namespace ACE.Server.Entity
                     //        new Position(0x7222002C, 143.886292f, 81.059364f, -0.445000f, 0.000000f, 0.000000f, 0.004404f, -0.999990f),
                     //        // 0x7222002C [143.886292 81.059364 -0.445000] -0.999990 0.000000 0.000000 0.004404
                     //}); //The Heptagon
+
+                    _arenaLocationStartingPositions.Add(
+                        0x039D,
+                        new List<Position>()
+                        {
+                            new Position(0x039D02A4, 104.028847f, -46.040611f, 48.005001f, 0f, 0f, -0.925397f, -0.379000f),
+                            //0x039D02A4 [104.028847 -46.040611 48.005001] -0.379000 0.000000 0.000000 -0.925397
+                            new Position(0x039D02A4, 103.830605f, -53.779991f, 48.005001f, 0f, 0f, -0.401763f, -0.915744f),
+                            //0x039D02A4 [103.830605 -53.779991 48.005001] -0.915744 0.000000 0.000000 -0.401763
+                            new Position(0x039D02A4, 96.026833f, -53.870930f, 48.005001f, 0f, 0f, 0.449561f, -0.893250f),
+                            //0x039D02A4 [96.026833 -53.870930 48.005001] -0.893250 0.000000 0.000000 0.449561
+                            new Position(0x039D02A4, 95.942345f, -45.941307f, 48.005001f, 0f, 0f, 0.924836f, -0.380366f),
+                            //0x039D02A4 [95.942345 -45.941307 48.005001] -0.380366 0.000000 0.000000 0.924836
+                        }); //One Ten
                 }
 
                 return _arenaLocationStartingPositions;
