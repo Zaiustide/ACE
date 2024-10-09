@@ -95,9 +95,9 @@ namespace ACE.Server.Entity.WorldBoss
                     //Samsur
                     //0x987B0006 [16.509394 122.500298 0.005000] 0.950834 0.000000 0.000000 0.309700
                     townSpawnLocations.Add(0x987B, new Position(0x987B0006, 16.509394f, 122.500298f, 0.005000f, 0f, 0f, 0.309700f, 0.950834f));
-                    //Tufa
+                    //Tufa - removed Tufa because it bugs out
                     //0x866E0001 [0.435155 10.220376 -0.445000] -0.273227 0.000000 0.000000 -0.961950
-                    townSpawnLocations.Add(0x866E, new Position(0x866E0001, 0.435155f, 10.220376f, -0.445000f, 0f, 0f, -0.961950f, -0.273227f));
+                    //townSpawnLocations.Add(0x866E, new Position(0x866E0001, 0.435155f, 10.220376f, -0.445000f, 0f, 0f, -0.961950f, -0.273227f));
                     //Yaraq
                     //0x7D640013 [60.771282 54.519730 12.447500] -0.995155 0.000000 0.000000 -0.098318
                     townSpawnLocations.Add(0x7D64, new Position(0x7D640013, 60.771282f, 54.519730f, 12.447500f, 0f, 0f, -0.098318f, -0.995155f));
