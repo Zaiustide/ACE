@@ -140,9 +140,9 @@ namespace ACE.Server.Entity.WorldBoss
                     //Timaru
                     //0x1EB60007 [8.295841 155.768005 120.005005] -0.348506 0.000000 0.000000 -0.937307
                     townSpawnLocations.Add(0x1EB6, new Position(0x1EB60007, 8.295841f, 155.768005f, 120.005005f, 0f, 0f, -0.937307f, -0.348506f));
-                    //Sanamar
+                    //Sanamar - removed Tufa because it bugs out
                     //0x33D90003 [12.172110 54.826462 52.005001] 0.783820 0.000000 0.000000 -0.620989
-                    townSpawnLocations.Add(0x33D9, new Position(0x33D90003, 12.172110f, 54.826462f, 52.005001f, 0f, 0f, -0.620989f, 0.783820f));
+                    //townSpawnLocations.Add(0x33D9, new Position(0x33D90003, 12.172110f, 54.826462f, 52.005001f, 0f, 0f, -0.620989f, 0.783820f));
                     //Silyun
                     //0x27EC001C [78.606445 82.675735 80.005005] 0.847683 0.000000 0.000000 0.530502
                     townSpawnLocations.Add(0x27EC, new Position(0x27EC001C, 78.606445f, 82.675735f, 80.005005f, 0f, 0f, 0.530502f, 0.847683f));
