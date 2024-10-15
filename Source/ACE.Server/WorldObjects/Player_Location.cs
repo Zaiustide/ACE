@@ -742,14 +742,14 @@ namespace ACE.Server.WorldObjects
                 }
             }
 
-            //If you're teleporting to an arena landblock and aren't in an arena event, disallow
-            if (ArenaLocation.IsArenaLandblock(newPosition.Landblock) && !ArenaManager.IsActiveArenaPlayer(this.Character.Id) && !this.IsArenaObserver)
-            {
-                this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter an arena location without being part of an arena event.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
+            ////If you're teleporting to an arena landblock and aren't in an arena event, disallow
+            //if (ArenaLocation.IsArenaLandblock(newPosition.Landblock) && !ArenaManager.IsActiveArenaPlayer(this.Character.Id) && !this.IsArenaObserver)
+            //{
+            //    this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter an arena location without being part of an arena event.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
 
-                Teleport(Sanctuary);
-                return;
-            }
+            //    Teleport(Sanctuary);
+            //    return;
+            //}
 
             HandlePreTeleportVisibility(newPosition);
 
