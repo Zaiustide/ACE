@@ -142,6 +142,8 @@ namespace ACE.Server.Managers
                 var statueWorldObj = WorldObjectFactory.CreateNewWorldObject(statueWeenie);
                 statueWorldObj.Location = spawnLoc.Value;
                 statueWorldObj.CurrentLandblock = statueLandblock;
+                statueWorldObj.TimeToRot = -1;
+                statueWorldObj.Lifespan = 3600000;
                 statueWorldObj.EnterWorld();
 
                 boss.StatueWorldObject = statueWorldObj;
@@ -154,6 +156,8 @@ namespace ACE.Server.Managers
                 var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
                 bossWorldObj.Location = boss.IndoorLocation;
                 bossWorldObj.CurrentLandblock = bossLandblock;
+                bossWorldObj.TimeToRot = -1;
+                bossWorldObj.Lifespan = 3600000;
                 bossWorldObj.EnterWorld();
                 boss.BossWorldObject = bossWorldObj;
 

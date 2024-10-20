@@ -1278,6 +1278,7 @@ namespace ACE.Server.WorldObjects
                 if (deadBoss.StatueWorldObject != null)
                 {
                     deadBoss.StatueWorldObject.TimeToRot = 0;
+                    deadBoss.StatueWorldObject.Lifespan = 0;
                 }
 
                 //Send global to webhook
