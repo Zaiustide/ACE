@@ -233,7 +233,7 @@ namespace ACE.Server.WorldObjects
 
             else if (WorldBosses.IsWorldBoss(this.WeenieClassId))
             {
-                if (this.Health.Percent < 1 && (!this.WorldBoss_LastPeriodicGlobal.HasValue || this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-2)))
+                if (!this.IsDead && this.Health.Percent < 0.9 && (!this.WorldBoss_LastPeriodicGlobal.HasValue || this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-2)))
                 {
                     var msg = "";
                     var wb = WorldBosses.WorldBossMap[this.WeenieClassId];
