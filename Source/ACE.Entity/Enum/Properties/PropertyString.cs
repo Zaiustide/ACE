@@ -104,6 +104,9 @@ namespace ACE.Entity.Enum.Properties
 
         [ServerOnly]
         CurrentRareEnchantmentIds = 52029,
+
+        [ServerOnly]
+        MorphGemLog = 9010,
     }
 
     public static class PropertyStringExtensions

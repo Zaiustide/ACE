@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Security.Policy;
 using ACE.Common;
 using ACE.Database.Models.Auth;
@@ -69,6 +71,32 @@ namespace ACE.Server.Entity
 		public const uint MorphGemQuicknessbeer = 490330;
 		public const uint MorphGemFocusbeer = 490331;
 		public const uint MorphGemWillpowerbeer = 490332;
+
+        public const uint MorphGemHeroicMaster = 1548800;
+        public const uint MorphGemDotResist = 1548801;
+        public const uint MorphGemRandomSet = 1548802;
+        public const uint MorphGemRandomCantrip = 1548803;
+        public const uint MorphGemBurden = 1548804;
+        public const uint MorphGemRareDmgBoost = 1548805;
+        public const uint MorphGemRareDmgReduction = 1548806;
+
+        public static readonly List<int> HeroicMasterSpells =
+            new List<int>()
+            {
+                4733,    //Master Duelist's Coordination
+                4737,   //Master Hero's Endurance
+                4741,    //Master Sage's Focus
+                4745,    //Master Rover's Quickness
+                4749,    //Master Brute's Strength
+                4753,    //Master Adherent's Willpower
+                4755,    //Journeyman Survivor's Health
+                4757,    //Journeyman Clairvoyant's Mana
+                4759,    //Journeyman Tracker's Stamina
+                4906,    //Apprentice Challenger's Rejuvenation
+                6333,    //Gauntlet Damage Reduction II
+                6335,    //Gauntlet Critical Damage Reduction II
+                6336    //Gauntlet Healing Boost I
+            };
 
         // Some WCIDs have Overlay Icons that need to be removed (e.g. Olthoi Alduressa Gauntlets or Boots)
         // There are other examples not here, like some stamped shields that might need to be added, as well.
@@ -248,6 +276,13 @@ namespace ACE.Server.Entity
 				case MorphGemQuicknessbeer:
 				case MorphGemFocusbeer:
 				case MorphGemWillpowerbeer:
+                case MorphGemHeroicMaster:
+                case MorphGemDotResist:
+                case MorphGemRandomSet:
+                case MorphGemRandomCantrip:
+                case MorphGemBurden:
+                case MorphGemRareDmgBoost:
+                case MorphGemRareDmgReduction:                     
                     ApplyMorphGem(player, source, target);
                     return;
             }
@@ -539,7 +574,8 @@ namespace ACE.Server.Entity
             MorphGemRareReduction,
             MorphGemCD,
             MorphGemCDR,
-            MorphGemJewelersSawblade
+            MorphGemJewelersSawblade,
+            MorphGemDotResist
         };
 
 
@@ -687,9 +723,9 @@ namespace ACE.Server.Entity
 
                         //Roll for an amount to change the item Value by
                         var valRandom = new Random();
-                        bool valueGain = valRandom.Next(0, 99) < 10;                        
+                        bool valueGain = valRandom.Next(0, 99) < 10;
                         var percentChange = valRandom.Next(5, 16) / 100f;
-                        var valueChange = (int)Math.Round(currentItemValue.Value * percentChange * (valueGain ? 1 : -1));                        
+                        var valueChange = (int)Math.Round(currentItemValue.Value * percentChange * (valueGain ? 1 : -1));
                         var newValue = currentItemValue.Value + valueChange;
 
                         //Don't let new Armor Value exceed minimum of 20k
@@ -701,6 +737,7 @@ namespace ACE.Server.Entity
 
                         //Set the new item value
                         player.UpdateProperty(target, PropertyInt.Value, newValue);
+                        AddMorphGemLog(target, MorphGemValue);
 
                         if (valueChange > 0)
                         {
@@ -735,11 +772,12 @@ namespace ACE.Server.Entity
                         }
 
                         //Roll for a value to set the Workmanship to
-                        var workRandom = ThreadSafeRandom.Next(1,10);
-                        var workChange =  (currentItemWork.Value - workRandom);
+                        var workRandom = ThreadSafeRandom.Next(1, 10);
+                        var workChange = (currentItemWork.Value - workRandom);
 
                         //Set the new Workmanship value
                         player.UpdateProperty(target, PropertyInt.ItemWorkmanship, workRandom);
+                        AddMorphGemLog(target, MorphGemRandomWorkmanship);
 
                         if (workChange < 0)
                         {
@@ -791,6 +829,7 @@ namespace ACE.Server.Entity
 
                         //Set the new arcane
                         player.UpdateProperty(target, PropertyInt.ItemDifficulty, newArcane);
+                        AddMorphGemLog(target, MorphGemArcane);
 
                         if (arcaneChange > 0)
                         {
@@ -955,81 +994,81 @@ namespace ACE.Server.Entity
                     #endregion MorphGemRandomEpic
 
                     #region MorphGemRandomSet
-                    //case MorphGemRandomSet:
+                    case MorphGemRandomSet:
 
-                    //    if (target.ClothingPriority == null || (target.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0)
-                    //    {
-                    //        player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                    //        player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item does not meet the requirements for adding an Equipment Set", ChatMessageType.Broadcast));
-                    //        return;
-                    //    }
+                        if (target.ClothingPriority == null || (target.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0)
+                        {
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item does not meet the requirements for adding an Equipment Set", ChatMessageType.Broadcast));
+                            return;
+                        }
 
-                    //    var originalSetId = target.EquipmentSetId;
-                    //    bool setRollResult = false;
+                        var originalSetId = target.EquipmentSetId;
+                        bool setRollResult = false;
 
-                    //    if (target.EquipmentSetId.HasValue)
-                    //    {
-                    //        //If item has an existing set, roll a 10% chance to remove the Set
-                    //        int removeSetRoll = ThreadSafeRandom.Next(0, 9);
-                    //        if (removeSetRoll > 0)
-                    //        {
-                    //            setRollResult = true;
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        //If item has no set, roll a 15% chance to add a Set
-                    //        int addSetRoll = ThreadSafeRandom.Next(0, 99);
-                    //        if (addSetRoll < 15)
-                    //        {
-                    //            setRollResult = true;
-                    //        }
-                    //    }
+                        if (target.EquipmentSetId.HasValue)
+                        {
+                            //If item has an existing set, roll a 10% chance to remove the Set
+                            int removeSetRoll = ThreadSafeRandom.Next(0, 9);
+                            if (removeSetRoll > 0)
+                            {
+                                setRollResult = true;
+                            }
+                        }
+                        else
+                        {
+                            //If item has no set, roll a 15% chance to add a Set
+                            int addSetRoll = ThreadSafeRandom.Next(0, 99);
+                            if (addSetRoll < 15)
+                            {
+                                setRollResult = true;
+                            }
+                        }
 
-                    //    if (setRollResult)
-                    //    {
-                    //        target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.Lightningproof);
-                    //        if (originalSetId.HasValue && target.EquipmentSetId.Value == originalSetId.Value)
-                    //        {
-                    //            int counter = 0;
-                    //            while (target.EquipmentSetId.Value == originalSetId.Value && counter < 10)
-                    //            {
-                    //                target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.Lightningproof);
-                    //                counter++;
-                    //            }
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        target.EquipmentSetId = null;
-                    //    }
+                        if (setRollResult)
+                        {
+                            target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.Lightningproof);
+                            if (originalSetId.HasValue && target.EquipmentSetId.Value == originalSetId.Value)
+                            {
+                                int counter = 0;
+                                while (target.EquipmentSetId.Value == originalSetId.Value && counter < 10)
+                                {
+                                    target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.Lightningproof);
+                                    counter++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            target.EquipmentSetId = null;
+                        }
 
-                    //    string resultMsg = string.Empty;
+                        string resultMsg = string.Empty;
 
-                    //    if (originalSetId.HasValue && setRollResult)
-                    //    {
-                    //        //Randomized existing set
-                    //        resultMsg = "You and I, we aren't so different.  We are nothing alike yet we are... nothing.  None of it matters.  You, especially, don't matter.  You will die.  I will die.  Will we then be the same?  Will we be at all?  Will you shut the fuck up?  Your armor has a different Set on it now, congrats.";
-                    //    }
-                    //    else if (!originalSetId.HasValue && setRollResult)
-                    //    {
-                    //        //Added new set
-                    //        resultMsg = "If you get caught with drugs and they ask you who you got them from, it was the naked Indian.  Also, your item that didn't have a Set, well, now it has a Set.  Take a look and see.  Hopefully it's what you wanted.";
-                    //    }
-                    //    else if (originalSetId.HasValue && !setRollResult)
-                    //    {
-                    //        //Remove existing set
-                    //        resultMsg = "Bad luck cunt, your armor that had a Set on it, well now it doesn't have a Set on it.  Also, you're ugly and smell bad, and those are your best qualities.";
-                    //    }
-                    //    else
-                    //    {
-                    //        //No existing set, failed to add a set
-                    //        resultMsg = "I once had a dream that I was peeing on a tree in the woods.  When I woke up, I had pissed all over myself.  I hope that makes you feel slightly better about the fact that your item which didn't previously have a Set on it still doesn't have a Set on it.  Better luck next time cunt.";
-                    //    }
+                        if (originalSetId.HasValue && setRollResult)
+                        {
+                            //Randomized existing set
+                            resultMsg = "You and I, we aren't so different.  We are nothing alike yet we are... nothing.  None of it matters.  You, especially, don't matter.  You will die.  I will die.  Will we then be the same?  Will we be at all?  Will you shut the fuck up?  Your armor has a different Set on it now, congrats.";
+                        }
+                        else if (!originalSetId.HasValue && setRollResult)
+                        {
+                            //Added new set
+                            resultMsg = "If you get caught with drugs and they ask you who you got them from, it was the naked Indian.  Also, your item that didn't have a Set, well, now it has a Set.  Take a look and see.  Hopefully it's what you wanted.";
+                        }
+                        else if (originalSetId.HasValue && !setRollResult)
+                        {
+                            //Remove existing set
+                            resultMsg = "Bad luck cunt, your armor that had a Set on it, well now it doesn't have a Set on it.  Also, you're ugly and smell bad, and those are your best qualities.";
+                        }
+                        else
+                        {
+                            //No existing set, failed to add a set
+                            resultMsg = "I once had a dream that I was peeing on a tree in the woods.  When I woke up, I had pissed all over myself.  I hope that makes you feel slightly better about the fact that your item which didn't previously have a Set on it still doesn't have a Set on it.  Better luck next time cunt.";
+                        }
 
-                    //    player.Session.Network.EnqueueSend(new GameMessageSystemChat(resultMsg, ChatMessageType.Broadcast));
-
-                    //    break;
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(resultMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemRandomSet);
+                        break;
                     #endregion MorphGemRandomSet
 
                     #region MorphGemRemoveMissileDReq
@@ -1048,13 +1087,14 @@ namespace ACE.Server.Entity
                         target.ItemSkillLevelLimit = null;
 
                         playerMsg = $"You apply the Morph Gem skillfully and have removed the Missile Defense activation requirement of your item.";
+                        AddMorphGemLog(target, MorphGemRemoveMissileDReq);
 
                         //Send player message confirming the applied morph gem
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         break;
 
                     #endregion MorphGemRemoveMissileDReq
-     
+
                     #region MorphGemRemoveMeleeDReq
                     case MorphGemRemoveMeleeDReq:
                         //Validate that the item has a Melee D activation requirement
@@ -1069,6 +1109,7 @@ namespace ACE.Server.Entity
                         target.ItemSkillLevelLimit = null;
 
                         playerMsg = $"You apply the Morph Gem skillfully and have removed the Melee Defense activation requirement of your item.";
+                        AddMorphGemLog(target, MorphGemRemoveMeleeDReq);
 
                         //Send player message confirming the applied morph gem
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1080,9 +1121,9 @@ namespace ACE.Server.Entity
                     case MorphGemRandomizeWeaponImbue:
 
                         //Verify the item is imbued with AR, CS or CB
-                        var isValid = false;                        
+                        var isValid = false;
 
-                        if(target.HasImbuedEffect(ImbuedEffectType.CripplingBlow) ||
+                        if (target.HasImbuedEffect(ImbuedEffectType.CripplingBlow) ||
                             target.HasImbuedEffect(ImbuedEffectType.ArmorRending) ||
                             target.HasImbuedEffect(ImbuedEffectType.CriticalStrike))
                         {
@@ -1096,9 +1137,9 @@ namespace ACE.Server.Entity
                         }
 
                         var origImbueEffect = target.ImbuedEffect;
-                        
+
                         var roll = ThreadSafeRandom.Next(0, 1);
-                        if(target.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
+                        if (target.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
                         {
                             target.ImbuedEffect = roll == 0 ? ImbuedEffectType.ArmorRending : ImbuedEffectType.CriticalStrike;
                         }
@@ -1114,6 +1155,7 @@ namespace ACE.Server.Entity
                         target.IconUnderlayId = RecipeManager.IconUnderlay[target.ImbuedEffect];
 
                         playerMsg = $"You apply the Morph Gem skillfully and have changed your weapon's imbue from {origImbueEffect} to {target.ImbuedEffect}";
+                        AddMorphGemLog(target, MorphGemRandomizeWeaponImbue);
 
                         //Send player message confirming the applied morph gem
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1136,6 +1178,7 @@ namespace ACE.Server.Entity
                         target.RemoveProperty(PropertyString.CraftsmanName);
 
                         playerMsg = $"You apply the Morph Gem skillfully and have altered your item so it is no longer wield restricted to {origWielder}";
+                        AddMorphGemLog(target, MorphGemRemovePlayerReq);
 
                         //Send player message confirming the applied morph gem
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1149,9 +1192,9 @@ namespace ACE.Server.Entity
                         var tinkerLottoLog = target.GetProperty(PropertyString.TinkerLottoLog);
                         if (!String.IsNullOrEmpty(tinkerLottoLog) && tinkerLottoLog.Contains("Slayer") && target.SlayerCreatureType != null)
                         {
-                            target.ApplyRandomSlayer(target.SlayerDamageBonus ?? 1.2);                            
+                            target.ApplyRandomSlayer(target.SlayerDamageBonus ?? 1.2);
                             playerMsg = $"The Morph Gem alters your weapon's slayer type to {target.SlayerCreatureType}";
-                            
+
                             //Send player message confirming the applied morph gem
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         }
@@ -1163,6 +1206,8 @@ namespace ACE.Server.Entity
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
+
+                        AddMorphGemLog(target, MorphGemSlayerRandom);
                         break;
 
                     #endregion MorphGemSlayerRandom
@@ -1197,7 +1242,7 @@ namespace ACE.Server.Entity
 
                         //Send player message confirming the applied morph gem
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-
+                        AddMorphGemLog(target, MorphGemRemoveLevelReq);
                         break;
 
                     #endregion MorphGemRemoveLevelReq
@@ -1209,7 +1254,7 @@ namespace ACE.Server.Entity
                         var tinkerLottoLog2 = target.GetProperty(PropertyString.TinkerLottoLog);
                         if (!String.IsNullOrEmpty(tinkerLottoLog2) && tinkerLottoLog2.Contains("Slayer") && target.SlayerCreatureType != null)
                         {
-                            if(target.SlayerDamageBonus < 1.8)
+                            if (target.SlayerDamageBonus < 1.8)
                             {
                                 playerMsg = $"The Morph Gem alters your weapon's slayer damage bonus to 1.8";
                                 target.SlayerDamageBonus = 1.8;
@@ -1221,7 +1266,7 @@ namespace ACE.Server.Entity
                                 player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                                 player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                                 return;
-                            }    
+                            }
                         }
                         else
                         {
@@ -1231,7 +1276,7 @@ namespace ACE.Server.Entity
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
+                        AddMorphGemLog(target, MorphGemSlayerUpgrade);
                         break;
 
                     #endregion MorphGemSlayerUpgrade
@@ -1241,7 +1286,7 @@ namespace ACE.Server.Entity
                     case MorphGemBurningCoal:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1250,14 +1295,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Blazing Heart (3204) on it                        
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3204))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3204))
                         {
                             playerMsg = "Your target item already has Blazing Heart on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1285,7 +1330,7 @@ namespace ACE.Server.Entity
                         //    playerMsg = $"Your hands quiver with anticipation as you attempt to apply the morph gem to your {target.NameWithMaterial}. Unfortunately the gem shatters on contact and with it your item has been destroyed.";
                         //    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         //}
-
+                        AddMorphGemLog(target, MorphGemBurningCoal);
                         break;
 
                     #endregion MorphGemBurningCoal
@@ -1300,10 +1345,10 @@ namespace ACE.Server.Entity
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
-                        }    
+                        }
 
                         //Check if an Impen already exists on this item                        
-                        if(!target.ItemMaxMana.HasValue || targetItemSpells == null || targetItemSpells.Count == 0)
+                        if (!target.ItemMaxMana.HasValue || targetItemSpells == null || targetItemSpells.Count == 0)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1340,7 +1385,7 @@ namespace ACE.Server.Entity
 
                             var spellId = 0;
                             var impenLevel = ThreadSafeRandom.Next(0, 99);
-                            if(impenLevel < 40) //40% chance for minor
+                            if (impenLevel < 40) //40% chance for minor
                             {
                                 spellId = 2604;
                                 playerMsg = String.Format(playerMsg, "a Minor", target.Name);
@@ -1360,9 +1405,10 @@ namespace ACE.Server.Entity
                                 spellId = 6095;
                                 playerMsg = String.Format(playerMsg, "a Legendary", target.Name);
                             }
-                            
+
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             target.Biota.GetOrAddKnownSpell(spellId, target.BiotaDatabaseLock, out _);
+                            AddMorphGemLog(target, MorphGemImpen);
                         }
                         else //If failed, destroy the target item
                         {
@@ -1391,7 +1437,7 @@ namespace ACE.Server.Entity
                     case MorphGemBanditHilt:
 
                         //Check if the target is a LW multi-strike weapon
-                        if(target.WeenieType != WeenieType.MeleeWeapon ||
+                        if (target.WeenieType != WeenieType.MeleeWeapon ||
                             target.WeaponSkill != Skill.LightWeapons ||
                             (!target.W_AttackType.HasFlag(AttackType.DoubleSlash) && !target.W_AttackType.HasFlag(AttackType.DoubleThrust)))
                         {
@@ -1404,6 +1450,7 @@ namespace ACE.Server.Entity
                         target.W_AttackType = AttackType.TripleStrike;
                         playerMsg = $"The morph gem alters your {target.NameWithMaterial} into a Triple-Strike weapon";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemBanditHilt);
                         break;
                     #endregion MorphGemBanditHilt
 
@@ -1418,7 +1465,7 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        if( target.WeenieType != WeenieType.Clothing &&
+                        if (target.WeenieType != WeenieType.Clothing &&
                             target.WeenieType != WeenieType.Caster &&
                             target.WeenieType != WeenieType.MeleeWeapon &&
                             target.WeenieType != WeenieType.MissileLauncher &&
@@ -1440,7 +1487,6 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-
                         //Find the counterpart legendary spell
                         //Remove the epic
                         //Add the legendary
@@ -1449,7 +1495,7 @@ namespace ACE.Server.Entity
                             var epicSpell = new Spell(epicSpellId, true);
                             var epicSpellName = epicSpell.ToString();
 
-                            foreach(var spellLevels in ArmorCantrips.Table)
+                            foreach (var spellLevels in ArmorCantrips.Table)
                             {
                                 if (spellLevels[2] == (SpellId)epicSpellId)
                                 {
@@ -1464,8 +1510,9 @@ namespace ACE.Server.Entity
 
                         //Return a message to the player
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Your {target.NameWithMaterial} has had its epic armor cantrips upgraded to legendaries", ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemRareUpgrade);
                         break;
-                    #endregion MorphGemFpDiamond
+                    #endregion MorphGemRareUpgrade
 
                     #region MorphGemCDR                    
                     case MorphGemCDR:
@@ -1496,6 +1543,7 @@ namespace ACE.Server.Entity
                         target.GearCritDamageResist = 2;
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemCDR);
                         break;
                     #endregion MorphGemCDR
 
@@ -1513,7 +1561,7 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        if(target.GearCritDamage >= 2)
+                        if (target.GearCritDamage >= 2)
                         {
                             playerMsg = $"Your {target.NameWithMaterial} already has a Critical Damage Rating of +{target.GearCritDamage} and thus the gem would have no effect";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1525,9 +1573,10 @@ namespace ACE.Server.Entity
                         string cdrRemovalMsg = target.GearCritDamageResist > 0 ? $" As a result your item's +{target.GearCritDamageResist} Critical Damage Resist Rating has been replaced." : string.Empty;
                         playerMsg = $"You have successfully used the {source.Name} to add +2 Critical Damage Rating to your {target.NameWithMaterial}!{cdrRemovalMsg}";
                         target.GearCritDamage = 2;
-                        target.GearCritDamageResist = 0;                        
+                        target.GearCritDamageResist = 0;
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemCD);
                         break;
                     #endregion MorphGemCD
 
@@ -1537,13 +1586,13 @@ namespace ACE.Server.Entity
                         //Would basically function as a main reduction tool for coats and middle reduction tool but strictly for rare armor. Will increase amount of useable rare armor and also increase the value of the multi slot pieces
 
                         //Check if this is rare armor
-                        if(!target.ArmorLevel.HasValue || target.ArmorLevel.Value < 1 || !target.GetProperty(PropertyInt.RareId).HasValue)
+                        if (!target.ArmorLevel.HasValue || target.ArmorLevel.Value < 1 || !target.GetProperty(PropertyInt.RareId).HasValue)
                         {
                             playerMsg = "This gem can only be used on multi-slot rare armor";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
-                        }                        
+                        }
 
                         EquipMask targetValidLocations = target.ValidLocations ?? EquipMask.None;
 
@@ -1568,7 +1617,7 @@ namespace ACE.Server.Entity
                         }
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-
+                        AddMorphGemLog(target, MorphGemRareReduction);
                         break;
                     #endregion MorphGemRareReduction
 
@@ -1580,9 +1629,9 @@ namespace ACE.Server.Entity
 
                         EquipMask validLocations = target.ValidLocations ?? EquipMask.None;
                         int newLocRoll = ThreadSafeRandom.Next(0, 1);
-                        if(validLocations.HasFlag(EquipMask.NeckWear))
+                        if (validLocations.HasFlag(EquipMask.NeckWear))
                         {
-                            if(newLocRoll == 0)
+                            if (newLocRoll == 0)
                             {
                                 player.UpdateProperty(target, PropertyInt.ValidLocations, (int)EquipMask.WristWear);
                                 playerMsg = $"You have successfully used the {source.Name} to alter your {target.NameWithMaterial} to be wearable on your wrists!";
@@ -1595,7 +1644,7 @@ namespace ACE.Server.Entity
                                 player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             }
                         }
-                        else if(validLocations.HasFlag(EquipMask.FingerWearLeft) || validLocations.HasFlag(EquipMask.FingerWearRight))
+                        else if (validLocations.HasFlag(EquipMask.FingerWearLeft) || validLocations.HasFlag(EquipMask.FingerWearRight))
                         {
                             if (newLocRoll == 0)
                             {
@@ -1633,6 +1682,7 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        AddMorphGemLog(target, MorphGemJewelersSawblade);
                         break;
                     #endregion MorphGemJewelersSawblade
 
@@ -1640,7 +1690,7 @@ namespace ACE.Server.Entity
                     case MorphGemAddSlayer:
 
                         //Verify the target is a weapon or caster
-                        if(target as MeleeWeapon == null &&
+                        if (target as MeleeWeapon == null &&
                             !target.IsCaster &&
                             !target.IsBow &&
                             !target.IsThrownWeapon)
@@ -1652,7 +1702,7 @@ namespace ACE.Server.Entity
                         }
 
                         //Verify the target doesn't already have a slayer
-                        if(target.SlayerCreatureType != null &&
+                        if (target.SlayerCreatureType != null &&
                             target.SlayerCreatureType > 0 &&
                             target.SlayerDamageBonus > 1)
                         {
@@ -1667,16 +1717,16 @@ namespace ACE.Server.Entity
                         target.HandleTinkerLottoLog($"MorphGemSlayer");
                         playerMsg = $"You have successfully used the {source.Name} to add {target.SlayerCreatureType} Slayer to your {target.NameWithMaterial}!";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-
+                        AddMorphGemLog(target, MorphGemAddSlayer);
                         break;
                     #endregion MorphGemAddSlayer
 
-					#region MorphGemHematite
+                    #region MorphGemHematite
 
                     case MorphGemHematite:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1685,14 +1735,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Warrior's Vitality (2004) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(2004))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(2004))
                         {
                             playerMsg = "Your target item already has Warrior's Vitality on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1703,17 +1753,17 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(2004, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Warrior's Vitality";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemHematite);
                         break;
 
                     #endregion MorphGemHematite
 
-					#region MorphGemStrengthbeer
+                    #region MorphGemStrengthbeer
 
                     case MorphGemStrengthbeer:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1722,14 +1772,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Zongo's Fist (3864) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3864))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3864))
                         {
                             playerMsg = "Your target item already has Zongo's Fist on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1740,17 +1790,17 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(3864, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Zongo's Fist";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemStrengthbeer);
                         break;
 
                     #endregion MorphGemStrengthbeer
-					
-					#region MorphGemEndurancebeer
+
+                    #region MorphGemEndurancebeer
 
                     case MorphGemEndurancebeer:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1759,14 +1809,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Hunter's Hardiness (3863) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3863))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3863))
                         {
                             playerMsg = "Your target item already has Hunter's Hardiness on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1777,17 +1827,17 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(3863, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Hunter's Hardiness";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemEndurancebeer);
                         break;
 
                     #endregion MorphGemEndurancebeer
-			
-			        #region MorphGemCoordinationbeer
+
+                    #region MorphGemCoordinationbeer
 
                     case MorphGemCoordinationbeer:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1796,14 +1846,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Brighteyes' Favor (3533) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3533))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3533))
                         {
                             playerMsg = "Your target item already has Brighteyes' Favor on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1814,17 +1864,17 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(3533, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Brighteyes' Favor";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemCoordinationbeer);
                         break;
 
                     #endregion MorphGemCoordinationbeer
-			
-					#region MorphGemQuicknessbeer
+
+                    #region MorphGemQuicknessbeer
 
                     case MorphGemQuicknessbeer:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1833,14 +1883,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Bobo's Quickening (3531) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3531))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3531))
                         {
                             playerMsg = "Your target item already has Bobo's Quickening on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1851,17 +1901,17 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(3531, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Bobo's Quickening";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemQuicknessbeer);
                         break;
 
                     #endregion MorphGemQuicknessbeer
-			
-			        #region MorphGemFocusbeer
+
+                    #region MorphGemFocusbeer
 
                     case MorphGemFocusbeer:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1870,14 +1920,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Ketnan's Eye (3530) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3530))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3530))
                         {
                             playerMsg = "Your target item already has Ketnan's Eye on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1888,17 +1938,17 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(3530, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Ketnan's Eye";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemFocusbeer);
                         break;
 
                     #endregion MorphGemFocusbeer
-					
-					#region MorphGemWillpowerbeer
+
+                    #region MorphGemWillpowerbeer
 
                     case MorphGemWillpowerbeer:
 
                         //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if(!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
                         {
                             playerMsg = "The gem can only be applied to armor, clothing or jewelry";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1907,14 +1957,14 @@ namespace ACE.Server.Entity
                         }
 
                         //Check if the item already has Duke Raoul's Pride (3862) on it
-                        if(targetItemSpells == null || targetItemSpells.Count < 1)
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if(targetItemSpells != null && targetItemSpells.Contains(3862))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(3862))
                         {
                             playerMsg = "Your target item already has Duke Raoul's Pride on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -1925,11 +1975,361 @@ namespace ACE.Server.Entity
                         target.Biota.GetOrAddKnownSpell(3862, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Duke Raoul's Pride";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                 
+                        AddMorphGemLog(target, MorphGemWillpowerbeer);
                         break;
 
                     #endregion MorphGemWillpowerbeer
-					
+
+                    #region MorphGemHeroicMaster
+                    case MorphGemHeroicMaster:
+
+                        //Check if the target is jewelry
+                        if (target.ItemType != ItemType.Jewelry)
+                        {
+                            playerMsg = $"{source.Name} can only be applied to jewelry.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if this gem has been applied already
+                        if (GetMorphGemLogCount(target, MorphGemHeroicMaster) > 0)
+                        {
+                            playerMsg = $"{source.Name} can only be applied once and has already been applied to your target item.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Roll for how many spells to add
+                        int spellRoll = ThreadSafeRandom.Next(0, 100);
+                        int spellCount = 1;
+                        if (spellRoll > 66)
+                            spellCount = 2;
+
+                        if (spellRoll > 96)
+                            spellCount = 3;
+
+                        //Select random set of spells
+                        var spellList = HeroicMasterSpells.OrderBy(x => Guid.NewGuid()).Take(spellCount);
+
+                        //Add the spells
+                        var spellNames = new List<string>();
+                        foreach(var spellId in spellList)
+                        {
+                            target.Biota.GetOrAddKnownSpell(spellId, target.BiotaDatabaseLock, out _);
+                            spellNames.Add(new Spell(spellId).Name);
+                        }
+
+                        //Broadcast result                        
+                        playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully added the following spells\n{String.Join('\n', spellNames)}";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemHeroicMaster);
+                        break;
+                    #endregion MorphGemHeroicMaster
+
+                    #region MorphGemDotResist
+                    case MorphGemDotResist:
+
+                        //Check if the target is trinket
+                        if (!(target.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false))
+                        {
+                            playerMsg = $"{source.Name} can only be applied to cloaks.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if this gem has been applied already
+                        if (GetMorphGemLogCount(target, MorphGemDotResist) > 0)
+                        {
+                            playerMsg = $"{source.Name} can only be applied once and has already been applied to your target item.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Roll for amount of DoT resist to add
+                        var growthSpellId = ThreadSafeRandom.Next(5575, 5581);
+                        target.Biota.GetOrAddKnownSpell(growthSpellId, target.BiotaDatabaseLock, out _);
+                        string spellName = new Spell(growthSpellId).Name;
+
+                        //Broadcast result
+                        playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial}, enhancing its resistance to DoT with {spellName}";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+
+                        AddMorphGemLog(target, MorphGemDotResist);
+                        break;
+                    #endregion MorphGemDotResist                    
+
+                    #region MorphGemRandomCantrip
+                    case MorphGemRandomCantrip:
+
+                        //Check if the target is armor
+                        if (target.ArmorLevel < 1)
+                        {
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The {source.Name} can only be applied to armor", ChatMessageType.Broadcast));
+                            return;
+                        }
+
+                        //Check if the morph gem has been applied already
+                        if (GetMorphGemLogCount(target, MorphGemRandomCantrip) > 0)
+                        {
+                            playerMsg = $"{source.Name} can only be applied once and has already been applied to your target item.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the target has an cantrips already
+                        var itemLegendaries = target.LegendaryCantrips;
+                        if (itemLegendaries == null || itemLegendaries.Count < 1)
+                        {
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item has no legendary cantrips to randomize", ChatMessageType.Broadcast));
+                            return;
+                        }
+
+                        //Come up with a new random list of legendaries to apply
+                        List<int> newLegendaryList = new List<int>();
+                        foreach (var currLegendary in itemLegendaries)
+                        {
+                            while (true)
+                            {
+                                //For now this morph gem can only be applied to armor.
+                                //In the future if we expand to include non-armor (like jewelry),
+                                //will need to have logic to use different Roll methods (like JewelryCantrips.Roll())
+                                SpellId newCantrip = ArmorCantrips.Roll();
+                                List<SpellId> progression = SpellLevelProgression.GetSpellLevels(newCantrip);
+
+                                if (progression != null && progression.Count >= 4)
+                                {
+                                    int newLegendarySpellId = (int)progression[3];
+                                    if (newLegendarySpellId != currLegendary.Key && !newLegendaryList.Contains(newLegendarySpellId))
+                                    {
+                                        newLegendaryList.Add(newLegendarySpellId);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        //Give a small chance to remove an legendary
+                        if (newLegendaryList.Count > 1)
+                        {
+                            var legRandom = new Random();
+                            var legRandomRoll = legRandom.Next(0, int.MaxValue);
+                            if (legRandomRoll % 15 == 0 && newLegendaryList.Count > 0)
+                            {
+                                newLegendaryList.RemoveAt(0);
+                            }
+                        }
+
+                        //Give a small chance to add a legendary
+                        if (newLegendaryList.Count < 4)
+                        {
+                            var legRandom = new Random();
+                            var legRandomRoll = legRandom.Next(0, int.MaxValue);
+                            if (legRandomRoll % 10 == 0 && newLegendaryList.Count > 0)
+                            {
+                                while (true)
+                                {
+                                    SpellId newCantrip = ArmorCantrips.Roll();
+                                    List<SpellId> progression = SpellLevelProgression.GetSpellLevels(newCantrip);
+                                    if (progression != null && progression.Count >= 4)
+                                    {
+                                        int newLegendarySpellId = (int)progression[3];
+                                        if (!newLegendaryList.Contains(newLegendarySpellId))
+                                        {
+                                            newLegendaryList.Add(newLegendarySpellId);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //Give a small chance to add Leg Impen
+                        var impenRandom = new Random();
+                        bool impenSuccess = false;
+                        var impenRoll = impenRandom.Next(0, int.MaxValue);
+                        if (impenRoll % 7 == 0 && !newLegendaryList.Contains(6095))
+                        {
+                            if (newLegendaryList.Count < 4)
+                            {
+                                newLegendaryList.Add(6095);
+                            }
+                            else
+                            {
+                                newLegendaryList[0] = 6095;
+                            }
+
+                            impenSuccess = true;
+                        }
+
+                        //Remove all existing legendaries
+                        string removedSpellList = "";
+                        int removedLegNum = 0;
+                        foreach (var spell in itemLegendaries)
+                        {
+                            target.Biota.TryRemoveKnownSpell(spell.Key, target.BiotaDatabaseLock);
+                            //player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Removed spellId { spell.Key }", ChatMessageType.Broadcast));
+                            removedLegNum++;
+                            if (removedLegNum == 1)
+                            {
+                                removedSpellList = $"{new Spell(spell.Key, true).Name}";
+                            }
+                            else if (removedLegNum == itemLegendaries.Count)
+                            {
+                                removedSpellList += $" and {new Spell(spell.Key, true).Name}";
+                            }
+                            else
+                            {
+                                removedSpellList += $", {new Spell(spell.Key, true).Name}";
+                            }
+                            //removedSpellList += removedEpicNum < itemEpicList.Count ? $"{ new Spell(spell.Key, true).Name }, " : $"and { new Spell(spell.Key, true).Name }";
+                        }
+
+                        //Add new legendaries
+                        string addedSpellList = "";
+                        int addedLegNum = 0;
+                        foreach (var spellId in newLegendaryList)
+                        {
+                            target.Biota.GetOrAddKnownSpell(spellId, target.BiotaDatabaseLock, out _);
+                            //player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Added spellId { spellId }", ChatMessageType.Broadcast));
+                            addedLegNum++;
+                            if (addedLegNum == 1)
+                            {
+                                addedSpellList = $"{new Spell(spellId, true).Name}";
+                            }
+                            else if (addedLegNum == newLegendaryList.Count)
+                            {
+                                addedSpellList += $" and {new Spell(spellId, true).Name}";
+                            }
+                            else
+                            {
+                                addedSpellList += $", {new Spell(spellId, true).Name}";
+                            }
+                            //addedSpellList += addedEpicNum < itemEpicList.Count ? $"{ new Spell(spellId, true).Name }" : $"and { new Spell(spellId, true).Name }";
+                        }
+
+                        string impenMessage = impenSuccess ? "\n\nYour armor also somehow looks tougher, like it might have once been worn by some kind of tough guy and his tough guy essence sort of rubbed off on it and now it's more tough than it was before." : "";
+
+                        string randomizeResultMsg = $"Staring into the morph gem intently, your head swims at the chaos within it.  As you slump to the ground you scream in silence at the realization that eternity is boundless and upon you; upon us all.  You smash the morph gem hard against your armor and it explodes into everything and nothing.  Washed away are the legendary enchantments that once took hold.\n\nThe spells {removedSpellList} are no longer.\n\nIn their place, the spells {addedSpellList} have been cast upon your armor.{impenMessage}";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(randomizeResultMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemRandomCantrip);
+                        break;
+                    #endregion MorphGemRandomCantrip
+
+                    #region MorphGemBurden
+                    case MorphGemBurden:
+
+                        if (!target.EncumbranceVal.HasValue)
+                        {
+                            playerMsg = $"{source.Name} can only be applied to items that have an encumbrance.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item is already at min of -1000 burden
+                        if (target.EncumbranceVal.Value < -999)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} has already reached the minimum amount of encumbrance.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Roll amount to reduce burden
+                        int encumbranceRoll = ThreadSafeRandom.Next(10, 101);
+                        if (target.EncumbranceVal.Value - encumbranceRoll < -1000)
+                        {
+                            encumbranceRoll = 1000 + target.EncumbranceVal.Value;
+                        }
+
+                        target.EncumbranceVal = target.EncumbranceVal - encumbranceRoll;
+
+                        //Broadcast result
+                        playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully reduced its encumbrance by {encumbranceRoll}";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemBurden);
+                        break;
+                    #endregion MorphGemBurden
+
+                    #region MorphGemRareDmgBoost
+                    case MorphGemRareDmgBoost:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = $"The {source.Name} can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Rare Damage Boost V (5202) on it
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if (targetItemSpells != null && targetItemSpells.Contains(5202))
+                        {
+                            playerMsg = "Your target item already has Rare Damage Boost V on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Broadcast result
+                        target.Biota.GetOrAddKnownSpell(5202, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully added the spell Rare Damage Boost V";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));                        
+                        AddMorphGemLog(target, MorphGemRareDmgBoost);
+                        break;
+                    #endregion MorphGemRareDmgBoost
+
+                    #region MorphGemRareDmgReduction
+                    case MorphGemRareDmgReduction:
+
+                        //Check if the item is undies, armor or jewelry; everything else is not allowed
+                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        {
+                            playerMsg = $"The {source.Name} can only be applied to armor, clothing or jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Check if the item already has Rare Damage Reduction V (5197) on it
+                        if (targetItemSpells == null || targetItemSpells.Count < 1)
+                        {
+                            playerMsg = "The gem can only be applied to magical items";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        else if (targetItemSpells != null && targetItemSpells.Contains(5197))
+                        {
+                            playerMsg = "Your target item already has Rare Damage Reduction V on it, you cannot add it twice";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Broadcast result
+                        target.Biota.GetOrAddKnownSpell(5197, target.BiotaDatabaseLock, out _);
+                        playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully added the spell Rare Damage Reduction V";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemRareDmgReduction);
+                        break;
+                    #endregion MorphGemRareDmgReduction
+
                     default:
                         player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                         return;
@@ -2213,10 +2613,37 @@ namespace ACE.Server.Entity
 				case MorphGemQuicknessbeer:
 				case MorphGemFocusbeer:
 				case MorphGemWillpowerbeer:
+                case MorphGemHeroicMaster:
+                case MorphGemDotResist:
+                case MorphGemRandomSet:
+                case MorphGemRandomCantrip:
+                case MorphGemBurden:
+                case MorphGemRareDmgBoost:
+                case MorphGemRareDmgReduction:
                     return true;
                 default:
                     return false;
             }
+        }
+
+        public static void AddMorphGemLog(WorldObject target, uint gemWeenieId)
+        {
+            if (!string.IsNullOrEmpty(target.MorphGemLog))
+                target.MorphGemLog += ",";
+
+            target.MorphGemLog += gemWeenieId;
+        }
+
+        public static int GetMorphGemLogCount(WorldObject target, uint gemWeenieId)
+        {
+            if (string.IsNullOrEmpty(target.MorphGemLog))
+                return 0;
+
+            var logEntries = target.MorphGemLog.Split(',');
+
+            var matchingLogEntries = logEntries.Where(x => x.Equals(gemWeenieId.ToString()));
+
+            return matchingLogEntries?.Count() ?? 0;
         }
     }
 }
