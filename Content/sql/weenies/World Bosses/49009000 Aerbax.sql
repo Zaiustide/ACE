@@ -16,7 +16,7 @@ VALUES (49009000,   1,         16) /* ItemType - Creature */
 	 , (49009000,  81,          50) /* MaxGeneratedObjects */
      , (49009000,  82,          50) /* InitGeneratedObjects */
      , (49009000,  40,          1) /* CombatMode - NonCombat */
-     , (49009000,  68,         41) /* TargetingTactic - Nearest */
+     , (49009000,  68,          1) /* TargetingTactic - Random */
      , (49009000,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (49009000, 101,        183) /* AiAllowedCombatStyle - Unarmed, OneHanded, OneHandedAndShield, Bow, Crossbow, ThrownWeapon */
      , (49009000, 133,          2) /* ShowableOnRadar - ShowMovement */

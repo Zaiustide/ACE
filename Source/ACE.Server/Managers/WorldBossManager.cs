@@ -79,8 +79,8 @@ namespace ACE.Server.Managers
                 //For indoor bosses make them non-attackable if more than one allegiance is on the landblock                
                 if (activeWorldBoss.IndoorLocation != null)
                 {
-                    var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, false);
-                    var playersOnLandblock = bossLandblock.GetCurrentLandblockPlayers();
+                    var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, true);
+                    var playersOnLandblock = bossLandblock?.GetCurrentLandblockPlayers() ?? new List<Player>();
                     uint? firstAllegId = null;
                     bool hasMultipleAllegiances = false;
                     bool isBossAttackable = activeWorldBoss.BossWorldObject.GetProperty(PropertyBool.Attackable) ?? true;
@@ -94,7 +94,7 @@ namespace ACE.Server.Managers
                         }
                         else
                         {
-                            firstAllegId = player.Allegiance.MonarchId;
+                            firstAllegId = player?.Allegiance.MonarchId ?? 0;
                         }                        
                     }
 
