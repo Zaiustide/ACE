@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Security.Policy;
 using ACE.Common;
 using ACE.Database.Models.Auth;
@@ -2242,8 +2243,36 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        //Check if the morph gem has been applied 3 times already
+                        if (GetMorphGemLogCount(target, MorphGemBurden) > 2)
+                        {
+                            playerMsg = $"{source.Name} can only be applied to an item three times and your target item has reached this maximum.";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
                         //Roll amount to reduce burden
-                        int encumbranceRoll = ThreadSafeRandom.Next(10, 101);
+                        int encumbranceRoll = 0;
+                        
+                        if (target.EncumbranceVal >= 1000)
+                        {
+                            encumbranceRoll = ThreadSafeRandom.Next(100, 650);
+                        }
+                        else if (target.EncumbranceVal >= 500)
+                        {
+                            encumbranceRoll = ThreadSafeRandom.Next(75, 420);
+                        }
+                        else if (target.EncumbranceVal > 0)
+                        {
+                            encumbranceRoll = ThreadSafeRandom.Next(50, 333);
+                        }
+                        else
+                        {
+                            encumbranceRoll = ThreadSafeRandom.Next(10, 333);
+                        }
+
+                        //Enforce min of -1000
                         if (target.EncumbranceVal.Value - encumbranceRoll < -1000)
                         {
                             encumbranceRoll = 1000 + target.EncumbranceVal.Value;
