@@ -177,13 +177,13 @@ namespace ACE.Server.Entity.WorldBoss
 
                     //Aerbax in Lesser Battle Dungeon
                     var aerbax = new WorldBoss();
-                    aerbax.WeenieID = 490090;
+                    aerbax.WeenieID = 49009000;
                     aerbax.Name = "Aerbax";
                     aerbax.SpawnMsg = "Aerbax has returned to the world, eager to sow chaos and terror. Those who seek death need but seek the Idol of the Progenitor, for death will be promptly delivered upon those who enter.";
                     aerbax.SpawnLocations = townSpawnLocations;
                     aerbax.IndoorLocation = new Position(0x65430119, 67.597794f, -59.671207f, 0.005000f, 0f, 0f, -0.966396f, -0.257058f); //0x65430119 [67.597794 -59.671207 0.005000] -0.257058 0.000000 0.000000 -0.966396
-                    aerbax.StatueWeenieId = 490091;
-                    _worldBossMap.Add(490090, aerbax);
+                    aerbax.StatueWeenieId = 49009100;
+                    _worldBossMap.Add(49009000, aerbax);
                 }
 
                 return _worldBossMap;
