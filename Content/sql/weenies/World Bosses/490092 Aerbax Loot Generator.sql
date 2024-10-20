@@ -28,6 +28,7 @@ VALUES (490092,   1, 0x0200026B) /* Setup */
      , (490092,   8, 0x06001066) /* Icon */;
 
 INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
-VALUES (490092, -1, 510000, 0, 14, 14, 1, 2, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate A Box (x32 up to max of 32) - Regenerate upon Destruction - Location to (re)Generate: Scatter */
-, (490092, -1, 480608, 0, 14, 14, 1, 2, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Darkbeat Key (51578) (x9 up to max of 9) - Regenerate upon Destruction - Location to (re)Generate: Scatter */
+VALUES (490092, -1, 510000, 0, 14, 14, 1, 2, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate A Box (x14 up to max of 14) - Regenerate upon Destruction - Location to (re)Generate: Scatter */
+     , (490092, -1, 480608, 0, 14, 14, 1, 2, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Darkbeat Key (51578) (x14 up to max of 14) - Regenerate upon Destruction - Location to (re)Generate: Scatter */
+	 , (490092, -1, 490364, 0, 5, 5, 1, 2, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate 490364 Hera''s Vault Key  (x5 up to max of 5)- Regenerate upon Destruction - Location to (re)Generate: Scatter */
 ;
