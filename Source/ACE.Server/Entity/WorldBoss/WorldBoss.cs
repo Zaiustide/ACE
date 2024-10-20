@@ -222,9 +222,19 @@ namespace ACE.Server.Entity.WorldBoss
 
         public static WorldBoss GetRandomWorldBoss()
         {
-            var i = ThreadSafeRandom.Next(0, WorldBosses.WorldBossMap.Count - 1);
-            return WorldBosses.WorldBossMap.Values.ElementAt(i);
-        }        
+            IEnumerable<WorldBoss> bossList = new List<WorldBoss>();
+            var isIndoor = ThreadSafeRandom.Next(0, 1) == 1;            
+            if(isIndoor)
+            {
+                bossList = WorldBosses.WorldBossMap.Values.Where(x => x.StatueWeenieId.HasValue);
+            }
+            else
+            {
+                bossList = WorldBosses.WorldBossMap.Values.Where(x => !x.StatueWeenieId.HasValue);
+            }
+            var i = ThreadSafeRandom.Next(0, Math.Max((bossList?.Count() ?? 0) - 1, 0) );
+            return bossList?.ElementAt(i);
+        }
     }
 
     public class WorldBoss
