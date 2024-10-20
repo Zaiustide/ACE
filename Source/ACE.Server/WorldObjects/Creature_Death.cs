@@ -1274,6 +1274,12 @@ namespace ACE.Server.WorldObjects
                 var globalMsg = $"{deadBoss.Name} has been slain by {(killer == null ? "NULL" : killer.Name)} and the land is once again safe from {deadBoss.Name}'s terror... for now";
                 PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalMsg, ChatMessageType.Broadcast));
 
+                //If this is an indoor boss with a statue, destroy the statue
+                if (deadBoss.StatueWorldObject != null)
+                {
+                    deadBoss.StatueWorldObject.TimeToRot = 0;
+                }
+
                 //Send global to webhook
                 try
                 {

@@ -1,6 +1,7 @@
 using ACE.Common;
 using ACE.Entity;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.WorldObjects;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -173,6 +174,16 @@ namespace ACE.Server.Entity.WorldBoss
                     ok.SpawnMsg = "A sudden acidic stench fills the air, presaging the emergence of a terrible beast. A deluge of unmistakably insectoid shrieks and rattles pours fourth; an acrid cacophony of pestilence and a challenge to the temerity of man. From deep within the caustic land of the Olthoi, a King has risen. Go forth to steal glory from the clutches of certain death.";
                     ok.SpawnLocations = townSpawnLocations;                    
                     _worldBossMap.Add(490010, ok);
+
+                    //Aerbax in Lesser Battle Dungeon
+                    var aerbax = new WorldBoss();
+                    aerbax.WeenieID = 490090;
+                    aerbax.Name = "Aerbax";
+                    aerbax.SpawnMsg = "Aerbax has returned to the world, eager to sow chaos and terror. Those who seek death need but seek the Idol of the Progenitor, for death will be promptly delivered upon those who enter.";
+                    aerbax.SpawnLocations = townSpawnLocations;
+                    aerbax.IndoorLocation = new Position(0x65430119, 67.597794f, -59.671207f, 0.005000f, 0f, 0f, -0.966396f, -0.257058f); //0x65430119 [67.597794 -59.671207 0.005000] -0.257058 0.000000 0.000000 -0.966396
+                    aerbax.StatueWeenieId = 490091;
+                    _worldBossMap.Add(490090, aerbax);
                 }
 
                 return _worldBossMap;
@@ -222,9 +233,17 @@ namespace ACE.Server.Entity.WorldBoss
 
         public string Name { get; set; }
 
+        public WorldObject BossWorldObject { get; set; }
+
         public string SpawnMsg { get; set; }
 
         public Position Location { get; set; }
+
+        public Position IndoorLocation { get; set; }
+
+        public uint? StatueWeenieId { get; set; }
+
+        public WorldObject StatueWorldObject { get; set; }
 
         public Dictionary<uint, Position> SpawnLocations { get; set; }
 

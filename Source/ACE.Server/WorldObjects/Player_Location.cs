@@ -719,6 +719,13 @@ namespace ACE.Server.WorldObjects
                     {
                         this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  {playerAllegName} already has {zergArea.MaxPlayersPerAllegiance} players in this area, which is the maximum allowed per allegiance.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
 
+                        //For Aerbax world boss, if you got into the dungeon but got kicked due to zerg limit
+                        //remove quest stamp for EnterBattleDungeon
+                        if(_newPosition.Landblock == 0x6543)
+                        {
+                            QuestManager.Erase("EnterBattleDungeon");
+                        }
+
                         Teleport(Sanctuary);
                         return;
                     }
@@ -924,7 +931,8 @@ namespace ACE.Server.WorldObjects
             0xE9F1,     //Town Control Conflict Area - Shoushi - Hidden Forest
             0xE8F1,     //Town Control Conflict Area - Shoushi - Hidden Forest
             0x0026,     //Drudge Dungeon
-            0x003F      //Dragon Cave
+            0x003F,     //Dragon Cave
+            0x6543      //Aerbax - Lesser Battle Dungeon
         };
 
         /// <summary>

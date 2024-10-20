@@ -60,6 +60,12 @@ namespace ACE.Server.Entity
                     ancientTemple.MaxPlayersPerAllegiance = 9;
                     ancientTemple.AreaLandblockIds = new uint[] { 0x0174 };
                     _zergControlLandblocksMap.Add(0x0174, ancientTemple);
+
+                    //Aerbax World Boss
+                    var aerbax = new ZergControlArea();
+                    aerbax.MaxPlayersPerAllegiance = 7;
+                    aerbax.AreaLandblockIds = new uint[] { 0x6543 };
+                    _zergControlLandblocksMap.Add(0x6543, aerbax);
                 }
 
                 return _zergControlLandblocksMap;

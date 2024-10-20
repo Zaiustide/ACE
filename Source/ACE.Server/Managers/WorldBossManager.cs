@@ -31,6 +31,7 @@ using ACE.Server.Entity;
 using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Factories;
 using ACE.Server.Network.Handlers;
+using ACE.Database.Models.TownControl;
 
 namespace ACE.Server.Managers
 {
@@ -49,7 +50,7 @@ namespace ACE.Server.Managers
         
         public static void Tick()
         {
-            if (DateTime.Now.AddSeconds(-300) < LastTickDateTime)
+            if (DateTime.Now.AddSeconds(-5) < LastTickDateTime)
                 return;
 
             LastTickDateTime = DateTime.Now;
@@ -70,6 +71,46 @@ namespace ACE.Server.Managers
             {
                 SpawnNewWorldBoss();                
                 nextBossSpawnTime = RollNextSpawnTime(6, 18);
+                return;
+            }
+            
+            if(activeWorldBoss != null && activeWorldBoss.BossWorldObject != null)
+            {
+                //For indoor bosses make them non-attackable if more than one allegiance is on the landblock                
+                if (activeWorldBoss.IndoorLocation != null)
+                {
+                    var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, false);
+                    var playersOnLandblock = bossLandblock.GetCurrentLandblockPlayers();
+                    uint? firstAllegId = null;
+                    bool hasMultipleAllegiances = false;
+                    bool isBossAttackable = activeWorldBoss.BossWorldObject.GetProperty(PropertyBool.Attackable) ?? true;
+
+                    foreach (var player in playersOnLandblock)
+                    {
+                        if(firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance.MonarchId ?? 0))
+                        {
+                            hasMultipleAllegiances = true;
+                            break;
+                        }
+                        else
+                        {
+                            firstAllegId = player.Allegiance.MonarchId;
+                        }                        
+                    }
+
+                    if(hasMultipleAllegiances && isBossAttackable)
+                    {
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle, driving {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Attackable, false);
+                        activeWorldBoss.BossWorldObject.EnqueueBroadcastPhysicsState();
+                    }
+                    else if(!hasMultipleAllegiances && !isBossAttackable)
+                    {
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} has become attackable", ChatMessageType.Broadcast));
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Attackable, true);
+                        activeWorldBoss.BossWorldObject.EnqueueBroadcastPhysicsState();
+                    }
+                }
             }
         }
 
@@ -85,22 +126,55 @@ namespace ACE.Server.Managers
             //Get a random boss to spawn, and get a random spawn location
             var boss = WorldBosses.GetRandomWorldBoss();
             var spawnLoc = boss.RollRandomSpawnLocation();
-            boss.Location = spawnLoc.Value;
-
-            //Perma load the landblock for the spawn location
-            var landblockID = new LandblockId(spawnLoc.Key << 16);
-            var landblock = LandblockManager.GetLandblock(landblockID, false, true);
+            boss.Location = spawnLoc.Value;            
 
             //Spawn the boss
-            var bossWeenie = DatabaseManager.World.GetCachedWeenie(boss.WeenieID);
+            var bossWeenie = DatabaseManager.World.GetCachedWeenie(boss.WeenieID);            
+            if (boss.StatueWeenieId.HasValue && boss.IndoorLocation != null)
+            {
+                var statueWeenie = DatabaseManager.World.GetCachedWeenie(boss.StatueWeenieId.Value);
 
-            var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
-            bossWorldObj.Location = spawnLoc.Value;
-            bossWorldObj.CurrentLandblock = landblock;
-            bossWorldObj.EnterWorld();
+                //Perma load the landblock for the statue location
+                var statueLandblockID = new LandblockId(spawnLoc.Key << 16);
+                var statueLandblock = LandblockManager.GetLandblock(statueLandblockID, false, true);
 
-            //Add landblock as whitelisted for ratings
-            Whitelist.AddLandblockToRatingsWhitelist(spawnLoc.Key);
+                //Create statue in world
+                var statueWorldObj = WorldObjectFactory.CreateNewWorldObject(statueWeenie);
+                statueWorldObj.Location = spawnLoc.Value;
+                statueWorldObj.CurrentLandblock = statueLandblock;
+                statueWorldObj.EnterWorld();
+
+                boss.StatueWorldObject = statueWorldObj;
+
+                //Perma load the landblock for the boss location
+                var bossLandblockID = new LandblockId(boss.IndoorLocation.LandblockId.Raw << 16);
+                var bossLandblock = LandblockManager.GetLandblock(bossLandblockID, false, true);
+
+                //Create boss in world
+                var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
+                bossWorldObj.Location = boss.IndoorLocation;
+                bossWorldObj.CurrentLandblock = bossLandblock;
+                bossWorldObj.EnterWorld();
+                boss.BossWorldObject = bossWorldObj;
+
+                //Add indoor landblock as whitelisted for ratings
+                Whitelist.AddLandblockToRatingsWhitelist(boss.IndoorLocation.LandblockId.Raw);
+            }
+            else
+            {
+                //Perma load the landblock for the spawn location
+                var landblockID = new LandblockId(spawnLoc.Key << 16);
+                var landblock = LandblockManager.GetLandblock(landblockID, false, true);
+
+                var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
+                bossWorldObj.Location = spawnLoc.Value;
+                bossWorldObj.CurrentLandblock = landblock;
+                bossWorldObj.EnterWorld();
+                boss.BossWorldObject = bossWorldObj;
+
+                //Add landblock as whitelisted for ratings
+                Whitelist.AddLandblockToRatingsWhitelist(spawnLoc.Key);
+            }
 
             //Send global message
             PlayerManager.BroadcastToAll(new GameMessageSystemChat(boss.SpawnMsg, ChatMessageType.Broadcast));
