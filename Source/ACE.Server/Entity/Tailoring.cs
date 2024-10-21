@@ -2035,7 +2035,7 @@ namespace ACE.Server.Entity
                         //Check if the target is trinket
                         if (!(target.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false))
                         {
-                            playerMsg = $"{source.Name} can only be applied to cloaks.";
+                            playerMsg = $"{source.Name} can only be applied to trinkets.";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
