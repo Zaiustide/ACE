@@ -76,39 +76,37 @@ namespace ACE.Server.Managers
             
             if(activeWorldBoss != null && activeWorldBoss.BossWorldObject != null)
             {
-                //For indoor bosses make them non-attackable if more than one allegiance is on the landblock                
+                //For indoor bosses make them take zero dmg if more than one allegiance is on the landblock                
                 if (activeWorldBoss.IndoorLocation != null)
                 {
                     var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, true);
                     var playersOnLandblock = bossLandblock?.GetCurrentLandblockPlayers() ?? new List<Player>();
                     uint? firstAllegId = null;
                     bool hasMultipleAllegiances = false;
-                    bool isBossAttackable = activeWorldBoss.BossWorldObject.GetProperty(PropertyBool.Attackable) ?? true;
+                    bool isBossInvincible = activeWorldBoss.BossWorldObject.GetProperty(PropertyBool.Invincible) ?? true;
 
                     foreach (var player in playersOnLandblock)
                     {
-                        if(firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance.MonarchId ?? 0))
+                        if(firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance?.MonarchId ?? 0))
                         {
                             hasMultipleAllegiances = true;
                             break;
                         }
                         else
                         {
-                            firstAllegId = player?.Allegiance.MonarchId ?? 0;
+                            firstAllegId = player?.Allegiance?.MonarchId ?? player?.Character.Id ?? 0;
                         }                        
                     }
 
-                    if(hasMultipleAllegiances && isBossAttackable)
+                    if(hasMultipleAllegiances && isBossInvincible)
                     {
                         bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle, driving {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
-                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Attackable, false);
-                        activeWorldBoss.BossWorldObject.EnqueueBroadcastPhysicsState();
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
                     }
-                    else if(!hasMultipleAllegiances && !isBossAttackable)
+                    else if(!hasMultipleAllegiances && !isBossInvincible)
                     {
                         bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} has become attackable", ChatMessageType.Broadcast));
-                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Attackable, true);
-                        activeWorldBoss.BossWorldObject.EnqueueBroadcastPhysicsState();
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
                     }
                 }
             }

@@ -581,8 +581,7 @@ namespace ACE.Server.Entity
 
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
-        {                        
-
+        {
             try
             {
                 //Only allow loot gen items to be morphed, except for gems that are allowed to be applied to quest / rare items
@@ -2299,7 +2298,7 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        //Check if the item already has Rare Damage Boost V (5202) on it
+                        //Check if the item already has Rare Damage Boost V (5978) on it
                         if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
@@ -2307,7 +2306,7 @@ namespace ACE.Server.Entity
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(5202))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(5978))
                         {
                             playerMsg = "Your target item already has Rare Damage Boost V on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -2316,7 +2315,7 @@ namespace ACE.Server.Entity
                         }
 
                         //Broadcast result
-                        target.Biota.GetOrAddKnownSpell(5202, target.BiotaDatabaseLock, out _);
+                        target.Biota.GetOrAddKnownSpell(5978, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully added the spell Rare Damage Boost V";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));                        
                         AddMorphGemLog(target, MorphGemRareDmgBoost);
@@ -2335,7 +2334,7 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        //Check if the item already has Rare Damage Reduction V (5197) on it
+                        //Check if the item already has Rare Damage Reduction V (5192) on it
                         if (targetItemSpells == null || targetItemSpells.Count < 1)
                         {
                             playerMsg = "The gem can only be applied to magical items";
@@ -2343,7 +2342,7 @@ namespace ACE.Server.Entity
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(5197))
+                        else if (targetItemSpells != null && targetItemSpells.Contains(5192))
                         {
                             playerMsg = "Your target item already has Rare Damage Reduction V on it, you cannot add it twice";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -2352,7 +2351,7 @@ namespace ACE.Server.Entity
                         }
 
                         //Broadcast result
-                        target.Biota.GetOrAddKnownSpell(5197, target.BiotaDatabaseLock, out _);
+                        target.Biota.GetOrAddKnownSpell(5192, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully added the spell Rare Damage Reduction V";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemRareDmgReduction);

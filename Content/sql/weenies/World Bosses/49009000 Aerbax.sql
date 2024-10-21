@@ -21,8 +21,8 @@ VALUES (49009000,   1,         16) /* ItemType - Creature */
      , (49009000, 101,        183) /* AiAllowedCombatStyle - Unarmed, OneHanded, OneHandedAndShield, Bow, Crossbow, ThrownWeapon */
      , (49009000, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (49009000, 146,      400000000) /* XpOverride */
-	 , (49009000, 307,         18) /* DamageRating */
-     , (49009000, 308,         23) /* DamageResistRating */
+	 , (49009000, 307,         50) /* DamageRating */
+     , (49009000, 308,         50) /* DamageResistRating */
 	 , (49009000, 386,         10) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -69,8 +69,8 @@ VALUES (49009000,   1,     1.5) /* HeartbeatInterval */
      , (49009000,  80,       1) /* AiUseMagicDelay */
      , (49009000, 104,      50) /* ObviousRadarRange */
      , (49009000, 122,       0) /* AiAcquireHealth */
-	 , (49009000, 166,      85) /* ResistNether */
-     , (49009000, 125,      85) /* ResistHealthDrain */
+	 , (49009000, 166,      1) /* ResistNether */
+     , (49009000, 125,      1) /* ResistHealthDrain */
      , (49009000, 127,       2) /* AiCounteractEnchantment */
 	 , (49009000,  43,      20) /* GeneratorRadius */
 	 , (49009000, 151,    0.80) /* IgnoreShield */
@@ -109,7 +109,7 @@ VALUES (49009000,  6, 0, 3, 0,   200, 0, 608.0722585280382) /* MeleeDefense     
      , (49009000, 24, 0, 3, 0, 200, 0, 608.0722585280382) /* Run                 Specialized */
      , (49009000, 31, 0, 3, 0, 900, 0, 608.0722585280382) /* CreatureEnchantment Specialized */
      , (49009000, 33, 0, 3, 0, 900, 0, 608.0722585280382) /* LifeMagic           Specialized */
-     , (49009000, 34, 0, 3, 0, 900, 0, 608.0722585280382) /* WarMagic            Specialized */;
+     , (49009000, 34, 0, 3, 0, 1200, 0, 608.0722585280382) /* WarMagic            Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
 VALUES (49009000,  0,  4,  0,    0,  900, 700, 700, 700, 700, 700, 700, 700,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head */
