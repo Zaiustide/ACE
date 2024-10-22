@@ -87,6 +87,9 @@ namespace ACE.Server.Managers
 
                     foreach (var player in playersOnLandblock)
                     {
+                        if (player.IsAdmin)
+                            continue;
+
                         if(firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance?.MonarchId ?? 0))
                         {
                             hasMultipleAllegiances = true;
@@ -100,12 +103,12 @@ namespace ACE.Server.Managers
 
                     if(hasMultipleAllegiances && !isBossInvincible)
                     {
-                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle, driving {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle! This pitiful infighting amongst humans has driven {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
                         activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
                     }
                     else if(!hasMultipleAllegiances && isBossInvincible)
                     {
-                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} has become attackable", ChatMessageType.Broadcast));
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"The pitiful display of humans struggling against themselves seems to have ended now that only one allegiance remains.  {activeWorldBoss.Name} has become vulnerable to human attacks once again!", ChatMessageType.Broadcast));
                         activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
                     }
                 }
@@ -119,10 +122,12 @@ namespace ACE.Server.Managers
             return DateTime.Now.AddHours(hr).AddMinutes(min);
         }
 
-        public static void SpawnNewWorldBoss()
+        public static void SpawnNewWorldBoss(WorldBoss boss = null)
         {
             //Get a random boss to spawn, and get a random spawn location
-            var boss = WorldBosses.GetRandomWorldBoss();
+            if(boss == null)
+                boss = WorldBosses.GetRandomWorldBoss();
+
             var spawnLoc = boss.RollRandomSpawnLocation();
             boss.Location = spawnLoc.Value;            
 

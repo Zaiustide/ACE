@@ -35,6 +35,7 @@ using ACE.Server.Network.Handlers;
 using System.Text;
 using ACE.Database.Models.Log;
 using Microsoft.Extensions.Logging;
+using ACE.Server.Entity.WorldBoss;
 
 namespace ACE.Server.Command.Handlers
 {
@@ -5108,9 +5109,24 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("worldbossspawn", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
             "Displays debug info about world bosses")]
         public static void HandleWorldBossSpawn(Session session, params string[] parameters)
-        {
+        {            
+            uint bossWeenieId = 0;
+
+            if (parameters.Count() == 1)
+            {
+                uint.TryParse(parameters[0].ToLower(), out bossWeenieId);
+            }
+
             CommandHandlerHelper.WriteOutputInfo(session, "Spawning new world boss");
-            WorldBossManager.SpawnNewWorldBoss();
+
+            if (WorldBosses.IsWorldBoss(bossWeenieId))
+            {
+                WorldBossManager.SpawnNewWorldBoss(WorldBosses.WorldBossMap[bossWeenieId]);
+            }
+            else
+            {
+                WorldBossManager.SpawnNewWorldBoss();
+            }
             var boss = WorldBossManager.GetActiveWorldBoss();
             CommandHandlerHelper.WriteOutputInfo(session, $"{boss.Name} spawned at {boss.Location}");
 
