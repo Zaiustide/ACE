@@ -170,16 +170,14 @@ namespace ACE.Server.WorldObjects
             var player = this as Player;
             var targetPlayer = target as Player;
 
-            if (targetPlayer != null)
+            if (target.Invincible)
             {
-                if (targetPlayer.Invincible)
-                    resisted = true;
-
-                if (targetPlayer.UnderLifestoneProtection)
-                {
-                    targetPlayer.HandleLifestoneProtection();
-                    resisted = true;
-                }
+                resisted = true;
+            }
+            else if (targetPlayer?.UnderLifestoneProtection ?? false)
+            {
+                targetPlayer.HandleLifestoneProtection();
+                resisted = true;                
             }
 
             if (caster == target)
