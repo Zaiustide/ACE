@@ -101,12 +101,12 @@ namespace ACE.Server.Managers
                     if(hasMultipleAllegiances && isBossInvincible)
                     {
                         bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle, driving {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
-                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
                     }
                     else if(!hasMultipleAllegiances && !isBossInvincible)
                     {
                         bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} has become attackable", ChatMessageType.Broadcast));
-                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
                     }
                 }
             }
