@@ -21,8 +21,8 @@ VALUES (49009000,   1,         16) /* ItemType - Creature */
      , (49009000, 101,        183) /* AiAllowedCombatStyle - Unarmed, OneHanded, OneHandedAndShield, Bow, Crossbow, ThrownWeapon */
      , (49009000, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (49009000, 146,      400000000) /* XpOverride */
-	 , (49009000, 307,         50) /* DamageRating */
-     , (49009000, 308,         50) /* DamageResistRating */
+	 , (49009000, 307,         1) /* DamageRating */
+     , (49009000, 308,         1) /* DamageResistRating */
 	 , (49009000, 386,         10) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -92,11 +92,11 @@ VALUES (49009000,   1, 900, 0, 0) /* Strength */
      , (49009000,   2, 900, 0, 0) /* Endurance */
      , (49009000,   3, 900, 0, 0) /* Quickness */
      , (49009000,   4, 900, 0, 0) /* Coordination */
-     , (49009000,   5, 900, 0, 0) /* Focus */
-     , (49009000,   6, 900, 0, 0) /* Self */;
+     , (49009000,   5, 1200, 0, 0) /* Focus */
+     , (49009000,   6, 1200, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (49009000,   1,  1000000, 0, 0, 200000) /* MaxHealth */
+VALUES (49009000,   1,  84252, 0, 0, 84252) /* MaxHealth */
      , (49009000,   3,  1000000, 0, 0,  1000000) /* MaxStamina */
      , (49009000,   5,  1000000, 0, 0, 1000000) /* MaxMana */;
 
