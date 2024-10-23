@@ -246,6 +246,10 @@ namespace ACE.Server.WorldObjects
                     {
                         msg = $"A brave adventurer has enjoined {this.Name} in battle! All those who seek glory and fortune must head to {coordsDisplay}. But beware; while some may choose to assist in defeating {this.Name}, others will choose a darker path of greed and spilt blood in pursuit of self enrichment.";
                     }
+                    if(this.Invincible)
+                    {
+                        msg += $"\n{this.Name} is currently feeding off of human conflict and has become invincible. The humans must finish their conflict with only one allegiance remaining.";
+                    }
                     PlayerManager.BroadcastToAll(new GameMessageSystemChat(msg, ChatMessageType.Broadcast));
 
                     if (this.WorldBoss_LastPeriodicGlobal < DateTime.Now.AddMinutes(-10))

@@ -96,7 +96,10 @@ namespace ACE.Server.Entity
                 4906,    //Apprentice Challenger's Rejuvenation
                 6333,    //Gauntlet Damage Reduction II
                 6335,    //Gauntlet Critical Damage Reduction II
-                6336    //Gauntlet Healing Boost I
+                6340,    //Gauntlet Vitality III
+                6337,    //Gauntlet Healing Boost II
+                6331,    //Gauntlet Damage Boost II
+                6329,    //Gauntlet Critical Damage Boost II
             };
 
         // Some WCIDs have Overlay Icons that need to be removed (e.g. Olthoi Alduressa Gauntlets or Boots)
