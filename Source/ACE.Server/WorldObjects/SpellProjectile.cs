@@ -671,6 +671,16 @@ namespace ACE.Server.WorldObjects
                         dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_war_cb_crit").Item;
                     }
 
+                    if(weapon.HasImbuedEffect(ImbuedEffectType.CriticalStrike))
+                    {
+                        dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_war_cs_dmg").Item;
+
+                        if(criticalHit)
+                        {
+                            dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_war_cs_crit").Item;
+                        }
+                    }
+
                     finalDamage = finalDamage * dmgMod;
                 }
                 else if (Spell.DamageType == DamageType.Nether)

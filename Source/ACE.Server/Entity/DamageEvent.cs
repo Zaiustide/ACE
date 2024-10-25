@@ -457,6 +457,10 @@ namespace ACE.Server.Entity
                                 break;
                             case Skill.LightWeapons:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_lw").Item;
+                                if (Weapon.W_AttackType == AttackType.TripleStrike)
+                                {
+                                    config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_triplestrike").Item;
+                                }                                                                
                                 break;
                             case Skill.HeavyWeapons:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_hw").Item;
