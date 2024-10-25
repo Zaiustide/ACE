@@ -459,7 +459,7 @@ namespace ACE.Server.Entity
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_lw").Item;
                                 if (Weapon.W_AttackType == AttackType.TripleStrike)
                                 {
-                                    config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_triplestrike").Item;
+                                    config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_triplestrike").Item;                                    
                                 }                                                                
                                 break;
                             case Skill.HeavyWeapons:
@@ -531,6 +531,13 @@ namespace ACE.Server.Entity
                                     break;
                                 case Skill.LightWeapons:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_cb").Item;
+                                    if(Weapon.W_AttackType == AttackType.TripleStrike)
+                                    {
+                                        if (IsCritical)
+                                        {
+                                            config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_cb_crit_triplestrike").Item; 
+                                        }
+                                    }
                                     break;
                                 case Skill.HeavyWeapons:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_cb").Item;

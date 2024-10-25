@@ -735,6 +735,7 @@ namespace ACE.Server.Managers
                 ("pvp_dmg_mod_lw_hollow", new Property<double>(1.0, "Scales the amount of damage for LW Hollow.")),
                 ("pvp_dmg_mod_lw_phantom", new Property<double>(1.0, "Scales the amount of damage for LW Phantom.")),
                 ("pvp_dmg_mod_lw_triplestrike", new Property<double>(1.0, "Scales the amount of damage for LW Triple Strike weapons.")),
+                ("pvp_dmg_mod_lw_cb_crit_triplestrike", new Property<double>(1.0, "Scales the amount of Crit damage for LW Triple Strike weapons.")),
                 ("pvp_dmg_mod_hw", new Property<double>(1.0, "Scales the amount of damage for Heavy Weapons")),                
                 ("pvp_dmg_mod_hw_cb", new Property<double>(1.0, "Scales the amount of damage for HW CB.")),
                 ("pvp_dmg_mod_hw_cb_crit", new Property<double>(1.0, "Scales the amount of damage for HW CB Crit.")),
