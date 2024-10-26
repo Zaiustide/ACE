@@ -52,12 +52,11 @@ namespace ACE.Server.Managers
         {
             if (DateTime.Now.AddSeconds(-5) < LastTickDateTime)
                 return;
-
-            LastTickDateTime = DateTime.Now;
-
+            
             bool isWorldBossesDisabled = PropertyManager.GetBool("disable_world_bosses").Item;
             if (isWorldBossesDisabled)
             {
+                LastTickDateTime = DateTime.Now;
                 return;
             }
 
@@ -71,6 +70,7 @@ namespace ACE.Server.Managers
             {
                 SpawnNewWorldBoss();                
                 nextBossSpawnTime = RollNextSpawnTime(6, 18);
+                LastTickDateTime = DateTime.Now;
                 return;
             }
             
@@ -111,8 +111,15 @@ namespace ACE.Server.Managers
                         bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"The pitiful display of humans struggling against themselves seems to have ended now that only one allegiance remains.  {activeWorldBoss.Name} has become vulnerable to human attacks once again!", ChatMessageType.Broadcast));
                         activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
                     }
+
+                    if(isBossInvincible && DateTime.Now.AddSeconds(-60) < LastTickDateTime)
+                    {
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} is currently feeding off of human conflict and has become invincible. The humans must finish their conflict with only one allegiance remaining.", ChatMessageType.Broadcast));
+                    }
                 }
             }
+
+            LastTickDateTime = DateTime.Now;
         }
 
         private static DateTime RollNextSpawnTime(int minHrs, int maxHrs)
