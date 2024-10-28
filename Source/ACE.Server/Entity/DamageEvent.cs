@@ -464,6 +464,10 @@ namespace ACE.Server.Entity
                                 break;
                             case Skill.HeavyWeapons:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_hw").Item;
+                                if(Weapon.W_AttackType == AttackType.MultiStrike)
+                                {
+                                    config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_multistrike").Item;
+                                }
                                 break;
                             case Skill.TwoHandedCombat:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_2h").Item;
@@ -541,6 +545,13 @@ namespace ACE.Server.Entity
                                     break;
                                 case Skill.HeavyWeapons:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_cb").Item;
+                                    if (Weapon.W_AttackType == AttackType.MultiStrike)
+                                    {
+                                        if (IsCritical)
+                                        {
+                                            config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_cb_crit_multistrike").Item;
+                                        }
+                                    }
                                     break;
                                 case Skill.TwoHandedCombat:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_2h_cb").Item;
