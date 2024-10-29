@@ -464,7 +464,7 @@ namespace ACE.Server.Entity
                                 break;
                             case Skill.HeavyWeapons:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_hw").Item;
-                                if(Weapon.W_AttackType == AttackType.DoubleStrike)
+                                if(AttackType.MultiStrike.HasFlag(Weapon.W_AttackType))
                                 {
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_multistrike").Item;
                                 }
@@ -545,7 +545,7 @@ namespace ACE.Server.Entity
                                     break;
                                 case Skill.HeavyWeapons:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_cb").Item;
-                                    if (Weapon.W_AttackType == AttackType.DoubleStrike)
+                                    if (AttackType.MultiStrike.HasFlag(Weapon.W_AttackType))
                                     {
                                         if (IsCritical)
                                         {
