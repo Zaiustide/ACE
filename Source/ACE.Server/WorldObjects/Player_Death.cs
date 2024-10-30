@@ -225,6 +225,7 @@ namespace ACE.Server.WorldObjects
 
 
             //Handle arena deaths and logging PK kills
+            bool isArenaDeath = false;
             if (topDamager != null)
             {
                 var killerPlayer = PlayerManager.FindByGuid(topDamager.Guid);
@@ -247,7 +248,7 @@ namespace ACE.Server.WorldObjects
 
                     //Handle arena kills
                     uint? victimArenaPlayerId = null;
-                    uint? killerArenaPlayerId = null;
+                    uint? killerArenaPlayerId = null;                    
                     try
                     {
                         if (ArenaLocation.IsArenaLandblock(Location.Landblock))
@@ -262,6 +263,8 @@ namespace ACE.Server.WorldObjects
 
                                 if (killerArenaPlayer != null)
                                     killerArenaPlayerId = killerArenaPlayer.Id;
+
+                                isArenaDeath = true;
                             }
                         }
                     }
@@ -293,7 +296,7 @@ namespace ACE.Server.WorldObjects
                 ThreadSafeTeleportOnDeath(); // enter portal space
 
                 if (IsPKDeath(topDamager) || IsPKLiteDeath(topDamager))
-                    SetMinimumTimeSincePK();
+                    SetMinimumTimeSincePK(isArenaDeath);
 
                 IsBusy = false;
             });
@@ -1123,7 +1126,7 @@ namespace ACE.Server.WorldObjects
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.MinimumTimeSincePk); else SetProperty(PropertyFloat.MinimumTimeSincePk, value.Value); }
         }
 
-        public void SetMinimumTimeSincePK()
+        public void SetMinimumTimeSincePK(bool isArenaDeath = false)
         {
             if (IsOlthoiPlayer)
                 return;
@@ -1145,6 +1148,12 @@ namespace ACE.Server.WorldObjects
             {
                 EnqueueBroadcast(new GameMessagePublicUpdatePropertyInt(this, PropertyInt.PlayerKillerStatus, (int)PlayerKillerStatus));
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouAreNonPKAgain));
+            }
+
+            if (isArenaDeath)
+            {
+                //Reduce pk respite to 2 minutes for arena deaths
+                MinimumTimeSincePk = Math.Max(PropertyManager.GetDouble("pk_respite_timer").Item - PropertyManager.GetDouble("arena_pk_respite_timer").Item, 0);
             }
         }
 
