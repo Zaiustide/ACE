@@ -628,6 +628,13 @@ namespace ACE.Server.WorldObjects
                     minDmg = Spell.MaxDamage - modifiedVariance;
                 }
 
+                if (isPVP && Spell.School == MagicSchool.VoidMagic && (spellType == ProjectileSpellType.Arc || spellType == ProjectileSpellType.Bolt))
+                {
+                    var voidVarianceMod = PropertyManager.GetDouble("pvp_dmg_mod_void_variance", 1).Item;
+                    var modifiedVariance = Convert.ToInt32(Math.Round(Spell.Variance * voidVarianceMod));
+                    minDmg = Spell.MaxDamage - modifiedVariance;
+                }
+
                 baseDamage = ThreadSafeRandom.Next(minDmg, Spell.MaxDamage);
 
                 weaponResistanceMod = GetWeaponResistanceModifier(weapon, sourceCreature, attackSkill, Spell.DamageType);
