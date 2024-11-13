@@ -64,7 +64,7 @@ namespace ACE.Server.Entity
         public const uint MorphGemRareReduction = 490270;        
         public const uint MorphGemJewelersSawblade = 490271;
         public const uint MorphGemAddSlayer = 490304;
-        public const int MorphGemMinValue = 20000;
+        public const int  MorphGemMinValue = 20000;
 		public const uint MorphGemHematite = 490284;
 		public const uint MorphGemStrengthbeer = 490327;
 		public const uint MorphGemEndurancebeer = 490328;
@@ -2068,8 +2068,8 @@ namespace ACE.Server.Entity
                     #region MorphGemRandomCantrip
                     case MorphGemRandomCantrip:
 
-                        //Check if the target is armor
-                        if (target.ArmorLevel < 1)
+                        //Check if the target is armor or undies
+                        if (!(target.ArmorLevel > 0 || EquipMask.Clothing.HasFlag(target.ValidLocations)))
                         {
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The {source.Name} can only be applied to armor", ChatMessageType.Broadcast));
@@ -2098,7 +2098,8 @@ namespace ACE.Server.Entity
                         List<int> newLegendaryList = new List<int>();
                         foreach (var currLegendary in itemLegendaries)
                         {
-                            while (true)
+                            var counter = 0;
+                            while (counter < 20)
                             {
                                 //For now this morph gem can only be applied to armor.
                                 //In the future if we expand to include non-armor (like jewelry),
@@ -2115,6 +2116,7 @@ namespace ACE.Server.Entity
                                         break;
                                     }
                                 }
+                                counter++;
                             }
                         }
 
