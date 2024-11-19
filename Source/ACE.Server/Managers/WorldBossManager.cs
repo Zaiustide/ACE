@@ -153,7 +153,7 @@ namespace ACE.Server.Managers
                 statueWorldObj.Location = spawnLoc.Value;
                 statueWorldObj.CurrentLandblock = statueLandblock;
                 statueWorldObj.TimeToRot = -1;
-                statueWorldObj.Lifespan = 3600000;
+                statueWorldObj.Lifespan = 86400;
                 statueWorldObj.EnterWorld();
 
                 boss.StatueWorldObject = statueWorldObj;
@@ -167,7 +167,7 @@ namespace ACE.Server.Managers
                 bossWorldObj.Location = boss.IndoorLocation;
                 bossWorldObj.CurrentLandblock = bossLandblock;
                 bossWorldObj.TimeToRot = -1;
-                bossWorldObj.Lifespan = 3600000;
+                bossWorldObj.Lifespan = 86400;
                 bossWorldObj.EnterWorld();
                 boss.BossWorldObject = bossWorldObj;
 
