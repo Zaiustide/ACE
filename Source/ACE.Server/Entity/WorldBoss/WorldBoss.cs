@@ -29,10 +29,10 @@ namespace ACE.Server.Entity.WorldBoss
                     townSpawnLocations.Add(0xA9B4, new Position(0xA9B40019, 84.000000f, 7.100000f, 94.005005f, 0f, 0f, 0.574462f, -0.818531f));
                     //Arwic
                     // 0xC5A90039 [175.435669 2.096370 42.005001] 0.993893 0.000000 0.000000 -0.110345
-                    townSpawnLocations.Add(0xC5A, new Position(0xC5A90039, 175.435669f, 2.096370f, 42.005001f, 0f, 0f, -0.110345f, 0.993893f));
+                    townSpawnLocations.Add(0xC5A9, new Position(0xC5A90039, 175.435669f, 2.096370f, 42.005001f, 0f, 0f, -0.110345f, 0.993893f));
                     //Cragstone
                     // 0xBC9F0032 [152.511810 40.966343 32.005001] -0.944500 0.000000 0.000000 0.328510
-                    townSpawnLocations.Add(0xBC9, new Position(0xBC9F0032, 152.511810f, 40.966343f, 32.005001f, 0f, 0f, 0.328510f, -0.944500f));
+                    townSpawnLocations.Add(0xBC9F, new Position(0xBC9F0032, 152.511810f, 40.966343f, 32.005001f, 0f, 0f, 0.328510f, -0.944500f));
                     //Glenden Wood
                     //0xA1A4001E[84.335281 135.430603 50.005001] 0.624067 0.000000 0.000000 0.781371
                     townSpawnLocations.Add(0xA1A4, new Position(0xA1A4001E, 84.335281f, 135.430603f, 50.005001f, 0f, 0f, 0.781371f, 0.624067f));
