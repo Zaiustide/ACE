@@ -1125,6 +1125,7 @@ namespace ACE.Server.Entity
 
                         //Verify the item is imbued with AR, CS or CB
                         var isValid = false;
+                        var hasFetish = target.HasImbuedEffect(ImbuedEffectType.IgnoreSomeMagicProjectileDamage);
 
                         if (target.HasImbuedEffect(ImbuedEffectType.CripplingBlow) ||
                             target.HasImbuedEffect(ImbuedEffectType.ArmorRending) ||
@@ -1144,7 +1145,7 @@ namespace ACE.Server.Entity
                         var roll = ThreadSafeRandom.Next(0, 1);
                         if (target.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
                         {
-                            target.ImbuedEffect = roll == 0 ? ImbuedEffectType.ArmorRending : ImbuedEffectType.CriticalStrike;
+                            target.ImbuedEffect = roll == 0 ? ImbuedEffectType.ArmorRending : ImbuedEffectType.CriticalStrike;                            
                         }
                         else if (target.HasImbuedEffect(ImbuedEffectType.ArmorRending))
                         {
@@ -1156,6 +1157,11 @@ namespace ACE.Server.Entity
                         }
 
                         target.IconUnderlayId = RecipeManager.IconUnderlay[target.ImbuedEffect];
+
+                        if (hasFetish)
+                        {
+                            target.ImbuedEffect |= ImbuedEffectType.IgnoreSomeMagicProjectileDamage;
+                        }                        
 
                         playerMsg = $"You apply the Morph Gem skillfully and have changed your weapon's imbue from {origImbueEffect} to {target.ImbuedEffect}";
                         AddMorphGemLog(target, MorphGemRandomizeWeaponImbue);
