@@ -501,7 +501,7 @@ namespace ACE.Server.WorldObjects
                 attackSkill = sourceCreature.GetCreatureSkill(Spell.School);
 
             // critical hit
-            var criticalChance = GetWeaponMagicCritFrequency(weapon, sourceCreature, attackSkill, target);
+            var criticalChance = GetWeaponMagicCritFrequency(weapon, sourceCreature, attackSkill, target);                        
 
             if (ThreadSafeRandom.Next(0.0f, 1.0f) < criticalChance)
             {
@@ -516,6 +516,13 @@ namespace ACE.Server.WorldObjects
 
                 if (!critDefended)
                     criticalHit = true;
+            }
+
+            //all spell projectiles now crit 100% against a logging out target
+            if (targetPlayer != null && (targetPlayer.IsLoggingOut || targetPlayer.PKLogout))
+            {
+                criticalChance = 1.0f;
+                criticalHit = true;
             }
 
             var absorbMod = GetAbsorbMod(target);
