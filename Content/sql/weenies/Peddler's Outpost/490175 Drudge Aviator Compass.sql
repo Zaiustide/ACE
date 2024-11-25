@@ -12,8 +12,6 @@ VALUES (490175,   1,        128) /* ItemType - Misc */
      , (490175,  15,      10000) /* StackUnitValue */
      , (490175,  16,          1) /* ItemUseable - No */
      , (490175,  19,      10000) /* Value */
-	 , (490175,  33,          1) /* Bonded - Bonded */
-     , (490175, 114,          1) /* Attuned - Attuned */
      , (490175,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)

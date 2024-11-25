@@ -20,7 +20,6 @@ VALUES (490322,   1,       2048) /* ItemType - Gem */
      , (490322, 108,         70) /* ItemMaxMana */
      , (490322, 109,         40) /* ItemDifficulty */
      , (490322, 110,          0) /* ItemAllegianceRankLimit */
-     , (490322, 114,          1) /* Attuned - Normal */
 	 , (490322, 280,        221) /* SharedCooldown */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)

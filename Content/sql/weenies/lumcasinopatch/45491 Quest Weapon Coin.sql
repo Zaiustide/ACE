@@ -12,9 +12,7 @@ VALUES (45491,   1,        128) /* ItemType - Misc */
      , (45491,  15,          1) /* StackUnitValue */
      , (45491,  16,          1) /* ItemUseable - No */
      , (45491,  19,          1) /* Value */
-     , (45491,  33,          1) /* Bonded - Bonded */
-     , (45491,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-     , (45491, 114,          0) /* Attuned - Attuned */;
+     , (45491,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */;
 	 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (45491,  23, True ) /* DestroyOnSell */

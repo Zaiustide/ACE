@@ -8,10 +8,8 @@ VALUES (490280,   1,        128) /* ItemType - Misc */
      , (490280,   5,          5) /* EncumbranceVal */
      , (490280,  16,          8) /* ItemUseable - Contained */
      , (490280,  19,         10) /* Value */
-     , (490280,  33,          1) /* Bonded - Bonded */
      , (490280,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (490280,  94,         16) /* TargetType - Creature */
-     , (490280, 114,          1) /* Attuned - Attuned */
      , (490280, 266,      490279) /* PetClass - Pet Mouf */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
