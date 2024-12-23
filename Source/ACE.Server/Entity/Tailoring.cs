@@ -80,6 +80,9 @@ namespace ACE.Server.Entity
         public const uint MorphGemBurden = 1548804;
         public const uint MorphGemRareDmgBoost = 1548805;
         public const uint MorphGemRareDmgReduction = 1548806;
+        public const uint MorphGemVitality = 490510;
+        public const uint MorphGemHealBoost = 490511;
+        public const uint MorphGemMeleeCleave = 490512;
 
         public static readonly List<int> HeroicMasterSpells =
             new List<int>()
@@ -286,7 +289,10 @@ namespace ACE.Server.Entity
                 case MorphGemRandomCantrip:
                 case MorphGemBurden:
                 case MorphGemRareDmgBoost:
-                case MorphGemRareDmgReduction:                     
+                case MorphGemRareDmgReduction:
+                case MorphGemVitality:
+                case MorphGemHealBoost:
+                case MorphGemMeleeCleave:
                     ApplyMorphGem(player, source, target);
                     return;
             }
@@ -579,9 +585,10 @@ namespace ACE.Server.Entity
             MorphGemCD,
             MorphGemCDR,
             MorphGemJewelersSawblade,
-            MorphGemDotResist
+            MorphGemDotResist,
+            MorphGemVitality,
+            MorphGemHealBoost
         };
-
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
         {
@@ -2369,6 +2376,118 @@ namespace ACE.Server.Entity
                         break;
                     #endregion MorphGemRareDmgReduction
 
+                    #region MorphGemVitality
+                    //490510 - Gem of Vitality -Add + 3 Vitality to loot gen jewelry or rare jewelry. Will override preexisting ratings on jewelry.
+                    case MorphGemVitality:
+                        if (target.ItemType != ItemType.Jewelry)
+                        {
+                            playerMsg = "This gem can only be used on jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if ((target.Workmanship ?? 0) < 1 && (target.GetProperty(PropertyInt.RareId) ?? 0) < 1)
+                        {
+                            playerMsg = "This gem can only be used on loot gen or rare jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if (target.GearMaxHealth >= 3)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} already has a Vitality Rating of +{target.GearMaxHealth} and thus the gem would have no effect";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Add +3 Vitality rating
+                        string hbRemovalMsg = target.GearHealingBoost > 0 ? $" As a result your item's +{target.GearHealingBoost} Healing Boost Rating has been replaced." : string.Empty;
+                        playerMsg = $"You have successfully used the {source.Name} to add +3 Vitality Rating to your {target.NameWithMaterial}!{hbRemovalMsg}";
+                        target.GearHealingBoost = 0;
+                        target.GearMaxHealth = 3;
+
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemVitality);
+                        break;
+                    #endregion MorphGemVitality
+
+                    #region MorphGemHealBoost
+                    //490511 - Gem of Heal boost - Add +3 Heal boost to loot gen jewelry or rare jewelry.Will override preexisting ratings on jewelry.
+                    case MorphGemHealBoost:
+                        if (target.ItemType != ItemType.Jewelry)
+                        {
+                            playerMsg = "This gem can only be used on jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if ((target.Workmanship ?? 0) < 1 && (target.GetProperty(PropertyInt.RareId) ?? 0) < 1)
+                        {
+                            playerMsg = "This gem can only be used on loot gen or rare jewelry";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if (target.GearHealingBoost >= 3)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} already has a Healing Boost Rating of +{target.GearMaxHealth} and thus the gem would have no effect";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Add +3 Healing Boost rating
+                        string vitRemovalMsg = target.GearMaxHealth > 0 ? $" As a result your item's +{target.GearMaxHealth} Vitality Rating has been replaced." : string.Empty;
+                        playerMsg = $"You have successfully used the {source.Name} to add +3 Healing Boost Rating to your {target.NameWithMaterial}!{vitRemovalMsg}";
+                        target.GearMaxHealth = 0;
+                        target.GearHealingBoost = 3;                        
+
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemHealBoost);
+                        break;
+                    #endregion MorphGemHealBoost
+
+                    #region MorphGemMeleeCleave
+                    //490512 - Cleaving morph gem - Increases target cleaving property on melee weapons by +1.
+                    case MorphGemMeleeCleave:
+                        if (target.ItemType != ItemType.MeleeWeapon)
+                        {
+                            playerMsg = "This gem can only be used on melee weapons";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        int currCleave = target.GetProperty(PropertyInt.Cleaving) ?? 0;
+
+                        if (currCleave >= 3)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} already has the maximum number of cleave targets and thus the gem would have no effect";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+                        
+                        //Add +1 cleave
+                        if (currCleave < 2)
+                        {
+                            target.SetProperty(PropertyInt.Cleaving, 2);
+                        }
+                        else
+                        {
+                            target.SetProperty(PropertyInt.Cleaving, 3);
+                        }
+
+                        playerMsg = $"You have successfully used the {source.Name} on your {target.NameWithMaterial} to increase its melee cleaving targets to {target.CleaveTargets + 1}!";
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemMeleeCleave);
+                        break;
+                    #endregion MorphGemMeleeCleave
                     default:
                         player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                         return;
@@ -2659,6 +2778,9 @@ namespace ACE.Server.Entity
                 case MorphGemBurden:
                 case MorphGemRareDmgBoost:
                 case MorphGemRareDmgReduction:
+                case MorphGemVitality:
+                case MorphGemHealBoost:
+                case MorphGemMeleeCleave:
                     return true;
                 default:
                     return false;
