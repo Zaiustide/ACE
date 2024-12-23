@@ -62,14 +62,14 @@ namespace ACE.Server.Managers
 
             if(!nextBossSpawnTime.HasValue)
             {
-                nextBossSpawnTime = RollNextSpawnTime(0, 3);
+                nextBossSpawnTime = RollNextSpawnTime(0, 2);
             }
 
             //if there's no active boss, and the next spawn time is in the past, spawn a boss
             if(activeWorldBoss == null && DateTime.Now > nextBossSpawnTime)
             {
                 SpawnNewWorldBoss();                
-                nextBossSpawnTime = RollNextSpawnTime(6, 18);
+                nextBossSpawnTime = RollNextSpawnTime(3, 11);
                 LastTickDateTime = DateTime.Now;
                 return;
             }
@@ -126,7 +126,14 @@ namespace ACE.Server.Managers
         {            
             var hr = ThreadSafeRandom.Next(minHrs, maxHrs);
             var min = ThreadSafeRandom.Next(0, 59);
-            return DateTime.Now.AddHours(hr).AddMinutes(min);
+            var result = DateTime.Now.AddHours(hr).AddMinutes(min);
+            if(result.Hour > 3 && result.Hour < 11)
+            {
+                hr = ThreadSafeRandom.Next(11, 15);
+                result = new DateTime(result.Year, result.Month, result.Day, hr, min, 0);
+            }
+
+            return result;
         }
 
         public static void SpawnNewWorldBoss(WorldBoss boss = null)

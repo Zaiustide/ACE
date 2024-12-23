@@ -744,6 +744,15 @@ namespace ACE.Server.WorldObjects
                         }
                     }
                 }
+
+                //Drop DB key on death during indoor world boss events
+                var currWb = WorldBossManager.GetActiveWorldBoss();
+                if (currWb != null && currWb.IndoorLocation != null && currWb.IndoorLocation.Landblock == this.Location.Landblock)
+                {
+                    var dbKey = WorldObjectFactory.CreateNewWorldObject(480608);
+                    dbKey.SetStackSize(1);
+                    dropItems.Add(dbKey);
+                }
             }
 
             // add items to corpse
