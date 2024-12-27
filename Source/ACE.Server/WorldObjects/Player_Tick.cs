@@ -661,7 +661,14 @@ namespace ACE.Server.WorldObjects
                         bool shouldDropTrophy = true;
                         bool isTrophyTimerPast = false;
                         string trophyValidationMsg = "";
+
                         var isDefender = false;
+                        var thisPlayerAllegiance = AllegianceManager.GetAllegiance(this);
+                        if (thisPlayerAllegiance != null)
+                        {
+                            if (thisPlayerAllegiance.MonarchId == town.CurrentOwnerID)
+                                isDefender = true;
+                        }
 
                         //Don't award trophies to characters under the minimum level
                         if (this.Level < PropertyManager.GetLong("town_control_reward_level_minimum").Item)
