@@ -212,5 +212,5 @@ VALUES  (490173, 9, 20630,  5, 0, 0.10, False) /* MMD */
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
 	 , (490173, 9, 490184,  1, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490173, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490173, 9, 490326,  1, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (490173, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */;
+	 , (490173, 9, 490326,  1, 0, 0.03, False) /* 4200028 Set Randomizer Morph Gem */
+	 , (490173, 9,     0,  0, 0, 0.97, False)    /* Create nothing for ContainTreasure */;

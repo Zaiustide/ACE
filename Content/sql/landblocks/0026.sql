@@ -196,8 +196,8 @@ VALUES (0x70026028, 490258, 0x0026010A, 87.8392, -45.4009, -35.945, -0.308694, 0
 /* @teleloc 0x0026010A [87.839203 -45.400902 -35.945000] -0.308694 0.000000 0.000000 0.951161 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x70026029, 490258, 0x00260111, 107.9863, -45.6246, -36, 0.99988, 0, 0, -0.01548, False, '2024-03-23 14:13:39'); /* Pile of Rocks */
-/* @teleloc 0x00260111 [107.986298 -45.624599 -36.000000] 0.999880 0.000000 0.000000 -0.015480 */
+VALUES (0x70026029, 490258, 0x00260111, 107.986, -45.6246, -36, 0.99988, 0, 0, -0.01548, False, '2024-03-23 14:13:39'); /* Pile of Rocks */
+/* @teleloc 0x00260111 [107.986000 -45.624599 -36.000000] 0.999880 0.000000 0.000000 -0.015480 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7002602A, 490258, 0x00260119, 171.976, -47.9259, -35.945, -0.479312, 0, 0, 0.877644, False, '2024-03-23 14:13:48'); /* Pile of Rocks */
@@ -238,3 +238,7 @@ VALUES (0x70026032, 490173, 0x00260163, 109.254, -52.5456, -23.9947, 0.511667, 0
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x70026033, 490173, 0x00260163, 112.505, -48.4198, -23.9947, 0.23771, 0, 0, -0.971336,  True, '2024-03-23 14:20:40'); /* Drudge Maurader */
 /* @teleloc 0x00260163 [112.504997 -48.419800 -23.994699] 0.237710 0.000000 0.000000 -0.971336 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x70026034, 490514, 0x00260153, 93.97906, -34.04482, -23.99545, -0.903859, 0, 0, -0.427831, False, '2024-12-24 01:00:56');
+/* @teleloc 0x00260153 [93.979057 -34.044819 -23.995449] -0.903859 0.000000 0.000000 -0.427831 */

@@ -198,5 +198,5 @@ VALUES (490172, 9, 490237,  3, 0, 0.05, False) /* Trinket */
 	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
 	 , (490172, 9, 43901,  5, 0, 0.10, False) /* Create Prom Note */ 
 	 , (490172, 9,     0,  0, 0, 0.90, False) /* Create nothing for ContainTreasure */
-	 , (490172, 9, 490326,  1, 0, 0.05, False) /* Trinket */
-	 , (490172, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */;
+	 , (490172, 9, 490326,  1, 0, 0.03, False) /* Trinket */
+	 , (490172, 9,     0,  0, 0, 0.97, False) /* Create nothing for ContainTreasure */;

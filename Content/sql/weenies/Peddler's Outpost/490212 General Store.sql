@@ -154,4 +154,5 @@ VALUES (490212, 2, 450032,  0, 4, 0, False) /* Create Leather Cuirass (25641) fo
 	 , (490212, 4, 490278, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
 	  , (490212, 4, 490315, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
 	   , (490212, 4, 490316, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
-	   , (490212, 4, 490317, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */;
+	   , (490212, 4, 490317, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
+	   	, (490212, 4, 490532, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */;

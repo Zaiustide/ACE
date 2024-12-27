@@ -116,7 +116,5 @@ VALUES (490185,  6159,   2.05)  /* Thorn Volley */
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (490185, 9, 34277,  1, 0, 0.20, False) /* Create Ancient Falatacot Trinket (34277) for ContainTreasure */
-     , (490185, 9,     0,  0, 0, 0.80, False) /* Create nothing for ContainTreasure */
-	 , (490185, 9, 480608,  1, 0, 0.05, False) /* MMD */
-     , (490185, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */;
+     , (490185, 9,     0,  0, 0, 0.80, False) /* Create nothing for ContainTreasure */;
 

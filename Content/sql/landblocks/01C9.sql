@@ -172,5 +172,9 @@ VALUES (0x701C905A, 490325, 0x01C901F9, 118.251, -92.4445, -5.99, 0.999987, 0, 0
 /* @teleloc 0x01C901F9 [118.250999 -92.444504 -5.990000] 0.999987 0.000000 0.000000 -0.005199 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C905B, 490356, 0x01C901EF, 109.4311, -83.51734, -5.956726, 0.043307, 0, 0, -0.999062, False, '2024-09-04 14:42:17'); /* Hera's Vault */
-/* @teleloc 0x01C901EF [109.431099 -83.517342 -5.956726] 0.043307 0.000000 0.000000 -0.999062 */
+VALUES (0x701C905B, 490356, 0x01C901EF, 109.431, -83.5173, -5.95673, 0.043307, 0, 0, -0.999062, False, '2024-09-04 14:42:17'); /* Hera's Vault */
+/* @teleloc 0x01C901EF [109.431000 -83.517303 -5.956730] 0.043307 0.000000 0.000000 -0.999062 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C905C, 490530, 0x01C901E4, 86.87894, -93.32718, -5.99, -0.910051, 0, 0, 0.414497, False, '2024-12-26 20:28:04'); /* Artemis */
+/* @teleloc 0x01C901E4 [86.878937 -93.327179 -5.990000] -0.910051 0.000000 0.000000 0.414497 */
