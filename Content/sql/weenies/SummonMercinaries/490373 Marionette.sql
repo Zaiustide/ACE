@@ -10,7 +10,8 @@ VALUES (490373,   1,         16) /* ItemType - Creature */
      , (490373,   7,         -1) /* ContainersCapacity */
      , (490373,  16,          1) /* ItemUseable - No */
      , (490373,  25,        200) /* Level */
-     , (490373,  68,         64) /* TargetingTactic - Nearest */
+	 , (490373,  40,          1) /* CombatMode - NonCombat */
+     , (490373,  68,         1) /* TargetingTactic - Nearest */
      , (490373,  93,       1036) /* PhysicsState - Ethereal, ReportCollisions, Gravity */
      , (490373, 133,          1) /* ShowableOnRadar - ShowNever */
      , (490373, 267,         43) /* Lifespan */;
@@ -20,10 +21,11 @@ VALUES (490373,   1, True ) /* Stuck */
      , (490373,  12, True ) /* ReportCollisions */
      , (490373,  13, True ) /* Ethereal */
      , (490373,  14, True ) /* GravityStatus */
+	 , (490373,  15, True ) /* LightsStatus */
      , (490373,  19, True ) /* Attackable */;
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
-VALUES (490373,  31,      25) /* VisualAwarenessRange */
+VALUES (490373,  31,      30) /* VisualAwarenessRange */
      , (490373,  39,     1.1) /* DefaultScale */
      , (490373,  77,       1) /* PhysicsScriptIntensity */;
 
@@ -47,7 +49,7 @@ VALUES (490373,   1, 210, 0, 0) /* Strength */
      , (490373,   6, 200, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (490373,   1,  1250, 0, 0, 1370) /* MaxHealth */
+VALUES (490373,   1,  3250, 0, 0, 3370) /* MaxHealth */
      , (490373,   3,  1500, 0, 0, 1740) /* MaxStamina */
      , (490373,   5,   900, 0, 0, 1070) /* MaxMana */;
 
@@ -60,7 +62,7 @@ VALUES (490373,  6, 0, 3, 0, 570, 0, 313.36962890625) /* MeleeDefense        Spe
      , (490373, 51, 0, 3, 0, 570, 0, 313.36962890625) /* SneakAttack         Specialized */;
 	 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
-VALUES (490373,    4312,   3.04)  /* Incantation of Imperil Other */;
+VALUES (490373,    4312,   3.0)  /* Incantation of Imperil Other */;
 
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
