@@ -28,7 +28,8 @@ VALUES (490518,   1, True ) /* Stuck */
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490518,  12,     0.5) /* Shade */
      , (490518,  31,      25) /* VisualAwarenessRange */
-     , (490518,  77,       1) /* PhysicsScriptIntensity */;
+     , (490518,  77,       1) /* PhysicsScriptIntensity */
+	 , (490518,  39,     1.5) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490518,   1, 'Acid Mercenary') /* Name */;
