@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490529;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490529, 'ace490529-Olthoimercinaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
+VALUES (490529, 'ace490529-Olthoimercenaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490529,   1,        128) /* ItemType - Misc */
@@ -36,8 +36,8 @@ VALUES (490529,  39,     0.4) /* DefaultScale */
      , (490529, 167,      45) /* CooldownDuration */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490529,   1, 'Olthoi Mercinary Essence') /* Name */
-     , (490529,  14, 'Use this essence to summon or dismiss your Olthoi Mercinary.') /* Use */;
+VALUES (490529,   1, 'Olthoi Mercenary Essence') /* Name */
+     , (490529,  14, 'Use this essence to summon or dismiss your Olthoi Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490529,   1, 0x02000181) /* Setup */

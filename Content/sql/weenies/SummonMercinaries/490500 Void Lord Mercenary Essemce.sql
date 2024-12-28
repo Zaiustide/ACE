@@ -36,8 +36,8 @@ VALUES (490500,  39,     0.4) /* DefaultScale */
      , (490500, 167,      45) /* CooldownDuration */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490500,   1, 'Void Lord Mercinary Essence') /* Name */
-     , (490500,  14, 'Use this essence to summon or dismiss your Void Lord.') /* Use */;
+VALUES (490500,   1, 'Void Lord Mercenary Essence') /* Name */
+     , (490500,  14, 'Use this essence to summon or dismiss your Void Lord Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490500,   1, 0x02000181) /* Setup */

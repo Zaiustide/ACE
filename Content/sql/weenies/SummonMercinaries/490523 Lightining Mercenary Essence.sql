@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490523;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490523, 'ace490523-Lightningmercinaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
+VALUES (490523, 'ace490523-Lightningmercenaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490523,   1,        128) /* ItemType - Misc */
@@ -36,8 +36,8 @@ VALUES (490523,  39,     0.4) /* DefaultScale */
      , (490523, 167,      45) /* CooldownDuration */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490523,   1, 'Lightining Mercinary Essence') /* Name */
-     , (490523,  14, 'Use this essence to summon or dismiss your Lightning Mercinary.') /* Use */;
+VALUES (490523,   1, 'Lightining Mercenary Essence') /* Name */
+     , (490523,  14, 'Use this essence to summon or dismiss your Lightning Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490523,   1, 0x02000181) /* Setup */

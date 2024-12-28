@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490527;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490527, 'ace490527-Tuskermercinaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
+VALUES (490527, 'ace490527-Tuskermercenaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490527,   1,        128) /* ItemType - Misc */
@@ -37,8 +37,8 @@ VALUES (490527,  39,     0.4) /* DefaultScale */
 	 ;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490527,   1, 'Tusker Mercinary Essence') /* Name */
-     , (490527,  14, 'Use this essence to summon or dismiss your Tusker Mercinary.') /* Use */;
+VALUES (490527,   1, 'Tusker Mercenary Essence') /* Name */
+     , (490527,  14, 'Use this essence to summon or dismiss your Tusker Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490527,   1, 0x02000181) /* Setup */

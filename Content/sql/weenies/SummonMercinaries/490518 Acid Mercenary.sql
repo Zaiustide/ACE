@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490518;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490518, 'ace490518-skeleton', 71, '2022-12-04 19:04:52') /* CombatPet */;
+VALUES (490518, 'ace490518-acidmercenary', 71, '2022-12-04 19:04:52') /* CombatPet */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490518,   1,         16) /* ItemType - Creature */
@@ -31,7 +31,7 @@ VALUES (490518,  12,     0.5) /* Shade */
      , (490518,  77,       1) /* PhysicsScriptIntensity */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490518,   1, 'Acid Mercinary') /* Name */;
+VALUES (490518,   1, 'Acid Mercenary') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490518,   1, 0x02000D5D) /* Setup */

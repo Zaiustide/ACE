@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490501;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490501, 'ace490501-Void Lord', 71, '2022-12-04 19:04:52') /* CombatPet */;
+VALUES (490501, 'ace490501-Void Lord Mercenary', 71, '2022-12-04 19:04:52') /* CombatPet */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490501,   1,         16) /* ItemType - Creature */
@@ -33,7 +33,7 @@ VALUES (490501,  31,      25) /* VisualAwarenessRange */
 
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490501,   1, 'Void Lord') /* Name */;
+VALUES (490501,   1, 'Void Lord Mercenary') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490501,   1, 0x020013F1) /* Setup */

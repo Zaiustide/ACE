@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490524;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490524, 'ace490524-LightningMercinary', 71, '2022-12-04 19:04:52') /* CombatPet */;
+VALUES (490524, 'ace490524-LightningMercenary', 71, '2022-12-04 19:04:52') /* CombatPet */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490524,   1,         16) /* ItemType - Creature */
@@ -31,7 +31,7 @@ VALUES (490524,  12,     0.5) /* Shade */
      , (490524,  77,       1) /* PhysicsScriptIntensity */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490524,   1, 'Frost Mercinary') /* Name */;
+VALUES (490524,   1, 'Frost Mercenary') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490524,   1, 0x02000D5F) /* Setup */

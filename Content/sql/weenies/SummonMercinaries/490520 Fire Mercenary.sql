@@ -1,7 +1,7 @@
-DELETE FROM `weenie` WHERE `class_Id` = 490520;
+eDELETE FROM `weenie` WHERE `class_Id` = 490520;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490520, 'ace490520-FireMercinary', 71, '2022-12-04 19:04:52') /* CombatPet */;
+VALUES (490520, 'ace490520-FireMercenary', 71, '2022-12-04 19:04:52') /* CombatPet */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490520,   1,         16) /* ItemType - Creature */
@@ -32,7 +32,7 @@ VALUES (490520,  12,     0.5) /* Shade */
 	 , (490520,  39,     1.5) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490520,   1, 'Fire Mercinary') /* Name */;
+VALUES (490520,   1, 'Fire Mercenary') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490520,   1, 0x02000D5E) /* Setup */

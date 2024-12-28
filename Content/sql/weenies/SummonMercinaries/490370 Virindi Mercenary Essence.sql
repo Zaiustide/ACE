@@ -36,8 +36,8 @@ VALUES (490370,  39,     0.4) /* DefaultScale */
      , (490370, 167,      45) /* CooldownDuration */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490370,   1, 'Virindi Essence') /* Name */
-     , (490370,  14, 'Use this essence to summon or dismiss your Virindi.') /* Use */;
+VALUES (490370,   1, 'Virindi Mercenary Essence') /* Name */
+     , (490370,  14, 'Use this essence to summon or dismiss your Virindi Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490370,   1, 0x02000181) /* Setup */

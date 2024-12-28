@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 490525;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (490525, 'ace490525-Frostmercinaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
+VALUES (490525, 'ace490525-Frostmercenaryessence', 70, '2021-11-01 00:00:00') /* PetDevice */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490525,   1,        128) /* ItemType - Misc */
@@ -36,8 +36,8 @@ VALUES (490525,  39,     0.4) /* DefaultScale */
      , (490525, 167,      45) /* CooldownDuration */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490525,   1, 'Frost Mercinary Essence') /* Name */
-     , (490525,  14, 'Use this essence to summon or dismiss your Frost Mercinary.') /* Use */;
+VALUES (490525,   1, 'Frost Mercenary Essence') /* Name */
+     , (490525,  14, 'Use this essence to summon or dismiss your Frost Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490525,   1, 0x02000181) /* Setup */
