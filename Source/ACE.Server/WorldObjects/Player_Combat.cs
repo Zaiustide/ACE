@@ -1286,16 +1286,27 @@ namespace ACE.Server.WorldObjects
                 }
 
                 //Disable most inepts in arenas
-                if(ArenaLocation.IsArenaLandblock(this.Location.Landblock) &&
+                if (ArenaLocation.IsArenaLandblock(this.Location.Landblock) &&
                     spell != null &&
-                    spell.IsHarmful &&
-                    ((spell.School == MagicSchool.CreatureEnchantment &&
+                    spell.IsHarmful)
+                {
+                    if ((spell.School == MagicSchool.CreatureEnchantment &&
                     spell.Category != SpellCategory.MagicDefenseLowering &&
                     spell.Category != SpellCategory.MeleeDefenseLowering &&
                     spell.Category != SpellCategory.MissileDefenseLowering) ||
-                    spell.School == MagicSchool.ItemEnchantment))
-                {
-                    return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
+                    spell.School == MagicSchool.ItemEnchantment)
+                    {
+                        return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
+                    }
+
+                    if (spell.School == MagicSchool.VoidMagic)
+                    {
+                        var arenaEvent = ArenaManager.GetArenaEventByLandblock(this.Location.Landblock);
+                        if (arenaEvent == null || arenaEvent.Status != 4)
+                        {
+                            return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
+                        }
+                    }
                 }
             }
             else
