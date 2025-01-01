@@ -183,20 +183,6 @@ namespace ACE.Server.WorldObjects
             if (caster == target)
                 resisted = false;
 
-            //Make all void spells resist if in arena landblock before event starts
-            //Vulns and some debuffs are still allowed.
-            if (targetPlayer != null && player != null && spell.School == MagicSchool.VoidMagic)
-            {
-                if (ArenaLocation.IsArenaLandblock(player.Location.Landblock))
-                {
-                    var arenaEvent = ArenaManager.GetArenaEventByLandblock(player.Location.Landblock);
-                    if (arenaEvent == null || arenaEvent.Status != 4)
-                    {
-                        resisted = true;
-                    }
-                }
-            }
-
             if (resisted)
             {
                 if (player != null)
