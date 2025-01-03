@@ -61,6 +61,11 @@ namespace ACE.Server.WorldObjects
                 case "Black Opal":
                     resultMessage = TinkeringLotto_PlayARCSCBLottery(salvageWorkmanship);
                     break;
+                case "Zircon":
+                case "Peridot":
+                case "Yellow Topaz":
+                    resultMessage = TinkeringLotto_PlayDefenseImbueLottery(salvageWorkmanship);
+                    break;
                 default:
                     return "";
             }
@@ -578,6 +583,38 @@ namespace ACE.Server.WorldObjects
 
                 //    resultMsg = string.IsNullOrEmpty(resultMsg) ? currRollResultMsg : $"{resultMsg}\n{currRollResultMsg}";
                 //}
+            }
+
+            return resultMsg;
+        }
+
+        private string TinkeringLotto_PlayDefenseImbueLottery(int salvageWorkmanship)
+        {
+            string resultMsg = "";
+
+            Random rand = new Random();
+            var roll = rand.NextDouble();
+            var alBonus = 0;
+
+            //Roll for 30% chance to proc bonus AL.  Random amount of AL between 10 and 20            
+            if (roll < 0.3)
+            {
+                alBonus = rand.Next(10, 21);
+                resultMsg = $"Improved Armor Level by {alBonus}";
+
+                //If you're using WS 10 salvage and your target item is <= WS 6, roll for a bonus 15% chance to add 5 AL
+                if (salvageWorkmanship == 10 && this.Workmanship <= 6)
+                {
+                    roll = rand.NextDouble();
+                    if(roll < 0.15)
+                    {
+                        alBonus += rand.Next(3, 6);
+                        resultMsg = $"Jackpot! Improved Armor Level by {alBonus}";
+                    }
+                }
+
+                this.ArmorLevel += alBonus;                
+                HandleTinkerLottoLog($"AL+{alBonus}");
             }
 
             return resultMsg;
