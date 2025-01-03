@@ -162,15 +162,14 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
 	 , (45489, 4, 43044, -1, 0, 0, False) /* Create Paradox-touched Olthoi Bow for Shop */
 	 , (45489, 4, 43045, -1, 0, 0, False) /* Create Paradox-touched Olthoi Crossbow for Shop */
 	 , (45489, 4, 35912, -1, 0, 0, False) /* Create Paradox-touched Olthoi Atlatl for Shop */
-
-     , (45489, 4, 32638, -1, 0, 0, False) /* Create Shadowfire Isparian Axe (32638) for Shop */
+     , (45489, 4, 23908, -1, 0, 0, False) /* Create Shadowfire Isparian Axe (23908) for Shop */
      , (45489, 4, 32643, -1, 0, 0, False) /* Create Shadowfire Isparian Dagger (32643) for Shop */
      , (45489, 4, 32641, -1, 0, 0, False) /* Create Shadowfire Isparian Claw (32641) for Shop */
      , (45489, 4, 32644, -1, 0, 0, False) /* Create Shadowfire Isparian Mace (32644) for Shop */
      , (45489, 4, 32645, -1, 0, 0, False) /* Create Shadowfire Isparian Spear (32645) for Shop */
      , (45489, 4, 32646, -1, 0, 0, False) /* Create Shadowfire Isparian Staff (32646) for Shop */
      , (45489, 4, 32600, -1, 0, 0, False) /* Create Shadowfire Isparian Sword (32600) for Shop */
-	 , (45489, 4, 46394, -1, 0, 0, False) /* Create Shadowfire Isparian Two Handed Sword for Shop 
+	 , (45489, 4, 46394, -1, 0, 0, False) /* Create Shadowfire Isparian Two Handed Sword for Shop */
 	 , (45489, 4, 46390, -1, 0, 0, False) /* Create Shadowfire Isparian Crossbow for Shop */
      , (45489, 4, 46396, -1, 0, 0, False) /* Create Shadowfire Isparian Wand (46396) for Shop */
      , (45489, 4, 46395, -1, 0, 0, False) /* Create Life-attuned Shadowfire Isparian Wand (46395) for Shop */
@@ -183,4 +182,18 @@ VALUES (45489, 4, 34024, -1, 0, 0, False) /* Create Silifi of Crimson Night (340
      , (45489, 4, 51989, -1, 0, 0, False) /* Create Rynthid Tentacle Wand (51989) for Shop */
      , (45489, 4, 51990, -1, 0, 0, False) /* Create Life-attuned Rynthid Tentacle Wand (51990) for Shop */
      , (45489, 4, 51991, -1, 0, 0, False) /* Create Nether-attuned Rynthid Tentacle Wand (51991) for Shop */
-     , (45489, 4, 37585, -1, 0, 0, False) /* Create Soul Bound Staff (37585) for Shop */;
+     , (45489, 4, 37585, -1, 0, 0, False) /* Create Soul Bound Staff (37585) for Shop */
+     , (45489, 4, 23908, -1, 0, 0, False) /* Create Assault Axe (23908) for Shop */
+     , (45489, 4, 23912, -1, 0, 0, False) /* Create Assault Dirk (23912) for Shop */
+     , (45489, 4, 23910, -1, 0, 0, False) /* Create Assault Cestus (23910) for Shop */
+     , (45489, 4, 23913, -1, 0, 0, False) /* Create Assault Mace (23913) for Shop */
+     , (45489, 4, 23914, -1, 0, 0, False) /* Create Assault Spear (23914) for Shop */
+     , (45489, 4, 23915, -1, 0, 0, False) /* Create Assault Staff (23915) for Shop */
+     , (45489, 4, 23916, -1, 0, 0, False) /* Create Assault Sword (23916) for Shop */
+	 , (45489, 4, 41791, -1, 0, 0, False) /* Create Assault Greatsword for Shop */
+	 , (45489, 4, 23909, -1, 0, 0, False) /* Create Assault Bow (23907) for Shop */
+	 , (45489, 4, 23911, -1, 0, 0, False) /* Create Assault Crossbow for Shop */
+	 , (45489, 4, 23907, -1, 0, 0, False) /* Create Assault Atlatl (23907) for Shop */
+	 , (45489, 4, 23890, -1, 0, 0, False) /* Create Assault Orb (23890) for Shop */
+	 , (45489, 4, 35950, -1, 0, 0, False) /* Create Tusker Paw Wand (35950) for Shop */;
+	
