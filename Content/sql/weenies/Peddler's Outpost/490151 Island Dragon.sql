@@ -117,12 +117,13 @@ INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490151,  4483,  2.05)  /* Incantation of Lightning Vulnerability Other */
      , (490151,  5967,  2.02)  /* Incantation of Lightning Bolt */
      , (490151,  5969,  2.15)  /* Incantation of Lightning Arc */
-	 , (490151,  4450,  2.15)  /* Incantation of Lightning Blast */
-	 , (490151,  4452,  2.15)  /* Incantation of Lightning Streak */
+	 , (490151,  4450,  2.25)  /* Incantation of Lightning Blast */
+	 , (490151,  4452,  2.25)  /* Incantation of Lightning Streak */
 	 , (490151,  3974,  2.15)  /* Lightning Bomb */
 	 , (490151,  4182,  2.15)  /* Ball Lightning */
 	 , (490151,  4312,  2.15)  /* Incantation of Imperil Other */
-	 , (490151,  6169,  2.15)  /* Deadly Lightning Volley */;
+	 , (490151,  6169,  2.15)  /* Deadly Lightning Volley */
+	 , (490151,  1837,  2.999999999999) /* Lightning Barrage */;
 	  
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
 VALUES (490151, 414) /* PLAYER_DEATH_EVENT */;
