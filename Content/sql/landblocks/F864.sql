@@ -85,24 +85,28 @@ VALUES (0x7F864019, 490263, 0xF864000F, 24.0431, 162.022, 59.5712, 0.495834, 0, 
 /* @teleloc 0xF864000F [24.043100 162.022003 59.571201] 0.495834 0.000000 0.000000 0.868418 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86401A, 490263, 0xF8640006, 13.43097, 122.0345, 55.89943, -0.638634, 0, 0, 0.769511, False, '2024-02-10 16:47:20'); /* Lower Outpost Isle Generator */
-/* @teleloc 0xF8640006 [13.430970 122.034500 55.899429] -0.638634 0.000000 0.000000 0.769511 */
+VALUES (0x7F86401A, 490263, 0xF864000D, 29.6415, 101.575, 60.4001, -0.638634, 0, 0, 0.769511, False, '2024-02-10 16:47:20'); /* Lower Outpost Isle Generator */
+/* @teleloc 0xF864000D [29.641500 101.574997 60.400101] -0.638634 0.000000 0.000000 0.769511 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86401B, 490263, 0xF864001D, 92.0515, 102.319, 68.8154, -0.532434, 0, 0, 0.846471, False, '2024-02-10 16:47:25'); /* Lower Outpost Isle Generator */
-/* @teleloc 0xF864001D [92.051498 102.319000 68.815399] -0.532434 0.000000 0.000000 0.846471 */
+VALUES (0x7F86401B, 490263, 0xF864001C, 92.2835, 72.2479, 62.4474, -0.532434, 0, 0, 0.846471, False, '2024-02-10 16:47:25'); /* Lower Outpost Isle Generator */
+/* @teleloc 0xF864001C [92.283501 72.247902 62.447399] -0.532434 0.000000 0.000000 0.846471 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F86401C, 490263, 0xF864002B, 132.666, 55.1473, 34.5309, -0.313779, 0, 0, 0.949496, False, '2024-02-10 16:47:28'); /* Lower Outpost Isle Generator */
 /* @teleloc 0xF864002B [132.666000 55.147301 34.530899] -0.313779 0.000000 0.000000 0.949496 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86401E,  3951, 0xF8640009, 37.7535, 11.2349, 36.3746, 0.576509, 0, 0, 0.817091, False, '2024-07-04 10:30:20'); /* Linkable Monster Gen (1 hour) */
-/* @teleloc 0xF8640009 [37.753502 11.234900 36.374599] 0.576509 0.000000 0.000000 0.817091 */
+VALUES (0x7F86401D, 490263, 0xF8640021, 102.417, 11.5606, 45.4142, -0.106405, 0, 0, -0.994323, False, '2024-02-10 16:47:41'); /* Lower Outpost Isle Generator */
+/* @teleloc 0xF8640021 [102.417000 11.560600 45.414200] -0.106405 0.000000 0.000000 -0.994323 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F86401E,  3951, 0xF864000A, 41.9253, 31.7305, 41.1132, 0.576509, 0, 0, 0.817091, False, '2024-07-04 10:30:20'); /* Linkable Monster Gen (1 hour) */
+/* @teleloc 0xF864000A [41.925301 31.730499 41.113201] 0.576509 0.000000 0.000000 0.817091 */
 
 INSERT INTO `landblock_instance_link` (`parent_GUID`, `child_GUID`, `last_Modified`)
 VALUES (0x7F86401E, 0x7F86401F, '2024-07-04 10:30:52') /* Island Dragon (490151) */;
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F86401F, 490151, 0xF8640009, 37.7535, 11.2349, 36.3746, 0.576509, 0, 0, 0.817091, False, '2024-07-04 10:30:20'); /* Island Dragon */
-/* @teleloc 0xF864000A [41.925301 31.730499 41.434700] 0.576509 0.000000 0.000000 0.817091 */
+VALUES (0x7F86401F, 490151, 0xF864000A, 41.92532, 31.7305, 41.43467, 0.576509, 0, 0, 0.817091,  True, '2024-07-04 10:30:52'); /* Island Dragon */
+/* @teleloc 0xF864000A [41.925320 31.730499 41.434669] 0.576509 0.000000 0.000000 0.817091 */
