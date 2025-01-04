@@ -56,9 +56,7 @@ VALUES (490151,   1,      1.5) /* HeartbeatInterval */
 	 , (490151,  80,       3) /* AiUseMagicDelay */
 	 , (490151, 166,       1) /* ResistNether */
      , (490151, 125,       1) /* ResistHealthDrain */
-     , (490151, 151,       0.80) /* IgnoreShield */
-	 , (490151,  43,      20) /* GeneratorRadius */
-	 , (490151,  41,     600) /* RegenerationInterval */;
+     , (490151, 151,       0.80) /* IgnoreShield */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490151,   1, 'Island Dragon') /* Name */;
