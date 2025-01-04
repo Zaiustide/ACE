@@ -96,13 +96,13 @@ VALUES (49009000,   1, 900, 0, 0) /* Strength */
      , (49009000,   6, 1200, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (49009000,   1,  84252, 0, 0, 84252) /* MaxHealth */
+VALUES (49009000,   1,  124252, 0, 0, 124252) /* MaxHealth */
      , (49009000,   3,  1000000, 0, 0,  1000000) /* MaxStamina */
      , (49009000,   5,  1000000, 0, 0, 1000000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
 VALUES (49009000,  6, 0, 3, 0, 200, 0, 608.0722585280382) /* MeleeDefense        Specialized */
-     , (49009000,  7, 0, 3, 0, 350, 0, 608.0722585280382) /* MissileDefense      Specialized */
+     , (49009000,  7, 0, 3, 0, 420, 0, 608.0722585280382) /* MissileDefense      Specialized */
      , (49009000, 13, 0, 3, 0, 400, 0, 608.0722585280382) /* Heavy Weapon      Specialized */
      , (49009000, 15, 0, 3, 0, 200, 0, 608.0722585280382) /* MagicDefense        Specialized */
      , (49009000, 20, 0, 3, 0, 100, 0, 608.0722585280382) /* Deception           Specialized */
