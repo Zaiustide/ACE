@@ -39,5 +39,5 @@ INSERT INTO `weenie_properties_i_i_d` (`object_Id`, `type`, `value`)
 VALUES (490233,  16, 0x00000000) /* ActivationTarget */;
 
 INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
-VALUES (490233, -1, 490234, 1, 1, 1, 1, 4, 0, 0, 0, 0xF8640009, 35.943977, 21.914394,   36.817196, 0.659072, 0, 0,  0.752079) /* Generate Shoushi Combat Arena (452000)  Location to (re)Generate: Static */;
+VALUES (490233, -1, 490234, 1, 1, 1, 1, 4, 0, 0, 0, 0xF662001A, 93.3084, 40.8427, -0.20983, -0.998726, 0, 0, -0.05047) /* Generate Shoushi Combat Arena (452000)  Location to (re)Generate: Static */;
 

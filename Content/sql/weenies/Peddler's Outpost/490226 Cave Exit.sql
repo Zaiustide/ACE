@@ -33,4 +33,5 @@ VALUES (490226,   1, 0x02001945) /* Setup */
      , (490226,  22, 0x3400002A) /* PhysicsEffectTable */;
 
 INSERT INTO `weenie_properties_position` (`object_Id`, `position_Type`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
-VALUES (490226, 2,  0xF864000B, 26.768614,  60.954163,  48.394745,  -0.009299, 0, 0, -0.999957);
+VALUES (490226, 2,  0xF6620023, 106.283958, 50.604279, 0.222023, -0.723892, 0.000000, 0.000000,-0.689914);
+
