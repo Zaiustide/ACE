@@ -413,4 +413,5 @@ VALUES (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   141 
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 53334 /* Corrupted Heartwood Wand */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72004 /* Stormwood Atlatl */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72005 /* Stormwood Staff */, '2022-05-10 03:49:02')
-     , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72006 /* Stormwood Dagger */, '2022-05-10 03:49:02');
+     , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72006 /* Stormwood Dagger */, '2022-05-10 03:49:02')
+	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24207 /* Weeping Wand */, '2022-05-10 03:49:02');

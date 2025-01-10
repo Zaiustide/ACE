@@ -29,7 +29,7 @@ INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (490520,  12,     0.5) /* Shade */
      , (490520,  31,      25) /* VisualAwarenessRange */
      , (490520,  77,       1) /* PhysicsScriptIntensity */
-	 , (490520,  39,     1.5) /* DefaultScale */;
+	 , (490520,  39,     1) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490520,   1, 'Fire Mercenary') /* Name */;
