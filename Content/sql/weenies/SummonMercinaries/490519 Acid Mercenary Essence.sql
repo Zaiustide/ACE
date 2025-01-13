@@ -36,8 +36,8 @@ VALUES (490519,  39,     0.4) /* DefaultScale */
      , (490519, 167,      45) /* CooldownDuration */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490519,   1, 'Acid Mercinary Essence') /* Name */
-     , (490519,  14, 'Use this essence to summon or dismiss your Acid Mercinary.') /* Use */;
+VALUES (490519,   1, 'Acid Mercenary Essence') /* Name */
+     , (490519,  14, 'Use this essence to summon or dismiss your Acid Mercenary.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490519,   1, 0x02000181) /* Setup */

@@ -58,8 +58,7 @@ VALUES (490185,   1,       5) /* HeartbeatInterval */
      , (490185, 166,       1) /* ResistNether */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (490185,   1, 'Island Zefir') /* Name */
-     , (490185,  45, 'KilltaskViridianZefir') /* KillQuest */;
+VALUES (490185,   1, 'Island Zefir') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490185,   1, 0x02001C3B) /* Setup */
