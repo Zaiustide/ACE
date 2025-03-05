@@ -2217,7 +2217,7 @@ namespace ACE.Server.WorldObjects
             IsAffecting = false;
         }
 
-        private static readonly double defaultIgnoreSomeMagicProjectileDamage = 0.25;
+        private static readonly double defaultIgnoreSomeMagicProjectileDamage = 0.18;
 
         public double? GetAbsorbMagicDamage()
         {
