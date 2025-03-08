@@ -414,4 +414,11 @@ VALUES (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   141 
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72004 /* Stormwood Atlatl */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72005 /* Stormwood Staff */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72006 /* Stormwood Dagger */, '2022-05-10 03:49:02')
-	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24207 /* Weeping Wand */, '2022-05-10 03:49:02');
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24207 /* Weeping Wand */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31798 /* Slashing Compound Bow */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31799 /* Acid Compound Bow */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31800 /* Blunt Compound Bow */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31801 /* Electric Compound Bow */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31802 /* Fire Compound Bow */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31803 /* Frost Compound Bow */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31804 /* Piercing Compound Bow */, '2022-05-10 03:49:02');

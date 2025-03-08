@@ -19,7 +19,7 @@ VALUES (480611,  69, False) /* IsSellable */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (480611,   1, 'Experience Certificate') /* Name */
-     , (480611,  15, 'A certificate that grants the bearer 5,000,000,000 experience. Bring this certificate to Anti Parazi for your reward. ') /* ShortDesc */;
+     , (480611,  15, 'A certificate that grants the bearer 10,000,000,000 experience. Bring this certificate to Anti Parazi for your reward. ') /* ShortDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (480611,   1, 0x020000E3) /* Setup */

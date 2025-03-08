@@ -145,5 +145,4 @@ VALUES (46425, 2, 25641,  0, 4, 0, False) /* Create Leather Cuirass (25641) for 
      , (46425, 4, 46420, -1, 0, 0, False) /* Create Skill Reset Certificate (46420) for Shop */
      , (46425, 4, 46422, -1, 0, 0, False) /* Create Mastery Reset Certificate (46422) for Shop */
      , (46425, 4, 46415, -1, 0, 0, False) /* Create Experience Certificate (46415) for Shop */
-	 , (46425, 4, 490312, -1, 0, 0, False) /* Book of Level 8 Spell Certificates  for Shop */
-, (46425, 4, 490307, -1, 0, 0, False) /* Create Experience Certificate (46415) for Shop */;
+	 , (46425, 4, 490312, -1, 0, 0, False) /* Book of Level 8 Spell Certificates  for Shop */;

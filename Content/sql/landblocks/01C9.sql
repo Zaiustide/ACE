@@ -176,5 +176,13 @@ VALUES (0x701C905B, 490356, 0x01C901EF, 109.431, -83.5173, -5.95673, 0.043307, 0
 /* @teleloc 0x01C901EF [109.431000 -83.517303 -5.956730] 0.043307 0.000000 0.000000 -0.999062 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C905C, 490530, 0x01C901E4, 86.87894, -93.32718, -5.99, -0.910051, 0, 0, 0.414497, False, '2024-12-26 20:28:04'); /* Artemis */
-/* @teleloc 0x01C901E4 [86.878937 -93.327179 -5.990000] -0.910051 0.000000 0.000000 0.414497 */
+VALUES (0x701C905C, 490530, 0x01C901E4, 86.8789, -93.3272, -5.99, -0.910051, 0, 0, 0.414497, False, '2024-12-26 20:28:04'); /* Artemis */
+/* @teleloc 0x01C901E4 [86.878899 -93.327202 -5.990000] -0.910051 0.000000 0.000000 0.414497 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C905D, 32000110, 0x01C901F2, 123.182, -27.6672, -5.99675, 0.707107, 0, 0, 0.707107, False, '2025-03-08 11:53:03'); /* Morgan le Fay */
+/* @teleloc 0x01C901F2 [123.181999 -27.667200 -5.996750] 0.707107 0.000000 0.000000 0.707107 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C905E, 49100001, 0x01C901F2, 116.599, -27.6509, -5.9925, -0.731951, 0, 0, 0.681358, False, '2025-03-08 14:00:30');
+/* @teleloc 0x01C901F2 [116.598999 -27.650900 -5.992500] -0.731951 0.000000 0.000000 0.681358 */
