@@ -67,7 +67,7 @@ VALUES (480607, -1, 10000, 1, 1, 1, 2, 72, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* 
 	 , (480607, 0.20, 52797, 1, 1, 1, 2, 8, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Gauntlet Coin (52797) (x1 up to max of 5) - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (480607, 0.24, 38726, 1, 1, 5, 2, 8, 5, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Black Market Gem of Dispelling (38726) (x1 up to max of 5) - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (480607, 0.25, 510000, 1, 1, 1, 2, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate A box (510000) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
-	 , (480607, 0.3, 52968, 1, 1, 10, 2, 8, 10, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Infused Amber Shard - Regenerate upon PickUp - Location to (re)Generate: Contain */
+	 , (480607, 0.3, 52968, 1, 1, 50, 2, 8, 10, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Infused Amber Shard - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (480607, 0.325, 52969, 1, 1, 10, 2, 8, 10, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Corrupted Amber Shard (52969) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
      , (480607, 0.375, 20630, 1, 1, 25, 2, 8, 25, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Trade Note (250,000) (20630) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
      , (480607, 0.40, 490321, 1, 1, 1, 2, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Luminance Exchange Token (490321) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
