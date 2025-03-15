@@ -66,6 +66,12 @@ namespace ACE.Server.Entity
                     aerbax.MaxPlayersPerAllegiance = 7;
                     aerbax.AreaLandblockIds = new uint[] { 0x6543 };
                     _zergControlLandblocksMap.Add(0x6543, aerbax);
+
+                    //Tusker Queen World Boss
+                    var tq = new ZergControlArea();
+                    tq.MaxPlayersPerAllegiance = 5;
+                    tq.AreaLandblockIds = new uint[] { 0x5C47 };
+                    _zergControlLandblocksMap.Add(0x5C47, tq);
                 }
 
                 return _zergControlLandblocksMap;
