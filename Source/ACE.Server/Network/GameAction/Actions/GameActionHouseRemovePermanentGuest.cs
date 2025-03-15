@@ -1,6 +1,7 @@
 using System;
 
 using ACE.Common.Extensions;
+using ACE.Server.Command.Handlers;
 
 namespace ACE.Server.Network.GameAction.Actions
 {
@@ -13,6 +14,11 @@ namespace ACE.Server.Network.GameAction.Actions
         public static void Handle(ClientMessage message, Session session)
         {
             //Console.WriteLine("Received 0x246 - HouseRemovePermanentGuest");
+
+            if (!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
 
             var guestName = message.Payload.ReadString16L();
 

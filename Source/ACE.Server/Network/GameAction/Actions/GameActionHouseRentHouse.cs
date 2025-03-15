@@ -14,6 +14,11 @@ namespace ACE.Server.Network.GameAction.Actions
         {
             //Console.WriteLine("Received 0x221 - RentHouse");
 
+            if (!Command.Handlers.PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
+
             var slumlord = message.Payload.ReadUInt32();
             var items = message.Payload.ReadListUInt32();   // items being used to pay rent
 

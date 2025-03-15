@@ -249,7 +249,7 @@ namespace ACE.Entity.Enum.Properties
         LastChugTimestamp = 9010,
 
         [ServerOnly]
-        LastArenaCommandTimestamp = 9011,
+        LastPlayerCommandTimestamp = 9012,
 
         /***** FOREDAWN CUSTOMS *****/
         ForedawnPvpDamageMulti = 52000

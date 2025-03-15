@@ -36,6 +36,9 @@ namespace ACE.Server.Command.Handlers
             "")]
         public static void HandlePop(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session, 1))
+                return;
+
             CommandHandlerHelper.WriteOutputInfo(session, $"Current world population: {PlayerManager.GetOnlineCount():N0}", ChatMessageType.Broadcast);
         }
 
@@ -43,6 +46,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("myquests", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows your quest log")]
         public static void HandleQuests(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (!PropertyManager.GetBool("quest_info_enabled").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"myquests\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -85,11 +91,14 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("house-select", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 1, "For characters/accounts who currently own multiple houses, used to select which house they want to keep")]
         public static void HandleHouseSelect(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             HandleHouseSelect(session, false, parameters);
         }
 
         public static void HandleHouseSelect(Session session, bool confirmed, params string[] parameters)
-        {
+        {            
             if (!int.TryParse(parameters[0], out var houseIdx))
                 return;
 
@@ -159,6 +168,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("debugcast", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows debug information about the current magic casting state")]
         public static void HandleDebugCast(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             var physicsObj = session.Player.PhysicsObj;
 
             var pendingActions = physicsObj.MovementManager.MoveToManager.PendingActions;
@@ -187,6 +199,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("fixcast", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Fixes magic casting if locked up for an extended time")]
         public static void HandleFixCast(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             var magicState = session.Player.MagicState;
 
             if (magicState.IsCasting && DateTime.UtcNow - magicState.StartTime > TimeSpan.FromSeconds(5))
@@ -200,6 +215,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("castmeter", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows the fast casting efficiency meter")]
         public static void HandleCastMeter(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (parameters.Length == 0)
             {
                 session.Player.MagicState.CastMeter = !session.Player.MagicState.CastMeter;
@@ -301,6 +319,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("config", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 1, "Manually sets a character option on the server.\nUse /config list to see a list of settings.", "<setting> <on/off>")]
         public static void HandleConfig(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (!PropertyManager.GetBool("player_config_command").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"config\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -392,6 +413,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("aceversion", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows this server's version data")]
         public static void HandleACEversion(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (!PropertyManager.GetBool("version_info_enabled").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"aceversion\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -429,6 +453,8 @@ namespace ACE.Server.Command.Handlers
             )]
         public static void HandleReportbug(Session session, params string[] parameters)
         {
+            return;
+
             if (!PropertyManager.GetBool("reportbug_enabled").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"reportbug\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -551,23 +577,16 @@ namespace ACE.Server.Command.Handlers
             "The arena command is used to join an arena event or get information about arena statistics")]
         public static void HandleArena(Session session, params string[] parameters)
         {
-            log.Warn($"HandleArena called for player = {session.Player?.Name}, params = {string.Join(" ", parameters)}");
+            log.Debug($"HandleArena called for player = {session.Player?.Name}, params = {string.Join(" ", parameters)}");
+
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
 
             if (parameters.Count() < 1)
             {
                 CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  See the arena help file below for valid parameters.");
                 parameters[0] = "help";
-            }
-
-            if (session.Player.LastArenaCommandTimestamp.HasValue && Time.GetDateTimeFromTimestamp(session.Player.LastArenaCommandTimestamp.Value) > DateTime.Now.AddSeconds(-3))
-            {
-                CommandHandlerHelper.WriteOutputInfo(session, "To prevent abuse, you can only issue one arena command every 3 seconds. Please try again.");
-                return;
-            }
-            else
-            {
-                session.Player.LastArenaCommandTimestamp = Time.GetUnixTime(DateTime.Now);
-            }
+            }            
 
             var actionType = parameters[0];
 
@@ -970,6 +989,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("ForceLogoffStuckCharacter", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Force log off of character that's stuck in game.  Is only allowed when initiated from a character that is on the same account as the target character.")]
         public static void HandleForceLogoffStuckCharacter(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             var playerName = "";
             if (parameters.Length > 0)
                 playerName = string.Join(" ", parameters);
@@ -1024,6 +1046,9 @@ namespace ACE.Server.Command.Handlers
             "< New Name >")]
         public static void HandleBuyRename(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if(parameters.Length < 1)
             {
                 CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters: please provide a new character name. Usage: /BuyRename <NewCharacterName>", ChatMessageType.Broadcast);
@@ -1135,6 +1160,23 @@ namespace ACE.Server.Command.Handlers
             }
         }
 
+        public static bool CheckPlayerCommandRateLimit(Session session, int limitSeconds = 3)
+        {
+            if (session == null)
+                return false;
+
+            if (session.Player.LastPlayerCommandTimestamp.HasValue && Time.GetDateTimeFromTimestamp(session.Player.LastPlayerCommandTimestamp.Value) > DateTime.UtcNow.AddSeconds(-1 * limitSeconds))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"To prevent abuse, you can only issue this player command every {limitSeconds} seconds. Please try again later.");
+                return false;
+            }
+            else
+            {
+                session.Player.LastPlayerCommandTimestamp = Time.GetUnixTime(DateTime.UtcNow);
+                return true;
+            }
+        }
+
         #region Town Control
 
         private static string _townOwnerMessageHeader = "Town Owners:\n";
@@ -1145,6 +1187,9 @@ namespace ACE.Server.Command.Handlers
             "")]
         public static void HandleTownOwnersQuery(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             try
             {
                 StringBuilder townOwnerMsg = new StringBuilder(_townOwnerMessageHeader);
@@ -1183,6 +1228,9 @@ namespace ACE.Server.Command.Handlers
             "")]
         public static void HandleTownRespiteQuery(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             try
             {
                 if (parameters != null && parameters.Length > 0)

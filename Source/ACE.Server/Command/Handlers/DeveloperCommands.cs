@@ -115,6 +115,11 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("fixbusy", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 0, "Attempts to remove the hourglass / fix the busy state for the player")]
         public static void HandleFixBusy(Session session, params string[] parameters)
         {
+            if (!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
+
             session.Player.SendUseDoneEvent();
         }
 
@@ -903,6 +908,11 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("spendallxp", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 0, "Spend all available XP on Attributes, Vitals and Skills.")]
         public static void HandleSpendAllXp(Session session, params string[] parameters)
         {
+            if(!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
+
             session.Player.SpendAllXp();
 
             ChatPacket.SendServerMessage(session, "All available xp has been spent. You must now log out for the updated values to take effect.", ChatMessageType.Broadcast);

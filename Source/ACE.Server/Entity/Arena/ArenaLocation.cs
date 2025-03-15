@@ -1008,6 +1008,35 @@ namespace ACE.Server.Entity
                         SetPlayerRewardLimitProperties(player, winner);
                     }
 
+                    //Handle PK quests
+                    player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateAnyArena);
+                    player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_WinAnyArena);
+                    player.CompletePkQuestTask("ARENA_DMG20K", (int)winner.TotalDmgDealt);
+                    if(winner.TotalDmgReceived <= 800)
+                        player.CompletePkQuestTask("ARENA_RECDMG800", 1);
+
+                    switch (ActiveEvent.EventType)
+                    {
+                        case "1v1":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate1v1Arena);
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Win1v1Arena);
+                            break;
+                        case "2v2":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate2v2Arena);
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Win2v2Arena);
+                            break;
+                        case "ffa":
+                            player.CompletePkQuestTask("ARENA_FFA_2");
+                            player.CompletePkQuestTask("ARENA_FFA_WIN_1");
+                            break;
+                        case "group":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_WinGroupArena);
+                            break;
+                        default:
+                            break;
+                    }
+
                     ArenaManager.DispelArenaRares(player);
                 }
             }
@@ -1310,6 +1339,30 @@ namespace ACE.Server.Entity
                         SetPlayerRewardLimitProperties(player, loser);
                     }
 
+                    //Handle PK quests
+                    player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateAnyArena);
+                    player.CompletePkQuestTask("ARENA_DMG20K", (int)loser.TotalDmgDealt);
+
+                    switch (ActiveEvent.EventType)
+                    {
+                        case "1v1":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate1v1Arena);
+                            break;
+                        case "2v2":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate2v2Arena);
+                            break;
+                        case "ffa":
+                            player.CompletePkQuestTask("ARENA_FFA_2");
+                            if(loser.FinishPlace > 0 && loser.FinishPlace <= 3)
+                                player.CompletePkQuestTask("ARENA_FFA_TOP3");
+                            break;
+                        case "group":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
+                            break;
+                        default:
+                            break;
+                    }
+
                     ArenaManager.DispelArenaRares(player);
                 }
             }
@@ -1535,6 +1588,29 @@ namespace ACE.Server.Entity
                         }
 
                         SetPlayerRewardLimitProperties(player, arenaPlayer);
+                    }
+
+                    //PK Quest stamps
+                    player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateAnyArena);
+                    player.CompletePkQuestTask("ARENA_DMG20K", (int)arenaPlayer.TotalDmgDealt);
+                    switch (ActiveEvent.EventType)
+                    {
+                        case "1v1":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate1v1Arena);
+                            break;
+                        case "2v2":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate2v2Arena);
+                            break;
+                        case "ffa":
+                            player.CompletePkQuestTask("ARENA_FFA_2");
+                            if(!isLoss)
+                                player.CompletePkQuestTask("ARENA_FFA_TOP3");
+                            break;
+                        case "group":
+                            player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
+                            break;
+                        default:
+                            break;
                     }
 
                     ArenaManager.DispelArenaRares(player);

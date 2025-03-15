@@ -103,6 +103,9 @@ namespace ACE.Entity.Enum.Properties
         ArenaRewardsByOpponent = 9009,
 
         [ServerOnly]
+        PKQuestInfo = 9010,
+
+        [ServerOnly]
         CurrentRareEnchantmentIds = 52029,
 
         [ServerOnly]

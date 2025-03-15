@@ -153,7 +153,7 @@ namespace ACE.Server.Managers
                 case "2v2":
                     maxOpposingTeamSize = 2;
                     break;
-                case "FFA":
+                case "ffa":
                     maxOpposingTeamSize = 1;
                     break;
                 case "group":
@@ -164,7 +164,7 @@ namespace ACE.Server.Managers
             player.CharacterId = characterId;
             player.CharacterName = characterName;
             player.CharacterLevel = (uint)(characterLevel.HasValue ? characterLevel.Value : 0);
-            player.EventType = eventType;
+            player.EventType = eventType.ToLower();
             player.MonarchId = monarchId;
             player.MonarchName = monarchName;
             player.CreateDateTime = DateTime.Now;

@@ -19,6 +19,8 @@ using ACE.Server.Network.Handlers;
 using ACE.Database;
 using ACE.Server.Entity.TownControl;
 
+using ACE.Server.Entity.PKQuests;
+
 namespace ACE.Server.WorldObjects
 {
     partial class Player
@@ -120,6 +122,41 @@ namespace ACE.Server.WorldObjects
 
                 PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalPKDe, ChatMessageType.Broadcast));
                 _ = TurbineChatHandler.SendWebhookedChat("God of PK", webhookMsg, null, "General");
+
+                //Handle PK Quests
+                bool isPkQuestEligible =
+                    pkPlayer.Allegiance != null &&
+                    pkPlayer.Allegiance.MonarchId.HasValue &&
+                    TownControlAllegiances.IsAllowedAllegiance((int)pkPlayer.Allegiance.MonarchId.Value) &&
+                    this.Allegiance != null &&
+                    this.Allegiance.MonarchId.HasValue &&
+                    TownControlAllegiances.IsAllowedAllegiance((int)this.Allegiance.MonarchId.Value) &&
+                    this.Allegiance.MonarchId != pkPlayer.Allegiance.MonarchId;
+
+                if (isPkQuestEligible)
+                {
+                    pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
+
+                    switch (Location.Landblock)
+                    {
+                        case 0xF76B:
+                        case 0xF76C:
+                        case 0xF86B:
+                            //Island LS
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDLS_3");
+                            break;
+                        case 0x01C9:
+                            //Subway
+                            pkPlayer.CompletePkQuestTask("PKKILL_SUB_3");
+                            break;
+                        case 0x0007:
+                            //TN
+                            pkPlayer.CompletePkQuestTask("PKKILL_TN_3");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
             else if (IsPKLiteDeath(topDamager))
                 pkPlayer.PlayerKillsPkl++;
