@@ -230,7 +230,7 @@ VALUES  (480480, 2,   6046, 0, 93, 1.1, False) /* Greater Shadow Amuli Coat (660
 	 , (480480, 4, 490042,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490283,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 490289,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
-	 , (480480, 4, 490296,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
+	 , (480480, 4, 490496,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 490297,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 490555,  0, 0, 0, False) /* Create Boxed Essence of Power for Shop */
 	 , (480480, 4, 490304,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
