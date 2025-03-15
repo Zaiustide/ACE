@@ -1693,21 +1693,20 @@ namespace ACE.Server.Entity
             var pklArena = new ArenaLocation();
             pklArena.LandblockId = 0x0067;
             pklArena.SupportedEventTypes = new List<string>();
-            pklArena.SupportedEventTypes.Add("1v1");
             pklArena.SupportedEventTypes.Add("2v2");
             pklArena.SupportedEventTypes.Add("ffa");
             pklArena.SupportedEventTypes.Add("group");
             pklArena.ArenaName = "PKL Arena";
             locList.Add(pklArena.LandblockId, pklArena);
 
-            ////Binding Realm
-            //var bindRealm = new ArenaLocation();
-            //bindRealm.LandblockId = 0x007F;
-            //bindRealm.SupportedEventTypes = new List<string>();
-            //bindRealm.SupportedEventTypes.Add("1v1");
-            //bindRealm.SupportedEventTypes.Add("2v2");
-            //bindRealm.ArenaName = "Binding Realm";
-            //locList.Add(bindRealm.LandblockId, bindRealm);
+            //Binding Realm
+            var bindRealm = new ArenaLocation();
+            bindRealm.LandblockId = 0x007F;
+            bindRealm.SupportedEventTypes = new List<string>();
+            bindRealm.SupportedEventTypes.Add("1v1");
+            bindRealm.SupportedEventTypes.Add("2v2");
+            bindRealm.ArenaName = "Binding Realm";
+            locList.Add(bindRealm.LandblockId, bindRealm);
 
             //0x0145, //Bone Lair            
             var boneLair = new ArenaLocation();
@@ -1760,6 +1759,7 @@ namespace ACE.Server.Entity
             fowl.SupportedEventTypes = new List<string>();
             fowl.SupportedEventTypes.Add("1v1");
             fowl.SupportedEventTypes.Add("2v2");
+            fowl.SupportedEventTypes.Add("ffa");
             fowl.SupportedEventTypes.Add("group");
             fowl.ArenaName = "Fowl Basement";
             locList.Add(fowl.LandblockId, fowl);
@@ -1787,8 +1787,6 @@ namespace ACE.Server.Entity
             oneTen.LandblockId = 0x039D;
             oneTen.SupportedEventTypes = new List<string>();
             oneTen.SupportedEventTypes.Add("1v1");
-            oneTen.SupportedEventTypes.Add("2v2");
-            oneTen.SupportedEventTypes.Add("ffa");
             oneTen.ArenaName = "One Ten";
             locList.Add(oneTen.LandblockId, oneTen);
 
@@ -1805,7 +1803,7 @@ namespace ACE.Server.Entity
                     _arenaLandblocks = new List<uint>()
                     {
                         0x0067, //PKL Arena
-                        //0x007F,  //Binding Realm
+                        0x007F,  //Binding Realm
                         0x0145, //Bone Lair
                         0x01AD, //Dungeon Galley Tower
                         0x02E3, //Yaraq PK Arena
@@ -1857,19 +1855,19 @@ namespace ACE.Server.Entity
                             //0x0067011A [37.242702 -24.179514 0.005000] 0.684840 0.000000 0.000000 0.728694
                         }); //PKL Arena
 
-                    //_arenaLocationStartingPositions.Add(
-                    //    0x007F,
-                    //    new List<Position>()
-                    //    {
-                    //        new Position(0x007F0101, 236.75943f, -22.896727f, -59.995f, 0.000000f, 0.000000f, -0.6899546f, 0.72385263f), //West
-                    //        //0x007F0101 [236.75943 -22.896727 -59.995] 0.72385263 0 0 -0.6899546
-                    //        new Position(0x007F0107, 262.50168f, -16.419994f, -59.995f, 0.000000f, 0.000000f, -0.8109761f, -0.58507925f),//East
-                    //        //0x007F0107 [262.50168 -16.419994 -59.995] -0.58507925 0 0 -0.8109761
-                    //        new Position(0x007F0103, 250.935226f, -5.749045f, -59.994999f, 0.000000f, 0.000000f, -0.999384f, -0.035106f),//North
-                    //        //0x007F0103 [250.935226 -5.749045 -59.994999] 0.035106 0.000000 0.000000 -0.999384
-                    //        new Position(0x007F0105, 252.860062f, -33.350712f, -59.994999f, 0.000000f, 0.000000f, -0.043396f, -0.999058f),//South
-                    //        //0x007F0105 [252.860062 -33.350712 -59.994999] -0.999058 0.000000 0.000000 -0.043396
-                    //    }); //Binding Realm
+                    _arenaLocationStartingPositions.Add(
+                        0x007F,
+                        new List<Position>()
+                        {
+                            new Position(0x007F0101, 236.75943f, -22.896727f, -59.995f, 0.000000f, 0.000000f, -0.6899546f, 0.72385263f), //West
+                            //0x007F0101 [236.75943 -22.896727 -59.995] 0.72385263 0 0 -0.6899546
+                            new Position(0x007F0107, 262.50168f, -16.419994f, -59.995f, 0.000000f, 0.000000f, -0.8109761f, -0.58507925f),//East
+                            //0x007F0107 [262.50168 -16.419994 -59.995] -0.58507925 0 0 -0.8109761
+                            new Position(0x007F0103, 250.935226f, -5.749045f, -59.994999f, 0.000000f, 0.000000f, -0.999384f, -0.035106f),//North
+                            //0x007F0103 [250.935226 -5.749045 -59.994999] 0.035106 0.000000 0.000000 -0.999384
+                            new Position(0x007F0105, 252.860062f, -33.350712f, -59.994999f, 0.000000f, 0.000000f, -0.043396f, -0.999058f),//South
+                            //0x007F0105 [252.860062 -33.350712 -59.994999] -0.999058 0.000000 0.000000 -0.043396
+                        }); //Binding Realm
 
                     _arenaLocationStartingPositions.Add(
                         0x02E3,
