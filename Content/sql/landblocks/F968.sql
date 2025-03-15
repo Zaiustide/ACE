@@ -5,10 +5,6 @@ VALUES (0x7F968000, 490113, 0xF9680005, 9.77656, 105.29, 14.6341, 0.570016, 0, 0
 /* @teleloc 0xF9680005 [9.776560 105.290001 14.634100] 0.570016 0.000000 0.000000 -0.821634 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F968001, 490246, 0xF968001D, 77.1647, 116.35, -0.30983, 0.889076, 0, 0, 0.45776, False, '2024-01-28 13:04:19'); /* Shreth Caverns */
-/* @teleloc 0xF968001D [77.164703 116.349998 -0.309830] 0.889076 0.000000 0.000000 0.457760 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F968002, 490262, 0xF9680020, 88.9652, 182.332, -0.395, 0.022144, 0, 0, -0.999755, False, '2024-02-10 16:32:46'); /* Upper Outpost Isle Generator */
 /* @teleloc 0xF9680020 [88.965202 182.332001 -0.395000] 0.022144 0.000000 0.000000 -0.999755 */
 
@@ -53,5 +49,5 @@ VALUES (0x7F96800C, 490262, 0xF9680015, 65.6301, 99.1464, -0.395, 0.66839, 0, 0,
 /* @teleloc 0xF9680015 [65.630096 99.146400 -0.395000] 0.668390 0.000000 0.000000 -0.743811 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7F96800D, 490262, 0xF9680037, 147.8436, 150.1642, -0.845, -0.759242, 0, 0, 0.650808, False, '2024-04-01 21:39:49'); /* Upper Outpost Isle Generator */
-/* @teleloc 0xF9680037 [147.843597 150.164200 -0.845000] -0.759242 0.000000 0.000000 0.650808 */
+VALUES (0x7F96800D, 490262, 0xF9680037, 147.844, 150.164, -0.845, -0.759242, 0, 0, 0.650808, False, '2024-04-01 21:39:49'); /* Upper Outpost Isle Generator */
+/* @teleloc 0xF9680037 [147.843994 150.164001 -0.845000] -0.759242 0.000000 0.000000 0.650808 */

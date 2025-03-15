@@ -31,5 +31,5 @@ VALUES (490241,   1, 0x02001945) /* Setup */
      , (490241,  22, 0x3400002A) /* PhysicsEffectTable */;
 
 INSERT INTO `weenie_properties_position` (`object_Id`, `position_Type`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
-VALUES (490241, 2,  0xF9680016, 66.466080, 123.666725, 0.005000, -0.464050, 0, 0, 0.885809) /* Destination */
-/* @teleloc 0x01C9022D [72.900002 -30.200001 0.000000] 0.139173 0.000000 0.000000 -0.990268 */;
+VALUES (490241, 2,  0xF9660010, 42.232334, 183.732300,  0.005000, -0.895744, 0, 0, 0.444570) /* Destination */
+/* @teleloc 0xF9660010 [42.232334 183.732300 0.005000] -0.895744 0.000000 0.000000 0.444570 */;
