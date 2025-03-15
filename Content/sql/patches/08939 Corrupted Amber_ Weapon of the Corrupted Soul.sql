@@ -413,7 +413,7 @@ VALUES (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   141 
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 53334 /* Corrupted Heartwood Wand */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72004 /* Stormwood Atlatl */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72005 /* Stormwood Staff */, '2022-05-10 03:49:02')
-     , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72006 /* Stormwood Dagger */, '2022-05-10 03:49:02')
+     , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72006  /* Stormwood Dagger */, '2022-05-10 03:49:02')
 	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24207 /* Weeping Wand */, '2022-05-10 03:49:02')
 	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31798 /* Slashing Compound Bow */, '2022-05-10 03:49:02')
 	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31799 /* Acid Compound Bow */, '2022-05-10 03:49:02')
@@ -421,4 +421,10 @@ VALUES (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   141 
 	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31801 /* Electric Compound Bow */, '2022-05-10 03:49:02')
 	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31802 /* Fire Compound Bow */, '2022-05-10 03:49:02')
 	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31803 /* Frost Compound Bow */, '2022-05-10 03:49:02')
-	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31804 /* Piercing Compound Bow */, '2022-05-10 03:49:02');
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 31804 /* Piercing Compound Bow */, '2022-05-10 03:49:02')
+ , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41041 /* Magari Yari */, '2022-05-10 03:49:02')
+  , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41042 /* Acid Magari Yari */, '2022-05-10 03:49:02')
+   , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41043 /* Lightning Magari Yari */, '2022-05-10 03:49:02')
+   , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41044 /* Flaming Magari Yari */, '2022-05-10 03:49:02')
+    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41045 /* Frost Magari Yari */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 46605 /* Magari Yari */, '2022-05-10 03:49:02');

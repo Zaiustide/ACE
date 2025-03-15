@@ -177,6 +177,7 @@ namespace ACE.Server.Entity
                         48742,
                         48741,
                         48744,
+						52032,
                         490356
                     };
                 }

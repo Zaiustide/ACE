@@ -421,4 +421,10 @@ VALUES (8938, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */,   141
 	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 31801 /* Electric Compound Bow */, '2022-05-10 03:49:02')
 	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 31802 /* Fire Compound Bow */, '2022-05-10 03:49:02')
 	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 31803 /* Frost Compound Bow */, '2022-05-10 03:49:02')
-	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 31804 /* Piercing Compound Bow */, '2022-05-10 03:49:02');
+	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 31804 /* Piercing Compound Bow */, '2022-05-10 03:49:02')
+	  , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 41041 /* Magari Yari */, '2022-05-10 03:49:02')
+  , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 41042 /* Acid Magari Yari */, '2022-05-10 03:49:02')
+   , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 41043 /* Lightning Magari Yari */, '2022-05-10 03:49:02')
+   , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 41044 /* Flaming Magari Yari */, '2022-05-10 03:49:02')
+    , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 41045 /* Frost Magari Yari */, '2022-05-10 03:49:02')
+	 , (8939, 53452 /* Corrupted Amber: Weapon of the Corrupted Heart. */, 46605 /* Magari Yari */, '2022-05-10 03:49:02');
