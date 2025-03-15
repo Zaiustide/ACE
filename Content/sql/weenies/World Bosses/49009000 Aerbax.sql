@@ -22,7 +22,7 @@ VALUES (49009000,   1,         16) /* ItemType - Creature */
      , (49009000, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (49009000, 146,      400000000) /* XpOverride */
 	 , (49009000, 307,         200) /* DamageRating */
-     , (49009000, 308,         50) /* DamageResistRating */
+     , (49009000, 308,         200) /* DamageResistRating */
 	 , (49009000, 386,         10) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)

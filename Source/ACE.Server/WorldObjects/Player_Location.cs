@@ -738,6 +738,32 @@ namespace ACE.Server.WorldObjects
                         Teleport(Sanctuary);
                         return;
                     }
+
+                    //If there's an active indoor WB event, and you're teleporting into that landblock,
+                    //check if the max number of entries per allegiance has been exceeded
+                    var wb = WorldBossManager.GetActiveWorldBoss();
+                    if(wb != null  && wb.MaxAllegianceEntries.HasValue && wb.IndoorLocation.Landblock == _newPosition.Landblock)
+                    {
+                        var currAllegEntryCount = wb.AllegianceEntries.GetValueOrDefault<uint, uint>(playerMonarchId.Value);
+                        if(currAllegEntryCount >= wb.MaxAllegianceEntries)
+                        {
+                            this.Session.Network.EnqueueSend(new GameMessageSystemChat($"Your allegiance has already reached it's maximum number of entrants to this World Boss event. ", ChatMessageType.Broadcast));
+
+                            Teleport(Sanctuary);
+                            return;
+                        }
+                        else
+                        {
+                            if(wb.AllegianceEntries.ContainsKey(playerMonarchId.Value))
+                            {
+                                wb.AllegianceEntries[playerMonarchId.Value]++;
+                            }
+                            else
+                            {
+                                wb.AllegianceEntries.Add(playerMonarchId.Value, 1);
+                            }
+                        }
+                    }
                 }
                 else
                 {

@@ -172,10 +172,10 @@ namespace ACE.Server.Entity
             var playerDefender = defender as Player;
 
             var pkBattle = playerAttacker != null && playerDefender != null;
-
-            //If defender is town control boss and attacker is not a player in PK state, dmg is zero
+            
             if (playerDefender == null)
             {
+                //If defender is town control boss and attacker is not a player in PK state, dmg is zero
                 if (defender.IsTownControlBoss)
                 {
                     if (playerAttacker == null || !playerAttacker.IsPK)
@@ -214,6 +214,14 @@ namespace ACE.Server.Entity
                                 return 0.0f;
                             }
                         }
+                    }
+                }
+                else if(WorldBoss.WorldBosses.IsWorldBoss(defender.WeenieClassId))
+                {
+                    if (playerAttacker == null || !playerAttacker.IsPK)
+                    {
+                        //Don't allow summons or NPKs to damage a world boss
+                        return 0.0f;
                     }
                 }
             }

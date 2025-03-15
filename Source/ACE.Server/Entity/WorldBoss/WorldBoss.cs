@@ -179,8 +179,10 @@ namespace ACE.Server.Entity.WorldBoss
                     var aerbax = new WorldBoss();
                     aerbax.WeenieID = 49009000;
                     aerbax.Name = "Aerbax";
-                    aerbax.SpawnMsg = "Aerbax has returned to the world, eager to sow chaos and terror. Those who seek death need but seek the Idol of the Progenitor, for death will be promptly delivered upon those who enter.";
-                    aerbax.SpawnLocations = townSpawnLocations;
+                    aerbax.SpawnMsg = "Aerbax has returned to the world, eager to sow chaos and terror. Those who seek death need but seek the Idol of the Progenitor, for death will be promptly delivered upon those who enter.";                    
+                    aerbax.SpawnLocations = new Dictionary<uint, Position>();                    
+                    aerbax.SpawnLocations.Add(0xF418, new Position(0xF418010D, 35.939579f, 45.303143f, 162.704987f, 0f, 0f, -0.999981f, -0.006195f)); //0xF418010D [35.939579 45.303143 162.704987] -0.006195 0.000000 0.000000 -0.999981
+                    aerbax.MaxAllegianceEntries = 10;
                     aerbax.IndoorLocation = new Position(0x65430119, 67.597794f, -59.671207f, 0.005000f, 0f, 0f, -0.966396f, -0.257058f); //0x65430119 [67.597794 -59.671207 0.005000] -0.257058 0.000000 0.000000 -0.966396
                     aerbax.StatueWeenieId = 49009100;
                     _worldBossMap.Add(49009000, aerbax);
@@ -223,7 +225,7 @@ namespace ACE.Server.Entity.WorldBoss
         public static WorldBoss GetRandomWorldBoss()
         {
             IEnumerable<WorldBoss> bossList = new List<WorldBoss>();
-            var isIndoor = ThreadSafeRandom.Next(0, 1) == 1;            
+            var isIndoor = ThreadSafeRandom.Next(0, 2) == 2;            
             if(isIndoor)
             {
                 bossList = WorldBosses.WorldBossMap.Values.Where(x => x.StatueWeenieId.HasValue);
@@ -256,6 +258,10 @@ namespace ACE.Server.Entity.WorldBoss
         public WorldObject StatueWorldObject { get; set; }
 
         public Dictionary<uint, Position> SpawnLocations { get; set; }
+
+        public uint? MaxAllegianceEntries { get; set; }
+
+        public Dictionary<uint, uint> AllegianceEntries { get; set; }
 
         public KeyValuePair<uint, Position> RollRandomSpawnLocation()
         {

@@ -240,7 +240,14 @@ namespace ACE.Server.WorldObjects
                     string coordsDisplay = (wb?.StatueWeenieId.HasValue ?? false) ? (wb?.Location?.GetMapCoordStr() ?? "NULL") : (this.Location?.GetMapCoordStr() ?? "NULL");
                     if (this.WorldBoss_LastPeriodicGlobal.HasValue)
                     {
-                        msg = $"The daring battle to destroy {this.Name} continues! Hurry to join the fray at {coordsDisplay}. Do not dawdle for {this.Name} has already been reduced to {Math.Round(this.Health.Percent * 100)}% of his power. But beware; while some may choose to assist in defeating {this.Name}, others will choose a darker path of greed and spilt blood in pursuit of self enrichment.";
+                        if (wb?.StatueWeenieId.HasValue ?? false)
+                        {
+                            msg = $"The daring battle to destroy {this.Name} continues! Hurry to join the fray at {coordsDisplay}. But beware; while some may choose to assist in defeating {this.Name}, others will choose a darker path of greed and spilt blood in pursuit of self enrichment.";
+                        }
+                        else
+                        {
+                            msg = $"The daring battle to destroy {this.Name} continues! Hurry to join the fray at {coordsDisplay}. Do not dawdle for {this.Name} has already been reduced to {Math.Round(this.Health.Percent * 100)}% of his power. But beware; while some may choose to assist in defeating {this.Name}, others will choose a darker path of greed and spilt blood in pursuit of self enrichment.";
+                        }
                     }
                     else
                     {

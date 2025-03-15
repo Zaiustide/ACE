@@ -11,6 +11,7 @@ using ACE.Entity.Models;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
@@ -449,6 +450,14 @@ namespace ACE.Server.WorldObjects
                                 return 0.0f;
                             }
                         }
+                    }
+                }
+                else if (WorldBosses.IsWorldBoss(target.WeenieClassId))
+                {
+                    if (sourcePlayer == null || !sourcePlayer.IsPK)
+                    {
+                        //Don't allow summons or NPKs to damage a world boss
+                        return 0.0f;
                     }
                 }
             }
