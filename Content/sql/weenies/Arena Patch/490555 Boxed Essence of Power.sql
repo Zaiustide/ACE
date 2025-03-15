@@ -34,6 +34,6 @@ VALUES (490555,   1, 0x0200011E) /* Setup */
      , (490555,   3, 0x20000014) /* SoundTable */
      , (490555,   8, 0x0600699E) /* Icon */
 	 , (490555,  50, 0x060064DC) /* IconOverlay */
-	 , (490326,  52, 0x06005B0C) /* IconUnderlay */
+	 , (490555,  52, 0x06005B0C) /* IconUnderlay */
      , (490555,  22, 0x3400002B) /* PhysicsEffectTable */
      , (490555,  38,      490326) /* UseCreateItem - Essence of Power */;
