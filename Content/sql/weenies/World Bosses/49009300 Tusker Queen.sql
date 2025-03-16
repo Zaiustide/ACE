@@ -22,7 +22,7 @@ VALUES (49009300,   1,         16) /* ItemType - Creature */
      , (49009300, 101,        183) /* AiAllowedCombatStyle - Unarmed, OneHanded, OneHandedAndShield, Bow, Crossbow, ThrownWeapon */
      , (49009300, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (49009300, 146,      400000000) /* XpOverride */
-	 , (49009300, 307,         200) /* DamageRating */
+	 , (49009300, 307,         50) /* DamageRating */
      , (49009300, 308,         200) /* DamageResistRating */
 	 , (49009300, 386,         10) /* Overpower */;
 

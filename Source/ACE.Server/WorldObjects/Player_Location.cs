@@ -721,9 +721,9 @@ namespace ACE.Server.WorldObjects
                         {
                             this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  {playerAllegName} already has {zergArea.MaxPlayersPerAllegiance} players in this area, which is the maximum allowed per allegiance.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
 
-                            //For Aerbax world boss, if you got into the dungeon but got kicked due to zerg limit
+                            //For Indoor world boss, if you got into the dungeon but got kicked due to zerg limit
                             //remove quest stamp for EnterBattleDungeon
-                            if (_newPosition.Landblock == 0x6543)
+                            if (_newPosition.Landblock == 0x6543 || _newPosition.Landblock == 0x02C8)
                             {
                                 QuestManager.Erase("EnterBattleDungeon");
                             }
