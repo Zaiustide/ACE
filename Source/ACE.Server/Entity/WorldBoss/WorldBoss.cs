@@ -274,7 +274,7 @@ namespace ACE.Server.Entity.WorldBoss
 
         public uint? MaxAllegianceEntries { get; set; }
 
-        public Dictionary<uint, uint> AllegianceEntries { get; set; }
+        public Dictionary<uint, uint> AllegianceEntries { get; set; } = new Dictionary<uint, uint>();
 
         public KeyValuePair<uint, Position> RollRandomSpawnLocation()
         {
