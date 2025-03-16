@@ -191,13 +191,12 @@ namespace ACE.Server.Entity.WorldBoss
                     var tq = new WorldBoss();
                     tq.WeenieID = 49009300;
                     tq.Name = "Tusker Queen";
-                    tq.SpawnMsg = "A piercing roar rings out, filled with terrifying rage. The great Queen of the Tuskers has emerged from her slumber, and she's fucking pissed. Seek her only if you seek death.";
+                    tq.SpawnMsg = "A piercing roar rings out, filled with terrifying rage. The great Queen of the Tuskers has emerged from her slumber, and she's fucking pissed. Seek the Idol of Brutality only if you seek death.";
                     tq.SpawnLocations = new Dictionary<uint, Position>();
                     tq.SpawnLocations.Add(0xF782, new Position(0xF7820003, 4.750887f, 59.361496f, 58.005001f, 0f, 0f, 0.703107f, 0.711085f)); //0xF7820003 [4.750887 59.361496 58.005001] 0.711085 0.000000 0.000000 0.703107
                     tq.MaxAllegianceEntries = 9;
-                    //tq.IndoorLocation = new Position(0x5C470102, 94.783234f, -17.666796f, -53.994999f, 0f, 0f, 0.999944f, 0.010541f); //0x5C470102 [94.783234 -17.666796 -53.994999] 0.010541 0.000000 0.000000 0.999944
-                    tq.IndoorLocation = new Position(0x5C470125, 84.801743f, -87.693291f, -29.995001f, 0f, 0f, -0.999862f, 0.016594f);
-                    //0x5C470125[84.801743 - 87.693291 - 29.995001] 0.016594 0.000000 0.000000 - 0.999862
+                    tq.IndoorLocation = new Position(0x02C8011E, 29.906477f, -218.092255f, -5.995000f, 0f, 0f, 0.008112f, -0.999967f);
+                    // 0x02C8011E [29.906477 -218.092255 -5.995000] -0.999967 0.000000 0.000000 0.008112
                     tq.StatueWeenieId = 49009301;
                     _worldBossMap.Add(49009300, tq);
                 }
