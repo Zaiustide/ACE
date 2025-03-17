@@ -143,7 +143,8 @@ namespace ACE.Server.Managers
                 boss = WorldBosses.GetRandomWorldBoss();
 
             var spawnLoc = boss.RollRandomSpawnLocation();
-            boss.Location = spawnLoc.Value;            
+            boss.Location = spawnLoc.Value;
+            boss.AllegianceEntries = new Dictionary<uint, uint>();
 
             //Spawn the boss
             var bossWeenie = DatabaseManager.World.GetCachedWeenie(boss.WeenieID);            
@@ -160,7 +161,7 @@ namespace ACE.Server.Managers
                 statueWorldObj.Location = spawnLoc.Value;
                 statueWorldObj.CurrentLandblock = statueLandblock;
                 statueWorldObj.TimeToRot = -1;
-                statueWorldObj.Lifespan = 86400;
+                statueWorldObj.Lifespan = 14370;
                 statueWorldObj.EnterWorld();
 
                 boss.StatueWorldObject = statueWorldObj;
@@ -174,7 +175,7 @@ namespace ACE.Server.Managers
                 bossWorldObj.Location = boss.IndoorLocation;
                 bossWorldObj.CurrentLandblock = bossLandblock;
                 bossWorldObj.TimeToRot = -1;
-                bossWorldObj.Lifespan = 86400;
+                bossWorldObj.Lifespan = 14400;
                 bossWorldObj.EnterWorld();
                 boss.BossWorldObject = bossWorldObj;
 

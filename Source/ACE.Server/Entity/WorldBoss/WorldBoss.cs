@@ -238,7 +238,7 @@ namespace ACE.Server.Entity.WorldBoss
         public static WorldBoss GetRandomWorldBoss()
         {
             IEnumerable<WorldBoss> bossList = new List<WorldBoss>();
-            var isIndoor = ThreadSafeRandom.Next(0, 2) == 2;            
+            var isIndoor = ThreadSafeRandom.Next(0f, 1f) > 0.4f;
             if(isIndoor)
             {
                 bossList = WorldBosses.WorldBossMap.Values.Where(x => x.StatueWeenieId.HasValue);
