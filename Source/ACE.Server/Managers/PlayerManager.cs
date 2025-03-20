@@ -81,10 +81,28 @@ namespace ACE.Server.Managers
 
         private static readonly LinkedList<Player> playersPendingLogoff = new LinkedList<Player>();
 
+        private static readonly LinkedList<Player> playersPendingFinalLogoff = new LinkedList<Player>();
+
         public static void AddPlayerToLogoffQueue(Player player)
         {
             if (!playersPendingLogoff.Contains(player))
                 playersPendingLogoff.AddLast(player);
+        }
+
+        private static readonly TimeSpan playerFinalLogoutDuration = TimeSpan.FromMinutes(15);
+
+        public static void AddPlayerToFinalLogoffQueue(Player player)
+        {
+            if (!playersPendingFinalLogoff.Contains(player))
+            {
+                player.LogOffFinalizedTime = Time.GetFutureUnixTime(playerFinalLogoutDuration.TotalSeconds);
+                playersPendingFinalLogoff.AddLast(player);
+            }
+        }
+
+        public static void RemovePlayerFromFinalLogoffQueue(Player player)
+        {
+             playersPendingFinalLogoff.Remove(player);
         }
 
         public static void Tick()
@@ -111,6 +129,23 @@ namespace ACE.Server.Managers
 
                     first.LogOut();
                     first.Session.logOffRequestTime = DateTime.UtcNow;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            while (playersPendingFinalLogoff.Count > 0)
+            {
+                var first = playersPendingFinalLogoff.First.Value;
+
+                if (currentUnixTime >= first.LogOffFinalizedTime)
+                {
+                    playersPendingFinalLogoff.RemoveFirst();
+                    first.ForcedLogOffRequested = true;
+                    first.Session?.Terminate(SessionTerminationReason.AutoForcedLogOff, new GameMessageBootAccount(" because the character was forced to log off by system"));
+                    first.ForceLogoff();
                 }
                 else
                 {
@@ -399,7 +434,7 @@ namespace ACE.Server.Managers
 
             AllegianceManager.LoadPlayer(player);
 
-            player.SendFriendStatusUpdates();
+            player.SendFriendStatusUpdates(false, !player.GetAppearOffline());
 
             return true;
         }
@@ -433,7 +468,7 @@ namespace ACE.Server.Managers
                 playersLock.ExitWriteLock();
             }
 
-            player.SendFriendStatusUpdates(false);
+            player.SendFriendStatusUpdates(!player.GetAppearOffline(), false);
             player.HandleAllegianceOnLogout();
 
             return true;

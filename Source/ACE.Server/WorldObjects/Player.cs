@@ -6,6 +6,7 @@ using System.Linq;
 using log4net;
 
 using ACE.Common;
+using ACE.Common.Extensions;
 using ACE.Database;
 using ACE.Database.Models.Auth;
 using ACE.DatLoader;
@@ -78,8 +79,8 @@ namespace ACE.Server.WorldObjects
 
         public SquelchManager SquelchManager;
 
-        public static readonly float MaxRadarRange_Indoors = 25.0f;
-        public static readonly float MaxRadarRange_Outdoors = 75.0f;
+        public const float MaxRadarRange_Indoors = 25.0f;
+        public const float MaxRadarRange_Outdoors = 75.0f;
 
         public DateTime PrevObjSend;
 
@@ -286,7 +287,7 @@ namespace ACE.Server.WorldObjects
 
             if (wo == null)
             {
-                //log.Debug($"{Name}.HandleActionIdentifyObject({objectGuid:X8}): couldn't find object");
+                //log.DebugFormat("{0}.HandleActionIdentifyObject({1:X8}): couldn't find object", Name, objectGuid);
                 Session.Network.EnqueueSend(new GameEventIdentifyObjectResponse(Session, objectGuid));
                 return;
             }
@@ -623,6 +624,8 @@ namespace ACE.Server.WorldObjects
             IsBusy = true;
             IsLoggingOut = true;
 
+            PlayerManager.AddPlayerToFinalLogoffQueue(this);
+
             if (Fellowship != null)
                 FellowshipQuit(false);
 
@@ -722,6 +725,8 @@ namespace ACE.Server.WorldObjects
             }
         }
 
+        public double LogOffFinalizedTime;
+
         public bool ForcedLogOffRequested;
 
         /// <summary>
@@ -732,6 +737,8 @@ namespace ACE.Server.WorldObjects
         {
             if (!ForcedLogOffRequested) return;
 
+            log.WarnFormat("[LOGOUT] Executing ForcedLogoff for Account {0} with character {1} (0x{2}) at {3}.", Account.AccountName, Name, Guid, DateTime.Now.ToCommonString());
+
             FinalizeLogout();
 
             ForcedLogOffRequested = false;
@@ -739,6 +746,7 @@ namespace ACE.Server.WorldObjects
 
         private void FinalizeLogout()
         {
+            PlayerManager.RemovePlayerFromFinalLogoffQueue(this);
             CurrentLandblock?.RemoveWorldObject(Guid, false);
             SetPropertiesAtLogOut();
             SavePlayerToDatabase();
@@ -793,7 +801,7 @@ namespace ACE.Server.WorldObjects
             var wo = FindObject(itemGuid, SearchLocations.Everywhere);
             if (wo == null)
             {
-                //log.Debug($"HandleActionForceObjDescSend() - couldn't find object {itemGuid:X8}");
+                //log.DebugFormat("HandleActionForceObjDescSend() - couldn't find object {0:X8}", itemGuid);
                 return;
             }
             Session.Network.EnqueueSend(new GameMessageObjDescEvent(wo));

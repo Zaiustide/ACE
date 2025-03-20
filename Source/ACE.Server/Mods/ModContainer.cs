@@ -1,4 +1,5 @@
 using ACE.Common;
+using ACE.Common.Extensions;
 
 using log4net;
 
@@ -109,7 +110,7 @@ namespace ACE.Server.Mods
                 Status = ModStatus.Active;
 
                 if (Meta.RegisterCommands)
-                    this.RegisterCommandHandlers();
+                    this.RegisterUncategorizedCommands();
 
                 log.Info($"Enabled mod `{Meta.Name} (v{Meta.Version})`.");
             }
@@ -118,6 +119,12 @@ namespace ACE.Server.Mods
                 log.Error($"Error enabling {Meta.Name}: {ex}");
                 Status = ModStatus.Inactive;    //Todo: what status?  Something to prevent reload attempts?
             }
+        }
+
+        public void RegisterCommands()
+        {
+            if (Meta.RegisterCommands)
+                this.RegisterUncategorizedCommands();
         }
 
         //Todo: decide about removing the assembly?
@@ -129,9 +136,9 @@ namespace ACE.Server.Mods
             if (Status != ModStatus.Active)
                 return;
 
-            log.Info($"{FolderName} shutting down @ {DateTime.Now}");
+            log.Info($"{FolderName} shutting down @ {DateTime.Now.ToCommonString()}");
 
-            this.UnregisterCommandHandlers();
+            this.UnregisterAllCommands();
 
             try
             {
@@ -226,7 +233,7 @@ namespace ACE.Server.Mods
             }
 
             Restart();
-            log.Info($"Reloaded {FolderName} @ {DateTime.Now} after {lapsed.TotalSeconds}/{RELOAD_TIMEOUT.TotalSeconds} seconds");
+            log.Info($"Reloaded {FolderName} @ {DateTime.Now.ToCommonString()} after {lapsed.TotalSeconds}/{RELOAD_TIMEOUT.TotalSeconds} seconds");
         }
 
 
@@ -240,7 +247,7 @@ namespace ACE.Server.Mods
                 return;
             }
 
-            log.Info($"{FolderName} changed @ {DateTime.Now} after {lapsed.TotalMilliseconds}ms");
+            log.Info($"{FolderName} changed @ {DateTime.Now.ToCommonString()} after {lapsed.TotalMilliseconds}ms");
             _lastChange = DateTime.Now;
 
             Disable();

@@ -275,6 +275,16 @@ namespace ACE.Server.WorldObjects
                         HandleActionChangeCombatMode(CombatMode.Magic);
                         break;
 
+                    case EquipMask.Shield:
+
+                        var weapon = GetEquippedWeapon(true);
+
+                        if (weapon != null && weapon.DefaultCombatStyle == CombatStyle.ThrownWeapon)
+                            HandleActionChangeCombatMode(CombatMode.Missile);
+                        else
+                            HandleActionChangeCombatMode(CombatMode.Melee);
+                        break;
+
                     default:
                         HandleActionChangeCombatMode(CombatMode.Melee);
                         break;
@@ -433,6 +443,11 @@ namespace ACE.Server.WorldObjects
 
                     if (CombatMode == CombatMode.Missile && wieldedLocation == EquipMask.MissileAmmo)
                         newCombatMode = CombatMode.NonCombat;
+
+                    var weapon = GetEquippedWeapon(true);
+
+                    if (weapon != null && weapon.DefaultCombatStyle == CombatStyle.ThrownWeapon)
+                        newCombatMode = CombatMode.Missile;
 
                     HandleActionChangeCombatMode(newCombatMode);
                 }
@@ -1086,7 +1101,7 @@ namespace ACE.Server.WorldObjects
 
                                 if (isFromAPlayerCorpse)
                                 {
-                                    log.Debug($"[CORPSE] {Name} (0x{Guid}) picked up {item.Name} (0x{item.Guid}) from {itemRootOwner.Name} (0x{itemRootOwner.Guid})");
+                                    log.DebugFormat("[CORPSE] {0} (0x{1}) picked up {2} (0x{3}) from {4} (0x{5})", Name, Guid, item.Name, item.Guid, itemRootOwner.Name, itemRootOwner.Guid);
                                     item.SaveBiotaToDatabase();
                                 }
                             }
@@ -1491,6 +1506,18 @@ namespace ACE.Server.WorldObjects
             }
             item.Ethereal = ethereal;
 
+            if (item.Ethereal == null)
+            {
+                var defaultPhysicsState = (PhysicsState)(item.GetProperty(PropertyInt.PhysicsState) ?? 0);
+
+                if (defaultPhysicsState.HasFlag(PhysicsState.Ethereal))
+                    item.Ethereal = true;
+                else
+                    item.Ethereal = false;
+            }
+
+            item.EnqueueBroadcastPhysicsState();
+
             return true;
         }
 
@@ -1612,7 +1639,7 @@ namespace ACE.Server.WorldObjects
 
                             if (isFromAPlayerCorpse)
                             {
-                                log.Debug($"[CORPSE] {Name} (0x{Guid}) picked up and wielded {item.Name} (0x{item.Guid}) from {rootOwner.Name} (0x{rootOwner.Guid})");
+                                log.DebugFormat("[CORPSE] {0} (0x{1}) picked up and wielded {2} (0x{3}) from {4} (0x{5})", Name, Guid, item.Name, item.Guid, rootOwner.Name, rootOwner.Guid);
                                 item.SaveBiotaToDatabase();
                             }
                         }
@@ -3153,7 +3180,8 @@ namespace ACE.Server.WorldObjects
 
             if (isFromAPlayerCorpse)
             {
-                log.Debug($"[CORPSE] {Name} (0x{Guid}) merged {amount:N0} {(sourceStack.IsDestroyed ? $"which resulted in the destruction" : $"leaving behind {sourceStack.StackSize:N0}")} of {sourceStack.Name} (0x{sourceStack.Guid}) to {targetStack.Name} (0x{targetStack.Guid}) from {sourceStackRootOwner.Name} (0x{sourceStackRootOwner.Guid})");
+                if (log.IsDebugEnabled)
+                    log.Debug($"[CORPSE] {Name} (0x{Guid}) merged {amount:N0} {(sourceStack.IsDestroyed ? $"which resulted in the destruction" : $"leaving behind {sourceStack.StackSize:N0}")} of {sourceStack.Name} (0x{sourceStack.Guid}) to {targetStack.Name} (0x{targetStack.Guid}) from {sourceStackRootOwner.Name} (0x{sourceStackRootOwner.Guid})");
                 targetStack.SaveBiotaToDatabase();
             }
 
@@ -3499,7 +3527,7 @@ namespace ACE.Server.WorldObjects
                     {
                         var success = uint.TryParse(split[0], out var wcid);
 
-                        //Console.WriteLine($"{success.ToString()} {wcid}");
+                        //Console.WriteLine($"{success} {wcid}");
 
                         Session.Network.EnqueueSend(new GameEventTell(target, "Ahh, an IOU! You know, I collect these for some reason. Let me see if I have something for it somewhere in my pack...", this, ChatMessageType.Tell));
 
@@ -3526,7 +3554,7 @@ namespace ACE.Server.WorldObjects
                                     if (PropertyManager.GetBool("player_receive_immediate_save").Item)
                                         RushNextPlayerSave(5);
 
-                                    log.Debug($"[IOU] {Name} (0x{Guid}) traded in a IOU (0x{iouToTurnIn.Guid}) for {wcid} which became {item.Name} (0x{item.Guid}).");
+                                    log.DebugFormat("[IOU] {0} (0x{1}) traded in a IOU (0x{2}) for {3} which became {4} (0x{5}).", Name, Guid, iouToTurnIn.Guid, wcid, item.Name, item.Guid);
                                 }
                                 return;
                             }

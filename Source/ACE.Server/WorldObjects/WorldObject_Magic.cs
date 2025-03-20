@@ -923,19 +923,19 @@ namespace ACE.Server.WorldObjects
 
             if (spell.School == MagicSchool.LifeMagic)
             {
-                if (spell.Name.Contains("Blight"))
+                if (spell.DamageType.HasFlag(DamageType.Mana))
                 {
                     var tryDamage = (int)Math.Round(caster.GetCreatureVital(PropertyAttribute2nd.Mana).Current * spell.DrainPercentage);
                     damage = (uint)-caster.UpdateVitalDelta(caster.Mana, -tryDamage);
                     damageType = DamageType.Mana;
                 }
-                else if (spell.Name.Contains("Tenacity"))
+                else if (spell.DamageType.HasFlag(DamageType.Stamina))
                 {
                     var tryDamage = (int)Math.Round(caster.GetCreatureVital(PropertyAttribute2nd.Stamina).Current * spell.DrainPercentage);
                     damage = (uint)-caster.UpdateVitalDelta(caster.Stamina, -tryDamage);
                     damageType = DamageType.Stamina;
                 }
-                else
+                else if (spell.DamageType.HasFlag(DamageType.Health))
                 {
                     var tryDamage = (int)Math.Round(caster.GetCreatureVital(PropertyAttribute2nd.Health).Current * spell.DrainPercentage);
                     damage = (uint)-caster.UpdateVitalDelta(caster.Health, -tryDamage);
@@ -943,7 +943,17 @@ namespace ACE.Server.WorldObjects
                     damageType = DamageType.Health;
 
                     //if (player != null && player.Fellowship != null)
-                        //player.Fellowship.OnVitalUpdate(player);
+                    //player.Fellowship.OnVitalUpdate(player);
+                }
+                else if(spell.DamageType != DamageType.Undef)
+                {
+                    // Handle rare case where some of these "Life Magic" spells do physical damage e.g. Hunter's Lash 2970 and Thorn Valley 6159
+                    damageType = spell.DamageType;
+                }
+                else
+                {
+                    log.Warn($"Unknown DamageType ({spell.DamageType}) for LifeProjectile {spell.Name} - {spell.Id}");
+                    return;
                 }
             }
 
@@ -1543,7 +1553,7 @@ namespace ACE.Server.WorldObjects
             return LaunchSpellProjectiles(spell, target, spellType, weapon, isWeaponSpell, fromProc, origins, velocity, lifeProjectileDamage);
         }
 
-        public static readonly float ProjHeight = 2.0f / 3.0f;
+        public const float ProjHeight = 2.0f / 3.0f;
 
         public Vector3 CalculatePreOffset(Spell spell, ProjectileSpellType spellType, WorldObject target)
         {
@@ -1707,7 +1717,7 @@ namespace ACE.Server.WorldObjects
 
         public static readonly Quaternion OneEighty = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, (float)Math.PI);
 
-        public static readonly float ProjHeightArc = 5.0f / 6.0f;
+        public const float ProjHeightArc = 5.0f / 6.0f;
 
         /// <summary>
         /// Calculates the spell projectile velocity in global space
@@ -2220,7 +2230,7 @@ namespace ACE.Server.WorldObjects
             IsAffecting = false;
         }
 
-        private static readonly double defaultIgnoreSomeMagicProjectileDamage = 0.25;
+        private const double defaultIgnoreSomeMagicProjectileDamage = 0.25;
 
         public double? GetAbsorbMagicDamage()
         {
