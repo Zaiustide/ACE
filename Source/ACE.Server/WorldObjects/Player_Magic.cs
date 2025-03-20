@@ -587,7 +587,7 @@ namespace ACE.Server.WorldObjects
 
             var spellWords = spell._spellBase.GetSpellWords(DatManager.PortalDat.SpellComponentsTable);
             if (!string.IsNullOrWhiteSpace(spellWords) && !isWeaponSpell)
-                EnqueueBroadcast(new GameMessageHearSpeech(spellWords, GetNameWithSuffix(), Guid.Full, ChatMessageType.Spellcasting), LocalBroadcastRange, ChatMessageType.Spellcasting);
+                EnqueueBroadcast(new GameMessageHearSpeech(spellWords, GetNameWithSuffix(), Guid.Full, ChatMessageType.Spellcasting), LocalBroadcastRange);
         }
 
         public static float CastSpeed = 2.0f;       // from retail pcaps, player animation speed for windup / first half of cast gesture
@@ -679,7 +679,7 @@ namespace ACE.Server.WorldObjects
         }
 
         // 20 from MoveToManager threshold?
-        public static readonly float MaxAngle = 5;
+        public const float MaxAngle = 5;
 
         public void DoCastSpell(MagicState _state, bool checkAngle = true)
         {
