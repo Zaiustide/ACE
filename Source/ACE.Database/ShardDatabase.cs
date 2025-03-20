@@ -921,7 +921,7 @@ namespace ACE.Database
             }
             catch (Exception ex)
             {
-                //TODO logging
+                log.ErrorFormat("Exception in GetCharacterIDsWithQuestCompletion. QuestName: {0}, Ex: {1}", questName, ex);
             }
 
             return characterIds;

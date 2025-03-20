@@ -34,7 +34,7 @@ namespace ACE.Server.Entity.TownControl
                         }
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     return new List<int>();
                 }
