@@ -28,7 +28,7 @@ VALUES (480623,   1, 'Boxed Burning Coals') /* Name */
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (480623,   1, 0x0200011E) /* Setup */
      , (480623,   3, 0x20000014) /* SoundTable */
-     , (480623,   8, 0x060072E9) /* Icon */
-	 , (480623,  50,  0x06003328) /* IconOverlay */
+     , (480623,   52, 0x060012F8) /* IconUnderlay */
+	 , (480623,  8,  0x06003328) /* Icon */
      , (480623,  22, 0x3400002B) /* PhysicsEffectTable */
      , (480623,  38,      480613) /* UseCreateItem - Blank Augmentation Gem */;

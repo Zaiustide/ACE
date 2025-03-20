@@ -5,13 +5,13 @@ VALUES (480702, 'ace480702-arenararedamagereductionvpk', 38, '2021-11-01 00:00:0
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (480702,   1,       2048) /* ItemType - Gem */
-     , (480702,   5,          5) /* EncumbranceVal */
+     , (480702,   5,          0) /* EncumbranceVal */
      , (480702,  16,          8) /* ItemUseable - Contained */
      , (480702,  18,          1) /* UiEffects - Magical */
      , (480702,  19,      	  1) /* Value */
 	 , (480702,  11,        100) /* MaxStackSize */
      , (480702,  12,          1) /* StackSize */
-     , (480702,  13,         10) /* StackUnitEncumbrance */
+     , (480702,  13,         0) /* StackUnitEncumbrance */
      , (480702,  15,      1) /* StackUnitValue */
      , (480702,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (480702,  94,         16) /* TargetType - Creature */

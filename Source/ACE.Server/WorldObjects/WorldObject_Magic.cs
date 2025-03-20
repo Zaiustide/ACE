@@ -170,16 +170,14 @@ namespace ACE.Server.WorldObjects
             var player = this as Player;
             var targetPlayer = target as Player;
 
-            if (targetPlayer != null)
+            if (target.Invincible)
             {
-                if (targetPlayer.Invincible)
-                    resisted = true;
-
-                if (targetPlayer.UnderLifestoneProtection)
-                {
-                    targetPlayer.HandleLifestoneProtection();
-                    resisted = true;
-                }
+                resisted = true;
+            }
+            else if (targetPlayer?.UnderLifestoneProtection ?? false)
+            {
+                targetPlayer.HandleLifestoneProtection();
+                resisted = true;                
             }
 
             if (caster == target)
@@ -2229,7 +2227,7 @@ namespace ACE.Server.WorldObjects
             IsAffecting = false;
         }
 
-        private const double defaultIgnoreSomeMagicProjectileDamage = 0.25;
+        private const double defaultIgnoreSomeMagicProjectileDamage = 0.18;
 
         public double? GetAbsorbMagicDamage()
         {

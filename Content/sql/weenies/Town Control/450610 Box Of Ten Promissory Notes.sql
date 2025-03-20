@@ -32,7 +32,7 @@ VALUES (450610,   1, 'Box Of Ten Promissory Notes') /* Name */
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (450610,   1, 0x0200011E) /* Setup */
      , (450610,   3, 0x20000014) /* SoundTable */
-     , (450610,   8, 0x060072EB) /* Icon */
+     , (450610,   52, 0x060012F8) /* IconUnderlay */
      , (450610,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (450610,  50, 0x06006F64) /* IconOverlay */
+     , (450610,  8, 0x06006F64) /* Icon */
      , (450610,  38,      43901) /* UseCreateItem - Promissory Note */;

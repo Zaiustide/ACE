@@ -724,27 +724,31 @@ namespace ACE.Server.WorldObjects
         }
 
         /// <summary>
-        /// Returns the total applicable Recklessness modifier,
-        /// taking into account both attacker and defender players
+        /// Returns the amount of bonus damage rating added for being a reckless attacker
         /// </summary>
-        public static float GetRecklessnessMod(Creature attacker, Creature defender)
+        public int GetRecklessAttackerDmgRatingBonus()
         {
-            var playerAttacker = attacker as Player;
-            var playerDefender = defender as Player;
-
-            var recklessnessMod = 1.0f;
-
-            // multiplicative or additive?
-            // defender is a negative Damage Reduction Rating
-            // 20 DR combined with 20 DRR = 1.2 * 0.8333... = 1.0
-            // 20 DR combined with -20 DRR = 1.2 * 1.2 = 1.44
+            var playerAttacker = this as Player;
+            var dmgRatingBonus = 0;
+            
             if (playerAttacker != null)
-                recklessnessMod *= playerAttacker.GetRecklessnessMod();
+                dmgRatingBonus = playerAttacker.GetRecklessnessDmgRatingBonus();
 
+            return dmgRatingBonus;
+        }
+
+        /// <summary>
+        /// Returns the amount of damage resistence rating penalized for being a reckless defender
+        /// </summary>
+        public int GetRecklessDefenderDmgRatingPenalty()
+        {            
+            var playerDefender = this as Player;
+            var dmgResistPenalty = 0;
+            
             if (playerDefender != null)
-                recklessnessMod *= playerDefender.GetRecklessnessMod();
+                dmgResistPenalty = playerDefender.GetRecklessnessDmgResistRatingPenalty();
 
-            return recklessnessMod;
+            return dmgResistPenalty;
         }
 
         public float GetSneakAttackMod(WorldObject target)

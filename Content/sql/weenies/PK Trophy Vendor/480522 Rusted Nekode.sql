@@ -15,7 +15,8 @@ VALUES (480522,   1,          1) /* ItemType - MeleeWeapon */
      , (480522,  45,          1) /* DamageType - Slash */
      , (480522,  46,          1) /* DefaultCombatStyle - Unarmed */
      , (480522,  47,          1) /* AttackType - Punch */
-     , (480522,  48,         13) /* WeaponSkill - UnarmedCombat */
+     , (480522,  48,         45) /* WeaponSkill - UnarmedCombat */
+	 , (480522,  353,         13) /* WeaponSkill - UnarmedCombat */
      , (480522,  49,         20) /* WeaponTime */
      , (480522,  51,          1) /* CombatUse - Melee */
      , (480522,  92,        100) /* Structure */

@@ -53,6 +53,8 @@ namespace ACE.Server.Entity
         public static float MaxObjectRange { get; } = 192f;
         public static float MaxObjectGhostRange { get; } = 250f;
 
+        private static DateTime lastTownControlTickDateTime = DateTime.MinValue;
+        private static DateTime lastZergControlTickDateTime = DateTime.MinValue;
 
         public LandblockId Id { get; }
 
@@ -207,7 +209,7 @@ namespace ACE.Server.Entity
 
             if (this.IsTownControlLandblock)
             {
-                log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");                
+                log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");
             }
         }
 
@@ -785,8 +787,17 @@ namespace ACE.Server.Entity
             }
             ServerPerformanceMonitor.AddToCumulativeEvent(ServerPerformanceMonitor.CumulativeEventHistoryType.Landblock_Tick_WorldObject_Heartbeat, stopwatch.Elapsed.TotalSeconds);
 
-            HandleTownControl();
-            HandleZergControl();
+            if (lastTownControlTickDateTime < DateTime.Now.AddSeconds(-30))
+            {
+                HandleTownControl();
+                lastTownControlTickDateTime = DateTime.Now;
+            }
+
+            if (lastZergControlTickDateTime < DateTime.Now.AddSeconds(-5))
+            {
+                HandleZergControl();
+                lastZergControlTickDateTime = DateTime.Now;
+            }
 
             Monitor5m.RegisterEventEnd();
             Monitor1h.RegisterEventEnd();
@@ -1086,6 +1097,12 @@ namespace ACE.Server.Entity
 
             if (wo is Corpse && wo.Level.HasValue)
             {
+                //Set corpse rot time in arena landblocks based on config
+                if(this.IsArenaLandblock)
+                {
+                    wo.TimeToRot = PropertyManager.GetDouble("arena_corpse_rot_seconds", 300).Item;
+                }
+
                 var corpseLimit = PropertyManager.GetLong("corpse_spam_limit").Item;
                 var corpseList = worldObjects.Values.Union(pendingAdditions.Values).Where(w => w is Corpse && w.Level.HasValue && w.VictimId == wo.VictimId).OrderBy(w => w.CreationTimestamp);
 

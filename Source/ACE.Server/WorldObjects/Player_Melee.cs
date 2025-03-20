@@ -298,6 +298,13 @@ namespace ACE.Server.WorldObjects
                 return;
             }
 
+            var playerTarget = target as Player;
+            if(playerTarget != null && playerTarget.IsJumping && PropertyManager.GetBool("jump_cancels_melee").Item)
+            {
+                OnAttackDone();
+                return;
+            }
+
             var creature = target as Creature;
             if (creature == null || !creature.IsAlive)
             {

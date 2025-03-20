@@ -19,7 +19,7 @@ namespace ACE.Server.Entity
                 {
                     _zergControlLandblocksMap = new Dictionary<uint, ZergControlArea>();
 
-                    //Zerg control Town Control landblocks to 6
+                    //Zerg control Town Control landblocks to 9
                     var holtTC = new ZergControlArea();
                     holtTC.MaxPlayersPerAllegiance = 9;
                     holtTC.AreaLandblockIds = new uint[] { 0x4FF1 };
@@ -44,6 +44,34 @@ namespace ACE.Server.Entity
                     shoushiTC3.MaxPlayersPerAllegiance = 9;
                     shoushiTC3.AreaLandblockIds = new uint[] { 0xE9F0, 0xE9F1, 0xE8F1 };
                     _zergControlLandblocksMap.Add(0xE8F1, shoushiTC3);
+
+                    //Zerg Control Custom Island dungeons to 9
+                    var drudgeDungeon = new ZergControlArea();
+                    drudgeDungeon.MaxPlayersPerAllegiance = 9;
+                    drudgeDungeon.AreaLandblockIds = new uint[] { 0x0026 };
+                    _zergControlLandblocksMap.Add(0x0026, drudgeDungeon);
+
+                    var dragonCave = new ZergControlArea();
+                    dragonCave.MaxPlayersPerAllegiance = 9;
+                    dragonCave.AreaLandblockIds = new uint[] { 0x003F };
+                    _zergControlLandblocksMap.Add(0x003F, dragonCave);
+
+                    var ancientTemple = new ZergControlArea();
+                    ancientTemple.MaxPlayersPerAllegiance = 9;
+                    ancientTemple.AreaLandblockIds = new uint[] { 0x0174 };
+                    _zergControlLandblocksMap.Add(0x0174, ancientTemple);
+
+                    //Aerbax World Boss
+                    var aerbax = new ZergControlArea();
+                    aerbax.MaxPlayersPerAllegiance = 7;
+                    aerbax.AreaLandblockIds = new uint[] { 0x6543 };
+                    _zergControlLandblocksMap.Add(0x6543, aerbax);
+
+                    //Tusker Queen World Boss
+                    var tq = new ZergControlArea();
+                    tq.MaxPlayersPerAllegiance = 5;
+                    tq.AreaLandblockIds = new uint[] { 0x02C8 };
+                    _zergControlLandblocksMap.Add(0x02C8, tq);
                 }
 
                 return _zergControlLandblocksMap;

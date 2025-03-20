@@ -5,12 +5,12 @@ VALUES (480701, 'ace480701-rarearmordamageboostvpk', 38, '2021-11-01 00:00:00') 
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (480701,   1,       2048) /* ItemType - Gem */
-     , (480701,   5,          5) /* EncumbranceVal */
+     , (480701,   5,          0) /* EncumbranceVal */
      , (480701,  16,          8) /* ItemUseable - Contained */
      , (480701,  18,          1) /* UiEffects - Magical */
 	 , (480701,  11,        100) /* MaxStackSize */
      , (480701,  12,          1) /* StackSize */
-     , (480701,  13,         10) /* StackUnitEncumbrance */
+     , (480701,  13,         0) /* StackUnitEncumbrance */
      , (480701,  15,      1) /* StackUnitValue */
      , (480701,  19,      	  1) /* Value */
      , (480701,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */

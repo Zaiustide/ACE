@@ -257,6 +257,15 @@ namespace ACE.Server.Network.Handlers
             session.State = SessionState.WorldConnected;
 
             WorldManager.PlayerEnterWorld(session, character);
+
+            try
+            {
+                new LogDatabase().LogCharacterLogin(session.AccountId, session.Account, session.EndPointC2S.Address.ToString(), character.Id, character.Name);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception logging character login. Ex: {ex}");
+            }
         }
 
 

@@ -78,7 +78,8 @@ namespace ACE.Server.Entity
         public float SlayerMod;
 
         public float DamageRatingBaseMod;
-        public float RecklessnessMod;
+        public int RecklessAttackerDmgRatingBonus;
+        public int RecklessDefenderDmgResistRatingPenalty;
         public float SneakAttackMod;
         public float HeritageMod;
         public float PkDamageMod;
@@ -171,10 +172,10 @@ namespace ACE.Server.Entity
             var playerDefender = defender as Player;
 
             var pkBattle = playerAttacker != null && playerDefender != null;
-
-            //If defender is town control boss and attacker is not a player in PK state, dmg is zero
+            
             if (playerDefender == null)
             {
+                //If defender is town control boss and attacker is not a player in PK state, dmg is zero
                 if (defender.IsTownControlBoss)
                 {
                     if (playerAttacker == null || !playerAttacker.IsPK)
@@ -213,6 +214,14 @@ namespace ACE.Server.Entity
                                 return 0.0f;
                             }
                         }
+                    }
+                }
+                else if(WorldBoss.WorldBosses.IsWorldBoss(defender.WeenieClassId))
+                {
+                    if (playerAttacker == null || !playerAttacker.IsPK)
+                    {
+                        //Don't allow summons or NPKs to damage a world boss
+                        return 0.0f;
                     }
                 }
             }
@@ -293,11 +302,11 @@ namespace ACE.Server.Entity
 
             // ratings
             DamageRatingBaseMod = Creature.GetPositiveRatingMod(attacker.GetDamageRating());
-            RecklessnessMod = Creature.GetRecklessnessMod(attacker, defender);
+            RecklessAttackerDmgRatingBonus = attacker.GetRecklessAttackerDmgRatingBonus();
             SneakAttackMod = attacker.GetSneakAttackMod(defender);
             HeritageMod = attacker.GetHeritageBonus(Weapon) ? 1.05f : 1.0f;
 
-            DamageRatingMod = Creature.AdditiveCombine(DamageRatingBaseMod, RecklessnessMod, SneakAttackMod, HeritageMod);
+            DamageRatingMod = Creature.AdditiveCombine(DamageRatingBaseMod, SneakAttackMod, HeritageMod, Creature.GetPositiveRatingMod(RecklessAttackerDmgRatingBonus));
 
             if (pkBattle)
             {
@@ -341,7 +350,7 @@ namespace ACE.Server.Entity
                     CriticalDamageRatingMod = Creature.GetPositiveRatingMod(attacker.GetCritDamageRating());
 
                     // recklessness excluded from crits
-                    RecklessnessMod = 1.0f;
+                    RecklessAttackerDmgRatingBonus = 0;
                     DamageRatingMod = Creature.AdditiveCombine(DamageRatingBaseMod, CriticalDamageRatingMod, SneakAttackMod, HeritageMod);
 
                     if (pkBattle)
@@ -412,7 +421,7 @@ namespace ACE.Server.Entity
             }
 
             // damage resistance rating
-            DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);
+            DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);            
 
             if (IsCritical)
             {
@@ -420,6 +429,13 @@ namespace ACE.Server.Entity
 
                 DamageResistanceRatingMod = Creature.AdditiveCombine(DamageResistanceRatingBaseMod, CriticalDamageResistanceRatingMod);
             }
+
+            //Apply a penalty to damage resist rating for defenders who are in a reckless state
+            RecklessDefenderDmgResistRatingPenalty = defender.GetRecklessDefenderDmgRatingPenalty();
+            if(RecklessDefenderDmgResistRatingPenalty > 0)
+            {
+                DamageResistanceRatingMod = Creature.AdditiveCombine(DamageResistanceRatingMod, Creature.GetPositiveRatingMod(RecklessDefenderDmgResistRatingPenalty));
+            }            
 
             if (pkBattle)
             {
@@ -449,9 +465,17 @@ namespace ACE.Server.Entity
                                 break;
                             case Skill.LightWeapons:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_lw").Item;
+                                if (Weapon.W_AttackType == AttackType.TripleStrike)
+                                {
+                                    config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_triplestrike").Item;                                    
+                                }                                                                
                                 break;
                             case Skill.HeavyWeapons:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_hw").Item;
+                                if(AttackType.MultiStrike.HasFlag(Weapon.W_AttackType))
+                                {
+                                    config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_multistrike").Item;
+                                }
                                 break;
                             case Skill.TwoHandedCombat:
                                 config_mod = (float)PropertyManager.GetDouble("pvp_dmg_mod_2h").Item;
@@ -519,9 +543,23 @@ namespace ACE.Server.Entity
                                     break;
                                 case Skill.LightWeapons:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_cb").Item;
+                                    if(Weapon.W_AttackType == AttackType.TripleStrike)
+                                    {
+                                        if (IsCritical)
+                                        {
+                                            config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_lw_cb_crit_triplestrike").Item; 
+                                        }
+                                    }
                                     break;
                                 case Skill.HeavyWeapons:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_cb").Item;
+                                    if (AttackType.MultiStrike.HasFlag(Weapon.W_AttackType))
+                                    {
+                                        if (IsCritical)
+                                        {
+                                            config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_hw_cb_crit_multistrike").Item;
+                                        }
+                                    }
                                     break;
                                 case Skill.TwoHandedCombat:
                                     config_mod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_2h_cb").Item;
@@ -949,8 +987,11 @@ namespace ACE.Server.Entity
             if (HeritageMod != 0.0f && HeritageMod != 1.0f)
                 info += $"HeritageMod: {HeritageMod}\n";
 
-            if (RecklessnessMod != 0.0f && RecklessnessMod != 1.0f)
-                info += $"RecklessnessMod: {RecklessnessMod}\n";
+            if (RecklessAttackerDmgRatingBonus > 0)
+                info += $"RecklessAttackerDmgRatingBonus: {RecklessAttackerDmgRatingBonus}\n";
+
+            if (RecklessDefenderDmgResistRatingPenalty > 0)
+                info += $"RecklessDefenderDmgResistRatingPenalty: {RecklessDefenderDmgResistRatingPenalty}\n";
 
             if (SneakAttackMod != 0.0f && SneakAttackMod != 1.0f)
                 info += $"SneakAttackMod: {SneakAttackMod}\n";
@@ -1038,7 +1079,7 @@ namespace ACE.Server.Entity
 
                 if (CriticalDefended)
                     attackConditions |= AttackConditions.CriticalProtectionAugmentation;
-                if (RecklessnessMod > 1.0f)
+                if (RecklessAttackerDmgRatingBonus > 0)
                     attackConditions |= AttackConditions.Recklessness;
                 if (SneakAttackMod > 1.0f)
                     attackConditions |= AttackConditions.SneakAttack;

@@ -436,6 +436,21 @@ namespace ACE.Database
                     returnMsg.Append($"  Damage Dealt: {ffaStats.TotalDmgDealt.ToString("n0")}\n");
                     returnMsg.Append($"  Damage Received: {ffaStats.TotalDmgReceived.ToString("n0")}\n\n");
 
+                    var groupStats = stats.FirstOrDefault(x => x.EventType.Equals("group"));
+                    if (groupStats == null)
+                        groupStats = new ArenaCharacterStats();
+
+                    returnMsg.Append($"Group\n");
+                    returnMsg.Append($"  Matches: {groupStats.TotalMatches.ToString("n0")}\n");
+                    returnMsg.Append($"  Wins: {groupStats.TotalWins.ToString("n0")}\n");
+                    returnMsg.Append($"  Draws: {groupStats.TotalDraws.ToString("n0")}\n");
+                    returnMsg.Append($"  Losses: {groupStats.TotalLosses.ToString("n0")}\n");
+                    returnMsg.Append($"  Disqualified: {groupStats.TotalDisqualified.ToString("n0")}\n");
+                    returnMsg.Append($"  Kills: {groupStats.TotalKills.ToString("n0")}\n");
+                    returnMsg.Append($"  Deaths: {groupStats.TotalDeaths.ToString("n0")}\n");
+                    returnMsg.Append($"  Damage Dealt: {groupStats.TotalDmgDealt.ToString("n0")}\n");
+                    returnMsg.Append($"  Damage Received: {groupStats.TotalDmgReceived.ToString("n0")}\n\n");
+
                     returnMsg.Append($"Totals:\n");
                     returnMsg.Append($"  Total Matches: {stats.Sum(x => x.TotalMatches).ToString("n0")}\n");
                     returnMsg.Append($"  Total Wins: {stats.Sum(x => x.TotalWins).ToString("n0")}\n");
@@ -499,7 +514,7 @@ namespace ACE.Database
             }
             catch (Exception ex)
             {
-                log.Error($"Error in GetArenaRank. ex:{ex}");
+                log.Error($"Error in GetArenaTopRankedByEventType. ex:{ex}");
             }
 
             return new List<ArenaCharacterStats>();

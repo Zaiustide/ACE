@@ -14,7 +14,8 @@ VALUES (480535,   1,          1) /* ItemType - MeleeWeapon */
      , (480535,  45,          4) /* DamageType - Bludgeon */
      , (480535,  46,          2) /* DefaultCombatStyle - OneHanded */
      , (480535,  47,          4) /* AttackType - Slash */
-     , (480535,  48,          5) /* WeaponSkill - Mace */
+     , (480535,  48,          45) /* WeaponSkill - Mace */
+	 , (480535, 353,          4) /* WeaponType - Mace */
      , (480535,  49,         70) /* WeaponTime */
      , (480535,  51,          1) /* CombatUse - Melee */
      , (480535,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */

@@ -277,6 +277,12 @@ namespace ACE.Server.WorldObjects
             actionChain.EnqueueChain();
 
             NextUseTime = DateTime.UtcNow + TimeSpan.FromSeconds(LastUseTime);
+
+            //Handle use of PK Quests NPC
+            if(item.WeenieClassId == 49100001)
+            {
+                this.HandlePKQuestInquiry();
+            }
         }
 
         /// <summary>

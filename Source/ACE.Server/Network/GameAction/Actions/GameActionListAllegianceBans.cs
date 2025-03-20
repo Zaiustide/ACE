@@ -1,3 +1,5 @@
+using ACE.Server.Command.Handlers;
+
 namespace ACE.Server.Network.GameAction.Actions
 {
     public static class GameActionListAllegianceBans
@@ -5,6 +7,11 @@ namespace ACE.Server.Network.GameAction.Actions
         [GameAction(GameActionType.ListAllegianceBans)]
         public static void Handle(ClientMessage message, Session session)
         {
+            if (!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
+
             session.Player.HandleActionListAllegianceBans();
         }
     }

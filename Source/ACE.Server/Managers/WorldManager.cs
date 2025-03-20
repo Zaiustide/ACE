@@ -98,7 +98,7 @@ namespace ACE.Server.Managers
                         {
                             latestEvent.EventEndDateTime = DateTime.UtcNow;
                             latestEvent.IsAttackSuccess = false;
-                            DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);                            
+                            DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);
                             town.IsInConflict = false;
                             DatabaseManager.TownControl.UpdateTown(town);
                         }
@@ -440,15 +440,15 @@ namespace ACE.Server.Managers
 
                 //Arena logic
                 try
-                {
+                {                    
                     ArenaManager.Tick();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     log.Error($"Exception executing ArenaManager Tick. ex: {ex}");
                 }
 
-                //Arena logic
+                ////World Boss logic
                 try
                 {
                     WorldBossManager.Tick();

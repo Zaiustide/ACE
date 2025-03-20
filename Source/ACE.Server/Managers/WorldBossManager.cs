@@ -31,6 +31,7 @@ using ACE.Server.Entity;
 using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Factories;
 using ACE.Server.Network.Handlers;
+using ACE.Database.Models.TownControl;
 
 namespace ACE.Server.Managers
 {
@@ -49,66 +50,153 @@ namespace ACE.Server.Managers
         
         public static void Tick()
         {
-            if (DateTime.Now.AddSeconds(-300) < LastTickDateTime)
+            if (DateTime.Now.AddSeconds(-5) < LastTickDateTime)
                 return;
-
-            LastTickDateTime = DateTime.Now;
-
+            
             bool isWorldBossesDisabled = PropertyManager.GetBool("disable_world_bosses").Item;
             if (isWorldBossesDisabled)
             {
+                LastTickDateTime = DateTime.Now;
                 return;
             }
 
             if(!nextBossSpawnTime.HasValue)
             {
-                nextBossSpawnTime = RollNextSpawnTime();
+                nextBossSpawnTime = RollNextSpawnTime(0, 2);
             }
 
             //if there's no active boss, and the next spawn time is in the past, spawn a boss
             if(activeWorldBoss == null && DateTime.Now > nextBossSpawnTime)
             {
-                SpawnNewWorldBoss();
-
-                bool bossSpawnedAfterMidnight = false;
-                if(nextBossSpawnTime.Value.Hour < 3)
+                SpawnNewWorldBoss();                
+                nextBossSpawnTime = RollNextSpawnTime(3, 11);
+                LastTickDateTime = DateTime.Now;
+                return;
+            }
+            
+            if(activeWorldBoss != null && activeWorldBoss.BossWorldObject != null)
+            {
+                //For indoor bosses make them take zero dmg if more than one allegiance is on the landblock                
+                if (activeWorldBoss.IndoorLocation != null)
                 {
-                    bossSpawnedAfterMidnight = true;
-                }
+                    var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, true);
+                    var playersOnLandblock = bossLandblock?.GetCurrentLandblockPlayers() ?? new List<Player>();
+                    uint? firstAllegId = null;
+                    bool hasMultipleAllegiances = false;
+                    bool isBossInvincible = activeWorldBoss?.BossWorldObject?.Invincible ?? false;
 
-                nextBossSpawnTime = RollNextSpawnTime();
-                if(!bossSpawnedAfterMidnight)
-                {
-                    nextBossSpawnTime = nextBossSpawnTime.Value.AddDays(1);
+                    foreach (var player in playersOnLandblock)
+                    {
+                        if (player.IsAdmin)
+                            continue;
+
+                        if(firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance?.MonarchId ?? 0))
+                        {
+                            hasMultipleAllegiances = true;
+                            break;
+                        }
+                        else
+                        {
+                            firstAllegId = player?.Allegiance?.MonarchId ?? player?.Character.Id ?? 0;
+                        }                        
+                    }
+
+                    if(hasMultipleAllegiances && !isBossInvincible)
+                    {
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle! This pitiful infighting amongst humans has driven {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
+                    }
+                    else if(!hasMultipleAllegiances && isBossInvincible)
+                    {
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"The pitiful display of humans struggling against themselves seems to have ended now that only one allegiance remains.  {activeWorldBoss.Name} has become vulnerable to human attacks once again!", ChatMessageType.Broadcast));
+                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
+                    }
+
+                    if(isBossInvincible && DateTime.Now.AddSeconds(-60) < LastTickDateTime)
+                    {
+                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} is currently feeding off of human conflict and has become invincible. The humans must finish their conflict with only one allegiance remaining.", ChatMessageType.Broadcast));
+                    }
                 }
             }
+
+            LastTickDateTime = DateTime.Now;
         }
 
-        private static DateTime RollNextSpawnTime()
+        private static DateTime RollNextSpawnTime(int minHrs, int maxHrs)
         {            
-            var hr = ThreadSafeRandom.Next(12, 25);
+            var hr = ThreadSafeRandom.Next(minHrs, maxHrs);
             var min = ThreadSafeRandom.Next(0, 59);
-            return DateTime.Today.AddHours(hr).AddMinutes(min);
+            var result = DateTime.Now.AddHours(hr).AddMinutes(min);
+            if(result.Hour > 3 && result.Hour < 11)
+            {
+                hr = ThreadSafeRandom.Next(11, 15);
+                result = new DateTime(result.Year, result.Month, result.Day, hr, min, 0);
+            }
+
+            return result;
         }
 
-        public static void SpawnNewWorldBoss()
+        public static void SpawnNewWorldBoss(WorldBoss boss = null)
         {
             //Get a random boss to spawn, and get a random spawn location
-            var boss = WorldBosses.GetRandomWorldBoss();
+            if(boss == null)
+                boss = WorldBosses.GetRandomWorldBoss();
+
             var spawnLoc = boss.RollRandomSpawnLocation();
             boss.Location = spawnLoc.Value;
-
-            //Perma load the landblock for the spawn location
-            var landblockID = new LandblockId(spawnLoc.Key << 16);
-            var landblock = LandblockManager.GetLandblock(landblockID, false, true);
+            boss.AllegianceEntries = new Dictionary<uint, uint>();
 
             //Spawn the boss
-            var bossWeenie = DatabaseManager.World.GetCachedWeenie(boss.WeenieID);
+            var bossWeenie = DatabaseManager.World.GetCachedWeenie(boss.WeenieID);            
+            if (boss.StatueWeenieId.HasValue && boss.IndoorLocation != null)
+            {
+                var statueWeenie = DatabaseManager.World.GetCachedWeenie(boss.StatueWeenieId.Value);
 
-            var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
-            bossWorldObj.Location = spawnLoc.Value;
-            bossWorldObj.CurrentLandblock = landblock;
-            bossWorldObj.EnterWorld();
+                //Perma load the landblock for the statue location
+                var statueLandblockID = new LandblockId(spawnLoc.Key << 16);
+                var statueLandblock = LandblockManager.GetLandblock(statueLandblockID, false, true);
+
+                //Create statue in world
+                var statueWorldObj = WorldObjectFactory.CreateNewWorldObject(statueWeenie);
+                statueWorldObj.Location = spawnLoc.Value;
+                statueWorldObj.CurrentLandblock = statueLandblock;
+                statueWorldObj.TimeToRot = -1;
+                statueWorldObj.Lifespan = 14370;
+                statueWorldObj.EnterWorld();
+
+                boss.StatueWorldObject = statueWorldObj;
+
+                //Perma load the landblock for the boss location
+                var bossLandblockID = new LandblockId(boss.IndoorLocation.LandblockId.Raw << 16);
+                var bossLandblock = LandblockManager.GetLandblock(bossLandblockID, false, true);
+
+                //Create boss in world
+                var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
+                bossWorldObj.Location = boss.IndoorLocation;
+                bossWorldObj.CurrentLandblock = bossLandblock;
+                bossWorldObj.TimeToRot = -1;
+                bossWorldObj.Lifespan = 14400;
+                bossWorldObj.EnterWorld();
+                boss.BossWorldObject = bossWorldObj;
+
+                //Add indoor landblock as whitelisted for ratings
+                Whitelist.AddLandblockToRatingsWhitelist(boss.IndoorLocation.LandblockId.Raw);
+            }
+            else
+            {
+                //Perma load the landblock for the spawn location
+                var landblockID = new LandblockId(spawnLoc.Key << 16);
+                var landblock = LandblockManager.GetLandblock(landblockID, false, true);
+
+                var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
+                bossWorldObj.Location = spawnLoc.Value;
+                bossWorldObj.CurrentLandblock = landblock;
+                bossWorldObj.EnterWorld();
+                boss.BossWorldObject = bossWorldObj;
+
+                //Add landblock as whitelisted for ratings
+                Whitelist.AddLandblockToRatingsWhitelist(spawnLoc.Key);
+            }
 
             //Send global message
             PlayerManager.BroadcastToAll(new GameMessageSystemChat(boss.SpawnMsg, ChatMessageType.Broadcast));

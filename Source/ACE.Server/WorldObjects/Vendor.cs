@@ -278,7 +278,7 @@ namespace ACE.Server.WorldObjects
                 {
                     log.ErrorFormat("Exception applying Town Control behavior to vendor.  Vendor WeenieClassId = {0}, Ex: {1}", this.WeenieClassId, ex);
                 }
-            }            
+            }
 
             var rotateTime = Rotate(player);    // vendor rotates towards player
 

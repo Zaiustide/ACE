@@ -805,11 +805,7 @@ namespace ACE.Server.WorldObjects
                     // emulate current gdle TurnTo - doesn't match retail, but some players may prefer this
                     OnMoveComplete_Magic(WeenieError.None);
                     return;
-                }
-
-                // verify cast radius before every automatic TurnTo after windup
-                if (!VerifyCastRadius())
-                    return;
+                }                
 
                 var stopCompletely = !MagicState.CastMotionDone;
                 //var stopCompletely = true;
@@ -1348,11 +1344,12 @@ namespace ACE.Server.WorldObjects
 
         public void CheckTurn()
         {
-            // verify cast radius while manually moving after windup
-            if (!VerifyCastRadius())
-                return;
+            // In retail, players could move freely during casting
+            // The position check only happened at spell release
+            // So we'll skip the continuous radius check here
 
-            if (TurnTarget != null && IsWithinAngle(TurnTarget))
+            // Only release the spell when the turn is complete AND we're within the required angle
+            if (TurnTarget != null && IsWithinAngle(TurnTarget) && !PhysicsObj.IsMovingOrAnimating)
             {
                 if (MagicState.PendingTurnRelease)
                     OnTurnRelease();

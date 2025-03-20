@@ -12,7 +12,6 @@ using ACE.Server.WorldObjects;
 using ACE.Server.WorldObjects.Managers;
 using log4net;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,8 +55,8 @@ namespace ACE.Server.Entity
         {
             //log.Info($"ArenaLocation.Tick() called for {this.ArenaName}");            
 
-            //If there's no active event, only run Tick every 5 seconds
-            if (!HasActiveEvent && lastTickDateTime > DateTime.Now.AddSeconds(-5))
+            //If there's no active event, only run Tick every 10 seconds
+            if (!HasActiveEvent && lastTickDateTime > DateTime.Now.AddSeconds(-10))
             {
                 return;
             }
@@ -206,12 +205,44 @@ namespace ACE.Server.Entity
                             }
 
                             //Teleport into the arena
-                            for (int i = 0; i < playerList.Count; i++)
+
+                            //For team events, keep teams spawning in same location
+                            if (ActiveEvent.EventType.ToLower().Equals("2v2") ||
+                                ActiveEvent.EventType.ToLower().Equals("group"))
                             {
-                                var j = i < positions.Count ? i : positions.Count - 1;
-                                log.Info($"ArenaLocation.Tick() - {ArenaName} status = 2 - teleporting {playerList[i].Name} to position {positions[j].ToLOCString}");
-                                playerList[i].Teleport(positions[j]);
-                            }                            
+                                var teamPositions = new Dictionary<Guid, Position>();
+                                foreach(var arenaPlayer in ActiveEvent.Players)
+                                {
+                                    if(arenaPlayer.TeamGuid.HasValue && !teamPositions.Keys.Contains(arenaPlayer.TeamGuid.Value))
+                                    {
+                                        var posIndex = new Random().Next(positions.Count());                                        
+                                        teamPositions.Add(arenaPlayer.TeamGuid.Value, positions[posIndex]);
+                                    }
+                                }
+
+                                foreach(var teamPosition in teamPositions)
+                                {
+                                    var teamArenaPlayers = ActiveEvent.Players.Where(x => x.TeamGuid == teamPosition.Key);
+                                    foreach(var teamArenaPlayer in teamArenaPlayers)
+                                    {
+                                        var teamPlayer = playerList.FirstOrDefault(x => x.Character.Id == teamArenaPlayer.CharacterId);
+                                        if(teamPlayer != null)
+                                        {
+                                            log.Info($"ArenaLocation.Tick() - {ArenaName} status = 2 - teleporting {teamPlayer.Name} to position {teamPosition.Value.ToLOCString}");
+                                            teamPlayer.Teleport(teamPosition.Value);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < playerList.Count; i++)
+                                {
+                                    var j = i < positions.Count ? i : positions.Count - 1;
+                                    log.Info($"ArenaLocation.Tick() - {ArenaName} status = 2 - teleporting {playerList[i].Name} to position {positions[j].ToLOCString}");
+                                    playerList[i].Teleport(positions[j]);
+                                }
+                            }
 
                             ActiveEvent.CountdownStartDateTime = DateTime.Now;
                             ActiveEvent.Status = ActiveEvent.Status == -1 ? -1 : 3;
@@ -231,17 +262,16 @@ namespace ACE.Server.Entity
                         if (DateTime.Now.AddSeconds(-15) > ActiveEvent.CountdownStartDateTime)
                         {
                             log.Info($"ArenaLocation.Tick() - {ArenaName} status = 3, countdown is complete, start the fight");
+                            StartEvent();
                             foreach (var arenaPlayer in ActiveEvent.Players)
                             {
                                 var player = PlayerManager.GetOnlinePlayer(arenaPlayer.CharacterId);
                                 if (player != null)
                                 {
-                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The event has started!\nRemaining Event Time: 15m 0s", ChatMessageType.System));
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The event has started!\nRemaining Event Time: {ActiveEvent.TimeRemainingDisplay}", ChatMessageType.System));
                                     lastEventTimerMessage = DateTime.Now;
                                 }
-                            }
-
-                            StartEvent();
+                            }                            
                         }
                         else
                         {
@@ -671,6 +701,17 @@ namespace ACE.Server.Entity
             string loserList = "";
             var losers = ActiveEvent.Players.Where(x => x.TeamGuid != winningTeamGuid)?.ToList();
 
+            bool sameClanFight = false;
+            foreach (var winner in winners)
+            {
+                var clanMatesOnOtherTeam = losers.Where(x => x.MonarchId == winner.MonarchId);
+                if (clanMatesOnOtherTeam != null && clanMatesOnOtherTeam.Count() > 0)
+                {
+                    sameClanFight = true;
+                    break;
+                }
+            }
+
             winners.ForEach(x => winnerList += string.IsNullOrEmpty(winnerList) ? x.CharacterName : $", {x.CharacterName}");
             losers.ForEach(x => loserList += string.IsNullOrEmpty(loserList) ? x.CharacterName : $", {x.CharacterName}");
 
@@ -771,24 +812,24 @@ namespace ACE.Server.Entity
                                 //Give % xp to next level
                                 if (player.Level > 0 && player.Level < 50)
                                 {
-                                    //25% xp to next level, min of 100k
-                                    player.GrantLevelProportionalXp(0.25, 100000, long.MaxValue, true);
+                                    //500% xp to next level
+                                    player.GrantLevelProportionalXp(5, 0, 0, true);
                                 }
                                 else if (player.Level >= 50 && player.Level < 150)
                                 {
-                                    //15% xp to next level, min of 1 mil
-                                    player.GrantLevelProportionalXp(0.15, 1000000, long.MaxValue, true);
+                                    //50% xp to next level
+                                    player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                 }
                                 else if (player.Level >= 150)
                                 {
-                                    //10% xp to next level, min of 1 mil
-                                    player.GrantLevelProportionalXp(0.1, 1000000, long.MaxValue, true);
+                                    //35% xp to next level
+                                    player.GrantLevelProportionalXp(0.35, 0, 0, true);
                                 }
 
-                                //Give 8k lum
+                                //Give 30k lum
                                 if (player.MaximumLuminance != null)
                                 {
-                                    player.GrantLuminance(8000, XpType.Quest, ShareType.None);
+                                    player.GrantLuminance(30000, XpType.Quest, ShareType.None);
                                 }
 
                                 //Give 5 PK trophies
@@ -822,6 +863,23 @@ namespace ACE.Server.Entity
                                     player.Session.Network.EnqueueSend(new GameMessageCreateObject(arenaKey));
                                     var msg = new GameMessageSystemChat($"You have received one of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
                                     player.Session.Network.EnqueueSend(msg);
+                                }                                
+
+                                //Give 25% chance for extra 1 to 3 Darkbeat's Lost Storage Keys
+                                if (new Random().NextDouble() > 0.75)
+                                {
+                                    var bonusCount = new Random().Next(1, 4);
+                                    for (int i = 0; i < bonusCount; i++)
+                                    {
+                                        arenaKey.SetStackSize(1);
+                                        var arenaKeyCreateResult2 = player.TryCreateInInventoryWithNetworking(arenaKey);
+                                        if (arenaKeyCreateResult2)
+                                        {
+                                            player.Session.Network.EnqueueSend(new GameMessageCreateObject(arenaKey));
+                                            var msg = new GameMessageSystemChat($"You have received a bonus Darkbeat's Lost Storage Key", ChatMessageType.Broadcast);
+                                            player.Session.Network.EnqueueSend(msg);
+                                        }
+                                    }
                                 }
                                 break;
 
@@ -832,21 +890,21 @@ namespace ACE.Server.Entity
                                 //Give % xp to next level
                                 if (player.Level > 0 && player.Level < 50)
                                 {
-                                    player.GrantLevelProportionalXp(1, 1000000, long.MaxValue, true);
+                                    player.GrantLevelProportionalXp(10, 0, 0, true);
                                 }
                                 else if (player.Level >= 50 && player.Level < 150)
                                 {
-                                    player.GrantLevelProportionalXp(0.75, 1000000, long.MaxValue, true);
+                                    player.GrantLevelProportionalXp(2, 0, 0, true);
                                 }
                                 else if (player.Level >= 150)
                                 {
-                                    player.GrantLevelProportionalXp(0.5, 1000000, long.MaxValue, true);
+                                    player.GrantLevelProportionalXp(1, 0, 0, true);
                                 }
 
-                                //Give 20k lum
+                                //Give 80k lum
                                 if (player.MaximumLuminance != null)
                                 {
-                                    player.GrantLuminance(20000, XpType.Quest, ShareType.None);
+                                    player.GrantLuminance(80000, XpType.Quest, ShareType.None);
                                 }
 
                                 //Give 5 PK trophies
@@ -860,7 +918,6 @@ namespace ACE.Server.Entity
                                     player.Session.Network.EnqueueSend(msg);
                                 }
 
-
                                 //Give 3 Phial of Bloody Tears
                                 var ffaWinner_arenaTrophy = WorldObjectFactory.CreateNewWorldObject(1000003); //Phial of Bloody Tears
                                 ffaWinner_arenaTrophy.SetStackSize(3);
@@ -872,20 +929,117 @@ namespace ACE.Server.Entity
                                     player.Session.Network.EnqueueSend(msg);
                                 }
 
-                                //Give 1 Darkbeat's Lost Storage Keys
-                                var ffaWinner_arenaKey = WorldObjectFactory.CreateNewWorldObject(480608); //Darkbeat's Lost Storage Keys
-                                ffaWinner_arenaKey.SetStackSize(1);
-                                var ffaWinner_arenaKeyCreateResult = player.TryCreateInInventoryWithNetworking(ffaWinner_arenaKey);
-                                if (ffaWinner_arenaKeyCreateResult)
+                                //Give 5 Darkbeat's Lost Storage Keys
+                                for (int i = 0; i < 5; i++)
                                 {
-                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(ffaWinner_arenaKey));
-                                    var msg = new GameMessageSystemChat($"You have received one of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
+                                    var ffaWinner_arenaKey = WorldObjectFactory.CreateNewWorldObject(480608); //Darkbeat's Lost Storage Keys
+                                    ffaWinner_arenaKey.SetStackSize(1);
+                                    var ffaWinner_arenaKeyCreateResult = player.TryCreateInInventoryWithNetworking(ffaWinner_arenaKey);
+                                    if (ffaWinner_arenaKeyCreateResult)
+                                    {
+                                        player.Session.Network.EnqueueSend(new GameMessageCreateObject(ffaWinner_arenaKey));
+                                        var msg = new GameMessageSystemChat($"You have received five of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
+                                        player.Session.Network.EnqueueSend(msg);
+                                    }
+                                }
+                                break;
+
+                            case "group":
+
+                                //Give % xp to next level.  Triple it if the player survived the fight and isn't fighting own clan
+                                var rewardMultiplier = winner.FinishPlace == 1 && !sameClanFight ? 3 : 1;
+                                if (player.Level > 0 && player.Level < 50)
+                                {
+                                    player.GrantLevelProportionalXp(1 * rewardMultiplier, 0, 0, true);
+                                }
+                                else if (player.Level >= 50 && player.Level < 150)
+                                {
+                                    player.GrantLevelProportionalXp(0.25 * rewardMultiplier, 0, 0, true);
+                                }
+                                else if (player.Level >= 150)
+                                {
+                                    player.GrantLevelProportionalXp(0.15 * rewardMultiplier, 0, 0, true);
+                                }
+
+                                //Give 20k lum, triple if you stayed alive and aren't fighting your own clan
+                                if (player.MaximumLuminance != null)
+                                {
+                                    player.GrantLuminance(20000 * rewardMultiplier, XpType.Quest, ShareType.None);
+                                }
+
+                                //Give 5 PK trophies, triple if you were still alive and not fighting against clanmates
+                                var groupWinnerPkTrophy = WorldObjectFactory.CreateNewWorldObject(1000002); //PK Trophy
+                                groupWinnerPkTrophy.SetStackSize(5 * rewardMultiplier);
+                                var groupWinnerPkTrophyCreateResult = player.TryCreateInInventoryWithNetworking(groupWinnerPkTrophy);
+                                if (groupWinnerPkTrophyCreateResult)
+                                {
+                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(groupWinnerPkTrophy));
+                                    var msg = new GameMessageSystemChat($"You have received {5 * rewardMultiplier} PK Trophies", ChatMessageType.Broadcast);
                                     player.Session.Network.EnqueueSend(msg);
+                                }
+
+                                //Give 1 Phial of Bloody Tears, triple if you were still alive and not fighting against clanmates
+                                var groupWinner_arenaTrophy = WorldObjectFactory.CreateNewWorldObject(1000003); //Phial of Bloody Tears
+                                groupWinner_arenaTrophy.SetStackSize(1 * rewardMultiplier);
+                                var groupWinner_arenaTrophyCreateResult = player.TryCreateInInventoryWithNetworking(groupWinner_arenaTrophy);
+                                if (groupWinner_arenaTrophyCreateResult)
+                                {
+                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(groupWinner_arenaTrophy));
+                                    var msg = new GameMessageSystemChat($"You have received {1 * rewardMultiplier} Phials of Bloody Tears", ChatMessageType.Broadcast);
+                                    player.Session.Network.EnqueueSend(msg);
+                                }
+
+                                //Give 2 Darkbeat's Lost Storage Keys, triple if you were still alive and not fighting against clanmates
+                                for (int i = 0; i < 2 * rewardMultiplier; i++)
+                                {
+                                    var groupWinner_arenaKey = WorldObjectFactory.CreateNewWorldObject(480608); //Darkbeat's Lost Storage Keys
+                                    groupWinner_arenaKey.SetStackSize(1);
+                                    var groupWinner_arenaKeyCreateResult = player.TryCreateInInventoryWithNetworking(groupWinner_arenaKey);
+                                    if (groupWinner_arenaKeyCreateResult)
+                                    {
+                                        player.Session.Network.EnqueueSend(new GameMessageCreateObject(groupWinner_arenaKey));
+                                        var msg = new GameMessageSystemChat($"You have received five of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
+                                        player.Session.Network.EnqueueSend(msg);
+                                    }
                                 }
                                 break;
                         }
 
                         SetPlayerRewardLimitProperties(player, winner);
+                    }
+
+                    //Handle PK quests
+                    var hasWhitelistedOpponent = losers.FirstOrDefault(x => x.MonarchId != winner.MonarchId && TownControl.TownControlAllegiances.IsAllowedAllegiance((int)x.MonarchId)) != null && TownControl.TownControlAllegiances.IsAllowedAllegiance((int)winner.MonarchId);
+                    if (hasWhitelistedOpponent)
+                    {
+                        player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateAnyArena);
+                        player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_WinAnyArena);
+                        player.CompletePkQuestTask("ARENA_DMG20K", (int)winner.TotalDmgDealt);
+                        if (winner.TotalDmgReceived <= 800)
+                            player.CompletePkQuestTask("ARENA_RECDMG800", 1);
+
+                        switch (ActiveEvent.EventType)
+                        {
+                            case "1v1":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate1v1Arena);
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Win1v1Arena);
+                                break;
+                            case "2v2":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate2v2Arena);
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Win2v2Arena);
+                                break;
+                            case "ffa":
+                                player.CompletePkQuestTask("ARENA_FFA_2");
+                                player.CompletePkQuestTask("ARENA_FFA_WIN_1");
+                                player.CompletePkQuestTask("ARENA_FFA_TOP3");
+                                break;
+                            case "group":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_WinGroupArena);
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     ArenaManager.DispelArenaRares(player);
@@ -941,13 +1095,13 @@ namespace ACE.Server.Entity
                             case "1v1":
                             case "2v2":
 
-                                //Give 2.5% xp to next level
-                                player.GrantLevelProportionalXp(0.025, 250000, long.MaxValue, true);
+                                //Give 10% xp to next level
+                                player.GrantLevelProportionalXp(0.1, 0, 0, true);
 
-                                //Give 3k lum
+                                //Give 5k lum
                                 if (player.MaximumLuminance != null)
                                 {
-                                    player.GrantLuminance(3000, XpType.Quest, ShareType.None);
+                                    player.GrantLuminance(5000, XpType.Quest, ShareType.None);
                                 }
 
                                 //Give 1 PK trophy
@@ -984,21 +1138,21 @@ namespace ACE.Server.Entity
                                     //Give % xp to next level
                                     if (player.Level > 0 && player.Level < 50)
                                     {
-                                        player.GrantLevelProportionalXp(0.75, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(5, 0, 0, true);
                                     }
                                     else if (player.Level >= 50 && player.Level < 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.25, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(1, 0, 0, true);
                                     }
                                     else if (player.Level >= 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.15, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                     }
 
-                                    //Give 8k lum
+                                    //Give 12k lum
                                     if (player.MaximumLuminance != null)
                                     {
-                                        player.GrantLuminance(8000, XpType.Quest, ShareType.None);
+                                        player.GrantLuminance(12000, XpType.Quest, ShareType.None);
                                     }
 
                                     //Give 3 PK trophies
@@ -1039,21 +1193,21 @@ namespace ACE.Server.Entity
                                     //Give % xp to next level
                                     if (player.Level > 0 && player.Level < 50)
                                     {
-                                        player.GrantLevelProportionalXp(0.25, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(1, 0, 0, true);
                                     }
                                     else if (player.Level >= 50 && player.Level < 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.15, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                     }
                                     else if (player.Level >= 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.05, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.25, 0, 0, true);
                                     }
 
-                                    //Give 5k lum
+                                    //Give 8k lum
                                     if (player.MaximumLuminance != null)
                                     {
-                                        player.GrantLuminance(5000, XpType.Quest, ShareType.None);
+                                        player.GrantLuminance(8000, XpType.Quest, ShareType.None);
                                     }
 
                                     //Give 1 PK trophies
@@ -1094,21 +1248,21 @@ namespace ACE.Server.Entity
                                     //Give % xp to next level
                                     if (player.Level > 0 && player.Level < 50)
                                     {
-                                        player.GrantLevelProportionalXp(0.1, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.5, 0, 0, true);
                                     }
                                     else if (player.Level >= 50 && player.Level < 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.05, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.25, 0, 0, true);
                                     }
                                     else if (player.Level >= 150)
                                     {
-                                        player.GrantLevelProportionalXp(0.025, 1000000, long.MaxValue, true);
+                                        player.GrantLevelProportionalXp(0.1, 0, 0, true);
                                     }
 
-                                    //Give 3k lum
+                                    //Give 5k lum
                                     if (player.MaximumLuminance != null)
                                     {
-                                        player.GrantLuminance(3000, XpType.Quest, ShareType.None);
+                                        player.GrantLuminance(5000, XpType.Quest, ShareType.None);
                                     }
 
                                     //25% chance to give 1 Darkbeat's Lost Storage Keys
@@ -1126,9 +1280,96 @@ namespace ACE.Server.Entity
                                     }
                                 }
                                 break;
+
+                            case "group":
+
+                                //Give % xp to next level.                                
+                                if (player.Level > 0 && player.Level < 50)
+                                {
+                                    player.GrantLevelProportionalXp(0.5, 0, 0, true);
+                                }
+                                else if (player.Level >= 50 && player.Level < 150)
+                                {
+                                    player.GrantLevelProportionalXp(0.15, 0, 0, true);
+                                }
+                                else if (player.Level >= 150)
+                                {
+                                    player.GrantLevelProportionalXp(0.1, 0, 0, true);
+                                }
+
+                                //Give 20k lum
+                                if (player.MaximumLuminance != null)
+                                {
+                                    player.GrantLuminance(20000, XpType.Quest, ShareType.None);
+                                }
+
+                                //Give 2 PK trophies
+                                var groupLoserPkTrophy = WorldObjectFactory.CreateNewWorldObject(1000002); //PK Trophy
+                                groupLoserPkTrophy.SetStackSize(2);
+                                var groupLoserPkTrophyCreateResult = player.TryCreateInInventoryWithNetworking(groupLoserPkTrophy);
+                                if (groupLoserPkTrophyCreateResult)
+                                {
+                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(groupLoserPkTrophy));
+                                    var msg = new GameMessageSystemChat($"You have received 2 PK Trophies", ChatMessageType.Broadcast);
+                                    player.Session.Network.EnqueueSend(msg);
+                                }
+
+                                //Give 1 Phial of Bloody Tears
+                                var groupLoser_arenaTrophy = WorldObjectFactory.CreateNewWorldObject(1000003); //Phial of Bloody Tears
+                                groupLoser_arenaTrophy.SetStackSize(1);
+                                var groupLoser_arenaTrophyCreateResult = player.TryCreateInInventoryWithNetworking(groupLoser_arenaTrophy);
+                                if (groupLoser_arenaTrophyCreateResult)
+                                {
+                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(groupLoser_arenaTrophy));
+                                    var msg = new GameMessageSystemChat($"You have received 1 Phial of Bloody Tears", ChatMessageType.Broadcast);
+                                    player.Session.Network.EnqueueSend(msg);
+                                }
+
+                                //25% chance to give 1 Darkbeat's Lost Storage Keys
+                                if (new Random().NextDouble() > 0.75)
+                                {
+                                    var groupLoser_arenaKey = WorldObjectFactory.CreateNewWorldObject(480608); //Darkbeat's Lost Storage Keys
+                                    groupLoser_arenaKey.SetStackSize(1);
+                                    var groupLoser_arenaKeyCreateResult = player.TryCreateInInventoryWithNetworking(groupLoser_arenaKey);
+                                    if (groupLoser_arenaKeyCreateResult)
+                                    {
+                                        player.Session.Network.EnqueueSend(new GameMessageCreateObject(groupLoser_arenaKey));
+                                        var msg = new GameMessageSystemChat($"You have received one of Darkbeat's Lost Storage Keys", ChatMessageType.Broadcast);
+                                        player.Session.Network.EnqueueSend(msg);
+                                    }
+                                }
+                                break;
                         }
 
                         SetPlayerRewardLimitProperties(player, loser);
+                    }
+
+                    //Handle PK quests
+                    var hasWhitelistedOpponent = winners.FirstOrDefault(x => x.MonarchId != loser.MonarchId && TownControl.TownControlAllegiances.IsAllowedAllegiance((int)x.MonarchId)) != null && TownControl.TownControlAllegiances.IsAllowedAllegiance((int)loser.MonarchId);
+                    if (hasWhitelistedOpponent)
+                    {
+                        player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateAnyArena);
+                        player.CompletePkQuestTask("ARENA_DMG20K", (int)loser.TotalDmgDealt);
+
+                        switch (ActiveEvent.EventType)
+                        {
+                            case "1v1":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate1v1Arena);
+                                break;
+                            case "2v2":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate2v2Arena);
+                                break;
+                            case "ffa":
+                                player.CompletePkQuestTask("ARENA_FFA_2");
+                                if (loser.FinishPlace > 0 && loser.FinishPlace <= 3)
+                                    player.CompletePkQuestTask("ARENA_FFA_TOP3");
+                                break;
+                            case "group":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     ArenaManager.DispelArenaRares(player);
@@ -1212,20 +1453,20 @@ namespace ACE.Server.Entity
                 return false;
             }
 
-            //You can't get more than 20 rewards per day
-            if (player.ArenaDailyRewardCount >= 20 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
+            //You can't get more than 40 rewards per day
+            if (player.ArenaDailyRewardCount >= 40 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
             {
                 return false;
             }
 
-            //You can't get more than 6 rewards per hour
-            if (player.ArenaHourlyCount >= 6 && (player.ArenaHourlyTimestamp ?? 0) >= Time.GetUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0)))
+            //You can't get more than 12 rewards per hour
+            if (player.ArenaHourlyCount >= 12 && (player.ArenaHourlyTimestamp ?? 0) >= Time.GetUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0)))
             {
                 return false;
             }
 
-            //You can't get more than 5 rewards playing against a clanmate per day
-            if (player.ArenaSameClanDailyRewardCount >= 5 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
+            //You can't get more than 15 rewards playing against a clanmate per day
+            if (player.ArenaSameClanDailyRewardCount >= 15 && (player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
             {
                 var sameClanOpponents = allArenaPlayers
                     .Where(x =>
@@ -1239,21 +1480,21 @@ namespace ACE.Server.Entity
                 }
             }
 
-            //You can't get more than 3 rewards from same person per day
-            if ((player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
-            {
-                var todaysArenaRewardsByOpponent = player.ArenaRewardsByOpponent;
-                foreach (var opponent in allArenaPlayers)
-                {
-                    if (arenaPlayer.CharacterId != opponent.CharacterId &&
-                        arenaPlayer.TeamGuid != opponent.TeamGuid &&
-                        todaysArenaRewardsByOpponent.ContainsKey(opponent.CharacterId) &&
-                        todaysArenaRewardsByOpponent[opponent.CharacterId] >= 3)
-                    {
-                        return false;
-                    }
-                }
-            }
+            ////You can't get more than 3 rewards from same person per day
+            //if ((player.ArenaDailyRewardTimestamp ?? 0) >= Time.GetUnixTime(DateTime.Today))
+            //{
+            //    var todaysArenaRewardsByOpponent = player.ArenaRewardsByOpponent;
+            //    foreach (var opponent in allArenaPlayers)
+            //    {
+            //        if (arenaPlayer.CharacterId != opponent.CharacterId &&
+            //            arenaPlayer.TeamGuid != opponent.TeamGuid &&
+            //            todaysArenaRewardsByOpponent.ContainsKey(opponent.CharacterId) &&
+            //            todaysArenaRewardsByOpponent[opponent.CharacterId] >= 3)
+            //        {
+            //            return false;
+            //        }
+            //    }
+            //}
 
             return true;
         }
@@ -1299,7 +1540,9 @@ namespace ACE.Server.Entity
 
             foreach (var arenaPlayer in ActiveEvent.Players)
             {
-                var isLoss = arenaPlayer.FinishPlace > 3 || arenaPlayer.FinishPlace < 1;
+                var isLoss = (arenaPlayer.FinishPlace > 3 || arenaPlayer.FinishPlace < 1) &&
+                    !arenaPlayer.EventType.ToLower().Equals("group");
+
                 var isDq = arenaPlayer.FinishPlace == -1;
 
                 DatabaseManager.Log.AddToArenaStats(
@@ -1354,6 +1597,33 @@ namespace ACE.Server.Entity
                         }
 
                         SetPlayerRewardLimitProperties(player, arenaPlayer);
+                    }
+
+                    //PK Quest stamps
+                    var hasWhitelistedOpponent = ActiveEvent.Players.FirstOrDefault(x => x.TeamGuid != arenaPlayer.TeamGuid && x.MonarchId != arenaPlayer.MonarchId && TownControl.TownControlAllegiances.IsAllowedAllegiance((int)x.MonarchId)) != null && TownControl.TownControlAllegiances.IsAllowedAllegiance((int)arenaPlayer.MonarchId);
+                    if (hasWhitelistedOpponent)
+                    {
+                        player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateAnyArena);
+                        player.CompletePkQuestTask("ARENA_DMG20K", (int)arenaPlayer.TotalDmgDealt);
+                        switch (ActiveEvent.EventType)
+                        {
+                            case "1v1":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate1v1Arena);
+                                break;
+                            case "2v2":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_Participate2v2Arena);
+                                break;
+                            case "ffa":
+                                player.CompletePkQuestTask("ARENA_FFA_2");
+                                if (!isLoss)
+                                    player.CompletePkQuestTask("ARENA_FFA_TOP3");
+                                break;
+                            case "group":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
+                                break;
+                            default:
+                                break;
+                        }
                     }
 
                     ArenaManager.DispelArenaRares(player);
@@ -1436,26 +1706,27 @@ namespace ACE.Server.Entity
             var pklArena = new ArenaLocation();
             pklArena.LandblockId = 0x0067;
             pklArena.SupportedEventTypes = new List<string>();
-            pklArena.SupportedEventTypes.Add("1v1");
             pklArena.SupportedEventTypes.Add("2v2");
             pklArena.SupportedEventTypes.Add("ffa");
+            pklArena.SupportedEventTypes.Add("group");
             pklArena.ArenaName = "PKL Arena";
             locList.Add(pklArena.LandblockId, pklArena);
 
-            ////Binding Realm
-            //var bindRealm = new ArenaLocation();
-            //bindRealm.LandblockId = 0x007F;
-            //bindRealm.SupportedEventTypes = new List<string>();
-            //bindRealm.SupportedEventTypes.Add("1v1");
-            //bindRealm.SupportedEventTypes.Add("2v2");
-            //bindRealm.ArenaName = "Binding Realm";
-            //locList.Add(bindRealm.LandblockId, bindRealm);
+            //Binding Realm
+            var bindRealm = new ArenaLocation();
+            bindRealm.LandblockId = 0x007F;
+            bindRealm.SupportedEventTypes = new List<string>();
+            bindRealm.SupportedEventTypes.Add("1v1");
+            bindRealm.SupportedEventTypes.Add("2v2");
+            bindRealm.ArenaName = "Binding Realm";
+            locList.Add(bindRealm.LandblockId, bindRealm);
 
             //0x0145, //Bone Lair            
             var boneLair = new ArenaLocation();
             boneLair.LandblockId = 0x0145;
             boneLair.SupportedEventTypes = new List<string>();
             boneLair.SupportedEventTypes.Add("ffa");
+            boneLair.SupportedEventTypes.Add("group");
             boneLair.ArenaName = "Bone Lair";
             locList.Add(boneLair.LandblockId, boneLair);
 
@@ -1464,6 +1735,7 @@ namespace ACE.Server.Entity
             galleyTower.LandblockId = 0x01AD;
             galleyTower.SupportedEventTypes = new List<string>();
             galleyTower.SupportedEventTypes.Add("ffa");
+            galleyTower.SupportedEventTypes.Add("group");
             galleyTower.ArenaName = "Galley Tower";
             locList.Add(galleyTower.LandblockId, galleyTower);
 
@@ -1472,16 +1744,18 @@ namespace ACE.Server.Entity
             ypk.LandblockId = 0x02E3;
             ypk.SupportedEventTypes = new List<string>();
             ypk.SupportedEventTypes.Add("ffa");
+            ypk.SupportedEventTypes.Add("group");
             ypk.ArenaName = "Yaraq PK Arena";
             locList.Add(ypk.LandblockId, ypk);
 
-            //0xECEC //Pyramid -Admin Island
-            var pyramid = new ArenaLocation();
-            pyramid.LandblockId = 0xECEC;
-            pyramid.SupportedEventTypes = new List<string>();
-            pyramid.SupportedEventTypes.Add("ffa");
-            pyramid.ArenaName = "Pyramid";
-            locList.Add(pyramid.LandblockId, pyramid);
+            ////0xECEC //Pyramid -Admin Island
+            //var pyramid = new ArenaLocation();
+            //pyramid.LandblockId = 0xECEC;
+            //pyramid.SupportedEventTypes = new List<string>();
+            //pyramid.SupportedEventTypes.Add("ffa");
+            //pyramid.SupportedEventTypes.Add("group");
+            //pyramid.ArenaName = "Pyramid";
+            //locList.Add(pyramid.LandblockId, pyramid);
 
             //Mad Cow Arena
             //var cow = new ArenaLocation();
@@ -1498,26 +1772,36 @@ namespace ACE.Server.Entity
             fowl.SupportedEventTypes = new List<string>();
             fowl.SupportedEventTypes.Add("1v1");
             fowl.SupportedEventTypes.Add("2v2");
+            fowl.SupportedEventTypes.Add("ffa");
+            fowl.SupportedEventTypes.Add("group");
             fowl.ArenaName = "Fowl Basement";
             locList.Add(fowl.LandblockId, fowl);
 
-            //Landing Strip
-            var ls = new ArenaLocation();
-            ls.LandblockId = 0xD50E;
-            ls.SupportedEventTypes = new List<string>();
-            ls.SupportedEventTypes.Add("1v1");
-            ls.SupportedEventTypes.Add("2v2");
-            ls.ArenaName = "The Landing Strip";
-            locList.Add(ls.LandblockId, ls);
+            ////Landing Strip
+            //var ls = new ArenaLocation();
+            //ls.LandblockId = 0xD50E;
+            //ls.SupportedEventTypes = new List<string>();
+            //ls.SupportedEventTypes.Add("1v1");
+            //ls.SupportedEventTypes.Add("2v2");
+            //ls.ArenaName = "The Landing Strip";
+            //locList.Add(ls.LandblockId, ls);
 
-            //The Heptagon
-            var heptagon = new ArenaLocation();
-            heptagon.LandblockId = 0x7222;
-            heptagon.SupportedEventTypes = new List<string>();
-            heptagon.SupportedEventTypes.Add("1v1");
-            heptagon.SupportedEventTypes.Add("2v2");
-            heptagon.ArenaName = "The Heptagon";
-            locList.Add(heptagon.LandblockId, heptagon);
+            ////The Heptagon
+            //var heptagon = new ArenaLocation();
+            //heptagon.LandblockId = 0x7222;
+            //heptagon.SupportedEventTypes = new List<string>();
+            //heptagon.SupportedEventTypes.Add("1v1");
+            //heptagon.SupportedEventTypes.Add("2v2");
+            //heptagon.ArenaName = "The Heptagon";
+            //locList.Add(heptagon.LandblockId, heptagon);
+
+            //oneTen
+            var oneTen = new ArenaLocation();
+            oneTen.LandblockId = 0x039D;
+            oneTen.SupportedEventTypes = new List<string>();
+            oneTen.SupportedEventTypes.Add("1v1");
+            oneTen.ArenaName = "One Ten";
+            locList.Add(oneTen.LandblockId, oneTen);
 
             return locList;
         }
@@ -1532,15 +1816,16 @@ namespace ACE.Server.Entity
                     _arenaLandblocks = new List<uint>()
                     {
                         0x0067, //PKL Arena
-                        //0x007F,  //Binding Realm
+                        0x007F,  //Binding Realm
                         0x0145, //Bone Lair
                         0x01AD, //Dungeon Galley Tower
                         0x02E3, //Yaraq PK Arena
-                        0xECEC, //Pyramid -Admin Island
+                        //0xECEC, //Pyramid -Admin Island
                         //0x00AF, //Mad Cow Arena
                         0x596A, //Fowl Basement
-                        0xD50E, //Landing Strip
-                        0x7222  //The Heptagon
+                        //0xD50E, //Landing Strip
+                        //0x7222  //The Heptagon
+                        0x039D, //One Ten
                     };
                 }
 
@@ -1583,19 +1868,19 @@ namespace ACE.Server.Entity
                             //0x0067011A [37.242702 -24.179514 0.005000] 0.684840 0.000000 0.000000 0.728694
                         }); //PKL Arena
 
-                    //_arenaLocationStartingPositions.Add(
-                    //    0x007F,
-                    //    new List<Position>()
-                    //    {
-                    //        new Position(0x007F0101, 236.75943f, -22.896727f, -59.995f, 0.000000f, 0.000000f, -0.6899546f, 0.72385263f), //West
-                    //        //0x007F0101 [236.75943 -22.896727 -59.995] 0.72385263 0 0 -0.6899546
-                    //        new Position(0x007F0107, 262.50168f, -16.419994f, -59.995f, 0.000000f, 0.000000f, -0.8109761f, -0.58507925f),//East
-                    //        //0x007F0107 [262.50168 -16.419994 -59.995] -0.58507925 0 0 -0.8109761
-                    //        new Position(0x007F0103, 250.935226f, -5.749045f, -59.994999f, 0.000000f, 0.000000f, -0.999384f, -0.035106f),//North
-                    //        //0x007F0103 [250.935226 -5.749045 -59.994999] 0.035106 0.000000 0.000000 -0.999384
-                    //        new Position(0x007F0105, 252.860062f, -33.350712f, -59.994999f, 0.000000f, 0.000000f, -0.043396f, -0.999058f),//South
-                    //        //0x007F0105 [252.860062 -33.350712 -59.994999] -0.999058 0.000000 0.000000 -0.043396
-                    //    }); //Binding Realm
+                    _arenaLocationStartingPositions.Add(
+                        0x007F,
+                        new List<Position>()
+                        {
+                            new Position(0x007F0101, 236.75943f, -22.896727f, -59.995f, 0.000000f, 0.000000f, -0.6899546f, 0.72385263f), //West
+                            //0x007F0101 [236.75943 -22.896727 -59.995] 0.72385263 0 0 -0.6899546
+                            new Position(0x007F0107, 262.50168f, -16.419994f, -59.995f, 0.000000f, 0.000000f, -0.8109761f, -0.58507925f),//East
+                            //0x007F0107 [262.50168 -16.419994 -59.995] -0.58507925 0 0 -0.8109761
+                            new Position(0x007F0103, 250.935226f, -5.749045f, -59.994999f, 0.000000f, 0.000000f, -0.999384f, -0.035106f),//North
+                            //0x007F0103 [250.935226 -5.749045 -59.994999] 0.035106 0.000000 0.000000 -0.999384
+                            new Position(0x007F0105, 252.860062f, -33.350712f, -59.994999f, 0.000000f, 0.000000f, -0.043396f, -0.999058f),//South
+                            //0x007F0105 [252.860062 -33.350712 -59.994999] -0.999058 0.000000 0.000000 -0.043396
+                        }); //Binding Realm
 
                     _arenaLocationStartingPositions.Add(
                         0x02E3,
@@ -1623,31 +1908,31 @@ namespace ACE.Server.Entity
                             //0x02E3015A[59.596912 -55.734844 12.054999] -0.696133 0.000000 0.000000 -0.717913
                         }); //Yaraq PK Arena
 
-                    _arenaLocationStartingPositions.Add(
-                        0xECEC,
-                        new List<Position>()
-                        {
-                            new Position(0xECEC012D, 84.326401f, 37.399399f, 0.205000f, 0.000000f, 0.000000f, -0.010572f, -0.999944f),
-                            //0xECEC012D[84.326401 37.399399 0.205000] -0.999944 0.000000 0.000000 -0.010572
-                            new Position(0xECEC011F, 131.125320f, 36.631672f, 0.205000f, 0.000000f, 0.000000f, -0.333597f, -0.942716f),
-                            //0xECEC011F[131.125320 36.631672 0.205000] -0.942716 0.000000 0.000000 -0.333597
-                            new Position(0xECEC012C, 132.890320f, 84.706825f, 0.205000f, 0.000000f, 0.000000f, -0.717156f, -0.696913f),
-                            //0xECEC012C[132.890320 84.706825 0.205000] -0.696913 0.000000 0.000000 -0.717156
-                            new Position(0xECEC0122, 131.195908f, 130.575638f, 0.205000f, 0.000000f, 0.000000f, -0.916779f, -0.399395f),
-                            //0xECEC0122[131.195908 130.575638 0.205000] -0.399395 0.000000 0.000000 -0.916779
-                            new Position(0xECEC012B, 83.108978f, 131.664230f, 0.205000f, 0.000000f, 0.000000f, -0.999970f, 0.007704f),
-                            //0xECEC012B[83.108978 131.664230 0.205000] 0.007704 0.000000 0.000000 -0.999970
-                            new Position(0xECEC0121, 37.388470f, 130.349777f, 0.205000f, 0.000000f, 0.000000f, -0.926284f, 0.376825f),
-                            //0xECEC0121[37.388470 130.349777 0.205000] 0.376825 0.000000 0.000000 -0.926284
-                            new Position(0xECEC012E, 36.323086f, 83.237755f, 0.205000f, 0.000000f, 0.000000f, -0.679018f, 0.734121f),
-                            //0xECEC012E[36.323086 83.237755 0.205000] 0.734121 0.000000 0.000000 -0.679018
-                            new Position(0xECEC0120, 37.112888f, 37.668873f, 0.205000f, 0.000000f, 0.000000f, -0.401558f, 0.915833f),
-                            //0xECEC0120[37.112888 37.668873 0.205000] 0.915833 0.000000 0.000000 -0.401558
-                            new Position(0xECEC0105, 72.137177f, 84.142395f, 0.205000f, 0.000000f, 0.000000f, -0.702030f, 0.712147f),
-                            //0xECEC0105[72.137177 84.142395 0.205000] 0.712147 0.000000 0.000000 -0.702030
-                            new Position(0xECEC0110, 97.596474f, 83.986618f, 0.205000f, 0.000000f, 0.000000f, 0.715533f, 0.698579f),
-                            //0xECEC0110[97.596474 83.986618 0.205000] 0.698579 0.000000 0.000000 0.715533
-                        }); //Pyramid -Admin Island
+                    //_arenaLocationStartingPositions.Add(
+                    //    0xECEC,
+                    //    new List<Position>()
+                    //    {
+                    //        new Position(0xECEC012D, 84.326401f, 37.399399f, 0.205000f, 0.000000f, 0.000000f, -0.010572f, -0.999944f),
+                    //        //0xECEC012D[84.326401 37.399399 0.205000] -0.999944 0.000000 0.000000 -0.010572
+                    //        new Position(0xECEC011F, 131.125320f, 36.631672f, 0.205000f, 0.000000f, 0.000000f, -0.333597f, -0.942716f),
+                    //        //0xECEC011F[131.125320 36.631672 0.205000] -0.942716 0.000000 0.000000 -0.333597
+                    //        new Position(0xECEC012C, 132.890320f, 84.706825f, 0.205000f, 0.000000f, 0.000000f, -0.717156f, -0.696913f),
+                    //        //0xECEC012C[132.890320 84.706825 0.205000] -0.696913 0.000000 0.000000 -0.717156
+                    //        new Position(0xECEC0122, 131.195908f, 130.575638f, 0.205000f, 0.000000f, 0.000000f, -0.916779f, -0.399395f),
+                    //        //0xECEC0122[131.195908 130.575638 0.205000] -0.399395 0.000000 0.000000 -0.916779
+                    //        new Position(0xECEC012B, 83.108978f, 131.664230f, 0.205000f, 0.000000f, 0.000000f, -0.999970f, 0.007704f),
+                    //        //0xECEC012B[83.108978 131.664230 0.205000] 0.007704 0.000000 0.000000 -0.999970
+                    //        new Position(0xECEC0121, 37.388470f, 130.349777f, 0.205000f, 0.000000f, 0.000000f, -0.926284f, 0.376825f),
+                    //        //0xECEC0121[37.388470 130.349777 0.205000] 0.376825 0.000000 0.000000 -0.926284
+                    //        new Position(0xECEC012E, 36.323086f, 83.237755f, 0.205000f, 0.000000f, 0.000000f, -0.679018f, 0.734121f),
+                    //        //0xECEC012E[36.323086 83.237755 0.205000] 0.734121 0.000000 0.000000 -0.679018
+                    //        new Position(0xECEC0120, 37.112888f, 37.668873f, 0.205000f, 0.000000f, 0.000000f, -0.401558f, 0.915833f),
+                    //        //0xECEC0120[37.112888 37.668873 0.205000] 0.915833 0.000000 0.000000 -0.401558
+                    //        new Position(0xECEC0105, 72.137177f, 84.142395f, 0.205000f, 0.000000f, 0.000000f, -0.702030f, 0.712147f),
+                    //        //0xECEC0105[72.137177 84.142395 0.205000] 0.712147 0.000000 0.000000 -0.702030
+                    //        new Position(0xECEC0110, 97.596474f, 83.986618f, 0.205000f, 0.000000f, 0.000000f, 0.715533f, 0.698579f),
+                    //        //0xECEC0110[97.596474 83.986618 0.205000] 0.698579 0.000000 0.000000 0.715533
+                    //    }); //Pyramid -Admin Island
 
                     _arenaLocationStartingPositions.Add(
                         0x01AD,
@@ -1729,33 +2014,47 @@ namespace ACE.Server.Entity
                             //0x596A0102 [5.146578 -21.661127 0.005000] 0.718819 0.000000 0.000000 -0.695197
                     }); //Fowl Basement
 
-                    _arenaLocationStartingPositions.Add(
-                    0xD50E,
-                    new List<Position>()
-                    {
-                            new Position(0xD50E0012, 48.137695f, 40.723217f, -0.095000f, 0.000000f, 0.000000f, 0.011873f, -0.999929f),
-                            //0xD50E0012 [48.137695 40.723217 -0.095000] -0.999929 0.000000 0.000000 0.011873
-                            new Position(0xD50E000E, 47.949497f, 130.815628f, -0.095000f, 0.000000f, 0.000000f, -0.999986f, 0.005301f),
-                            //0xD50E000E [47.949497 130.815628 -0.095000] 0.005301 0.000000 0.000000 -0.999986
-                            new Position(0xD50E000D, 36.021290f, 96.158844f, -0.095000f, 0.000000f, 0.000000f, -0.707318f, 0.706895f),
-                            //0xD50E000D [36.021290 96.158844 -0.095000] 0.706895 0.000000 0.000000 -0.707318
-                            new Position(0xD50E0015, 61.040390f, 96.038742f, -0.445000f, 0.000000f, 0.000000f, -0.707665f, -0.706548f),
-                            //0xD50E0015 [61.040390 96.038742 -0.445000] -0.706548 0.000000 0.000000 -0.707665
-                    }); //Landing Strip
+                    //_arenaLocationStartingPositions.Add(
+                    //0xD50E,
+                    //new List<Position>()
+                    //{
+                    //        new Position(0xD50E0012, 48.137695f, 40.723217f, -0.095000f, 0.000000f, 0.000000f, 0.011873f, -0.999929f),
+                    //        //0xD50E0012 [48.137695 40.723217 -0.095000] -0.999929 0.000000 0.000000 0.011873
+                    //        new Position(0xD50E000E, 47.949497f, 130.815628f, -0.095000f, 0.000000f, 0.000000f, -0.999986f, 0.005301f),
+                    //        //0xD50E000E [47.949497 130.815628 -0.095000] 0.005301 0.000000 0.000000 -0.999986
+                    //        new Position(0xD50E000D, 36.021290f, 96.158844f, -0.095000f, 0.000000f, 0.000000f, -0.707318f, 0.706895f),
+                    //        //0xD50E000D [36.021290 96.158844 -0.095000] 0.706895 0.000000 0.000000 -0.707318
+                    //        new Position(0xD50E0015, 61.040390f, 96.038742f, -0.445000f, 0.000000f, 0.000000f, -0.707665f, -0.706548f),
+                    //        //0xD50E0015 [61.040390 96.038742 -0.445000] -0.706548 0.000000 0.000000 -0.707665
+                    //}); //Landing Strip
+
+                    //_arenaLocationStartingPositions.Add(
+                    //0x7222,
+                    //new List<Position>()
+                    //{
+                    //        new Position(0x7222002D, 131.824692f, 96.041451f, -0.445000f, 0.000000f, 0.000000f, -0.709499f, 0.704706f),
+                    //        // 0x7222002D [131.824692 96.041451 -0.445000] 0.704706 0.000000 0.000000 -0.709499
+                    //        new Position(0x72220034, 156.016724f, 95.997833f, -0.445000f, 0.000000f, 0.000000f, -0.719308f, -0.694692f),
+                    //        // 0x72220034 [156.016724 95.997833 -0.445000] -0.694692 0.000000 0.000000 -0.719308
+                    //        new Position(0x7222002D, 143.945587f, 110.087395f, -0.445000f, 0.000000f, 0.000000f, -0.999998f, -0.002127f),
+                    //        // 0x7222002D [143.945587 110.087395 -0.445000] -0.002127 0.000000 0.000000 -0.999998
+                    //        new Position(0x7222002C, 143.886292f, 81.059364f, -0.445000f, 0.000000f, 0.000000f, 0.004404f, -0.999990f),
+                    //        // 0x7222002C [143.886292 81.059364 -0.445000] -0.999990 0.000000 0.000000 0.004404
+                    //}); //The Heptagon
 
                     _arenaLocationStartingPositions.Add(
-                    0x7222,
-                    new List<Position>()
-                    {
-                            new Position(0x7222002D, 131.824692f, 96.041451f, -0.445000f, 0.000000f, 0.000000f, -0.709499f, 0.704706f),
-                            // 0x7222002D [131.824692 96.041451 -0.445000] 0.704706 0.000000 0.000000 -0.709499
-                            new Position(0x72220034, 156.016724f, 95.997833f, -0.445000f, 0.000000f, 0.000000f, -0.719308f, -0.694692f),
-                            // 0x72220034 [156.016724 95.997833 -0.445000] -0.694692 0.000000 0.000000 -0.719308
-                            new Position(0x7222002D, 143.945587f, 110.087395f, -0.445000f, 0.000000f, 0.000000f, -0.999998f, -0.002127f),
-                            // 0x7222002D [143.945587 110.087395 -0.445000] -0.002127 0.000000 0.000000 -0.999998
-                            new Position(0x7222002C, 143.886292f, 81.059364f, -0.445000f, 0.000000f, 0.000000f, 0.004404f, -0.999990f),
-                            // 0x7222002C [143.886292 81.059364 -0.445000] -0.999990 0.000000 0.000000 0.004404
-                    }); //The Heptagon
+                        0x039D,
+                        new List<Position>()
+                        {
+                            new Position(0x039D02A4, 104.028847f, -46.040611f, 48.005001f, 0f, 0f, -0.925397f, -0.379000f),
+                            //0x039D02A4 [104.028847 -46.040611 48.005001] -0.379000 0.000000 0.000000 -0.925397
+                            new Position(0x039D02A4, 103.830605f, -53.779991f, 48.005001f, 0f, 0f, -0.401763f, -0.915744f),
+                            //0x039D02A4 [103.830605 -53.779991 48.005001] -0.915744 0.000000 0.000000 -0.401763
+                            new Position(0x039D02A4, 96.026833f, -53.870930f, 48.005001f, 0f, 0f, 0.449561f, -0.893250f),
+                            //0x039D02A4 [96.026833 -53.870930 48.005001] -0.893250 0.000000 0.000000 0.449561
+                            new Position(0x039D02A4, 95.942345f, -45.941307f, 48.005001f, 0f, 0f, 0.924836f, -0.380366f),
+                            //0x039D02A4 [95.942345 -45.941307 48.005001] -0.380366 0.000000 0.000000 0.924836
+                        }); //One Ten
                 }
 
                 return _arenaLocationStartingPositions;

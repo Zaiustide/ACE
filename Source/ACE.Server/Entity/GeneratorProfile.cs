@@ -482,6 +482,16 @@ namespace ACE.Server.Entity
                 if(container != null)
                 {
                     var landblockId = container.CurrentLandblock?.Id.Landblock;
+
+                    if (PropertyManager.GetBool("ratings_whitelist_enabled").Item && !Whitelist.IsRatingsWhitelistedChestWeenie(container.WeenieClassId))
+                    {
+                        deathTreasure.DisableRatings = landblockId.HasValue ? !Whitelist.IsRatingsWhitelistedLandblock(landblockId.Value) : true;
+                    }
+                    else
+                    {
+                        deathTreasure.DisableRatings = false;
+                    }
+
                     if (PropertyManager.GetBool("equipmentset_whitelist_enabled").Item)
                     {
                         deathTreasure.DisableSets = landblockId.HasValue ? !Whitelist.IsEquipmentSetWhitelistedLandblock(landblockId.Value) : true;

@@ -211,7 +211,7 @@ namespace ACE.Server.Network.Handlers
                 {
                     try
                     {
-                        var currIp = session.EndPointC2S.ToString();
+                        var currIp = session.EndPointC2S?.Address?.ToString();
                         bool isVpn = false;
                         if (!VpnApprovedIPs.Contains(currIp))
                         {

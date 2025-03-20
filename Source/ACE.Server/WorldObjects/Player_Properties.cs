@@ -1551,11 +1551,11 @@ namespace ACE.Server.WorldObjects
             set { if (!value) RemoveProperty(PropertyBool.HasArenaRareDmgReductionBuff); else SetProperty(PropertyBool.HasArenaRareDmgReductionBuff, value); }
         }
 
-        //Don't let players spam arena commands
-        public double? LastArenaCommandTimestamp
+        //Don't let players spam any player commands
+        public double? LastPlayerCommandTimestamp
         {
-            get => GetProperty(PropertyFloat.LastArenaCommandTimestamp) ?? 0;
-            set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastArenaCommandTimestamp); else SetProperty(PropertyFloat.LastArenaCommandTimestamp, value.Value); }
+            get => GetProperty(PropertyFloat.LastPlayerCommandTimestamp) ?? 0;
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastPlayerCommandTimestamp); else SetProperty(PropertyFloat.LastPlayerCommandTimestamp, value.Value); }
         }
 
 
@@ -1564,6 +1564,20 @@ namespace ACE.Server.WorldObjects
         {
             get => GetProperty(PropertyFloat.LastChugTimestamp) ?? 0;
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastChugTimestamp); else SetProperty(PropertyFloat.LastChugTimestamp, value.Value); }
+        }
+
+        /* Tinkering Tool morph gem */
+        public bool NextTinkIsFoolproof
+        {
+            get => GetProperty(PropertyBool.NextTinkIsFoolproof) ?? false;
+            set { if (!value) RemoveProperty(PropertyBool.NextTinkIsFoolproof); else SetProperty(PropertyBool.NextTinkIsFoolproof, value); }
+        }
+
+        /* PK Quests */
+        public string PKQuestListSerialized
+        {
+            get => GetProperty(PropertyString.PKQuestInfo) ?? String.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.PKQuestInfo); else SetProperty(PropertyString.PKQuestInfo, value); }
         }
     }
 }

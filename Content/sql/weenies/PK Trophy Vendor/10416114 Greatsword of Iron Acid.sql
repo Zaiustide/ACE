@@ -13,6 +13,7 @@ VALUES (10416114,   1,          1) /* ItemType - MeleeWeapon */
      , (10416114,  45,         32) /* DamageType - Acid */
      , (10416114,  46,          8) /* DefaultCombatStyle - TwoHanded */
      , (10416114,  47,        160) /* AttackType - DoubleSlash, DoubleThrust */
+	 , (10416114,  48,        41) /* AttackType - DoubleSlash, DoubleThrust */
      , (10416114,  51,          5) /* CombatUse - TwoHanded */
      , (10416114,  52,          1) /* ParentLocation - RightHand */
      , (10416114,  93,       3092) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity, LightingOn */

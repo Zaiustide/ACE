@@ -664,35 +664,33 @@ namespace ACE.Server.WorldObjects
             return (int)Math.Round(staminaCost);
         }
 
-        /// <summary>
-        /// Returns the damage rating modifier for an applicable Recklessness attack
-        /// </summary>
-        /// <param name="powerAccuracyBar">The 0.0 - 1.0 power/accurary bar</param>
-        public float GetRecklessnessMod(/*float powerAccuracyBar*/)
+        public int GetRecklessnessDmgRatingBonus()
         {
-            // ensure melee or missile combat mode
             if (CombatMode != CombatMode.Melee && CombatMode != CombatMode.Missile)
-                return 1.0f;
+                return 0;
 
             var skill = GetCreatureSkill(Skill.Recklessness);
 
             // recklessness skill must be either trained or specialized to use
             if (skill.AdvancementClass < SkillAdvancementClass.Trained)
-                return 1.0f;
+                return 0;
 
-            // recklessness is active when attack bar is between 20% and 80% (according to wiki)
-            // client attack bar range seems to indicate this might have been updated, between 10% and 90%?
+            // Recklessness is active when attack bar is between 10% and 90%
+            // Note that client side changes to the accuracy bar are not independently reported to the server, thus
+            // GetPowerAccuracyBar returns the power/accuracy value from the last recorded damage event
+            // This is retail-accurate, as a character was considered in a reckless state if their last damage was done with the
+            // power/accuracy bar between 10%-90%, regardless of whether they've changed the accuracy client-side since then
             var powerAccuracyBar = GetPowerAccuracyBar();
-            //if (powerAccuracyBar < 0.2f || powerAccuracyBar > 0.8f)
+            
             if (powerAccuracyBar < 0.1f || powerAccuracyBar > 0.9f)
-                return 1.0f;
+                return 0;
 
             // recklessness only applies to non-critical hits,
             // which is handled outside of this method.
 
             // damage rating is increased by 20 for specialized, and 10 for trained.
             // incoming non-critical damage from all sources is increased by the same.
-            var damageRating = skill.AdvancementClass == SkillAdvancementClass.Specialized ? 20 : 10;
+            int damageRatingBonus = skill.AdvancementClass == SkillAdvancementClass.Specialized ? 20 : 10;
 
             // if recklessness skill is lower than current attack skill (as determined by your equipped weapon)
             // then the damage rating is reduced proportionately. The damage rating caps at 10 for trained
@@ -702,15 +700,48 @@ namespace ACE.Server.WorldObjects
             if (skill.Current < attackSkill.Current)
             {
                 var scale = (float)skill.Current / attackSkill.Current;
-                damageRating = (int)Math.Round(damageRating * scale);
+                damageRatingBonus = (int)Math.Round(damageRatingBonus * scale);
             }
 
-            // The damage rating adjustment for incoming damage is also adjusted proportinally if your Recklessness skill
-            // is lower than your active attack skill
+            return damageRatingBonus;
+        }
 
-            var recklessnessMod = GetDamageRating(damageRating);    // trained DR 1.10 = 10% additional damage
-                                                                    // specialized DR 1.20 = 20% additional damage
-            return recklessnessMod;
+        public int GetRecklessnessDmgResistRatingPenalty()
+        {
+            if (CombatMode != CombatMode.Melee && CombatMode != CombatMode.Missile)
+                return 0;
+
+            var skill = GetCreatureSkill(Skill.Recklessness);
+
+            // recklessness skill must be either trained or specialized to use
+            if (skill.AdvancementClass < SkillAdvancementClass.Trained)
+                return 0;
+
+            // Recklessness is active when attack bar is between 10% and 90%
+            // Note that client side changes to the accuracy bar are not independently reported to the server, thus
+            // GetPowerAccuracyBar returns the power/accuracy value from the last recorded damage event
+            // This is retail-accurate, as a character was considered in a reckless state if their last damage was done with the
+            // power/accuracy bar between 10%-90%, regardless of whether they've changed the accuracy client-side since then
+            var powerAccuracyBar = GetPowerAccuracyBar();
+
+            if (powerAccuracyBar < 0.1f || powerAccuracyBar > 0.9f)
+                return 0;
+
+            // damage resist rating is decreased by 20 for specialized, and 10 for trained.
+            int damageResistRatingPenalty = skill.AdvancementClass == SkillAdvancementClass.Specialized ? 20 : 10;
+
+            // if recklessness skill is lower than current attack skill (as determined by your equipped weapon)
+            // then the damage rating is reduced proportionately. The damage rating caps at 10 for trained
+            // and 20 for specialized, so there is no reason to raise the skill above your attack skill.
+            var attackSkill = GetCreatureSkill(GetCurrentAttackSkill());
+
+            if (skill.Current < attackSkill.Current)
+            {
+                var scale = (float)skill.Current / attackSkill.Current;
+                damageResistRatingPenalty = (int)Math.Round(damageResistRatingPenalty * scale);
+            }
+
+            return damageResistRatingPenalty;
         }
 
         /// <summary>
@@ -1252,6 +1283,30 @@ namespace ACE.Server.WorldObjects
 
                     if (spell == null || spell.IsHarmful || targetPlayer.PlayerKillerStatus != PlayerKillerStatus.NPK)
                         return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_NotSamePKType, WeenieErrorWithString._FailsToAffectYou_NotSamePKType };
+                }
+
+                //Disable most inepts in arenas
+                if (ArenaLocation.IsArenaLandblock(this.Location.Landblock) &&
+                    spell != null &&
+                    spell.IsHarmful)
+                {
+                    if ((spell.School == MagicSchool.CreatureEnchantment &&
+                    spell.Category != SpellCategory.MagicDefenseLowering &&
+                    spell.Category != SpellCategory.MeleeDefenseLowering &&
+                    spell.Category != SpellCategory.MissileDefenseLowering) ||
+                    spell.School == MagicSchool.ItemEnchantment)
+                    {
+                        return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
+                    }
+
+                    if (spell.School == MagicSchool.VoidMagic)
+                    {
+                        var arenaEvent = ArenaManager.GetArenaEventByLandblock(this.Location.Landblock);
+                        if (arenaEvent == null || arenaEvent.Status != 4)
+                        {
+                            return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
+                        }
+                    }
                 }
             }
             else

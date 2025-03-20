@@ -616,6 +616,7 @@ namespace ACE.Server.Managers
                 ("equipmentset_whitelist_enabled", new Property<bool>(false, "enable this to limit areas where Sets drop to whitelisted landblocks")),
                 ("epic_whitelist_enabled", new Property<bool>(false, "enable this to limit areas where Epic cantrips drop to whitelisted landblocks")),
                 ("legendary_whitelist_enabled", new Property<bool>(false, "enable this to limit areas where Legendary cantrips drop to whitelisted landblocks")),
+                ("ratings_whitelist_enabled", new Property<bool>(false, "enable this to limit areas where Ratings drop on loot gen armor to whitelisted landblocks")),
                 ("aetheria_whitelist_enabled", new Property<bool>(false, "enable this to limit areas where aetheria drop to whitelisted landblocks")),
                 ("aetheria_highlevel_whitelist_enabled", new Property<bool>(false, "enable this to limit areas where level 4 and 5 aetheria drop to whitelisted landblocks")),
                 ("block_vpn_connections", new Property<bool>(false, "enable this to block user sessions from IPs identified as VPN proxies")),
@@ -625,7 +626,8 @@ namespace ACE.Server.Managers
                 ("tinker_lotto_enabled", new Property<bool>(false, "enables the tinkering lotto feature")),
                 ("force_materialization", new Property<bool>(true, "forces players to materialize on login")),
                 ("disable_pvp_cleave", new Property<bool>(false, "disables melee cleave attacks from targeting players")),
-                ("disable_world_bosses", new Property<bool>(true, "disables spawning of world bosses")), 
+                ("disable_world_bosses", new Property<bool>(true, "disables spawning of world bosses")),
+                ("jump_cancels_melee", new Property<bool>(false, "cancels melee attacks when the target is jumping")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
 
@@ -661,7 +663,9 @@ namespace ACE.Server.Managers
                 ("arenas_reward_min_level", new Property<long>(25, "the minimum level required to get arena rewards")),
                 ("arenas_reward_min_age", new Property<long>(864000, "the minimum in-game age in seconds required to get arena rewards")),
                 ("pvp_chug_timer", new Property<long>(0, "the minimum time in milliseconds between chugs. if a chug is used within X milliseconds of a previous one, it will heal for 0. if value is set to 0 the feature is disabled.")),
-                ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out"))
+                ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out")),
+                ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting"))
+                
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<double>> DefaultDoubleProperties =
@@ -672,6 +676,7 @@ namespace ACE.Server.Managers
                 ("cloak_max_proc_base", new Property<double>(0.25, "The max proc chance of a cloak.")),
                 ("cloak_max_proc_damage_percentage", new Property<double>(0.30, "The damage percentage at which cloak proc chance plateaus.")),
                 ("cloak_min_proc", new Property<double>(0, "The minimum proc chance of a cloak.")),
+                ("pvp_cloak_max_dmg_mitigation", new Property<double>(100, "The maximum amount of damage a cloak proc can mitigate")),
                 ("minor_cantrip_drop_rate", new Property<double>(1.0, "Scales the chance for minor cantrips to drop, relative to other cantrip levels in the tier. Defaults to 1.0, as per end of retail")),
                 ("major_cantrip_drop_rate", new Property<double>(1.0, "Scales the chance for major cantrips to drop, relative to other cantrip levels in the tier. Defaults to 1.0, as per end of retail")),
                 ("epic_cantrip_drop_rate", new Property<double>(1.0, "Scales the chance for epic cantrips to drop, relative to other cantrip levels in the tier. Defaults to 1.0, as per end of retail")),
@@ -701,16 +706,20 @@ namespace ACE.Server.Managers
                 ("vendor_unique_rot_time", new Property<double>(300, "the number of seconds before unique items sold to vendors disappear")),
                 ("vitae_penalty", new Property<double>(0.05, "the amount of vitae penalty a player gets per death")),
                 ("vitae_penalty_max", new Property<double>(0.40, "the maximum vitae penalty a player can have")),                
-                ("xp_modifier", new Property<double>(1.0, "scales the amount of xp received by players")),
+                ("xp_modifier", new Property<double>(1.0, "scales the amount of xp received by players")),                
                 ("pvp_dmg_mod_war", new Property<double>(1.0, "Scales the amount of damage for war magic")),
                 ("pvp_dmg_mod_war_variance", new Property<double>(1.0, "Scales the low end for war magic bolts and arcs without effecting top end.  Values under 1 will reduce the variance and increase min dmg by the amount the variance was reduced.  Values over 1 will increase variance and reduce min dmg to match.")),
                 ("pvp_dmg_mod_war_streak", new Property<double>(1.0, "Scales the amount of damage for war streaks")),
-                ("pvp_dmg_mod_war_blast", new Property<double>(1.0, "Scales the amount of damage for war blasts")),
-                ("pvp_dmg_mod_void", new Property<double>(1.0, "Scales the amount of damage players take from Void Magic (not including streaks and DOTs which have their own mods)")),
+                ("pvp_dmg_mod_war_blast", new Property<double>(1.0, "Scales the amount of damage for war blasts")),                
                 ("pvp_dmg_mod_war_cb_crit", new Property<double>(1.0, "Scales the amount of CB crit damage for war magic.")),
+                ("pvp_dmg_mod_war_cs_crit", new Property<double>(1.0, "Scales the amount of CS crit damage for war magic.")),
+                ("pvp_dmg_mod_war_cs_dmg", new Property<double>(1.0, "Scales the amount of CS damage for war magic for all hits (both crits and non-crits).")),
+                ("pvp_dmg_mod_void", new Property<double>(1.0, "Scales the amount of damage players take from Void Magic (not including streaks and DOTs which have their own mods)")),
                 ("pvp_dmg_mod_void_streak", new Property<double>(1.0, "Scales the amount of damage for void streaks.")),
                 ("pvp_dmg_mod_void_dot", new Property<double>(1.0, "Scales the amount of damage for void DOTs.")),
+                ("pvp_dmg_mod_void_crit", new Property<double>(1.0, "Scales the amount of crit damage for void magic.")),
                 ("pvp_dmg_mod_void_cb_crit", new Property<double>(1.0, "Scales the amount of CB crit damage for void magic.")),
+                ("pvp_dmg_mod_void_variance", new Property<double>(1.0, "Scales the low end for void magic bolts and arcs without effecting top end.  Values under 1 will reduce the variance and increase min dmg by the amount the variance was reduced.  Values over 1 will increase variance and reduce min dmg to match.")),
                 ("pvp_dmg_mod_phantom", new Property<double>(1.0, "Scales the amount of damage for phantom")),
                 ("pvp_dmg_mod_hollow", new Property<double>(1.0, "Scales the amount of damage for hollow")),                
                 ("pvp_dmg_mod_cb", new Property<double>(1.0, "Scales the amount of damage for crippling blow")),
@@ -730,6 +739,8 @@ namespace ACE.Server.Managers
                 ("pvp_dmg_mod_lw_ar", new Property<double>(1.0, "Scales the amount of damage for LW AR.")),
                 ("pvp_dmg_mod_lw_hollow", new Property<double>(1.0, "Scales the amount of damage for LW Hollow.")),
                 ("pvp_dmg_mod_lw_phantom", new Property<double>(1.0, "Scales the amount of damage for LW Phantom.")),
+                ("pvp_dmg_mod_lw_triplestrike", new Property<double>(1.0, "Scales the amount of damage for LW Triple Strike weapons.")),
+                ("pvp_dmg_mod_lw_cb_crit_triplestrike", new Property<double>(1.0, "Scales the amount of Crit damage for LW Triple Strike weapons.")),
                 ("pvp_dmg_mod_hw", new Property<double>(1.0, "Scales the amount of damage for Heavy Weapons")),                
                 ("pvp_dmg_mod_hw_cb", new Property<double>(1.0, "Scales the amount of damage for HW CB.")),
                 ("pvp_dmg_mod_hw_cb_crit", new Property<double>(1.0, "Scales the amount of damage for HW CB Crit.")),
@@ -737,6 +748,8 @@ namespace ACE.Server.Managers
                 ("pvp_dmg_mod_hw_ar", new Property<double>(1.0, "Scales the amount of damage for HW AR.")),
                 ("pvp_dmg_mod_hw_hollow", new Property<double>(1.0, "Scales the amount of damage for HW Hollow.")),
                 ("pvp_dmg_mod_hw_phantom", new Property<double>(1.0, "Scales the amount of damage for HW Phantom.")),
+                ("pvp_dmg_mod_hw_multistrike", new Property<double>(1.0, "Scales the amount of damage for HW Multi Strike weapons.")),
+                ("pvp_dmg_mod_hw_cb_crit_multistrike", new Property<double>(1.0, "Scales the amount of Crit damage for HW Multi Strike weapons.")),
                 ("pvp_dmg_mod_2h", new Property<double>(1.0, "Scales the amount of damage for Two Handed Weapons")),
                 ("pvp_dmg_mod_2h_cb", new Property<double>(1.0, "Scales the amount of damage for v CB.")),
                 ("pvp_dmg_mod_2h_cb_crit", new Property<double>(1.0, "Scales the amount of damage for 2H CB Crit.")),
@@ -744,7 +757,7 @@ namespace ACE.Server.Managers
                 ("pvp_dmg_mod_2h_ar", new Property<double>(1.0, "Scales the amount of damage for 2H AR.")),
                 ("pvp_dmg_mod_2h_hollow", new Property<double>(1.0, "Scales the amount of damage for 2H Hollow.")),
                 ("pvp_dmg_mod_2h_phantom", new Property<double>(1.0, "Scales the amount of damage for 2H Phantom.")),                
-                ("pvp_dmg_mod_xbow", new Property<double>(1.0, "Scales the amount of damage for hollow")),                
+                ("pvp_dmg_mod_xbow", new Property<double>(1.0, "Scales the amount of damage for Xbow")),                
                 ("pvp_dmg_mod_xbow_cb", new Property<double>(1.0, "Scales the amount of damage for Xbow CB.")),
                 ("pvp_dmg_mod_xbow_cb_crit", new Property<double>(1.0, "Scales the amount of damage for Xbow CB Crit.")),
                 ("pvp_dmg_mod_xbow_cs", new Property<double>(1.0, "Scales the amount of damage for Xbow CS.")),
@@ -771,7 +784,9 @@ namespace ACE.Server.Managers
                 //("pvp_dmg_mod_ratings_bonus", new Property<double>(1.0, "Scales the bonus received from dmg related ratings during pvp")),
                 //("pvp_dmg_mod_ratings_cap", new Property<double>(100.0, "Caps the ratings amount that can be applied for any given rating type during pvp")),
                 ("cloak_max_proc_rate", new Property<double>(25.0, "Cap cloak proc chance to this percentage (100.0 will effectively use the standard ACE proc rate).")),
-                ("town_control_trophy_chance", new Property<double>(0.25, "the change that a town control trophy is given to a player that is within the landblock of an active town control event with each player tick"))
+                ("town_control_trophy_chance", new Property<double>(0.25, "the change that a town control trophy is given to a player that is within the landblock of an active town control event with each player tick")),
+                ("arena_corpse_rot_seconds", new Property<double>(900, "the number of seconds a corpse that is generated in an arena landblock takes to rot. Default 15 mins.")),
+                ("arena_pk_respite_timer", new Property<double>(120, "the number of seconds that a player killer is set to non-player killer status after dying to another player killer in an arena match.  Should be a value less than pk_respite_timer, or else pk_respite_timer will override."))
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<string>> DefaultStringProperties =

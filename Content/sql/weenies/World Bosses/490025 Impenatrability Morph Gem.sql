@@ -24,7 +24,7 @@ VALUES (490025,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490025,   1, 'Impenatrability Morph Gem') /* Name */
-     , (490025,  14, 'Applying this gem to loot generated armor has a 33% chance to add an additional spell, either Minor Impenatrability, Major Impenatrability or Epic Impenatrability. If this fails to land, the target will be destroyed.') /* Use */;
+     , (490025,  14, 'Applying this gem to loot generated armor will add an additional spell, either Minor Impenatrability, Major Impenatrability, Epic Impenatrability or Legendary Impenatrability.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490025,   1, 0x02000179) /* Setup */
@@ -32,7 +32,7 @@ VALUES (490025,   1, 0x02000179) /* Setup */
      , (490025,   6, 0x04000BEF) /* PaletteBase */
      , (490025,   7, 0x1000010B) /* ClothingBase */
      , (490025,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (490025,  50, 100668271) /* IconOverlay */
+     , (490025,  8, 100668271) /* Icon */
      , (490025,  52, 0x06005B0C) /* IconUnderlay */;
 
 /* Lifestoned Changelog:

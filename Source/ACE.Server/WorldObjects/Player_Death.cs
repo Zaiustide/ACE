@@ -18,6 +18,7 @@ using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Handlers;
 using ACE.Database;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.Entity.PKQuests;
 
 namespace ACE.Server.WorldObjects
 {
@@ -120,6 +121,42 @@ namespace ACE.Server.WorldObjects
 
                 PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalPKDe, ChatMessageType.Broadcast));
                 _ = TurbineChatHandler.SendWebhookedChat("God of PK", webhookMsg, null, "General");
+
+                //Handle PK Quests
+                bool isPkQuestEligible =
+                    pkPlayer.Allegiance != null &&
+                    pkPlayer.Allegiance.MonarchId.HasValue &&
+                    pkPlayer.Level >= 150 &&
+                    TownControlAllegiances.IsAllowedAllegiance((int)pkPlayer.Allegiance.MonarchId.Value) &&
+                    this.Allegiance != null &&
+                    this.Allegiance.MonarchId.HasValue &&
+                    TownControlAllegiances.IsAllowedAllegiance((int)this.Allegiance.MonarchId.Value) &&
+                    this.Allegiance.MonarchId != pkPlayer.Allegiance.MonarchId;
+
+                if (isPkQuestEligible)
+                {
+                    pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
+
+                    switch (Location.Landblock)
+                    {
+                        case 0xF76B:
+                        case 0xF76C:
+                        case 0xF86B:
+                            //Island LS
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDLS_3");
+                            break;
+                        case 0x01C9:
+                            //Subway
+                            pkPlayer.CompletePkQuestTask("PKKILL_SUB_3");
+                            break;
+                        case 0x0007:
+                            //TN
+                            pkPlayer.CompletePkQuestTask("PKKILL_TN_3");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
             else if (IsPKLiteDeath(topDamager))
                 pkPlayer.PlayerKillsPkl++;
@@ -229,6 +266,7 @@ namespace ACE.Server.WorldObjects
 
 
             //Handle arena deaths and logging PK kills
+            bool isArenaDeath = false;
             if (topDamager != null)
             {
                 var killerPlayer = PlayerManager.FindByGuid(topDamager.Guid);
@@ -251,7 +289,7 @@ namespace ACE.Server.WorldObjects
 
                     //Handle arena kills
                     uint? victimArenaPlayerId = null;
-                    uint? killerArenaPlayerId = null;
+                    uint? killerArenaPlayerId = null;                    
                     try
                     {
                         if (ArenaLocation.IsArenaLandblock(Location.Landblock))
@@ -266,6 +304,8 @@ namespace ACE.Server.WorldObjects
 
                                 if (killerArenaPlayer != null)
                                     killerArenaPlayerId = killerArenaPlayer.Id;
+
+                                isArenaDeath = true;
                             }
                         }
                     }
@@ -297,7 +337,7 @@ namespace ACE.Server.WorldObjects
                 ThreadSafeTeleportOnDeath(); // enter portal space
 
                 if (IsPKDeath(topDamager) || IsPKLiteDeath(topDamager))
-                    SetMinimumTimeSincePK();
+                    SetMinimumTimeSincePK(isArenaDeath);
 
                 IsBusy = false;
             });
@@ -658,7 +698,7 @@ namespace ACE.Server.WorldObjects
                         shouldDropTcRewards = false;
                     }
 
-                    if(!victimMonarch.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)victimMonarch.Value))
+                    if (!victimMonarch.HasValue || !TownControlAllegiances.IsAllowedAllegiance((int)victimMonarch.Value))
                     {
                         shouldDropTcRewards = false;
                     }
@@ -683,22 +723,22 @@ namespace ACE.Server.WorldObjects
                 }
 
                 //Don't drop trophy if 10 have already dropped today
-                if(PkTrophyDropDay.HasValue && PkTrophyDropsToday.HasValue)
+                if (PkTrophyDropDay.HasValue && PkTrophyDropsToday.HasValue)
                 {
-                    if(PkTrophyDropDay.Value >= Time.GetUnixTime(DateTime.Today) &&
+                    if (PkTrophyDropDay.Value >= Time.GetUnixTime(DateTime.Today) &&
                         PkTrophyDropsToday >= 10)
                     {
                         shouldDropTrophy = false;
                     }
                 }
-                
+
                 if (shouldDropTrophy)
                 {
                     var dropItem = WorldObjectFactory.CreateNewWorldObject(1000002);
                     dropItem.SetStackSize(1);
                     dropItems.Add(dropItem);
 
-                    if(!LastPkTrophyDropTime.HasValue)
+                    if (!LastPkTrophyDropTime.HasValue)
                     {
                         SetProperty(PropertyFloat.LastPkTrophyDropTime, Time.GetUnixTime());
                     }
@@ -744,6 +784,15 @@ namespace ACE.Server.WorldObjects
                             }
                         }
                     }
+                }
+
+                //Drop DB key on death during indoor world boss events
+                var currWb = WorldBossManager.GetActiveWorldBoss();
+                if (currWb != null && currWb.IndoorLocation != null && currWb.IndoorLocation.Landblock == this.Location.Landblock)
+                {
+                    var dbKey = WorldObjectFactory.CreateNewWorldObject(480608);
+                    dbKey.SetStackSize(1);
+                    dropItems.Add(dbKey);
                 }
             }
 
@@ -1127,7 +1176,7 @@ namespace ACE.Server.WorldObjects
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.MinimumTimeSincePk); else SetProperty(PropertyFloat.MinimumTimeSincePk, value.Value); }
         }
 
-        public void SetMinimumTimeSincePK()
+        public void SetMinimumTimeSincePK(bool isArenaDeath = false)
         {
             if (IsOlthoiPlayer)
                 return;
@@ -1149,6 +1198,12 @@ namespace ACE.Server.WorldObjects
             {
                 EnqueueBroadcast(new GameMessagePublicUpdatePropertyInt(this, PropertyInt.PlayerKillerStatus, (int)PlayerKillerStatus));
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouAreNonPKAgain));
+            }
+
+            if (isArenaDeath)
+            {
+                //Reduce pk respite to 2 minutes for arena deaths
+                MinimumTimeSincePk = Math.Max(PropertyManager.GetDouble("pk_respite_timer").Item - PropertyManager.GetDouble("arena_pk_respite_timer").Item, 0);
             }
         }
 

@@ -188,5 +188,8 @@ namespace ACE.Entity.Enum.Properties
         HasArenaRareDmgBuff              = 9013,
         HasArenaRareDmgReductionBuff     = 9014,
         IsGlobalChatGagged = 9015,
+
+        [ServerOnly]
+        NextTinkIsFoolproof = 9016,
     }
 }

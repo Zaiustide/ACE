@@ -129,7 +129,7 @@ namespace ACE.Server.WorldObjects
 
             TownControlTick();
 
-            if(IsArenaObserver)
+            if (IsArenaObserver)
             {
                 if(!ArenaLocation.IsArenaLandblock(Location?.Landblock ?? 0))
                 {
@@ -661,13 +661,20 @@ namespace ACE.Server.WorldObjects
                         bool shouldDropTrophy = true;
                         bool isTrophyTimerPast = false;
                         string trophyValidationMsg = "";
+
                         var isDefender = false;
+                        var thisPlayerAllegiance = AllegianceManager.GetAllegiance(this);
+                        if (thisPlayerAllegiance != null)
+                        {
+                            if (thisPlayerAllegiance.MonarchId == town.CurrentOwnerID)
+                                isDefender = true;
+                        }
 
                         //Don't award trophies to characters under the minimum level
                         if (this.Level < PropertyManager.GetLong("town_control_reward_level_minimum").Item)
                             shouldDropTrophy = false;
 
-                        //Don't award trohpies to characters who are not PK
+                        //Don't award trophies to characters who are not PK
                         if (PlayerKillerStatus != PlayerKillerStatus.PK)
                             shouldDropTrophy = false;
 
@@ -681,42 +688,42 @@ namespace ACE.Server.WorldObjects
                             isTrophyTimerPast = true;
                         }
 
-                        //Check if too many players from same clan are in the same landblock
-                        if(shouldDropTrophy)
-                        {
-                            var zergLimit = PropertyManager.GetLong("town_control_reward_zerg_limit").Item;
-                            var playersOnLandblock = this.CurrentLandblock?.GetCurrentLandblockPlayers();
-                            int playersInSameClan = 0;
-                            if (playersOnLandblock != null && playersOnLandblock.Count > 0)
-                            {
-                                var thisPlayerAllegiance = AllegianceManager.GetAllegiance(this);
-                                if (thisPlayerAllegiance != null)
-                                {
-                                    if (thisPlayerAllegiance.MonarchId == town.CurrentOwnerID)
-                                        isDefender = true;
+                        ////Check if too many players from same clan are in the same landblock
+                        //if(shouldDropTrophy)
+                        //{
+                        //    var zergLimit = PropertyManager.GetLong("town_control_reward_zerg_limit").Item;
+                        //    var playersOnLandblock = this.CurrentLandblock?.GetCurrentLandblockPlayers();
+                        //    int playersInSameClan = 0;
+                        //    if (playersOnLandblock != null && playersOnLandblock.Count > 0)
+                        //    {
+                        //        var thisPlayerAllegiance = AllegianceManager.GetAllegiance(this);
+                        //        if (thisPlayerAllegiance != null)
+                        //        {
+                        //            if (thisPlayerAllegiance.MonarchId == town.CurrentOwnerID)
+                        //                isDefender = true;
 
-                                    foreach (var player in playersOnLandblock)
-                                    {
-                                        var landblockPlayerAllegiance = AllegianceManager.GetAllegiance(player);
+                        //            foreach (var player in playersOnLandblock)
+                        //            {
+                        //                var landblockPlayerAllegiance = AllegianceManager.GetAllegiance(player);
 
-                                        if (landblockPlayerAllegiance != null)
-                                        {
-                                            if(thisPlayerAllegiance.MonarchId == landblockPlayerAllegiance.MonarchId)
-                                            {
-                                                playersInSameClan++;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                        //                if (landblockPlayerAllegiance != null)
+                        //                {
+                        //                    if(thisPlayerAllegiance.MonarchId == landblockPlayerAllegiance.MonarchId)
+                        //                    {
+                        //                        playersInSameClan++;
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
 
-                            if (playersInSameClan > zergLimit)
-                            {
-                                shouldDropTrophy = false;
-                                trophyValidationMsg = $"No participation trophy for you! Your clan has exceeded the zerg limit of {zergLimit} players.";
-                                SetProperty(PropertyFloat.TownControlTrophyTimer, Time.GetFutureUnixTime(isDefender ? PropertyManager.GetLong("town_control_periodic_reward_defender_seconds").Item : PropertyManager.GetLong("town_control_periodic_reward_seconds").Item));
-                            }
-                        }
+                        //    if (playersInSameClan > zergLimit)
+                        //    {
+                        //        shouldDropTrophy = false;
+                        //        trophyValidationMsg = $"No participation trophy for you! Your clan has exceeded the zerg limit of {zergLimit} players.";
+                        //        SetProperty(PropertyFloat.TownControlTrophyTimer, Time.GetFutureUnixTime(isDefender ? PropertyManager.GetLong("town_control_periodic_reward_defender_seconds").Item : PropertyManager.GetLong("town_control_periodic_reward_seconds").Item));
+                        //    }
+                        //}
 
                         //If all validation passed, award a trophy and set the timestamp for next trophy award
                         if (shouldDropTrophy)

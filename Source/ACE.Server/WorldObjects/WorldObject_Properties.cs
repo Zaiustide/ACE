@@ -3074,6 +3074,12 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyString.TinkerLottoLog); else SetProperty(PropertyString.TinkerLottoLog, value); }
         }
 
+        public string MorphGemLog
+        {
+            get => GetProperty(PropertyString.MorphGemLog);
+            set { if (value == null) RemoveProperty(PropertyString.MorphGemLog); else SetProperty(PropertyString.MorphGemLog, value); }
+        }
+
         public int? CreatureKills
         {
             get => GetProperty(PropertyInt.CreatureKills);

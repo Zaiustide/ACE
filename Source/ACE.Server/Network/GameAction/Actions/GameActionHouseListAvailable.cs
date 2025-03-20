@@ -1,6 +1,7 @@
 using System;
 
 using ACE.Entity.Enum;
+using ACE.Server.Command.Handlers;
 
 namespace ACE.Server.Network.GameAction.Actions
 {
@@ -13,6 +14,11 @@ namespace ACE.Server.Network.GameAction.Actions
         public static void Handle(ClientMessage message, Session session)
         {
             //Console.WriteLine("Received 0x270 - ListAvailableHouses");
+
+            if (!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
 
             // type of house being listed
             var houseType = (HouseType)message.Payload.ReadUInt32();

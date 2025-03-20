@@ -75,7 +75,7 @@ namespace ACE.Server.WorldObjects
                 {
                     log.ErrorFormat("Exception applying Town Control behavior to vendor.  VendorGuid = {0}, Vendor WeenieClassId = {1}, Ex: {2}", vendorGuid, this.WeenieClassId, ex);
                 }
-            }            
+            }
 
             // if this succeeds, it automatically calls player.FinalizeBuyTransaction()
             vendor.BuyItems_ValidateTransaction(items, this);

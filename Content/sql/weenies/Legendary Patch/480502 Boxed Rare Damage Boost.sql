@@ -29,7 +29,7 @@ VALUES (480502,   1, 'Boxed Gem of Rare Damage Boost V') /* Name */
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (480502,   1, 0x0200011E) /* Setup */
      , (480502,   3, 0x20000014) /* SoundTable */
-     , (480502,   8, 0x060072E9) /* Icon */
-     , (480502,  50, 0x06005B2B) /* IconOverlay */
+     , (480502,   52, 0x060012F8) /* IconUnderlay */
+     , (480502,  8, 0x06005B2B) /* Icon */
      , (480502,  22, 0x3400002B) /* PhysicsEffectTable */
      , (480502,  38,      52023) /* UseCreateItem - Blank Augmentation Gem */;

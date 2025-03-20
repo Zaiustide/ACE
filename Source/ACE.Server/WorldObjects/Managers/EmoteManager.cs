@@ -1897,6 +1897,11 @@ namespace ACE.Server.WorldObjects.Managers
             else if (targetSelf)
                 spellTarget = WorldObject;
 
+            if(WorldObject.WeenieClassId == 510001) //A dick
+            {
+                spellTarget = target;
+            }
+
             return spellTarget;
         }
 

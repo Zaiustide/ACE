@@ -59,7 +59,7 @@ namespace ACE.Server.WorldObjects
                 HandleTownControlBossDeath();
             }
 
-            if(WorldBosses.IsWorldBoss(this.WeenieClassId))
+            if (WorldBosses.IsWorldBoss(this.WeenieClassId))
             {
                 HandleWorldBossDeath();
             }
@@ -145,6 +145,13 @@ namespace ACE.Server.WorldObjects
             {
                 CreateCorpse(topDamager);
                 Destroy();
+
+                //// World Bosses don't currently spawn in any T8 locations,
+                ////but if we ever do, we'd want to remove the ratings whitelist on world boss death
+                //if (WorldBosses.IsWorldBoss(this.WeenieClassId))
+                //{
+                //    Whitelist.RemoveLandblockFromRatingsWhitelist(this.Location.Landblock);
+                //}
             });
 
             dieChain.EnqueueChain();
@@ -439,7 +446,7 @@ namespace ACE.Server.WorldObjects
         /// Create a corpse for both creatures and players currently
         /// </summary>
         protected void CreateCorpse(DamageHistoryInfo killer, bool hadVitae = false)
-        {
+        {           
             if (NoCorpse)
             {
                 if (killer != null && killer.IsOlthoiPlayer) return;
@@ -643,6 +650,15 @@ namespace ACE.Server.WorldObjects
             {
                 if (this.CurrentLandblock != null)
                 {
+                    if (PropertyManager.GetBool("ratings_whitelist_enabled").Item)
+                    {
+                        DeathTreasure.DisableRatings = !Whitelist.IsRatingsWhitelistedLandblock(this.CurrentLandblock.Id.Landblock);
+                    }
+                    else
+                    {
+                        DeathTreasure.DisableRatings = false;
+                    }
+
                     if (PropertyManager.GetBool("equipmentset_whitelist_enabled").Item)
                     {
                         DeathTreasure.DisableSets = !Whitelist.IsEquipmentSetWhitelistedLandblock(this.CurrentLandblock.Id.Landblock);
@@ -1246,7 +1262,7 @@ namespace ACE.Server.WorldObjects
                 //var deadBossNameProp = deadBossWeenie.WeeniePropertiesString.FirstOrDefault(x => x.Type == (ushort)PropertyString.Name);
                 //var deadBossName = deadBossNameProp?.Value;
 
-                if (!killer.IsPlayer)
+                if (killer == null || !killer.IsPlayer)
                 {
                     //TODO - what to do if the killer isn't a player?                        
                     log.DebugFormat("World Boss - {0} killer is not a player", deadBoss.Name);  
@@ -1255,8 +1271,15 @@ namespace ACE.Server.WorldObjects
                 WorldBossManager.HandleBossDeath();
 
                 //Global broadcast the kill
-                var globalMsg = $"{deadBoss.Name} has been slain by {killer.Name} and the land is once again safe from {deadBoss.Name}'s terror... for now";
+                var globalMsg = $"{deadBoss.Name} has been slain by {(killer == null ? "NULL" : killer.Name)} and the land is once again safe from {deadBoss.Name}'s terror... for now";
                 PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalMsg, ChatMessageType.Broadcast));
+
+                //If this is an indoor boss with a statue, destroy the statue
+                if (deadBoss.StatueWorldObject != null)
+                {
+                    deadBoss.StatueWorldObject.TimeToRot = 0;
+                    deadBoss.StatueWorldObject.Lifespan = 1;
+                }
 
                 //Send global to webhook
                 try

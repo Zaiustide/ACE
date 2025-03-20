@@ -1,7 +1,9 @@
 using System;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using ACE.Adapter.GDLE.Models;
 using ACE.Entity.Enum;
 using ACE.Server.Entity;
 using ACE.Server.Managers;
@@ -393,7 +395,7 @@ namespace ACE.Server.Network.Handlers
                     var dict = new System.Collections.Generic.Dictionary<string, string>();
                     dict["content"] = $"{channelName}{sender}: \"{message.Replace("@", "")}\"";
 
-                    var payload = Newtonsoft.Json.JsonConvert.SerializeObject(dict);
+                    var payload = JsonSerializer.Serialize<dynamic>(dict);
                     using (var wc = new System.Net.WebClient())
                     {
                         wc.Headers.Add("Content-Type", "application/json");

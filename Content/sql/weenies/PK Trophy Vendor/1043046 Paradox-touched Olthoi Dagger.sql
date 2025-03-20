@@ -13,6 +13,7 @@ VALUES (1043046,   1,          1) /* ItemType - MeleeWeapon */
      , (1043046,  44,          1) /* Damage */
      , (1043046,  45,          3) /* DamageType - Slash, Pierce */
      , (1043046,  46,          2) /* DefaultCombatStyle - OneHanded */
+	 , (1043046, 48,          46) /* WeaponType - Dagger */
      , (1043046,  51,          1) /* CombatUse - Melee */
      , (1043046,  52,          1) /* ParentLocation - RightHand */
      , (1043046,  53,          1) /* PlacementPosition - RightHandCombat */

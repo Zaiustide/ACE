@@ -1,3 +1,4 @@
+using ACE.Server.Command.Handlers;
 using System;
 
 namespace ACE.Server.Network.GameAction.Actions
@@ -11,6 +12,11 @@ namespace ACE.Server.Network.GameAction.Actions
         public static void Handle(ClientMessage message, Session session)
         {
             //Console.WriteLine("Received 0x24D - House - RequestFullGuestList");
+
+            if (!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
 
             session.Player.HandleActionGuestList();
         }

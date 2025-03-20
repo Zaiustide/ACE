@@ -21,7 +21,7 @@ VALUES (480525,   1,          1) /* ItemType - MeleeWeapon */
      , (480525,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (480525, 150,        103) /* HookPlacement - Hook */
      , (480525, 151,          2) /* HookType - Wall */
-     , (480525, 353,          3) /* WeaponType - Axe */;
+     , (480525, 353,          4) /* WeaponType - Axe */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (480525,  22, True ) /* Inscribable */;

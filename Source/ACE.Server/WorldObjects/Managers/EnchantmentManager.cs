@@ -1405,6 +1405,13 @@ namespace ACE.Server.WorldObjects.Managers
                     damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, pkDamageResistRatingMod);
                 }
 
+                //If target is in reckless state apply DRR penalty
+                int recklessDefenderDmgResistRatingPenalty = creature.GetRecklessDefenderDmgRatingPenalty();
+                if (recklessDefenderDmgResistRatingPenalty > 0)
+                {
+                    damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, Creature.GetPositiveRatingMod(recklessDefenderDmgResistRatingPenalty));
+                }
+
                 var dotResistRatingMod = Creature.GetNegativeRatingMod(creature.GetDotResistanceRating());  // should this be here, or somewhere else?
                                                                                                             // should this affect NetherDotDamageRating?
 

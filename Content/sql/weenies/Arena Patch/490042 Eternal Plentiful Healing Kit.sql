@@ -9,7 +9,7 @@ VALUES (490042,   1,        128) /* ItemType - Misc */
      , (490042,   8,         25) /* Mass */
      , (490042,   9,          0) /* ValidLocations - None */
      , (490042,  16,    2228232) /* ItemUseable - SourceContainedTargetRemoteOrSelf */
-     , (490042,  19,       50) /* Value */
+     , (490042,  19,       25) /* Value */
 	 , (490042,  33,          1) /* Bonded - Bonded */
      , (490042,  89,          2) /* BoosterEnum - Health */
      , (490042,  90,        100) /* BoostValue */

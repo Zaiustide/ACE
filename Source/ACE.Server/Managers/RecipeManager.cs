@@ -325,6 +325,11 @@ namespace ACE.Server.Managers
                 floorMsg += $"\n{player.EnlightenmentCustomLevel * 10} percent is due to your enlightenment.";
             }
 
+            if(player.NextTinkIsFoolproof)
+            {
+                floorMsg = "You have a 100% chance to succeed due to being filled with the essence of a tinkering tool";
+            }
+
             if (!player.ConfirmationManager.EnqueueSend(new Confirmation_CraftInteration(player.Guid, source.Guid, target.Guid), floorMsg))
             {
                 player.SendUseDoneEvent(WeenieError.ConfirmationInProgress);
@@ -350,16 +355,23 @@ namespace ACE.Server.Managers
             }
 
             var roll = ThreadSafeRandom.Next(0.0f, 1.0f);
-            var success =  roll < successChance;
-
-            if (recipe.IsImbuing())
-            {
-                player.ImbueAttempts++;
-                if (success) player.ImbueSuccesses++;
-            }
+            var success =  roll < successChance;            
 
             if(recipe.IsTinkering() || recipe.IsImbuing())
             {
+                if (player.NextTinkIsFoolproof)
+                {
+                    successChance = 1;
+                    success = true;
+                    player.NextTinkIsFoolproof = false;
+                }
+
+                if (recipe.IsImbuing())
+                {
+                    player.ImbueAttempts++;
+                    if (success) player.ImbueSuccesses++;
+                }
+
                 try
                 {
                     var sourceName = Regex.Replace(source.NameWithMaterial, @" \(\d+\)$", "");

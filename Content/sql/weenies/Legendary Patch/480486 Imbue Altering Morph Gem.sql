@@ -34,20 +34,7 @@ VALUES (480486,   1, 0x02000179) /* Setup */
      , (480486,   3, 0x20000014) /* SoundTable */
      , (480486,   6, 0x04000BEF) /* PaletteBase */
      , (480486,   7, 0x1000010B) /* ClothingBase */
-     , (480486,   8, 0x06002971) /* Icon */
      , (480486,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (480486,  50, 0x060067EA) /* IconOverlay */
+     , (480486,  8, 0x060067E4) /* Icon */
      , (480486,  52, 0x060065FB) /* IconUnderlay */;
 
-/* Lifestoned Changelog:
-{
-  "Changelog": [
-    {
-      "created": "2022-01-17T02:18:55.5489445Z",
-      "author": "ACE.Adapter",
-      "comment": "Weenie exported from ACEmulator world database using ACE.Adapter"
-    }
-  ],
-  "IsDone": false
-}
-*/

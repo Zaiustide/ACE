@@ -208,7 +208,7 @@ namespace ACE.Server.Entity
             // https://asheron.fandom.com/wiki/Master_of_Arms
             // Cloaks with the chance to reduce incoming damage by 200 have been reduced to 100 for PvP circumstances.
             if (source is Player)
-                damageReductionAmount /= 2;
+                damageReductionAmount = Convert.ToInt32(PropertyManager.GetDouble("pvp_cloak_max_dmg_mitigation").Item);
 
             return damageReductionAmount;
         }

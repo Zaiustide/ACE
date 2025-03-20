@@ -11,6 +11,7 @@ using ACE.Entity.Models;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
@@ -327,6 +328,12 @@ namespace ACE.Server.WorldObjects
                 }
                 else
                 {
+                    if(player != null && targetPlayer != null && IsWeaponSpell)
+                    {
+                        //Fuck you wand monkey
+                        damage = 0;
+                    }
+
                     DamageTarget(creatureTarget, damage.Value, critical, critDefended, overpower);
                 }
 
@@ -390,7 +397,7 @@ namespace ACE.Server.WorldObjects
             var sourcePlayer = source as Player;
             var targetPlayer = target as Player;
 
-            if (source == null || !target.IsAlive || targetPlayer != null && targetPlayer.Invincible)
+            if (source == null || !target.IsAlive || target.Invincible)
                 return null;
 
             // check lifestone protection
@@ -445,6 +452,14 @@ namespace ACE.Server.WorldObjects
                         }
                     }
                 }
+                else if (WorldBosses.IsWorldBoss(target.WeenieClassId))
+                {
+                    if (sourcePlayer == null || !sourcePlayer.IsPK)
+                    {
+                        //Don't allow summons or NPKs to damage a world boss
+                        return 0.0f;
+                    }
+                }
             }
 
             //Arenas - If this is an arena landblock
@@ -495,7 +510,7 @@ namespace ACE.Server.WorldObjects
                 attackSkill = sourceCreature.GetCreatureSkill(Spell.School);
 
             // critical hit
-            var criticalChance = GetWeaponMagicCritFrequency(weapon, sourceCreature, attackSkill, target);
+            var criticalChance = GetWeaponMagicCritFrequency(weapon, sourceCreature, attackSkill, target);                        
 
             if (ThreadSafeRandom.Next(0.0f, 1.0f) < criticalChance)
             {
@@ -510,6 +525,13 @@ namespace ACE.Server.WorldObjects
 
                 if (!critDefended)
                     criticalHit = true;
+            }
+
+            //all spell projectiles now crit 100% against a logging out target
+            if (targetPlayer != null && (targetPlayer.IsLoggingOut || targetPlayer.PKLogout))
+            {
+                criticalChance = 1.0f;
+                criticalHit = true;
             }
 
             var absorbMod = GetAbsorbMod(target);
@@ -622,6 +644,13 @@ namespace ACE.Server.WorldObjects
                     minDmg = Spell.MaxDamage - modifiedVariance;
                 }
 
+                if (isPVP && Spell.School == MagicSchool.VoidMagic && (spellType == ProjectileSpellType.Arc || spellType == ProjectileSpellType.Bolt))
+                {
+                    var voidVarianceMod = PropertyManager.GetDouble("pvp_dmg_mod_void_variance", 1).Item;
+                    var modifiedVariance = Convert.ToInt32(Math.Round(Spell.Variance * voidVarianceMod));
+                    minDmg = Spell.MaxDamage - modifiedVariance;
+                }
+
                 baseDamage = ThreadSafeRandom.Next(minDmg, Spell.MaxDamage);
 
                 weaponResistanceMod = GetWeaponResistanceModifier(weapon, sourceCreature, attackSkill, Spell.DamageType);
@@ -629,7 +658,7 @@ namespace ACE.Server.WorldObjects
                 // if attacker/weapon has IgnoreMagicResist directly, do not transfer to spell projectile
                 // only pass if SpellProjectile has it directly, such as 2637 - Invoking Aun Tanua
 
-                resistanceMod = (float)Math.Max(0.0f, target.GetResistanceMod(resistanceType, this, null, weaponResistanceMod));                                
+                resistanceMod = (float)Math.Max(0.0f, target.GetResistanceMod(resistanceType, this, null, weaponResistanceMod));
 
                 finalDamage = baseDamage + critDamageBonus + skillBonus;
 
@@ -665,6 +694,16 @@ namespace ACE.Server.WorldObjects
                         dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_war_cb_crit").Item;
                     }
 
+                    if(weapon.HasImbuedEffect(ImbuedEffectType.CriticalStrike))
+                    {
+                        dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_war_cs_dmg").Item;
+
+                        if(criticalHit)
+                        {
+                            dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_war_cs_crit").Item;
+                        }
+                    }
+
                     finalDamage = finalDamage * dmgMod;
                 }
                 else if (Spell.DamageType == DamageType.Nether)
@@ -672,11 +711,17 @@ namespace ACE.Server.WorldObjects
                     dmgMod = (float)PropertyManager.GetDouble("pvp_dmg_mod_void").Item;
 
                     if (SpellType == ProjectileSpellType.Streak)
-                        dmgMod = (float)PropertyManager.GetDouble("pvp_dmg_mod_void_streak").Item; // scales void streak damages
-
-                    if (criticalHit && weapon.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
                     {
-                        dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_void_cb_crit").Item;
+                        dmgMod = (float)PropertyManager.GetDouble("pvp_dmg_mod_void_streak").Item; // scales void streak damages
+                    }
+
+                    if (criticalHit)
+                    {
+                        dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_void_crit").Item;
+                        if (weapon.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
+                        {
+                            dmgMod *= (float)PropertyManager.GetDouble("pvp_dmg_mod_void_cb_crit").Item;
+                        }
                     }
 
                     finalDamage = finalDamage * dmgMod;
@@ -837,7 +882,7 @@ namespace ACE.Server.WorldObjects
         {
             var targetPlayer = target as Player;
 
-            if (targetPlayer != null && targetPlayer.Invincible || target.IsDead)
+            if (target.Invincible || target.IsDead)
                 return;
 
             var sourceCreature = ProjectileSource as Creature;
@@ -857,6 +902,7 @@ namespace ACE.Server.WorldObjects
             var damageResistRatingMod = 1.0f;
             var critDamageResistRatingMod = 1.0f;
             var pkDamageResistRatingMod = 1.0f;
+            int recklessDefenderDmgResistRatingPenalty = 0;
 
             WorldObject equippedCloak = null;
 
@@ -905,6 +951,13 @@ namespace ACE.Server.WorldObjects
 
                     damageRatingMod = Creature.AdditiveCombine(damageRatingMod, pkDamageRatingMod);
                     damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, pkDamageResistRatingMod);
+                }
+
+                //If target is in reckless state apply DRR penalty
+                recklessDefenderDmgResistRatingPenalty = target.GetRecklessDefenderDmgRatingPenalty();
+                if (recklessDefenderDmgResistRatingPenalty > 0)
+                {
+                    damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, Creature.GetPositiveRatingMod(recklessDefenderDmgResistRatingPenalty));
                 }
 
                 damage *= damageRatingMod * damageResistRatingMod;

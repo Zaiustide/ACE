@@ -87,7 +87,6 @@ namespace ACE.Entity.Enum.Properties
         PCAPRecordedCurrentMotionState = 8006,
         PCAPRecordedServerName         = 8031,
         PCAPRecordedCharacterName      = 8032,
-
         AllegianceMotd                 = 9001,
         AllegianceMotdSetBy            = 9002,
         AllegianceSpeakerTitle         = 9003,
@@ -96,7 +95,9 @@ namespace ACE.Entity.Enum.Properties
         GodState                       = 9006,
         TinkerLog                      = 9007,
         TinkerLottoLog                 = 9008,
-        ArenaRewardsByOpponent         = 9009,
+        ArenaRewardsByOpponent         = 9009,                
+        MorphGemLog                    = 9010,
+        PKQuestInfo                    = 9011,
         CurrentRareEnchantmentIds      = 52029,
     }
 }

@@ -1062,7 +1062,8 @@ VALUES (450450, 4, 450531,  0, 0, 0, False) /* Create Gelidite Robe (450531) for
 	 , (450450, 4, 480540,  0, 0, 0, False) /* Create Shield of Isin Dule (450764) for Shop */
 	 , (450450, 4, 480541,  0, 0, 0, False) /* Create Shield of Isin Dule (450764) for Shop */
 	 , (450450, 4, 480542,  0, 0, 0, False) /* Create Shield of Isin Dule (450764) for Shop */
-	 , (450450, 4, 480580,  0, 0, 0, False) /* Create Shield of Isin Dule (450764) for Shop */;
+	 , (450450, 4, 480580,  0, 0, 0, False) /* Create Shield of Isin Dule (450764) for Shop */
+	  , (450450, 4, 490306,  0, 0, 0, False) /* Create Shield of Isin Dule (450764) for Shop */;
 	 
 
 	 

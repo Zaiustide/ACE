@@ -172,6 +172,11 @@ namespace ACE.Server.Command.Handlers
                 CommandHandlerHelper.WriteOutputInfo(session, "This command is run from ingame client only", ChatMessageType.Broadcast);
                 return;
             }
+            else if (!PlayerCommands.CheckPlayerCommandRateLimit(session))
+            {
+                return;
+            }
+
 
             log.DebugFormat("{0} is changing their password", session.Player.Name);
 

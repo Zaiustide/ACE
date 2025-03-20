@@ -36,6 +36,9 @@ namespace ACE.Server.Command.Handlers
             "")]
         public static void HandlePop(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session, 1))
+                return;
+
             CommandHandlerHelper.WriteOutputInfo(session, $"Current world population: {PlayerManager.GetOnlineCount():N0}", ChatMessageType.Broadcast);
         }
 
@@ -43,6 +46,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("myquests", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows your quest log")]
         public static void HandleQuests(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (!PropertyManager.GetBool("quest_info_enabled").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"myquests\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -85,11 +91,14 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("house-select", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 1, "For characters/accounts who currently own multiple houses, used to select which house they want to keep")]
         public static void HandleHouseSelect(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             HandleHouseSelect(session, false, parameters);
         }
 
         public static void HandleHouseSelect(Session session, bool confirmed, params string[] parameters)
-        {
+        {            
             if (!int.TryParse(parameters[0], out var houseIdx))
                 return;
 
@@ -159,6 +168,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("debugcast", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows debug information about the current magic casting state")]
         public static void HandleDebugCast(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             var physicsObj = session.Player.PhysicsObj;
 
             var pendingActions = physicsObj.MovementManager.MoveToManager.PendingActions;
@@ -187,6 +199,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("fixcast", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Fixes magic casting if locked up for an extended time")]
         public static void HandleFixCast(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             var magicState = session.Player.MagicState;
 
             if (magicState.IsCasting && DateTime.UtcNow - magicState.StartTime > TimeSpan.FromSeconds(5))
@@ -200,6 +215,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("castmeter", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows the fast casting efficiency meter")]
         public static void HandleCastMeter(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (parameters.Length == 0)
             {
                 session.Player.MagicState.CastMeter = !session.Player.MagicState.CastMeter;
@@ -301,6 +319,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("config", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 1, "Manually sets a character option on the server.\nUse /config list to see a list of settings.", "<setting> <on/off>")]
         public static void HandleConfig(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (!PropertyManager.GetBool("player_config_command").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"config\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -392,6 +413,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("aceversion", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Shows this server's version data")]
         public static void HandleACEversion(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (!PropertyManager.GetBool("version_info_enabled").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"aceversion\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -429,6 +453,8 @@ namespace ACE.Server.Command.Handlers
             )]
         public static void HandleReportbug(Session session, params string[] parameters)
         {
+            return;
+
             if (!PropertyManager.GetBool("reportbug_enabled").Item)
             {
                 session.Network.EnqueueSend(new GameMessageSystemChat("The command \"reportbug\" is not currently enabled on this server.", ChatMessageType.Broadcast));
@@ -551,21 +577,16 @@ namespace ACE.Server.Command.Handlers
             "The arena command is used to join an arena event or get information about arena statistics")]
         public static void HandleArena(Session session, params string[] parameters)
         {
+            log.Debug($"HandleArena called for player = {session.Player?.Name}, params = {string.Join(" ", parameters)}");
+
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if (parameters.Count() < 1)
             {
                 CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  See the arena help file below for valid parameters.");
                 parameters[0] = "help";
-            }
-
-            if (session.Player.LastArenaCommandTimestamp.HasValue && Time.GetDateTimeFromTimestamp(session.Player.LastArenaCommandTimestamp.Value) > DateTime.Now.AddSeconds(-3))
-            {
-                CommandHandlerHelper.WriteOutputInfo(session, "To prevent abuse, you can only issue one arena command every 3 seconds. Please try again.");
-                return;
-            }
-            else
-            {
-                session.Player.LastArenaCommandTimestamp = Time.GetUnixTime(DateTime.Now);
-            }
+            }            
 
             var actionType = parameters[0];
 
@@ -574,23 +595,104 @@ namespace ACE.Server.Command.Handlers
                 case "join":
 
                     string eventType = "1v1";
+                    string param2 = string.Empty;
                     if (parameters.Length > 1)
                     {
-                        eventType = parameters[1];
-
-                        for (int i = 2; i < parameters.Length; i++)
-                        {
-                            eventType += parameters[i];
-                        }
+                        eventType = parameters[1];                        
 
                         if(!ArenaManager.IsValidEventType(eventType))
                         {
                             CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  The Join command does not support the event type {eventType}. Proper syntax is as follows...\n  To join a 1v1 arena match: /arena join\n  To join a specific type of arena match, replace eventType with the string code for the type of match you want to join, such as 1v1, 2v2, ffa. : /arena join eventType\n  To get your current character's stats: /arena stats\n  To get a named character's stats, replace characterName with the target character's name: /arena stats characterName");
                             return;
                         }
+
+                        if (parameters.Length > 2)
+                        {
+                            param2 = parameters[2];
+                        }                        
                     }
 
-                    string resultMsg = JoinArenaQueue(session, eventType.ToLower());
+                    if(eventType.ToLower().Equals("group"))
+                    {
+                        //Get a list of players in the fellowship
+                        Fellowship firstPlayerFellowship = session.Player.Fellowship;
+                        if (firstPlayerFellowship != null)
+                        {
+                            //Don't allow groups under 3 in size
+                            if(firstPlayerFellowship.FellowshipMembers.Count() < 3)
+                            {
+                                CommandHandlerHelper.WriteOutputInfo(session, $"You must have a fellowship with at least 3 members to queue for a group fight");
+                                return;
+                            }
+
+                            //For each player in the fellow, set the Team and add to queue
+                            //If any players don't meet criteria, report that back and don't allow to join queue
+                            List<string> failureMessages = new List<string>();
+                            Guid teamGuid = Guid.NewGuid();
+                            int maxOpposingTeamSize = int.TryParse(param2, out int result) ? result : 9;
+                            if (maxOpposingTeamSize > 9)
+                                maxOpposingTeamSize = 9;
+                            if (maxOpposingTeamSize < 3)
+                                maxOpposingTeamSize = 3;
+
+                            foreach (var fellowMemberId in firstPlayerFellowship.FellowshipMembers.Keys.OrderBy(x=> x == session.Player.CharacterTitleId))
+                            {
+                                var fellowMemberPlayer = PlayerManager.GetOnlinePlayer(fellowMemberId);
+                                if(fellowMemberPlayer == null)
+                                {
+                                    continue;
+                                }
+
+                                string queueResultMsg = JoinArenaQueue(fellowMemberPlayer, eventType.ToLower(), out bool queueIsSuccess, teamGuid, maxOpposingTeamSize);
+                                if (!queueIsSuccess)
+                                {
+                                    failureMessages.Add($"{fellowMemberPlayer.Character.Name}: {queueResultMsg}");
+                                }
+                            }
+
+                            if (failureMessages.Count() > 0)
+                            {
+                                //Remove all from queue if anyone in the fellow failed
+                                ArenaManager.RemoveTeamFromQueue(teamGuid);
+
+                                string returnMessage = "Your team failed to queue for the following reasons...\n\n";
+                                foreach(var msg in failureMessages)
+                                {
+                                    returnMessage += msg + "\n";
+                                }
+
+                                CommandHandlerHelper.WriteOutputInfo(session, returnMessage);
+                                return;
+                            }
+                            else
+                            {                                
+                                var successMessage = "Your team has successfully queued for a group arena match with the following team members. Please ensure your entire team remains elegible as an online player killer who is not PK tagged.\n\n";
+                                var globalMessage = $"{session.Player.Character.Name} has queued a new team of {firstPlayerFellowship.FellowshipMembers.Count()} players for a group arena match, accepting challenging teams with up to {maxOpposingTeamSize} players";
+                                foreach (var fellowMemberId in firstPlayerFellowship.FellowshipMembers.Keys)
+                                {
+                                    var fellowMemberPlayer = PlayerManager.GetOnlinePlayer(fellowMemberId);
+                                    if (fellowMemberPlayer == null)
+                                    {
+                                        continue;
+                                    }
+
+                                    successMessage += fellowMemberPlayer.Character.Name + "\n";
+                                }
+                                CommandHandlerHelper.WriteOutputInfo(session, successMessage);
+                                PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalMessage, ChatMessageType.Broadcast));
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            CommandHandlerHelper.WriteOutputInfo(session, $"You must have a fellowship with at least 3 members to queue for a group fight");
+                            return;
+                        }                            
+
+                        break;
+                    }
+
+                    string resultMsg = JoinArenaQueue(session.Player, eventType.ToLower(), out bool isSuccess);
                     if (resultMsg != null)
                     {
                         CommandHandlerHelper.WriteOutputInfo(session, resultMsg);
@@ -656,16 +758,26 @@ namespace ACE.Server.Command.Handlers
                     var queuedOnes = queuedPlayers.Where(x => x.EventType.ToLower().Equals("1v1"));
                     var queuedTwos = queuedPlayers.Where(x => x.EventType.ToLower().Equals("2v2"));
                     var queuedFFA = queuedPlayers.Where(x => x.EventType.ToLower().Equals("ffa"));
+                    var queuedGroup = queuedPlayers.Where(x => x.EventType.ToLower().Equals("group"));
                     var longestOnesWait = queuedOnes.Count() > 0 ? (DateTime.Now - queuedOnes.Min(x => x.CreateDateTime)) : new TimeSpan(0);
                     var longestTwosWait = queuedTwos.Count() > 0 ? (DateTime.Now - queuedTwos.Min(x => x.CreateDateTime)) : new TimeSpan(0);
-                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);
+                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);                    
 
-                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}";
+                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}\n  Group:";
+
+                    var queuedGroupTeams = queuedGroup.Select(x => x.TeamGuid).Distinct();
+                    foreach (var queuedTeam in queuedGroupTeams)
+                    {
+                        var teamMembers = queuedGroup.Where(x => x.TeamGuid == queuedTeam);
+                        var leader = teamMembers.OrderBy(x => x.CreateDateTime).First();
+                        queueInfo += $"\n\n    Team Leader: {leader.CharacterName}\n    Num Players: {teamMembers.Count()}\n    Max Opponents: {leader.MaxOpposingTeamSize}\n    Time Queued: {String.Format("{0:%h}h {0:%m}m {0:%s}s", DateTime.Now - leader.CreateDateTime)}";
+                    }
 
                     var activeEvents = ArenaManager.GetActiveEvents();
                     var eventsOnes = activeEvents.Where(x => x.EventType.ToLower().Equals("1v1"));
                     var eventsTwos = activeEvents.Where(x => x.EventType.ToLower().Equals("2v2"));
                     var eventsFFA = activeEvents.Where(x => x.EventType.ToLower().Equals("ffa"));
+                    var eventsGroup = activeEvents.Where(x => x.EventType.ToLower().Equals("group"));
 
                     string onesEventInfo = eventsOnes.Count() == 0 ? "No active events" : "";
                     foreach (var ev in eventsOnes)
@@ -694,7 +806,16 @@ namespace ACE.Server.Command.Handlers
                                          $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
                     }
 
-                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n";
+                    string groupEventInfo = eventsGroup.Count() == 0 ? "No active events" : "";
+                    foreach (var ev in eventsGroup)
+                    {
+                        groupEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
+                                         $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
+                                         $"    Players:\n    {ev.PlayersDisplay}\n" +
+                                         $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
+                    }
+
+                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n  Group: {groupEventInfo}\n";
 
                     CommandHandlerHelper.WriteOutputInfo(session, $"*********\n{queueInfo}\n\n{eventInfo}\n*********\n");
                     break;
@@ -769,30 +890,31 @@ namespace ACE.Server.Command.Handlers
                     break;
 
                 default:
-                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2 or FFA)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2, FFA or Group)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
                     return;
             }
         }
 
-        private static string JoinArenaQueue(Session session, string eventType)
+        private static string JoinArenaQueue(Player player, string eventType, out bool isSuccess, Guid? teamGuid = null, int maxOpposingTeamSize = 9)
         {
             //Whitelist specific clans to participate
-            uint? monarchId = session.Player.MonarchId;
-            string monarchName = session.Player.Name;
-            var playerAllegiance = AllegianceManager.GetAllegiance(session.Player);
+            uint? monarchId = player.MonarchId;
+            string monarchName = player.Name;
+            var playerAllegiance = AllegianceManager.GetAllegiance(player);
             if (playerAllegiance != null && playerAllegiance.MonarchId.HasValue)
             {
                 monarchId = playerAllegiance.MonarchId;
                 monarchName = playerAllegiance.Monarch.Player.Name;
             }
 
-            var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)session.Player.Character.Id;
-            var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
+            //var whiteListId = monarchId.HasValue ? (int)monarchId.Value : (int)player.Character.Id;
+            //var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance(whiteListId);
 
-            if (!isWhitelisted)
-            {
-                return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
-            }
+            //if (!isWhitelisted)
+            //{
+            //    isSuccess = false;
+            //    return "To participate in an Arena match your monarch must be whitelisted.  Please reach out to an admin to get whitelisted.  This helps prevent abuse, apologies for the inconvenience.";
+            //}
 
             //Blacklist specific players
             var blacklistString = PropertyManager.GetString("arenas_blacklist").Item;
@@ -801,44 +923,59 @@ namespace ACE.Server.Command.Handlers
                 var blacklist = blacklistString.Split(',');
                 foreach (var charIdString in blacklist)
                 {
-                    if (uint.TryParse(charIdString, out uint charId) && session.Player.Character.Id == charId)
+                    if (uint.TryParse(charIdString, out uint charId) && (player.Character.Id == charId || monarchId == charId))
                     {
+                        isSuccess = false;
                         return "You are blacklisted from joining Arena events, probably because you're a cunt who tried to abuse it or some shit.  Fuck yourself.  Or ask forgiveness from Doc Z.  Whatever, I don't care.";
                     }
                 }
             }            
 
             var minLevel = PropertyManager.GetLong("arenas_min_level").Item;
-            if (session.Player.Level < minLevel)
+            if (player.Level < minLevel)
             {
+                isSuccess = false;
                 return $"You must be at least level {minLevel} to join an arena match";
             }
 
-            if(session.Player.IsArenaObserver ||
-                session.Player.IsPendingArenaObserver ||
-                session.Player.CloakStatus == CloakStatus.On)
+            if (player.IsArenaObserver ||
+                player.IsPendingArenaObserver ||
+                player.CloakStatus == CloakStatus.On)
+            {
+                isSuccess = false;
                 return $"You cannot join an arena queue while you're watching an arena event. Use /arena cancel to stop watching the current event before you queue.";
+            }
 
-            if (!session.Player.IsPK)
+            if (!player.IsPK)
+            {
+                isSuccess = false;
                 return $"You cannot join an arena queue until you are in a PK state";
+            }
 
-            if(session.Player.PKTimerActive)
+            if (player.PKTimerActive)
+            {
+                isSuccess = false;
                 return $"You cannot join an arena queue while you are PK tagged";
+            }
 
             string returnMsg;
             if(!ArenaManager.AddPlayerToQueue(
-                session.Player.Character.Id,
-                session.Player.Character.Name,
-                session.Player.Level,
+                player.Character.Id,
+                player.Character.Name,
+                player.Level,
                 eventType,
-                monarchId.HasValue ? monarchId.Value : session.Player.Character.Id,
+                monarchId.HasValue ? monarchId.Value : player.Character.Id,
                 monarchName,
-                session.EndPointC2S?.Address?.ToString(),
-                out returnMsg))
+                player.Session.EndPointC2S?.Address?.ToString(),
+                out returnMsg,
+                teamGuid,
+                maxOpposingTeamSize))
             {
+                isSuccess = false;
                 return returnMsg;
             }
 
+            isSuccess = true;
             return $"You have successfully joined the {eventType} arena queue";
         }
 
@@ -852,6 +989,9 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("ForceLogoffStuckCharacter", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Force log off of character that's stuck in game.  Is only allowed when initiated from a character that is on the same account as the target character.")]
         public static void HandleForceLogoffStuckCharacter(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             var playerName = "";
             if (parameters.Length > 0)
                 playerName = string.Join(" ", parameters);
@@ -906,6 +1046,9 @@ namespace ACE.Server.Command.Handlers
             "< New Name >")]
         public static void HandleBuyRename(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             if(parameters.Length < 1)
             {
                 CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters: please provide a new character name. Usage: /BuyRename <NewCharacterName>", ChatMessageType.Broadcast);
@@ -1017,6 +1160,23 @@ namespace ACE.Server.Command.Handlers
             }
         }
 
+        public static bool CheckPlayerCommandRateLimit(Session session, int limitSeconds = 3)
+        {
+            if (session == null)
+                return false;
+
+            if (session.Player.LastPlayerCommandTimestamp.HasValue && Time.GetDateTimeFromTimestamp(session.Player.LastPlayerCommandTimestamp.Value) > DateTime.UtcNow.AddSeconds(-1 * limitSeconds))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"To prevent abuse, you can only issue this player command every {limitSeconds} seconds. Please try again later.");
+                return false;
+            }
+            else
+            {
+                session.Player.LastPlayerCommandTimestamp = Time.GetUnixTime(DateTime.UtcNow);
+                return true;
+            }
+        }
+
         #region Town Control
 
         private static string _townOwnerMessageHeader = "Town Owners:\n";
@@ -1027,6 +1187,9 @@ namespace ACE.Server.Command.Handlers
             "")]
         public static void HandleTownOwnersQuery(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             try
             {
                 StringBuilder townOwnerMsg = new StringBuilder(_townOwnerMessageHeader);
@@ -1065,6 +1228,9 @@ namespace ACE.Server.Command.Handlers
             "")]
         public static void HandleTownRespiteQuery(Session session, params string[] parameters)
         {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
             try
             {
                 if (parameters != null && parameters.Length > 0)
