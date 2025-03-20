@@ -31,7 +31,6 @@ using ACE.Server.Entity.TownControl;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Adapter.GDLE.Models;
 using ACE.Database.Models.TownControl;
-using K4os.Compression.LZ4.Engine;
 using ACE.Server.Network.Handlers;
 using ACE.Server.Entity;
 
@@ -458,7 +457,7 @@ namespace ACE.Server.Entity
 
                     var pos = new Physics.Common.Position();
                     pos.ObjCellID = (uint)(Id.Landblock << 16) | 1;
-                    pos.Frame = new Physics.Animation.AFrame(new Vector3(xPos, yPos, 0), Quaternion.Identity);
+                    pos.Frame = new Physics.Animation.AFrame(new Vector3(xPos, yPos, 0), System.Numerics.Quaternion.Identity);
                     pos.adjust_to_outside();
 
                     pos.Frame.Origin.Z = PhysicsLandblock.GetZ(pos.Frame.Origin);

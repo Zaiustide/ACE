@@ -638,7 +638,6 @@ namespace ACE.Entity.Enum.Properties
         InventoryOrder                           = 9015,
 
         //The number of times a character has been renamed
-        [ServerOnly]
         CharacterRenameCount = 9016,
     }
 

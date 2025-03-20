@@ -286,7 +286,7 @@ namespace ACE.Server.Managers
 
 
             //Handle global chat gag by IP
-            if(!player.IsGlobalChatGagged && GlobalChatGagsByIP.Contains(session.EndPoint.Address.ToString()))
+            if(!player.IsGlobalChatGagged && GlobalChatGagsByIP.Contains(session.EndPointC2S.Address.ToString()))
             {
                 player.IsGlobalChatGagged = true;
                 player.SaveBiotaToDatabase();

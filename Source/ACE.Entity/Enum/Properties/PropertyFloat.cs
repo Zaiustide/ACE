@@ -214,8 +214,6 @@ namespace ACE.Entity.Enum.Properties
         Last2PkTrophyDropTime          = 173,
         PkTrophyDropDay                = 174,
         PkTrophyDropsToday             = 175,
-
-        [ServerOnly]
         PCAPRecordedWorkmanship        = 8004,
         PCAPRecordedVelocityX          = 8010,
         PCAPRecordedVelocityY          = 8011,
@@ -225,47 +223,20 @@ namespace ACE.Entity.Enum.Properties
         PCAPRecordedAccelerationZ      = 8015,
         PCAPRecordeOmegaX              = 8016,
         PCAPRecordeOmegaY              = 8017,
-        [ServerOnly]
         PCAPRecordeOmegaZ              = 8018,
 
         /* Custom */
-        [ServerOnly]
         TownControlTrophyTimer = 9003,
-        
-        [ServerOnly]
         JumpTimer = 9004,
-
-        [ServerOnly]
         ArenaHourlyTimestamp = 9005,
-
-        [ServerOnly]
         ArenaHourlyCount = 9006,
-
-        [ServerOnly]
         ArenaDailyRewardTimestamp = 9007,
-
-        [ServerOnly]
         ArenaDailyRewardCount = 9008,
-
-        [ServerOnly]
         ArenaSameClanDailyRewardCount = 9009,
-
-        [ServerOnly]
         LastChugTimestamp = 9010,
-
-        [ServerOnly]
         LastArenaCommandTimestamp = 9011,
 
         /***** FOREDAWN CUSTOMS *****/
         ForedawnPvpDamageMulti = 52000
-    }
-
-    public static class PropertyFloatExtensions
-    {
-        public static string GetDescription(this PropertyFloat prop)
-        {
-            var description = prop.GetAttributeOfType<DescriptionAttribute>();
-            return description?.Description ?? prop.ToString();
-        }
     }
 }

@@ -8,7 +8,6 @@ using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Server.Entity;
 using ACE.Server.Managers;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace ACE.Server.WorldObjects
 {

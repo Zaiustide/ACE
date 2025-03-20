@@ -841,9 +841,9 @@ namespace ACE.Server.Managers
 
             //Save player's IP to the general chat gag list
             var onlinePlayer = PlayerManager.GetOnlinePlayer(player.Guid);
-            if(onlinePlayer != null && !WorldManager.GlobalChatGagsByIP.Contains(onlinePlayer.Session.EndPoint.Address.ToString()))
+            if(onlinePlayer != null && !WorldManager.GlobalChatGagsByIP.Contains(onlinePlayer.Session.EndPointC2S.Address.ToString()))
             {
-                WorldManager.GlobalChatGagsByIP = WorldManager.GlobalChatGagsByIP + "," + onlinePlayer.Session.EndPoint.Address.ToString();
+                WorldManager.GlobalChatGagsByIP = WorldManager.GlobalChatGagsByIP + "," + onlinePlayer.Session.EndPointC2S.Address.ToString();
             }    
 
             BroadcastToAuditChannel(issuer, $"{issuer.Name} has global chat gagged {player.Name} and all associated accounts.");
@@ -879,9 +879,9 @@ namespace ACE.Server.Managers
             var onlinePlayer = PlayerManager.GetOnlinePlayer(player.Guid);
             if (onlinePlayer != null)
             {
-                if (WorldManager.GlobalChatGagsByIP.Contains(onlinePlayer.Session.EndPoint.Address.ToString()))
+                if (WorldManager.GlobalChatGagsByIP.Contains(onlinePlayer.Session.EndPointC2S.Address.ToString()))
                 {
-                    WorldManager.GlobalChatGagsByIP = WorldManager.GlobalChatGagsByIP.Replace(onlinePlayer.Session.EndPoint.Address.ToString(), "").Replace(",,", "");
+                    WorldManager.GlobalChatGagsByIP = WorldManager.GlobalChatGagsByIP.Replace(onlinePlayer.Session.EndPointC2S.Address.ToString(), "").Replace(",,", "");
                 }
                 else
                 {

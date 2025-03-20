@@ -183,19 +183,10 @@ namespace ACE.Entity.Enum.Properties
         SkillTemplesTimerReset           = 9009,
         FreeMasteryResetRenewed          = 9010,
 
-        [ServerOnly]
         IsArenaObserver                  = 9011,
-
-        [ServerOnly]
         IsPendingArenaObserver           = 9012,
-
-        [ServerOnly]
         HasArenaRareDmgBuff              = 9013,
-
-        [ServerOnly]
         HasArenaRareDmgReductionBuff     = 9014,
-
-        [ServerOnly]
         IsGlobalChatGagged = 9015,
     }
 }

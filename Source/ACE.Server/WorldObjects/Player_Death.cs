@@ -18,7 +18,6 @@ using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Handlers;
 using ACE.Database;
 using ACE.Server.Entity.TownControl;
-using ACE.Database.Models.PKKills;
 
 namespace ACE.Server.WorldObjects
 {

@@ -95,13 +95,8 @@ namespace ACE.Entity.Enum.Properties
         AllegianceCastellanTitle       = 9005,
         GodState                       = 9006,
         TinkerLog                      = 9007,
-        [ServerOnly]
-        TinkerLottoLog = 9008,
-
-        [ServerOnly]
-        ArenaRewardsByOpponent = 9009,
-
-        [ServerOnly]
-        CurrentRareEnchantmentIds = 52029,
+        TinkerLottoLog                 = 9008,
+        ArenaRewardsByOpponent         = 9009,
+        CurrentRareEnchantmentIds      = 52029,
     }
 }
