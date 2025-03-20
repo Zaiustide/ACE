@@ -1031,6 +1031,7 @@ namespace ACE.Server.Entity
                             case "ffa":
                                 player.CompletePkQuestTask("ARENA_FFA_2");
                                 player.CompletePkQuestTask("ARENA_FFA_WIN_1");
+                                player.CompletePkQuestTask("ARENA_FFA_TOP3");
                                 break;
                             case "group":
                                 player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);

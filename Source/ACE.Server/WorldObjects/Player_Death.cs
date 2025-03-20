@@ -127,6 +127,7 @@ namespace ACE.Server.WorldObjects
                 bool isPkQuestEligible =
                     pkPlayer.Allegiance != null &&
                     pkPlayer.Allegiance.MonarchId.HasValue &&
+                    pkPlayer.Level >= 150 &&
                     TownControlAllegiances.IsAllowedAllegiance((int)pkPlayer.Allegiance.MonarchId.Value) &&
                     this.Allegiance != null &&
                     this.Allegiance.MonarchId.HasValue &&
