@@ -18,7 +18,7 @@ namespace ACE.Server.Network.Structure
     /// </summary>
     public class AppraiseInfo
     {
-        private static readonly uint EnchantmentMask = 0x80000000;
+        private const uint EnchantmentMask = 0x80000000;
 
         public IdentifyResponseFlags Flags;
 
@@ -341,13 +341,13 @@ namespace ACE.Server.Network.Structure
 
         private void BuildProperties(WorldObject wo)
         {
-            PropertiesInt = wo.GetAllPropertyInt().Where(x => ClientProperties.PropertiesInt.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
-            PropertiesInt64 = wo.GetAllPropertyInt64().Where(x => ClientProperties.PropertiesInt64.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
-            PropertiesBool = wo.GetAllPropertyBools().Where(x => ClientProperties.PropertiesBool.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
-            PropertiesFloat = wo.GetAllPropertyFloat().Where(x => ClientProperties.PropertiesDouble.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
-            PropertiesString = wo.GetAllPropertyString().Where(x => ClientProperties.PropertiesString.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
-            PropertiesDID = wo.GetAllPropertyDataId().Where(x => ClientProperties.PropertiesDataId.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
-            PropertiesIID = wo.GetAllPropertyInstanceId().Where(x => ClientProperties.PropertiesInstanceId.Contains((ushort)x.Key)).ToDictionary(x => x.Key, x => x.Value);
+            PropertiesInt = wo.GetAllPropertyIntWhere(AssessmentProperties.PropertiesInt);
+            PropertiesInt64 = wo.GetAllPropertyInt64Where(AssessmentProperties.PropertiesInt64);
+            PropertiesBool = wo.GetAllPropertyBoolsWhere(AssessmentProperties.PropertiesBool);
+            PropertiesFloat = wo.GetAllPropertyFloatWhere(AssessmentProperties.PropertiesDouble);
+            PropertiesString = wo.GetAllPropertyStringWhere(AssessmentProperties.PropertiesString);
+            PropertiesDID = wo.GetAllPropertyDataIdWhere(AssessmentProperties.PropertiesDataId);
+            PropertiesIID = wo.GetAllPropertyInstanceIdWhere(AssessmentProperties.PropertiesInstanceId);
 
             if (wo is Player player)
             {

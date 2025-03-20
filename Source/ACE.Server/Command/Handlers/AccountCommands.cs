@@ -178,7 +178,7 @@ namespace ACE.Server.Command.Handlers
             }
 
 
-            log.Debug($"{session.Player.Name} is changing their password");
+            log.DebugFormat("{0} is changing their password", session.Player.Name);
 
             var currentTime = DateTime.UtcNow;
 

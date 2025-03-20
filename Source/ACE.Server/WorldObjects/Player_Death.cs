@@ -259,7 +259,11 @@ namespace ACE.Server.WorldObjects
                 Session.Network.EnqueueSend(msgPurgeEnchantments);
             }
             else
-                Session.Network.EnqueueSend(new GameMessageSystemChat("Your augmentation prevents the tides of death from ripping away your current enchantments!", ChatMessageType.Broadcast));
+            {
+                var msgPurgeBadEnchantments = new GameEventMagicPurgeBadEnchantments(Session);
+                EnchantmentManager.RemoveAllBadEnchantments();
+                Session.Network.EnqueueSend(msgPurgeBadEnchantments, new GameMessageSystemChat("Your augmentation prevents the tides of death from ripping away your current enchantments!", ChatMessageType.Broadcast));
+            }
 
 
             //Handle arena deaths and logging PK kills
@@ -845,7 +849,7 @@ namespace ACE.Server.WorldObjects
         /// <summary>
         /// The maximum # of items a player can drop
         /// </summary>
-        public static readonly int MaxItemsDropped = 14;
+        public const int MaxItemsDropped = 14;
 
         /// <summary>
         /// Rolls for the # of items to drop for a player death

@@ -53,12 +53,16 @@ namespace ACE.Server.Command.Handlers.Processors
 
                 if (fileType.StartsWith("landblock"))
                     return FileType.LandblockInstance;
+                else if (fileType.StartsWith("encounter"))
+                    return FileType.Encounter;
                 else if (fileType.StartsWith("quest"))
                     return FileType.Quest;
                 else if (fileType.StartsWith("recipe"))
                     return FileType.Recipe;
                 else if (fileType.StartsWith("weenie"))
                     return FileType.Weenie;
+                else if (fileType.StartsWith("spell"))
+                    return FileType.Spell;
             }
             return FileType.Undefined;
         }
@@ -218,7 +222,7 @@ namespace ACE.Server.Command.Handlers.Processors
             ImportSQLWeenie(session, param, true);
         }
 
-        [CommandHandler("import-sql", AccessLevel.Developer, CommandHandlerFlag.None, 1, "Imports sql data from the Content folder", "<type> <wcid>\n<type> - landblock, quest, recipe, spell, weenie (default if not specified)\n<wcid> - filename prefix to search for. can be 'all' to import all files for this content type")]
+        [CommandHandler("import-sql", AccessLevel.Developer, CommandHandlerFlag.None, 1, "Imports sql data from the Content folder", "<type> <wcid>\n<type> - landblock, encounter, quest, recipe, spell, weenie (default if not specified)\n<wcid> - filename prefix to search for. can be 'all' to import all files for this content type")]
         public static void HandleImportSQL(Session session, params string[] parameters)
         {
             var param = parameters[0];
@@ -242,12 +246,20 @@ namespace ACE.Server.Command.Handlers.Processors
                         ImportSQLLandblock(session, param);
                         break;
 
+                    case FileType.Encounter:
+                        ImportSQLEncounter(session, param);
+                        break;
+
                     case FileType.Quest:
                         ImportSQLQuest(session, param);
                         break;
 
                     case FileType.Recipe:
                         ImportSQLRecipe(session, param);
+                        break;
+
+                    case FileType.Spell:
+                        ImportSQLSpell(session, param);
                         break;
 
                     case FileType.Weenie:
@@ -366,6 +378,34 @@ namespace ACE.Server.Command.Handlers.Processors
                 ImportSQLLandblock(session, sql_folder, file.Name);
         }
 
+        public static void ImportSQLEncounter(Session session, string landblockId)
+        {
+            DirectoryInfo di = VerifyContentFolder(session);
+            if (!di.Exists) return;
+
+            var sep = Path.DirectorySeparatorChar;
+
+            var sql_folder = $"{di.FullName}{sep}sql{sep}encounters{sep}";
+
+            var prefix = landblockId;
+
+            if (landblockId.Equals("all", StringComparison.OrdinalIgnoreCase))
+                prefix = "";
+
+            di = new DirectoryInfo(sql_folder);
+
+            var files = di.Exists ? di.GetFiles($"{prefix}*.sql") : null;
+
+            if (files == null || files.Length == 0)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find {sql_folder}{prefix}*.sql");
+                return;
+            }
+
+            foreach (var file in files)
+                ImportSQLEncounter(session, sql_folder, file.Name);
+        }
+
         public static void ImportSQLQuest(Session session, string questName)
         {
             DirectoryInfo di = VerifyContentFolder(session);
@@ -392,6 +432,34 @@ namespace ACE.Server.Command.Handlers.Processors
 
             foreach (var file in files)
                 ImportSQLQuest(session, sql_folder, file.Name);
+        }
+
+        public static void ImportSQLSpell(Session session, string spellId)
+        {
+            DirectoryInfo di = VerifyContentFolder(session);
+            if (!di.Exists) return;
+
+            var sep = Path.DirectorySeparatorChar;
+
+            var sql_folder = $"{di.FullName}{sep}sql{sep}spells{sep}";
+
+            var prefix = spellId.PadLeft(5, '0') + " ";
+
+            if (spellId.Equals("all", StringComparison.OrdinalIgnoreCase))
+                prefix = "";
+
+            di = new DirectoryInfo(sql_folder);
+
+            var files = di.Exists ? di.GetFiles($"{prefix}*.sql") : null;
+
+            if (files == null || files.Length == 0)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find {sql_folder}{prefix}*.sql");
+                return;
+            }
+
+            foreach (var file in files)
+                ImportSQLSpell(session, sql_folder, file.Name);
         }
 
         /// <summary>
@@ -555,21 +623,21 @@ namespace ACE.Server.Command.Handlers.Processors
                     output.LastModified = DateTime.UtcNow;
 
                 sqlFilename = WeenieSQLWriter.GetDefaultFileName(output);
-                var sqlFile = new StreamWriter(sqlFolder + sqlFilename);
-
-                WeenieSQLWriter.CreateSQLDELETEStatement(output, sqlFile);
-                sqlFile.WriteLine();
-
-                WeenieSQLWriter.CreateSQLINSERTStatement(output, sqlFile);
-
-                var metadata = new Adapter.GDLE.Models.Metadata(weenie);
-                if (metadata.HasInfo)
+                using (StreamWriter sqlFile = new StreamWriter(sqlFolder + sqlFilename))
                 {
-                    var jsonEx = JsonSerializer.Serialize(metadata, LifestonedConverter.SerializerSettings);
-                    sqlFile.WriteLine($"\n/* Lifestoned Changelog:\n{jsonEx}\n*/");
-                }
 
-                sqlFile.Close();
+                    WeenieSQLWriter.CreateSQLDELETEStatement(output, sqlFile);
+                    sqlFile.WriteLine();
+
+                    WeenieSQLWriter.CreateSQLINSERTStatement(output, sqlFile);
+
+                    var metadata = new Adapter.GDLE.Models.Metadata(weenie);
+                    if (metadata.HasInfo)
+                    {
+                        var jsonEx = JsonSerializer.Serialize(metadata, LifestonedConverter.SerializerSettings);
+                        sqlFile.WriteLine($"\n/* Lifestoned Changelog:\n{jsonEx}\n*/");
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -585,6 +653,7 @@ namespace ACE.Server.Command.Handlers.Processors
 
         public static CookBookSQLWriter CookBookSQLWriter;
         public static RecipeSQLWriter RecipeSQLWriter;
+        public static SpellSQLWriter SpellSQLWriter;
 
         public static string json2sql_recipe(Session session, string folder, string json_filename)
         {
@@ -642,20 +711,18 @@ namespace ACE.Server.Command.Handlers.Processors
                 }
 
                 sqlFilename = RecipeSQLWriter.GetDefaultFileName(recipe, cookbooks);
-                var sqlFile = new StreamWriter(sqlFolder + sqlFilename);
+                using (StreamWriter sqlFile = new StreamWriter(sqlFolder + sqlFilename)) { 
+                    RecipeSQLWriter.CreateSQLDELETEStatement(recipe, sqlFile);
+                    sqlFile.WriteLine();
 
-                RecipeSQLWriter.CreateSQLDELETEStatement(recipe, sqlFile);
-                sqlFile.WriteLine();
+                    RecipeSQLWriter.CreateSQLINSERTStatement(recipe, sqlFile);
+                    sqlFile.WriteLine();
 
-                RecipeSQLWriter.CreateSQLINSERTStatement(recipe, sqlFile);
-                sqlFile.WriteLine();
+                    CookBookSQLWriter.CreateSQLDELETEStatement(cookbooks, sqlFile);
+                    sqlFile.WriteLine();
 
-                CookBookSQLWriter.CreateSQLDELETEStatement(cookbooks, sqlFile);
-                sqlFile.WriteLine();
-
-                CookBookSQLWriter.CreateSQLINSERTStatement(cookbooks, sqlFile);
-
-                sqlFile.Close();
+                    CookBookSQLWriter.CreateSQLINSERTStatement(cookbooks, sqlFile);
+                }
             }
             catch (Exception e)
             {
@@ -743,14 +810,14 @@ namespace ACE.Server.Command.Handlers.Processors
                 }
 
                 sqlFilename = LandblockInstanceWriter.GetDefaultFileName(landblockInstances[0]);
-                var sqlFile = new StreamWriter(sqlFolder + sqlFilename);
 
-                LandblockInstanceWriter.CreateSQLDELETEStatement(landblockInstances, sqlFile);
-                sqlFile.WriteLine();
+                using (StreamWriter sqlFile = new StreamWriter(sqlFolder + sqlFilename))
+                {
+                    LandblockInstanceWriter.CreateSQLDELETEStatement(landblockInstances, sqlFile);
+                    sqlFile.WriteLine();
 
-                LandblockInstanceWriter.CreateSQLINSERTStatement(landblockInstances, sqlFile);
-
-                sqlFile.Close();
+                    LandblockInstanceWriter.CreateSQLINSERTStatement(landblockInstances, sqlFile);
+                }
             }
             catch (Exception e)
             {
@@ -805,14 +872,13 @@ namespace ACE.Server.Command.Handlers.Processors
                 if (quest.LastModified == DateTime.MinValue)
                     quest.LastModified = DateTime.UtcNow;
 
-                var sqlFile = new StreamWriter(sqlFolder + sqlFilename);
+                using (StreamWriter sqlFile = new StreamWriter(sqlFolder + sqlFilename))
+                {
+                    QuestSQLWriter.CreateSQLDELETEStatement(quest, sqlFile);
+                    sqlFile.WriteLine();
 
-                QuestSQLWriter.CreateSQLDELETEStatement(quest, sqlFile);
-                sqlFile.WriteLine();
-
-                QuestSQLWriter.CreateSQLINSERTStatement(quest, sqlFile);
-
-                sqlFile.Close();
+                    QuestSQLWriter.CreateSQLINSERTStatement(quest, sqlFile);
+                }
             }
             catch (Exception e)
             {
@@ -905,6 +971,22 @@ namespace ACE.Server.Command.Handlers.Processors
             sql2json_landblock(session, instances, sql_folder, sql_file);
         }
 
+        private static void ImportSQLEncounter(Session session, string sql_folder, string sql_file)
+        {
+            if (!ushort.TryParse(Regex.Match(sql_file, @"[0-9A-F]{4}", RegexOptions.IgnoreCase).Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var landblockId))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find landblock id from {sql_file}");
+                return;
+            }
+
+            // import sql to db
+            ImportSQL(sql_folder + sql_file);
+            CommandHandlerHelper.WriteOutputInfo(session, $"Imported {sql_file}");
+
+            // clear any cached encounters for this landblock
+            DatabaseManager.World.ClearCachedEncountersByLandblock(landblockId);
+        }
+
         private static void ImportSQLQuest(Session session, string sql_folder, string sql_file)
         {
             // import sql to db
@@ -920,6 +1002,26 @@ namespace ACE.Server.Command.Handlers.Processors
 
             // convert to json file
             sql2json_quest(session, quest, sql_folder, sql_file);
+        }
+
+        private static void ImportSQLSpell(Session session, string sql_folder, string sql_file)
+        {
+            if (!uint.TryParse(Regex.Match(sql_file, @"\d+").Value, out var spellId))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find spell id from {sql_file}");
+                return;
+            }
+
+            // import sql to db
+            ImportSQL(sql_folder + sql_file);
+            CommandHandlerHelper.WriteOutputInfo(session, $"Imported {sql_file}");
+
+            // clear this spell out of the cache (and everything else)
+            DatabaseManager.World.ClearSpellCache();
+            WorldObject.ClearSpellCache();
+
+            // load spell from db
+            var spell = DatabaseManager.World.GetCachedSpell(spellId);
         }
 
         /// <summary>
@@ -1305,7 +1407,7 @@ namespace ACE.Server.Command.Handlers.Processors
                 File.Delete(sqlFilename);
 
                 using (var ctx = new WorldDbContext())
-                    ctx.Database.ExecuteSqlRaw($"DELETE FROM landblock_instance WHERE landblock={landblock};");
+                    ctx.Database.ExecuteSqlInterpolated($"DELETE FROM landblock_instance WHERE landblock={landblock};");
             }
 
             // clear landblock instances for this landblock (again)
@@ -1679,7 +1781,7 @@ namespace ACE.Server.Command.Handlers.Processors
                 File.Delete(sqlFilename);
 
                 using (var ctx = new WorldDbContext())
-                    ctx.Database.ExecuteSqlRaw($"DELETE FROM encounter WHERE landblock={landblock};");
+                    ctx.Database.ExecuteSqlInterpolated($"DELETE FROM encounter WHERE landblock={landblock};");
             }
 
             // clear the encounters for this landblock (again)
@@ -1881,7 +1983,7 @@ namespace ACE.Server.Command.Handlers.Processors
             }
 
             var cookbooks = DatabaseManager.World.GetCookbooksByRecipeId(recipeId);
-            if (cookbooks == null)
+            if (cookbooks == null || cookbooks.Count == 0)
             {
                 CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find recipe id {recipeId}");
                 return;
@@ -2007,7 +2109,7 @@ namespace ACE.Server.Command.Handlers.Processors
             ExportSQLWeenie(session, param, true);
         }
 
-        [CommandHandler("export-sql", AccessLevel.Developer, CommandHandlerFlag.None, 1, "Exports content from database to SQL file", "<optional type> <id>\n<optional type> - landblock, quest, recipe, spell, weenie (default if not specified)\n<id> - wcid or content id to export")]
+        [CommandHandler("export-sql", AccessLevel.Developer, CommandHandlerFlag.None, 1, "Exports content from database to SQL file", "<optional type> <id>\n<optional type> - landblock, encounter, quest, recipe, spell, weenie (default if not specified)\n<id> - wcid or content id to export")]
         public static void HandleExportSql(Session session, params string[] parameters)
         {
             var param = parameters[0];
@@ -2029,12 +2131,20 @@ namespace ACE.Server.Command.Handlers.Processors
                     ExportSQLLandblock(session, param);
                     break;
 
+                case FileType.Encounter:
+                    ExportSQLEncounter(session, param);
+                    break;
+
                 case FileType.Quest:
                     ExportSQLQuest(session, param);
                     break;
 
                 case FileType.Recipe:
                     ExportSQLRecipe(session, param);
+                    break;
+
+                case FileType.Spell:
+                    ExportSQLSpell(session, param);
                     break;
 
                 case FileType.Weenie:
@@ -2144,7 +2254,7 @@ namespace ACE.Server.Command.Handlers.Processors
             }
 
             var cookbooks = DatabaseManager.World.GetCookbooksByRecipeId(recipeId);
-            if (cookbooks == null)
+            if (cookbooks == null || cookbooks.Count == 0)
             {
                 CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find recipe id {recipeId}");
                 return;
@@ -2176,20 +2286,19 @@ namespace ACE.Server.Command.Handlers.Processors
 
             try
             {
-                var sqlFile = new StreamWriter(sql_folder + sql_filename);
+                using (StreamWriter sqlFile = new StreamWriter(sql_folder + sql_filename))
+                {
+                    RecipeSQLWriter.CreateSQLDELETEStatement(recipe, sqlFile);
+                    sqlFile.WriteLine();
 
-                RecipeSQLWriter.CreateSQLDELETEStatement(recipe, sqlFile);
-                sqlFile.WriteLine();
+                    RecipeSQLWriter.CreateSQLINSERTStatement(recipe, sqlFile);
+                    sqlFile.WriteLine();
 
-                RecipeSQLWriter.CreateSQLINSERTStatement(recipe, sqlFile);
-                sqlFile.WriteLine();
+                    CookBookSQLWriter.CreateSQLDELETEStatement(cookbooks, sqlFile);
+                    sqlFile.WriteLine();
 
-                CookBookSQLWriter.CreateSQLDELETEStatement(cookbooks, sqlFile);
-                sqlFile.WriteLine();
-
-                CookBookSQLWriter.CreateSQLINSERTStatement(cookbooks, sqlFile);
-
-                sqlFile.Close();
+                    CookBookSQLWriter.CreateSQLINSERTStatement(cookbooks, sqlFile);
+                }
             }
             catch (Exception e)
             {
@@ -2237,14 +2346,81 @@ namespace ACE.Server.Command.Handlers.Processors
                     LandblockInstanceWriter.WeenieNames = DatabaseManager.World.GetAllWeenieNames();
                 }
 
-                var sqlFile = new StreamWriter(sql_folder + sql_filename);
+                using (StreamWriter sqlFile = new StreamWriter(sql_folder + sql_filename))
+                {
+                    // Check if the Landblock is empty
+                    if(instances.Count > 0)
+                        LandblockInstanceWriter.CreateSQLDELETEStatement(instances, sqlFile);
+                    else
+                    {
+                        // We'll just create a dummy list with a fake instance in our landblock so we don't anger CreateSQLDeleteStatement()
+                        CommandHandlerHelper.WriteOutputInfo(session, $"Landblock {landblockId:X4} is empty.");
+                        List<LandblockInstance> dummyList = new List<LandblockInstance> ();
+                        LandblockInstance dummyInstance = new LandblockInstance();
+                        dummyInstance.ObjCellId = (uint)(landblockId << 16);
+                        dummyList.Add(dummyInstance);
+                        LandblockInstanceWriter.CreateSQLDELETEStatement(dummyList, sqlFile);
+                    }
+                    sqlFile.WriteLine();
 
-                LandblockInstanceWriter.CreateSQLDELETEStatement(instances, sqlFile);
-                sqlFile.WriteLine();
+                    LandblockInstanceWriter.CreateSQLINSERTStatement(instances, sqlFile);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                CommandHandlerHelper.WriteOutputInfo(session, $"Failed to export {sql_folder}{sql_filename}");
+                return;
+            }
 
-                LandblockInstanceWriter.CreateSQLINSERTStatement(instances, sqlFile);
+            CommandHandlerHelper.WriteOutputInfo(session, $"Exported {sql_folder}{sql_filename}");
+        }
 
-                sqlFile.Close();
+        public static void ExportSQLEncounter(Session session, string param)
+        {
+            DirectoryInfo di = VerifyContentFolder(session, false);
+
+            var sep = Path.DirectorySeparatorChar;
+
+            if (!ushort.TryParse(Regex.Match(param, @"[0-9A-F]{4}", RegexOptions.IgnoreCase).Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var landblockId))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"{param} not a valid landblock");
+                return;
+            }
+
+            var encounters = DatabaseManager.World.GetCachedEncountersByLandblock(landblockId);
+
+            if (encounters == null || encounters.Count == 0)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find encounters for landblock {landblockId:X4}");
+                return;
+            }
+
+            var sql_folder = $"{di.FullName}{sep}sql{sep}encounters{sep}";
+
+            di = new DirectoryInfo(sql_folder);
+
+            if (!di.Exists)
+                di.Create();
+
+            var sql_filename = $"{landblockId:X4}.sql";
+
+            try
+            {
+                if (LandblockEncounterWriter == null)
+                {
+                    LandblockEncounterWriter = new EncounterSQLWriter();
+                    LandblockEncounterWriter.WeenieNames = DatabaseManager.World.GetAllWeenieNames();
+                }
+
+                using (var sqlFile = new StreamWriter(sql_folder + sql_filename))
+                {
+                    LandblockEncounterWriter.CreateSQLDELETEStatement(encounters, sqlFile);
+
+                    sqlFile.WriteLine();
+
+                    LandblockEncounterWriter.CreateSQLINSERTStatement(encounters, sqlFile);
+                }
             }
             catch (Exception e)
             {
@@ -2284,14 +2460,67 @@ namespace ACE.Server.Command.Handlers.Processors
 
             try
             {
-                var sqlFile = new StreamWriter(sql_folder + sql_filename);
+                using (StreamWriter sqlFile = new StreamWriter(sql_folder + sql_filename))
+                {
 
-                QuestSQLWriter.CreateSQLDELETEStatement(quest, sqlFile);
-                sqlFile.WriteLine();
+                    QuestSQLWriter.CreateSQLDELETEStatement(quest, sqlFile);
+                    sqlFile.WriteLine();
 
-                QuestSQLWriter.CreateSQLINSERTStatement(quest, sqlFile);
+                    QuestSQLWriter.CreateSQLINSERTStatement(quest, sqlFile);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                CommandHandlerHelper.WriteOutputInfo(session, $"Failed to export {sql_folder}{sql_filename}");
+                return;
+            }
 
-                sqlFile.Close();
+            CommandHandlerHelper.WriteOutputInfo(session, $"Exported {sql_folder}{sql_filename}");
+        }
+
+
+        public static void ExportSQLSpell(Session session, string param)
+        {
+            DirectoryInfo di = VerifyContentFolder(session, false);
+
+            var sep = Path.DirectorySeparatorChar;
+
+            if (!uint.TryParse(param, out var spellId))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"{param} not a valid spell id");
+                return;
+            }
+
+            var spell = DatabaseManager.World.GetCachedSpell(spellId);
+
+            if (spell == null)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find spell id {spellId}");
+                return;
+            }
+
+            var sql_folder = $"{di.FullName}{sep}sql{sep}spells{sep}";
+
+            di = new DirectoryInfo(sql_folder);
+
+            if (!di.Exists)
+                di.Create();
+
+            if (SpellSQLWriter == null)
+                SpellSQLWriter = new SpellSQLWriter();
+
+            var sql_filename = SpellSQLWriter.GetDefaultFileName(spell);
+
+            try
+            {
+                using (StreamWriter sqlFile = new StreamWriter(sql_folder + sql_filename))
+                {
+                    SpellSQLWriter.CreateSQLDELETEStatement(spell, sqlFile);
+                    sqlFile.WriteLine();
+
+                    SpellSQLWriter.CreateSQLINSERTStatement(spell, sqlFile);
+                }
             }
             catch (Exception e)
             {

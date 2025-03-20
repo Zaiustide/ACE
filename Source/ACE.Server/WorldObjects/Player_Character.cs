@@ -220,8 +220,9 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void SetAppearOffline(bool appearOffline)
         {
+            var previousAppearOffline = GetAppearOffline();
             SetCharacterOption(CharacterOption.AppearOffline, appearOffline);
-            SendFriendStatusUpdates();
+            SendFriendStatusUpdates(!previousAppearOffline, !GetAppearOffline());
         }
 
 
@@ -296,9 +297,11 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void HandleActionAddSpellFavorite(uint spellId, uint spellBarPositionId, uint spellBarId)
         {
-            Character.AddSpellToBar(spellBarId, spellBarPositionId, spellId, CharacterDatabaseLock);
+            if (spellBarId > 7 || spellBarPositionId > (uint)SpellId.NumSpells || !SpellIsKnown(spellId))
+                return;
 
-            CharacterChangesDetected = true;
+            if (Character.AddSpellToBar(spellBarId, spellBarPositionId, spellId, CharacterDatabaseLock))
+                CharacterChangesDetected = true;
         }
 
         /// <summary>
