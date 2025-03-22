@@ -371,97 +371,109 @@ namespace ACE.Server.WorldObjects
         public void CreateEnchantment(WorldObject target, WorldObject caster, WorldObject weapon, Spell spell, bool equip = false, bool fromProc = false, bool isWeaponSpell = false)
         {
             // weird itemCaster -> caster collapsing going on here -- fixme
-
-            var player = this as Player;
-
-            var aetheriaProc = false;
-            var cloakProc = false;
-
-            // technically unsafe, should be using fromProc
-            if (caster.ProcSpell == spell.Id)
+            try
             {
-                if (caster is Gem && Aetheria.IsAetheria(caster.WeenieClassId))
+                var player = this as Player;
+
+                var aetheriaProc = false;
+                var cloakProc = false;
+
+                // technically unsafe, should be using fromProc
+                if (caster.ProcSpell == spell.Id)
                 {
-                    caster = this;
-                    aetheriaProc = true;
+                    if (caster is Gem && Aetheria.IsAetheria(caster.WeenieClassId))
+                    {
+                        caster = this;
+                        aetheriaProc = true;
+                    }
+                    else if (Cloak.IsCloak(caster))
+                    {
+                        caster = this;
+                        cloakProc = true;
+                    }
                 }
-                else if (Cloak.IsCloak(caster))
+                else if (fromProc)
                 {
+                    // fromProc is assumed to be cloakProc currently
+                    // todo: change fromProc from bool to WorldObject
+                    // do we need separate concepts for itemCaster and fromProc objects?
                     caster = this;
                     cloakProc = true;
                 }
-            }
-            else if (fromProc)
-            {
-                // fromProc is assumed to be cloakProc currently
-                // todo: change fromProc from bool to WorldObject
-                // do we need separate concepts for itemCaster and fromProc objects?
-                caster = this;
-                cloakProc = true;
-            }
 
-            // create enchantment
-            var addResult = target.EnchantmentManager.Add(spell, caster, weapon, equip, isWeaponSpell);
+                // create enchantment
+                var addResult = target.EnchantmentManager.Add(spell, caster, weapon, equip, isWeaponSpell);
 
-            // build message
-            var suffix = "";
-            switch (addResult.StackType)
-            {
-                case StackType.Surpass:
-                    suffix = $", surpassing {addResult.SurpassSpell.Name}";
-                    break;
-                case StackType.Refresh:
-                    suffix = $", refreshing {addResult.RefreshSpell.Name}";
-                    break;
-                case StackType.Surpassed:
-                    suffix = $", but it is surpassed by {addResult.SurpassedSpell.Name}";
-                    break;
-            }
-
-            if (aetheriaProc)
-            {
-                var message = new GameMessageSystemChat($"Aetheria surges on {target.Name} with the power of {spell.Name}!", ChatMessageType.Spellcasting);
-
-                EnqueueBroadcast(message, LocalBroadcastRange, ChatMessageType.Spellcasting);
-            }
-            else if (player != null && !cloakProc)
-            {
-                // TODO: replace with some kind of 'rootOwner unless equip' concept?
-                // for item casters where the message should be 'You cast', we still need pass the caster as item
-                // down this far, to prevent using player's AugmentationIncreasedSpellDuration
-                var casterCheck = caster == this || caster is Gem || caster is Food;
-
-                if (casterCheck || target == this || caster != target)
+                // build message
+                var suffix = "";
+                switch (addResult.StackType)
                 {
-                    var casterName = casterCheck ? "You" : caster.Name;
-                    var targetName = target.Name;
-                    if (target == this)
-                        targetName = casterCheck ? "yourself" : "you";
+                    case StackType.Surpass:
+                        suffix = $", surpassing {addResult.SurpassSpell.Name}";
+                        break;
+                    case StackType.Refresh:
+                        suffix = $", refreshing {addResult.RefreshSpell.Name}";
+                        break;
+                    case StackType.Surpassed:
+                        suffix = $", but it is surpassed by {addResult.SurpassedSpell.Name}";
+                        break;
+                }
 
-                    player.SendChatMessage(player, $"{casterName} cast {spell.Name} on {targetName}{suffix}", ChatMessageType.Magic);
+                if (aetheriaProc)
+                {
+                    var message = new GameMessageSystemChat($"Aetheria surges on {target.Name} with the power of {spell.Name}!", ChatMessageType.Spellcasting);
+
+                    EnqueueBroadcast(message, LocalBroadcastRange, ChatMessageType.Spellcasting);
+                }
+                else if (player != null && !cloakProc)
+                {
+                    // TODO: replace with some kind of 'rootOwner unless equip' concept?
+                    // for item casters where the message should be 'You cast', we still need pass the caster as item
+                    // down this far, to prevent using player's AugmentationIncreasedSpellDuration
+                    var casterCheck = caster == this || caster is Gem || caster is Food;
+
+                    if (casterCheck || target == this || caster != target)
+                    {
+                        var casterName = casterCheck ? "You" : caster.Name;
+                        var targetName = target.Name;
+                        if (target == this)
+                            targetName = casterCheck ? "yourself" : "you";
+
+                        player.SendChatMessage(player, $"{casterName} cast {spell.Name} on {targetName}{suffix}", ChatMessageType.Magic);
+                    }
+                }
+
+                var playerTarget = target as Player;
+
+                if (playerTarget != null)
+                {
+                    playerTarget.Session.Network.EnqueueSend(new GameEventMagicUpdateEnchantment(playerTarget.Session, new Enchantment(playerTarget, addResult.Enchantment)));
+
+                    playerTarget.HandleSpellHooks(spell);
+
+                    if (!spell.IsBeneficial && this is Creature creatureCaster)
+                        playerTarget.SetCurrentAttacker(creatureCaster);
+                }
+
+                if (playerTarget == null && target.Wielder is Player wielder)
+                    playerTarget = wielder;
+
+                if (playerTarget != null && playerTarget != this && !cloakProc)
+                {
+                    var targetName = target == playerTarget ? "you" : $"your {target.Name}";
+
+                    playerTarget.SendChatMessage(this, $"{caster.Name} cast {spell.Name} on {targetName}{suffix}", ChatMessageType.Magic);
                 }
             }
-
-            var playerTarget = target as Player;
-
-            if (playerTarget != null)
+            catch(Exception ex)
             {
-                playerTarget.Session.Network.EnqueueSend(new GameEventMagicUpdateEnchantment(playerTarget.Session, new Enchantment(playerTarget, addResult.Enchantment)));
-
-                playerTarget.HandleSpellHooks(spell);
-
-                if (!spell.IsBeneficial && this is Creature creatureCaster)
-                    playerTarget.SetCurrentAttacker(creatureCaster);
-            }
-
-            if (playerTarget == null && target.Wielder is Player wielder)
-                playerTarget = wielder;
-
-            if (playerTarget != null && playerTarget != this && !cloakProc)
-            {
-                var targetName = target == playerTarget ? "you" : $"your {target.Name}";
-
-                playerTarget.SendChatMessage(this, $"{caster.Name} cast {spell.Name} on {targetName}{suffix}", ChatMessageType.Magic);
+                log.ErrorFormat(@"Exception in CreateEnchantment. WorldObjectId = {0}, Target = {1}, Caster = {2}, Weapon = {3}, Spell = {4}\nEx:{5}",
+                    this?.Biota.Id.ToString() ?? "NULL",
+                    target?.Biota.Id.ToString() ?? "NULL",
+                    caster?.Biota.Id.ToString() ?? "NULL",
+                    weapon?.Biota.Id.ToString() ?? "NULL",
+                    spell?.Name ?? "NULL",
+                    ex);
             }
         }
 
