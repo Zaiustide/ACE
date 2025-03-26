@@ -805,8 +805,12 @@ namespace ACE.Server.WorldObjects
                     // emulate current gdle TurnTo - doesn't match retail, but some players may prefer this
                     OnMoveComplete_Magic(WeenieError.None);
                     return;
-                }                
+                }
 
+                // verify cast radius before every automatic TurnTo after windup
+                if (!VerifyCastRadius())
+                    return;
+                                
                 var stopCompletely = !MagicState.CastMotionDone;
                 //var stopCompletely = true;
 
