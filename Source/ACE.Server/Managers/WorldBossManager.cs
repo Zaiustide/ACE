@@ -52,71 +52,78 @@ namespace ACE.Server.Managers
         {
             if (DateTime.Now.AddSeconds(-5) < LastTickDateTime)
                 return;
-            
-            bool isWorldBossesDisabled = PropertyManager.GetBool("disable_world_bosses").Item;
-            if (isWorldBossesDisabled)
-            {
-                LastTickDateTime = DateTime.Now;
-                return;
-            }
 
-            if(!nextBossSpawnTime.HasValue)
+            try
             {
-                nextBossSpawnTime = RollNextSpawnTime(0, 2);
-            }
-
-            //if there's no active boss, and the next spawn time is in the past, spawn a boss
-            if(activeWorldBoss == null && DateTime.Now > nextBossSpawnTime)
-            {
-                SpawnNewWorldBoss();                
-                nextBossSpawnTime = RollNextSpawnTime(3, 11);
-                LastTickDateTime = DateTime.Now;
-                return;
-            }
-            
-            if(activeWorldBoss != null && activeWorldBoss.BossWorldObject != null)
-            {
-                //For indoor bosses make them take zero dmg if more than one allegiance is on the landblock                
-                if (activeWorldBoss.IndoorLocation != null)
+                bool isWorldBossesDisabled = PropertyManager.GetBool("disable_world_bosses").Item;
+                if (isWorldBossesDisabled)
                 {
-                    var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, true);
-                    var playersOnLandblock = bossLandblock?.GetCurrentLandblockPlayers() ?? new List<Player>();
-                    uint? firstAllegId = null;
-                    bool hasMultipleAllegiances = false;
-                    bool isBossInvincible = activeWorldBoss?.BossWorldObject?.Invincible ?? false;
+                    LastTickDateTime = DateTime.Now;
+                    return;
+                }
 
-                    foreach (var player in playersOnLandblock)
+                if (!nextBossSpawnTime.HasValue)
+                {
+                    nextBossSpawnTime = RollNextSpawnTime(0, 2);
+                }
+
+                //if there's no active boss, and the next spawn time is in the past, spawn a boss
+                if (activeWorldBoss == null && DateTime.Now > nextBossSpawnTime)
+                {
+                    SpawnNewWorldBoss();
+                    nextBossSpawnTime = RollNextSpawnTime(3, 11);
+                    LastTickDateTime = DateTime.Now;
+                    return;
+                }
+
+                if (activeWorldBoss != null && activeWorldBoss.BossWorldObject != null)
+                {
+                    //For indoor bosses make them take zero dmg if more than one allegiance is on the landblock                
+                    if (activeWorldBoss.IndoorLocation != null)
                     {
-                        if (player.IsAdmin)
-                            continue;
+                        var bossLandblock = LandblockManager.GetLandblock(activeWorldBoss.IndoorLocation.LandblockId, false, true);
+                        var playersOnLandblock = bossLandblock?.GetCurrentLandblockPlayers() ?? new List<Player>();
+                        uint? firstAllegId = null;
+                        bool hasMultipleAllegiances = false;
+                        bool isBossInvincible = activeWorldBoss?.BossWorldObject?.Invincible ?? false;
 
-                        if(firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance?.MonarchId ?? 0))
+                        foreach (var player in playersOnLandblock)
                         {
-                            hasMultipleAllegiances = true;
-                            break;
+                            if (player.IsAdmin)
+                                continue;
+
+                            if (firstAllegId.HasValue && firstAllegId.Value != (player?.Allegiance?.MonarchId ?? 0))
+                            {
+                                hasMultipleAllegiances = true;
+                                break;
+                            }
+                            else
+                            {
+                                firstAllegId = player?.Allegiance?.MonarchId ?? player?.Character.Id ?? 0;
+                            }
                         }
-                        else
+
+                        if (hasMultipleAllegiances && !isBossInvincible)
                         {
-                            firstAllegId = player?.Allegiance?.MonarchId ?? player?.Character.Id ?? 0;
-                        }                        
-                    }
+                            bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle! This pitiful infighting amongst humans has driven {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
+                            activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
+                        }
+                        else if (!hasMultipleAllegiances && isBossInvincible)
+                        {
+                            bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"The pitiful display of humans struggling against themselves seems to have ended now that only one allegiance remains.  {activeWorldBoss.Name} has become vulnerable to human attacks once again!", ChatMessageType.Broadcast));
+                            activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
+                        }
 
-                    if(hasMultipleAllegiances && !isBossInvincible)
-                    {
-                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"Human challengers have arrived to the battle! This pitiful infighting amongst humans has driven {activeWorldBoss.Name} to become invulnerable. Fight valiantly until only one allegiance remains before you may once again join battle with the mighty {activeWorldBoss.Name}.", ChatMessageType.Broadcast));
-                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, true);
-                    }
-                    else if(!hasMultipleAllegiances && isBossInvincible)
-                    {
-                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"The pitiful display of humans struggling against themselves seems to have ended now that only one allegiance remains.  {activeWorldBoss.Name} has become vulnerable to human attacks once again!", ChatMessageType.Broadcast));
-                        activeWorldBoss.BossWorldObject.SetProperty(PropertyBool.Invincible, false);
-                    }
-
-                    if(isBossInvincible && DateTime.Now.AddSeconds(-60) < LastTickDateTime)
-                    {
-                        bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} is currently feeding off of human conflict and has become invincible. The humans must finish their conflict with only one allegiance remaining.", ChatMessageType.Broadcast));
+                        if (isBossInvincible && DateTime.Now.AddSeconds(-60) < LastTickDateTime)
+                        {
+                            bossLandblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{activeWorldBoss.Name} is currently feeding off of human conflict and has become invincible. The humans must finish their conflict with only one allegiance remaining.", ChatMessageType.Broadcast));
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                log.ErrorFormat("Exception in WorldBossManager.Tick. Ex: {0}", ex);
             }
 
             LastTickDateTime = DateTime.Now;
