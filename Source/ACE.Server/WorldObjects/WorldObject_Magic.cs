@@ -356,6 +356,12 @@ namespace ACE.Server.WorldObjects
             if (spell.CasterEffect != 0 && (!spell.IsProjectile || !projectileHit))
                 caster.EnqueueBroadcast(new GameMessageScript(caster.Guid, spell.CasterEffect, spell.Formula.Scale));
 
+            if (target == null)
+            {
+                //log.WarnFormat("DoSpellEffects with NULL target. Spell = {0}, Caster = {1}, ProjectileHit = {2}", spell?.Name ?? "NULL", caster?.Name ?? "NULL", projectileHit);
+                return;
+            }
+
             if (spell.TargetEffect != 0 && (!spell.IsProjectile || projectileHit))
             {
                 var targetBroadcaster = target.Wielder ?? target;
