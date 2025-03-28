@@ -19,6 +19,8 @@ using ACE.Database.Models.Auth;
 using System.Net;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Threading.Channels;
 
 namespace ACE.Database
 {
@@ -55,19 +57,13 @@ namespace ACE.Database
 
         public void LogAccountSessionStart(uint accountId, string accountName, string sessionIP)
         {
-            var logEntry = new AccountSessionLog();
-
             try
-            {
-                logEntry.AccountId = accountId;
-                logEntry.AccountName = accountName;
-                logEntry.SessionIP = sessionIP;
-                logEntry.LoginDateTime = DateTime.Now;
-
+            {        
                 using (var context = new LogDbContext())
                 {
-                    context.AccountSessions.Add(logEntry);
-                    context.SaveChanges();
+                    context.Database.ExecuteSql(
+                        @$"INSERT INTO account_session_log (accountId, accountName, sessionIP, loginDateTime)
+                            VALUES ({accountId}, {accountName}, {sessionIP}, {DateTime.Now});");
                 }
             }
             catch (Exception ex)
@@ -80,47 +76,22 @@ namespace ACE.Database
 
         public void LogAccountSessionEnd(uint accountId)
         {
-            var logEntry = GetAccountLatestOpenSessionLog(accountId);
-
-            if (logEntry != null)
-            {
-                try
-                {
-                    logEntry.LogoutDateTime = DateTime.Now;
-
-                    using (var context = new LogDbContext())
-                    {
-                        context.Entry(logEntry).State = EntityState.Modified;
-                        context.SaveChanges();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log.Error($"Exception in LogAccountSessionEnd saving session log data to DB. Ex: {ex}");
-                }
-            }
-
-            return;
-        }
-
-        public AccountSessionLog GetAccountLatestOpenSessionLog(uint accountId)
-        {
             try
-            {
+            {                
                 using (var context = new LogDbContext())
                 {
-                    return context.AccountSessions
-                        .AsNoTracking()
-                        .OrderByDescending(r => r.Id)
-                        .FirstOrDefault(r => r.AccountId == accountId && !r.LogoutDateTime.HasValue);
+                    context.Database.ExecuteSql(
+                        @$"UPDATE account_session_log SET logoutDateTime = {DateTime.Now}
+                            WHERE accountId = {accountId} AND logoutDateTime IS NULL;");
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Exception in GetLatestOpenSessionLogByAccountId looking for latest open session log for accountId = {accountId}. Ex: {ex}");
-                return null;
+                log.Error($"Exception in LogAccountSessionEnd saving session log data to DB for AccountId = {accountId}. Ex: {ex}");
             }
-        }
+            
+            return;
+        }        
 
         #endregion Account Session Log
 
@@ -128,72 +99,40 @@ namespace ACE.Database
 
         public void LogCharacterLogin(uint accountId, string accountName, string sessionIP, uint characterId, string characterName)
         {
-            var logEntry = new CharacterLoginLog();
-
             try
             {
-                logEntry.AccountId = accountId;
-                logEntry.AccountName = accountName;
-                logEntry.SessionIP = sessionIP;
-                logEntry.CharacterId = characterId;
-                logEntry.CharacterName = characterName;
-                logEntry.LoginDateTime = DateTime.Now;
-
                 using (var context = new LogDbContext())
                 {
-                    context.CharacterLogins.Add(logEntry);
-                    context.SaveChanges();
+                    context.Database.ExecuteSql(
+                        @$"INSERT INTO character_login_log (accountId, accountName, characterId, characterName, sessionIP, loginDateTime)
+                            VALUES ({accountId}, {accountName}, {characterId}, {characterName}, {sessionIP}, {DateTime.Now});");
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Exception in LogCharacterLogin saving character login info to DB. Ex: {ex}");
+                log.Error($"Exception in LogCharacterLogin saving character login info to DB for AccountId = {accountId}, CharacterId = {characterId}. Ex: {ex}");
             }
         }
 
 
         public void LogCharacterLogout(uint characterId)
         {
-            var logEntry = GetLatestOpenCharacterLoginLog(characterId);
-
-            if (logEntry != null)
-            {
-
-                try
-                {
-                    logEntry.LogoutDateTime = DateTime.Now;
-
-                    using (var context = new LogDbContext())
-                    {
-                        context.Entry(logEntry).State = EntityState.Modified;
-                        context.SaveChanges();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log.Error($"Exception in LogCharacterLogout saving character logout date to DB. CharacterId = {characterId}, Ex: {ex}");
-                }
-            }
-        }
-
-        public CharacterLoginLog GetLatestOpenCharacterLoginLog(uint characterId)
-        {
             try
             {
                 using (var context = new LogDbContext())
                 {
-                    return context.CharacterLogins
-                        .AsNoTracking()
-                        .OrderByDescending(r => r.Id)
-                        .FirstOrDefault(r => r.CharacterId == characterId && !r.LogoutDateTime.HasValue);
+                    context.Database.ExecuteSql(
+                        @$"UPDATE character_login_log SET logoutDateTime = {DateTime.Now}
+                            WHERE characterId = {characterId} AND logoutDateTime IS NULL;");
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Exception in GetLatestOpenCharacterLoginLog looking for latest open session log for characterId = {characterId}. Ex: {ex}");
-                return null;
+                log.Error($"Exception in LogCharacterLogout saving session log data to DB for CharacterId = {characterId}. Ex: {ex}");
             }
-        }
+
+            return;
+        }        
 
         #endregion Character Login Log
 
@@ -201,33 +140,18 @@ namespace ACE.Database
 
         public void LogTinkeringEvent(uint characterId, string characterName, uint itemBiotaId, float chance, float roll, bool isSuccess, uint itemNumPreviousTinks, uint itemWorkmanship, string salvageType, uint salvageWorkmanship)
         {
-            var logEntry = new TinkerLog();
-
-            log.Info($"LogTinkeringEvent itemBiotaId = {itemBiotaId}");
-
             try
             {
-                logEntry.CharacterId = characterId;
-                logEntry.CharacterName = characterName;
-                logEntry.ItemBiotaId = itemBiotaId;
-                logEntry.TinkDateTime = DateTime.Now;
-                logEntry.SuccessChance = chance;
-                logEntry.Roll = roll;
-                logEntry.IsSuccess = isSuccess;
-                logEntry.ItemNumPreviousTinks = itemNumPreviousTinks;
-                logEntry.ItemWorkmanship = itemWorkmanship;
-                logEntry.SalvageType = salvageType;
-                logEntry.SalvageWorkmanship = salvageWorkmanship;
-
                 using (var context = new LogDbContext())
                 {
-                    context.TinkeringEvents.Add(logEntry);
-                    context.SaveChanges();
+                    context.Database.ExecuteSql(
+                        @$"INSERT INTO tinker_log (characterId, characterName, itemBiotaId, tinkDateTime, successChance, roll, isSuccess, itemNumPreviousTinks, itemWorkmanship, salvageType, salvageWorkmanship)
+                            VALUES ({characterId}, {characterName}, {itemBiotaId}, {DateTime.Now}, {chance}, {roll}, {isSuccess}, {itemNumPreviousTinks}, {itemWorkmanship}, {salvageType}, {salvageWorkmanship});");
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Exception in LogTinkeringEvent saving session log data to DB. Ex: {ex}");
+                log.Error($"Exception in LogTinkeringEvent saving data to DB for CharacterId = {characterId}, ItemBiotaId = {itemBiotaId}. Ex: {ex}");
             }
 
             return;
@@ -237,32 +161,21 @@ namespace ACE.Database
 
         #region PK Kills Log
 
-        public PKKill LogPkKill(uint victimId, uint killerId, uint? victimMonarchId, uint? killerMonarchId, uint? victimArenaPlayerId = null, uint? killerArenaPlayerId = null)
+        public void LogPkKill(uint victimId, uint killerId, uint? victimMonarchId, uint? killerMonarchId, uint? victimArenaPlayerId = null, uint? killerArenaPlayerId = null)
         {
-            var kill = new PKKill();
-
             try
             {
-                kill.VictimId = victimId;
-                kill.KillerId = killerId;
-                kill.VictimMonarchId = victimMonarchId;
-                kill.KillerMonarchId = killerMonarchId;
-                kill.KillDateTime = DateTime.Now;
-                kill.VictimArenaPlayerID = victimArenaPlayerId;
-                kill.KillerArenaPlayerID = killerArenaPlayerId;
-
                 using (var context = new LogDbContext())
                 {
-                    context.PKKills.Add(kill);
-                    context.SaveChanges();
+                    context.Database.ExecuteSql(
+                        @$"INSERT INTO pk_kills_log (killer_id, victim_id, killer_monarch_id, victim_monarch_id, kill_datetime, killer_arena_player_id, victim_arena_player_id)
+                            VALUES ({killerId}, {victimId}, {killerMonarchId}, {victimMonarchId}, {DateTime.Now}, {killerArenaPlayerId}, {victimArenaPlayerId});");
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Exception in LogPkKill saving kill data to DB. Ex: {ex}");
+                log.Error($"Exception in LogPkKill saving kill data to DB for KillerId = {killerId}, VictimId = {victimId}. Ex: {ex}");
             }
-
-            return kill;
         }
 
         #endregion PK Kills Log        
@@ -606,12 +519,16 @@ namespace ACE.Database
 
         public void LogRare(RareLog rareLog)
         {
+            if (rareLog == null)
+                return;
+
             try
             {                
                 using (var context = new LogDbContext())
                 {
-                    context.RareLogs.Add(rareLog);
-                    context.SaveChanges();
+                    context.Database.ExecuteSql(
+                        @$"INSERT INTO rare_log (characterName, characterId, itemName, itemBiotaId, itemWeenieId, createDateTime)
+                            VALUES ({rareLog.CharacterName}, {rareLog.CharacterId}, {rareLog.ItemName}, {rareLog.ItemBiotaId}, {rareLog.ItemWeenieId}, {DateTime.Now});");
                 }
             }
             catch (Exception ex)

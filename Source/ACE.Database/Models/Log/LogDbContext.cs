@@ -40,10 +40,11 @@ namespace ACE.Database.Models.Log
 
                 var connectionString = $"server={config.Host};port={config.Port};user={config.Username};password={config.Password};database={config.Database};TreatTinyAsBoolean=False;SslMode=None;AllowPublicKeyRetrieval=true;ApplicationName=ACEmulator";
 
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), builder =>
-                {
-                    builder.EnableRetryOnFailure(10);
-                });
+                optionsBuilder
+                    .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), builder =>
+                    {
+                        builder.EnableRetryOnFailure(10);
+                    });
             }
         }
 

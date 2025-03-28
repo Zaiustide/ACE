@@ -334,7 +334,8 @@ namespace ACE.Server.Network
 
             try
             {
-                new LogDatabase().LogAccountSessionEnd(this.AccountId);
+                if(this.AccountId > 0)
+                    new LogDatabase().LogAccountSessionEnd(this.AccountId);
             }
             catch (Exception ex)
             {
