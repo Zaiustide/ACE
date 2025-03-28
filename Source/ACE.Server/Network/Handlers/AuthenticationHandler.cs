@@ -264,7 +264,7 @@ namespace ACE.Server.Network.Handlers
                 }
 
                 if (WorldManager.WorldStatus == WorldManager.WorldStatusState.Open)
-                    log.Info($"client {loginRequest.Account} connected with verified password");
+                    log.InfoFormat("client {0} connected with verified password", loginRequest.Account);
                 else
                     log.DebugFormat("client {0} connected with verified password", loginRequest.Account);
             }
