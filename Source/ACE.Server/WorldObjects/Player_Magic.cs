@@ -808,8 +808,8 @@ namespace ACE.Server.WorldObjects
                 }
 
                 // verify cast radius before every automatic TurnTo after windup
-                if (!VerifyCastRadius())
-                    return;
+                //if (!VerifyCastRadius())
+                //    return;
                                 
                 var stopCompletely = !MagicState.CastMotionDone;
                 //var stopCompletely = true;
