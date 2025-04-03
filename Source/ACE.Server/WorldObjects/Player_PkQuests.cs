@@ -382,8 +382,11 @@ namespace ACE.Server.WorldObjects
                         Session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.System));
                         if (playerQuest.TaskDoneCount >= quest.TaskCount)
                         {
-                            playerQuest.IsCompleted = true;
-                            playerQuest.CompletedTime = DateTime.Now;
+                            if (!playerQuest.IsCompleted || !playerQuest.CompletedTime.HasValue)
+                            {
+                                playerQuest.IsCompleted = true;
+                                playerQuest.CompletedTime = DateTime.Now;
+                            }
                             msg = $"Quest Completed";
                             Session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.System));
                         }                        
