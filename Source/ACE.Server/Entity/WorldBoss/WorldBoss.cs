@@ -262,6 +262,8 @@ namespace ACE.Server.Entity.WorldBoss
 
         public string SpawnMsg { get; set; }
 
+        public DateTime SpawnTime { get; set; }
+
         public Position Location { get; set; }
 
         public Position IndoorLocation { get; set; }

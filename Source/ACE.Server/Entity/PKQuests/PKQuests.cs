@@ -73,22 +73,22 @@ namespace ACE.Server.Entity.PKQuests
                     _pkQuestList.Add(arena_any_win_30);
 
                     //- Kill 10 players from a whitelisted clan that isn’t your clan(open world or arena)
-                    var kill_any_10 = new PKQuest();
-                    kill_any_10.QuestCode = "KILL_ANY_10";
-                    kill_any_10.Description = "Kill any 10 players from an opposing whitelisted allegiance";
-                    kill_any_10.RewardDescription = "80k luminance, 50% XP to next level, 5 Darkbeat Keys, 200 PK Trophies, 2 Boxes";
-                    kill_any_10.Rewards = new List<string>() { "LUM,80000", "XP%,50", "DBKEY,5", "PKTROPHY,200", "BOX,2" };
-                    kill_any_10.TaskCount = 10;
-                    _pkQuestList.Add(kill_any_10);
+                    //var kill_any_10 = new PKQuest();
+                    //kill_any_10.QuestCode = "KILL_ANY_10";
+                    //kill_any_10.Description = "Kill any 10 players from an opposing whitelisted allegiance";
+                    //kill_any_10.RewardDescription = "80k luminance, 50% XP to next level, 5 Darkbeat Keys, 200 PK Trophies, 2 Boxes";
+                    //kill_any_10.Rewards = new List<string>() { "LUM,80000", "XP%,50", "DBKEY,5", "PKTROPHY,200", "BOX,2" };
+                    //kill_any_10.TaskCount = 10;
+                    //_pkQuestList.Add(kill_any_10);
 
                     //- Kill 30 players from a whitelisted clan that isn’t your clan(open world or arena)
-                    var kill_any_30 = new PKQuest();
-                    kill_any_30.QuestCode = "KILL_ANY_30";
-                    kill_any_30.Description = "Kill any 30 players from an opposing whitelisted allegiance";
-                    kill_any_30.RewardDescription = "200k luminance, 75% XP to next level, 8 Darkbeat Keys, 300 PK Trophies, 4 Boxes";
-                    kill_any_30.Rewards = new List<string>() { "LUM,200000", "XP%,75", "DBKEY,8", "PKTROPHY,300", "BOX,4" };
-                    kill_any_30.TaskCount = 30;
-                    _pkQuestList.Add(kill_any_30);
+                    //var kill_any_30 = new PKQuest();
+                    //kill_any_30.QuestCode = "KILL_ANY_30";
+                    //kill_any_30.Description = "Kill any 30 players from an opposing whitelisted allegiance";
+                    //kill_any_30.RewardDescription = "200k luminance, 75% XP to next level, 8 Darkbeat Keys, 300 PK Trophies, 4 Boxes";
+                    //kill_any_30.Rewards = new List<string>() { "LUM,200000", "XP%,75", "DBKEY,8", "PKTROPHY,300", "BOX,4" };
+                    //kill_any_30.TaskCount = 30;
+                    //_pkQuestList.Add(kill_any_30);
 
                     //-Participate in 10 1v1 arena matches
                     var arena_1v1_10 = new PKQuest();
@@ -368,7 +368,7 @@ namespace ACE.Server.Entity.PKQuests
 
         public static string[] PKQuests_WinGroupArena = { "ARENA_GROUP_WIN_1", "ARENA_GROUP_WIN_5", "ARENA_GROUP_WIN_10" };
 
-        public static string[] PKQuests_KillAnywhere = { "KILL_ANY_10", "KILL_ANY_30" };
+        //public static string[] PKQuests_KillAnywhere = { "KILL_ANY_10", "KILL_ANY_30" };
 
         public static PKQuest GetPkQuestByCode(string questCode)
         {

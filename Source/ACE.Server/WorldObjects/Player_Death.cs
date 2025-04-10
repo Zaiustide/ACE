@@ -131,11 +131,12 @@ namespace ACE.Server.WorldObjects
                     this.Allegiance != null &&
                     this.Allegiance.MonarchId.HasValue &&
                     TownControlAllegiances.IsAllowedAllegiance((int)this.Allegiance.MonarchId.Value) &&
-                    this.Allegiance.MonarchId != pkPlayer.Allegiance.MonarchId;
+                    this.Allegiance.MonarchId != pkPlayer.Allegiance.MonarchId &&
+                    !(this.Session.EndPointC2S?.Address?.ToString().Equals(pkPlayer?.Session?.EndPointC2S?.Address?.ToString()) ?? false);
 
                 if (isPkQuestEligible)
                 {
-                    pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
+                    //pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
 
                     switch (Location.Landblock)
                     {

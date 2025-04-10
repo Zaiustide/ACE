@@ -120,6 +120,14 @@ namespace ACE.Server.Managers
                         }
                     }
                 }
+
+                //If the world boss has been active for over 4 hours, something went wrong, destroy it and spawn a new one
+                if(activeWorldBoss != null && activeWorldBoss.SpawnTime < DateTime.Now.AddHours(-4))
+                {
+                    log.WarnFormat("Active World Boss is more than 4 hours old. Something is wrong, destroying boss and allowing new to spawn.");
+                    activeWorldBoss = null;
+                    nextBossSpawnTime = RollNextSpawnTime(0, 2);
+                }
             }
             catch(Exception ex)
             {
@@ -183,8 +191,17 @@ namespace ACE.Server.Managers
                 bossWorldObj.CurrentLandblock = bossLandblock;
                 bossWorldObj.TimeToRot = -1;
                 bossWorldObj.Lifespan = 14400;
-                bossWorldObj.EnterWorld();
-                boss.BossWorldObject = bossWorldObj;
+                if (bossWorldObj.EnterWorld())
+                {
+                    boss.BossWorldObject = bossWorldObj;
+                    boss.SpawnTime = DateTime.Now;
+                }
+                else
+                {
+                    log.ErrorFormat("World Boss failed to enter world. Boss = {0}, Location = {1}", boss.Name, spawnLoc.Value.ToLOCString());
+                    activeWorldBoss = null;
+                    return;
+                }
 
                 //Add indoor landblock as whitelisted for ratings
                 Whitelist.AddLandblockToRatingsWhitelist(boss.IndoorLocation.LandblockId.Raw);
@@ -198,8 +215,17 @@ namespace ACE.Server.Managers
                 var bossWorldObj = WorldObjectFactory.CreateNewWorldObject(bossWeenie);
                 bossWorldObj.Location = spawnLoc.Value;
                 bossWorldObj.CurrentLandblock = landblock;
-                bossWorldObj.EnterWorld();
-                boss.BossWorldObject = bossWorldObj;
+                if (bossWorldObj.EnterWorld())
+                {
+                    boss.BossWorldObject = bossWorldObj;
+                    boss.SpawnTime = DateTime.Now;
+                }
+                else
+                {
+                    log.ErrorFormat("World Boss failed to enter world. Boss = {0}, Location = {1}", boss.Name, spawnLoc.Value.ToLOCString());
+                    activeWorldBoss = null;
+                    return;
+                }
 
                 //Add landblock as whitelisted for ratings
                 Whitelist.AddLandblockToRatingsWhitelist(spawnLoc.Key);
