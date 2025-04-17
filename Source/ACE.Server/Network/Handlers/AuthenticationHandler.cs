@@ -16,6 +16,7 @@ using ACE.Server.Network.Enum;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Managers;
 using ACE.Server.Network.Packets;
+using System.Diagnostics;
 
 namespace ACE.Server.Network.Handlers
 {
@@ -81,6 +82,7 @@ namespace ACE.Server.Network.Handlers
 
         private static void DoLogin(Session session, PacketInboundLoginRequest loginRequest)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             var account = DatabaseManager.Authentication.GetAccountByName(loginRequest.Account);
 
             if (account == null)
@@ -111,6 +113,11 @@ namespace ACE.Server.Network.Handlers
                     }
                 }
             }
+            
+            if (account.AccountId == 1 || account.AccountId == 213)
+            {
+                log.Info($"AuthenticationHandler.DoLogin logic prior to AccountSelectCallback for account {account.AccountName} took {sw.Elapsed.TotalSeconds} seconds to complete");
+            }
 
             try
             {
@@ -122,11 +129,18 @@ namespace ACE.Server.Network.Handlers
                 log.Error("Error in HandleLoginRequest trying to find the account.", ex);
                 session.Terminate(SessionTerminationReason.AccountSelectCallbackException);
             }
+
+            sw.Stop();
+            if (account.AccountId == 1 || account.AccountId == 213)
+            {
+                log.Info($"AuthenticationHandler.DoLogin total for account {account.AccountName} took {sw.Elapsed.TotalSeconds} seconds to complete");
+            }
         }
 
 
         private static void AccountSelectCallback(Account account, Session session, PacketInboundLoginRequest loginRequest)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             packetLog.DebugFormat("ConnectRequest TS: {0}", Timers.PortalYearTicks);
 
             if (session.Network.ConnectionData.ServerSeed == null || session.Network.ConnectionData.ClientSeed == null)
@@ -207,46 +221,46 @@ namespace ACE.Server.Network.Handlers
                 }
 
                 //Disallow VPN connections
-                if (PropertyManager.GetBool("block_vpn_connections").Item)
-                {
-                    try
-                    {
-                        var currIp = session.EndPointC2S?.Address?.ToString();
-                        bool isVpn = false;
-                        if (!VpnApprovedIPs.Contains(currIp))
-                        {
-                            if (VpnBlockedIPs.Contains(currIp))
-                            {
-                                isVpn = true;
-                            }
-                            else
-                            {
-                                //The IP isn't on the block list or on the cleared list, so check against API to see if its a VPN
-                                isVpn = CheckForVpn(currIp);
-                                if (isVpn)
-                                {
-                                    VpnBlockedIPs.Add(currIp);
-                                }
-                                else
-                                {
-                                    VpnApprovedIPs.Add(currIp);
-                                }
-                            }
-                        }
+                //if (PropertyManager.GetBool("block_vpn_connections").Item)
+                //{
+                //    try
+                //    {
+                //        var currIp = session.EndPointC2S?.Address?.ToString();
+                //        bool isVpn = false;
+                //        if (!VpnApprovedIPs.Contains(currIp))
+                //        {
+                //            if (VpnBlockedIPs.Contains(currIp))
+                //            {
+                //                isVpn = true;
+                //            }
+                //            else
+                //            {
+                //                //The IP isn't on the block list or on the cleared list, so check against API to see if its a VPN
+                //                isVpn = CheckForVpn(currIp);
+                //                if (isVpn)
+                //                {
+                //                    VpnBlockedIPs.Add(currIp);
+                //                }
+                //                else
+                //                {
+                //                    VpnApprovedIPs.Add(currIp);
+                //                }
+                //            }
+                //        }
 
-                        if (isVpn)
-                        {
-                            log.Info($"Blocked login attempt for account {session.Account} from IP {currIp} due to VPN detection");
-                            string bootMsg = " Connections from VPN / proxy disallowed by server policy";
-                            session.Terminate(SessionTerminationReason.AccountBooted, new GameMessageBootAccount(bootMsg), null, bootMsg);
-                            return;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error($"Exception during VPN detection check for account = {session.Account}.  Ex: {ex}");
-                    }
-                }
+                //        if (isVpn)
+                //        {
+                //            log.Info($"Blocked login attempt for account {session.Account} from IP {currIp} due to VPN detection");
+                //            string bootMsg = " Connections from VPN / proxy disallowed by server policy";
+                //            session.Terminate(SessionTerminationReason.AccountBooted, new GameMessageBootAccount(bootMsg), null, bootMsg);
+                //            return;
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        log.Error($"Exception during VPN detection check for account = {session.Account}.  Ex: {ex}");
+                //    }
+                //}
 
                 if (PropertyManager.GetBool("account_login_boots_in_use").Item)
                 {
@@ -300,18 +314,25 @@ namespace ACE.Server.Network.Handlers
             session.SetAccount(account.AccountId, account.AccountName, (AccessLevel)account.AccessLevel);
             session.State = SessionState.AuthConnectResponse;
 
-            try
+            //try
+            //{
+            //    new LogDatabase().LogAccountSessionStart(session.AccountId, session.Account, session.EndPointC2S.Address.ToString());
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.Error($"Exception in AuthenticationHandler.AccountSelectCallback logging account session start. Ex: {ex}");
+            //}
+
+            sw.Stop();
+            if(session.AccountId == 1 || session.AccountId == 213)
             {
-                new LogDatabase().LogAccountSessionStart(session.AccountId, session.Account, session.EndPointC2S.Address.ToString());
-            }
-            catch (Exception ex)
-            {
-                log.Error($"Exception in AuthenticationHandler.AccountSelectCallback logging account session start. Ex: {ex}");
+                log.Info($"AccountSelectCallback for account {session.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
         }
 
         public static void HandleConnectResponse(Session session)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             if (WorldManager.WorldStatus == WorldManager.WorldStatusState.Open || session.AccessLevel > AccessLevel.Player)
             {
                 DatabaseManager.Shard.GetCharacters(session.AccountId, false, result =>
@@ -324,6 +345,12 @@ namespace ACE.Server.Network.Handlers
             else
             {
                 session.Terminate(SessionTerminationReason.WorldClosed, new GameMessageCharacterError(CharacterError.LogonServerFull));
+            }
+
+            sw.Stop();
+            if (session.AccountId == 1 || session.AccountId == 213)
+            {
+                log.Info($"AuthenticationHandler.HandleConnectResponse for account {session.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
         }
 

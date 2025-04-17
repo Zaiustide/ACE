@@ -277,6 +277,9 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void SendFriendStatusUpdates(bool previouslyOnline, bool isOnline)
         {
+            if(this.IsAdmin)
+                return;
+
             var appearOffline = GetAppearOffline();
             var previouslyOnlineAndIsNowOffline = previouslyOnline && !isOnline;
             var previouslyOfflineAndIsNowOnline = !previouslyOnline && isOnline;

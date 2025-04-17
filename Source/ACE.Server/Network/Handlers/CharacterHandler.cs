@@ -17,6 +17,7 @@ using ACE.Server.Network.Enum;
 using ACE.Server.Network.GameMessages;
 using ACE.Server.Network.GameMessages.Messages;
 using System;
+using System.Diagnostics;
 
 namespace ACE.Server.Network.Handlers
 {
@@ -186,6 +187,7 @@ namespace ACE.Server.Network.Handlers
         [GameMessage(GameMessageOpcode.CharacterEnterWorldRequest, SessionState.AuthConnected)]
         public static void CharacterEnterWorldRequest(ClientMessage message, Session session)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             if (ServerManager.ShutdownInProgress)
             {
                 session.SendCharacterError(CharacterError.LogonServerFull);
@@ -196,11 +198,18 @@ namespace ACE.Server.Network.Handlers
                 session.Network.EnqueueSend(new GameMessageCharacterEnterWorldServerReady());
             else
                 session.SendCharacterError(CharacterError.LogonServerFull);
+
+            sw.Stop();
+            if (session.AccountId == 1 || session.AccountId == 213)
+            {
+                log.Info($"CharacterHandler.CharacterEnterWorldRequest for account {session.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
+            }
         }
 
         [GameMessage(GameMessageOpcode.CharacterEnterWorld, SessionState.AuthConnected)]
         public static void CharacterEnterWorld(ClientMessage message, Session session)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             var guid = message.Payload.ReadUInt32();
 
             string clientString = message.Payload.ReadString16L();
@@ -258,9 +267,21 @@ namespace ACE.Server.Network.Handlers
 
             WorldManager.PlayerEnterWorld(session, character);
 
+            sw.Stop();
+            if (session.AccountId == 1 || session.AccountId == 213)
+            {
+                log.Info($"CharacterHandler.CharacterEnterWorld - logic prior to LogCharacterLogin for account {session.Account} and character {character.Name} took {sw.Elapsed.TotalSeconds} seconds to complete");                
+            }            
+
             try
             {
+                sw.Restart();
                 new LogDatabase().LogCharacterLogin(session.AccountId, session.Account, session.EndPointC2S.Address.ToString(), character.Id, character.Name);
+                sw.Stop();
+                if (session.AccountId == 1 || session.AccountId == 213)
+                {
+                    log.Info($"CharacterHandler.CharacterEnterWorld - LogCharacterLogin for account {session.Account} and character {character.Name} took {sw.Elapsed.TotalSeconds} seconds to complete");
+                }
             }
             catch (Exception ex)
             {

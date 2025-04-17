@@ -18,6 +18,7 @@ using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.GameMessages;
 using ACE.Server.Network.Managers;
+using System.Diagnostics;
 
 namespace ACE.Server.Network
 {
@@ -299,6 +300,7 @@ namespace ACE.Server.Network
 
         public void DropSession()
         {
+            Stopwatch sw = Stopwatch.StartNew();
             if (PendingTermination == null || PendingTermination.TerminationStatus != SessionTerminationPhase.SessionWorkCompleted) return;
 
             if (PendingTermination.Reason != SessionTerminationReason.PongSentClosingConnection)
@@ -332,15 +334,21 @@ namespace ACE.Server.Network
             // In the future, we should set Network to null and funnel Network communication through Session, instead of accessing Session.Network directly.
             Network.ReleaseResources();
 
-            try
+            sw.Stop();
+            if (this.AccountId == 1 || this.AccountId == 213)
             {
-                if(this.AccountId > 0)
-                    new LogDatabase().LogAccountSessionEnd(this.AccountId);
+                log.Info($"AccountSelectCallback for account {this.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
-            catch (Exception ex)
-            {
-                log.Error($"Exception saving session end date to log DB. Ex:{ex}");
-            }
+
+            //try
+            //{
+            //    if(this.AccountId > 0)
+            //        new LogDatabase().LogAccountSessionEnd(this.AccountId);
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.Error($"Exception saving session end date to log DB. Ex:{ex}");
+            //}
         }
 
 

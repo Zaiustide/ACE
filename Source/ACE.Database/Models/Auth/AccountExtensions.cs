@@ -3,6 +3,7 @@ using ACE.Common.Cryptography;
 using log4net;
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
@@ -105,11 +106,17 @@ namespace ACE.Database.Models.Auth
 
         public static void UpdateLastLogin(this Account account, IPAddress address)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             account.LastLoginIP = address.GetAddressBytes();
             account.LastLoginTime = DateTime.UtcNow;
             account.TotalTimesLoggedIn++;
 
             DatabaseManager.Authentication.UpdateAccount(account);
+            sw.Stop();
+            if (account.AccountId == 1 || account.AccountId == 213)
+            {
+                log.Info($"AccountExtensions.UpateLastLogin for account {account.AccountName} took {sw.Elapsed.TotalSeconds} seconds to complete");
+            }
         }
 
         public static void UnBan(this Account account)
