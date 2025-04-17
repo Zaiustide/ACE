@@ -138,7 +138,7 @@ namespace ACE.Server.WorldObjects
                 var cleaveTargetPlayer = obj.WeenieObj.WorldObject as Player;
 
                 //Disable cleave on player targets
-                if (disablePlayerCleave && cleaveTargetPlayer != null)
+                if (disablePlayerCleave && cleaveTargetPlayer != null && player != null && !player.IsAdmin)
                     continue;
 
                 if (player != null && player.CheckPKStatusVsTarget(creature, null) != null)
