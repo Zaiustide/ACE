@@ -231,6 +231,7 @@ namespace ACE.Server.Network
         /// </summary>
         public void LogOffPlayer(bool forceImmediate = false)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             if (Player == null) return;
 
             // Character database objects are not cached. Each session gets a new character entity and dbContext from ShardDatabase.
@@ -245,6 +246,8 @@ namespace ACE.Server.Network
                 if (result)
                     logOffRequestTime = DateTime.UtcNow;
             }
+            sw.Stop();
+            log.InfoFormat("Session.LogOffPlayer for Account: {0}, AccountId: {1}, Player: {2} took {3} seconds to complete", Account, AccountId, Player?.Name, sw.Elapsed.TotalSeconds);
         }
 
         private void SendFinalLogOffMessages()
@@ -312,7 +315,7 @@ namespace ACE.Server.Network
                     reas = reas + ", " + PendingTermination.ExtraReason;
                 }
                 if (WorldManager.WorldStatus == WorldManager.WorldStatusState.Open)
-                    log.Info($"Session {Network?.ClientId}\\{EndPointC2S} dropped. Account: {Account}, Player: {Player?.Name}{reas}");
+                    log.Info($"Session {Network?.ClientId}\\{EndPointC2S} dropped. Account: {Account}, AccountId: {AccountId}, Player: {Player?.Name}{reas}");
                 else
                     log.DebugFormat("Session {0}\\{1} dropped. Account: {2}, Player: {3}{4}", Network?.ClientId, EndPointC2S, Account, Player?.Name, reas);
             }
@@ -337,7 +340,7 @@ namespace ACE.Server.Network
             sw.Stop();
             if (this.AccountId == 1 || this.AccountId == 213)
             {
-                log.Info($"AccountSelectCallback for account {this.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
+                log.Info($"DropSession for account {this.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
 
             //try

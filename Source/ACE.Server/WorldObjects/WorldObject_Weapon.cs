@@ -1055,7 +1055,7 @@ namespace ACE.Server.WorldObjects
 
             if ((attackType & AttackType.Offhand) != 0)
             {
-                log.Warn($"{Name} ({Guid}, {WeenieClassId}).GetAttackType(): {attackType}");
+                //log.Warn($"{Name} ({Guid}, {WeenieClassId}).GetAttackType(): {attackType}");
                 attackType &= ~AttackType.Offhand;
             }
 

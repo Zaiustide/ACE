@@ -12,6 +12,7 @@ using ACE.Server.Entity.Actions;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
+using System;
 
 namespace ACE.Server.WorldObjects
 {
@@ -249,6 +250,40 @@ namespace ACE.Server.WorldObjects
                 var canSolve = player.QuestManager.CanSolve(QuestRestriction);
 
                 var success = (hasQuest && !canSolve) || QuestRestriction.Contains("TownControlOwner");
+
+                //Peddler's Outpost dungeon entry is only allowed 15x, then a 24 hour wait
+                if(QuestRestriction.StartsWith("PeddlersDungeonEntry"))
+                {
+                    if(!hasQuest)
+                    {
+                        //Quest will be stamped by emote on the weenie
+                        //player.QuestManager.Stamp(QuestRestriction);                        
+                        success = true;
+                    }
+                    else
+                    {
+                        var nextSolveTime = player.QuestManager.GetNextSolveTime(QuestRestriction);
+                        if(nextSolveTime > TimeSpan.MinValue)
+                        {
+                            if(player.QuestManager.GetCurrentSolves(QuestRestriction) >= 5)
+                            {
+                                success = false;
+                                var error = new GameEventWeenieError(player.Session, WeenieError.YouHaveSolvedThisQuestTooRecently);
+                                var text = new GameMessageSystemChat($"You have entered this portal too recently! You may enter again in {(nextSolveTime.Hours > 0 ? $"{nextSolveTime.Hours.ToString()}h" : "")}{(nextSolveTime.Minutes > 0 ? $" {nextSolveTime.Minutes.ToString()}m" : "")}{(nextSolveTime.Seconds > 0 ? $" {nextSolveTime.Seconds.ToString()}s" : "")}", ChatMessageType.Magic);
+                                player.Session.Network.EnqueueSend(text, error);
+                            }
+                            else
+                            {
+                                success = true;
+                            }
+                        }
+                        else
+                        {
+                            player.QuestManager.SetQuestCompletions(QuestRestriction, 0);
+                            success = true;
+                        }                        
+                    }
+                }
 
                 if (!success)
                 {
