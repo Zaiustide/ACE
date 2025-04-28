@@ -152,16 +152,16 @@ namespace ACE.Server.Network.Managers
                         if (session.EndPointC2S.Equals(endPoint))
                             session.ProcessPacket(packet);
                         else
-                            log.DebugFormat("Session for Id {0} has IP {1} but packet has IP {2}", packet.Header.Id, session.EndPointC2S, endPoint);
+                            log.WarnFormat("Session for Id {0} has IP {1} but packet has IP {2}", packet.Header.Id, session.EndPointC2S, endPoint);
                     }
                     else
                     {
-                        log.DebugFormat("Unsolicited Packet from {0} with Id {1}", endPoint, packet.Header.Id);
+                        log.WarnFormat("Unsolicited Packet from {0} with Id {1}", endPoint, packet.Header.Id);
                     }
                 }
                 else
                 {
-                    log.DebugFormat("Unsolicited Packet from {0} with Id {1}", endPoint, packet.Header.Id);
+                    log.WarnFormat("Unsolicited Packet from {0} with Id {1}", endPoint, packet.Header.Id);
                 }
                 //ServerPerformanceMonitor.RegisterEventEnd(ServerPerformanceMonitor.MonitorType.ProcessPacket_0);
             }
@@ -262,6 +262,8 @@ namespace ACE.Server.Network.Managers
 
         public static Session FindOrCreateSession(ConnectionListener connectionListener, IPEndPoint endPoint)
         {
+            log.Info($"FindOrCreateSession for endPoint = {endPoint.Address.ToString()}:{endPoint.Port}");
+
             Session session;
 
             sessionLock.EnterUpgradeableReadLock();
@@ -277,12 +279,16 @@ namespace ACE.Server.Network.Managers
                         {
                             if (sessionMap[i] == null)
                             {
-                                log.DebugFormat("Creating new session for {0} with id {1}", endPoint, i);
+                                log.InfoFormat("Creating new session for {0} with id {1}", endPoint, i);
                                 session = new Session(connectionListener, endPoint, i, ServerId);
                                 sessionMap[i] = session;
                                 break;
                             }
                         }
+                    }
+                    catch(Exception ex)
+                    {
+                        log.Error($"Error in FindOrCreateSession. ex: {ex}");
                     }
                     finally
                     {

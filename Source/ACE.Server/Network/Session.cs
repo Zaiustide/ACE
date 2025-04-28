@@ -94,13 +94,22 @@ namespace ACE.Server.Network
         private bool CheckState(ClientPacket packet)
         {
             if (packet.Header.HasFlag(PacketHeaderFlags.LoginRequest) && State != SessionState.AuthLoginRequest)
+            {
+                log.Info($"Session.CheckState returned False at Check 1. State = {State}");
                 return false;
+            }
 
             if (packet.Header.HasFlag(PacketHeaderFlags.ConnectResponse) && State != SessionState.AuthConnectResponse)
+            {
+                log.Info($"Session.CheckState returned False at Check 2. State = {State}");
                 return false;
+            }
 
             if (packet.Header.HasFlag(PacketHeaderFlags.AckSequence | PacketHeaderFlags.TimeSync | PacketHeaderFlags.EchoRequest | PacketHeaderFlags.Flow) && State == SessionState.AuthLoginRequest)
+            {
+                log.Info($"Session.CheckState returned False at Check 3. State = {State}");
                 return false;
+            }
 
             return true;
         }
@@ -337,11 +346,8 @@ namespace ACE.Server.Network
             // In the future, we should set Network to null and funnel Network communication through Session, instead of accessing Session.Network directly.
             Network.ReleaseResources();
 
-            sw.Stop();
-            if (this.AccountId == 1 || this.AccountId == 213)
-            {
-                log.Info($"DropSession for account {this.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
-            }
+            sw.Stop();            
+            log.Info($"DropSession for account {this.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");            
 
             //try
             //{

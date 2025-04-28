@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 using ACE.Common;
@@ -24,6 +25,11 @@ namespace ACE.Server.Network.Handlers
         [GameMessage(GameMessageOpcode.DDD_InterrogationResponse, SessionState.AuthConnected)]
         public static void DDD_InterrogationResponse(ClientMessage message, Session session)
         {
+            Stopwatch sw = Stopwatch.StartNew();
+            if (session.AccountId == 1 || session.AccountId == 213)
+            {
+                log.Info($"DDD_InterrogationResponse for account {session.Account} started");
+            }
             var clientIsMissingIterations = false;
 
             var clientHasExtraIterations = false;
@@ -170,6 +176,12 @@ namespace ACE.Server.Network.Handlers
             else // client dat files are up to date
             {
                 session.Network.EnqueueSend(new GameMessageDDDEndDDD());
+            }
+
+            sw.Stop();
+            if (session.AccountId == 1 || session.AccountId == 213)
+            {
+                log.Info($"DDD_InterrogationResponse for account {session.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
         }
 
