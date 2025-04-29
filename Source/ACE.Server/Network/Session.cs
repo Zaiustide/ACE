@@ -349,7 +349,7 @@ namespace ACE.Server.Network
             sw.Stop();
             if (PendingTermination.Reason != SessionTerminationReason.PongSentClosingConnection)
             {
-                log.Info($"DropSession for account {this.Account} at {EndPointC2S} took {sw.Elapsed.TotalSeconds} seconds to complete");
+                log.DebugFormat("DropSession for account {0} at {1} took {2} seconds to complete", this.Account, EndPointC2S, sw.Elapsed.TotalSeconds);
             }
 
             //try
