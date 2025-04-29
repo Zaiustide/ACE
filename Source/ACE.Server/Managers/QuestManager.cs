@@ -169,7 +169,7 @@ namespace ACE.Server.Managers
         /// <summary>
         /// Adds or updates a quest completion to the player's registry
         /// </summary>
-        public void Update(string questFormat)
+        public void Update(string questFormat, bool skipCompletionTimeUpdate = false)
         {
             var questName = GetQuestName(questFormat);
 
@@ -177,7 +177,8 @@ namespace ACE.Server.Managers
 
             if (questRegistryWasCreated)
             {
-                quest.LastTimeCompleted = (uint) Time.GetUnixTime();
+                if(!skipCompletionTimeUpdate)
+                    quest.LastTimeCompleted = (uint) Time.GetUnixTime();
                 quest.NumTimesCompleted = 1; // initial add / first solve
 
                 quest.CharacterId = IDtoUseForQuestRegistry;
@@ -200,7 +201,8 @@ namespace ACE.Server.Managers
                 }
 
                 // update existing quest
-                quest.LastTimeCompleted = (uint)Time.GetUnixTime();
+                if (!skipCompletionTimeUpdate)
+                    quest.LastTimeCompleted = (uint)Time.GetUnixTime();
                 quest.NumTimesCompleted++;
 
                 if (Debug) Console.WriteLine($"{Name}.QuestManager.Update({quest}): updated quest ({quest.NumTimesCompleted})");
@@ -364,10 +366,10 @@ namespace ACE.Server.Managers
         /// <summary>
         /// Increment the number of times completed for a quest
         /// </summary>
-        public void Increment(string questName, int amount = 1)
+        public void Increment(string questName, int amount = 1, bool skipCompletionTimeUpdate = false)
         {
             for (var i = 0; i < amount; i++)
-                Update(questName);
+                Update(questName, skipCompletionTimeUpdate);
         }
 
         /// <summary>

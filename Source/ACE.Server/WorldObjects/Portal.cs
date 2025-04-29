@@ -255,17 +255,17 @@ namespace ACE.Server.WorldObjects
                 if(QuestRestriction.StartsWith("PeddlersDungeonEntry"))
                 {
                     if(!hasQuest)
-                    {
-                        //Quest will be stamped by emote on the weenie
-                        //player.QuestManager.Stamp(QuestRestriction);                        
+                    {                        
+                        player.QuestManager.Stamp(QuestRestriction);                        
                         success = true;
                     }
                     else
                     {
                         var nextSolveTime = player.QuestManager.GetNextSolveTime(QuestRestriction);
-                        if(nextSolveTime > TimeSpan.MinValue)
+                        var currentSolves = player.QuestManager.GetCurrentSolves(QuestRestriction);
+                        if (nextSolveTime > TimeSpan.MinValue)
                         {
-                            if(player.QuestManager.GetCurrentSolves(QuestRestriction) >= 5)
+                            if(currentSolves >= 5)
                             {
                                 success = false;
                                 var error = new GameEventWeenieError(player.Session, WeenieError.YouHaveSolvedThisQuestTooRecently);
@@ -274,6 +274,14 @@ namespace ACE.Server.WorldObjects
                             }
                             else
                             {
+                                if (currentSolves == 0)
+                                {
+                                    player.QuestManager.Increment(QuestRestriction, 1, false);
+                                }
+                                else
+                                {
+                                    player.QuestManager.Increment(QuestRestriction, 1, true);
+                                }
                                 success = true;
                             }
                         }
