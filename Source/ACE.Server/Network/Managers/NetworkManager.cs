@@ -262,7 +262,7 @@ namespace ACE.Server.Network.Managers
 
         public static Session FindOrCreateSession(ConnectionListener connectionListener, IPEndPoint endPoint)
         {
-            log.Info($"FindOrCreateSession for endPoint = {endPoint.Address.ToString()}:{endPoint.Port}");
+            log.DebugFormat("FindOrCreateSession for endPoint = {0}:{1}", endPoint.Address.ToString(), endPoint.Port);
 
             Session session;
 
@@ -279,7 +279,7 @@ namespace ACE.Server.Network.Managers
                         {
                             if (sessionMap[i] == null)
                             {
-                                log.InfoFormat("Creating new session for {0} with id {1}", endPoint, i);
+                                log.DebugFormat("Creating new session for {0} with id {1}", endPoint, i);
                                 session = new Session(connectionListener, endPoint, i, ServerId);
                                 sessionMap[i] = session;
                                 break;
