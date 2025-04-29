@@ -346,8 +346,11 @@ namespace ACE.Server.Network
             // In the future, we should set Network to null and funnel Network communication through Session, instead of accessing Session.Network directly.
             Network.ReleaseResources();
 
-            sw.Stop();            
-            log.Info($"DropSession for account {this.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");            
+            sw.Stop();
+            if (PendingTermination.Reason != SessionTerminationReason.PongSentClosingConnection)
+            {
+                log.Info($"DropSession for account {this.Account} at {EndPointC2S} took {sw.Elapsed.TotalSeconds} seconds to complete");
+            }
 
             //try
             //{

@@ -130,7 +130,7 @@ namespace ACE.Server.Network.Handlers
             }
 
             sw.Stop();
-            if (account == null || account.AccountId == 1 || account.AccountId == 213)
+            if (account.AccountId == 1 || account.AccountId == 213 || (account == null && !loginRequest.Account.Equals("acservertracker:jj9h26hcsggc")))
             {
                 log.Info($"AuthenticationHandler.DoLogin total for account {(account == null ? "NULL" : account.AccountName)} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
