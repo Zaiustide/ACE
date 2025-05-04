@@ -48,7 +48,7 @@ namespace ACE.Server.WorldObjects
                 return new ActivationResult(new GameEventWeenieError(player.Session, WeenieError.YouAreNotPermittedToUseThatHook));
 
             var myHookGroup = HookGroup ?? HookGroupType.Undef;
-            if ((myHookGroup == HookGroupType.PortalItems || myHookGroup == HookGroupType.SpellTeachingItems) && hook.House.HouseType != HouseType.Mansion)
+            if ((myHookGroup == HookGroupType.PortalItems || myHookGroup == HookGroupType.SpellTeachingItems) && hook.House.HouseType != HouseType.Mansion && hook.House.HouseType != HouseType.Apartment)
                 return new ActivationResult(new GameEventWeenieError(player.Session, WeenieError.YouAreNotPermittedToUseThatHook));
 
             var baseRequirements = base.CheckUseRequirements(activator);
