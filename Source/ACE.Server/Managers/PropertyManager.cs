@@ -664,8 +664,9 @@ namespace ACE.Server.Managers
                 ("arenas_reward_min_age", new Property<long>(864000, "the minimum in-game age in seconds required to get arena rewards")),
                 ("pvp_chug_timer", new Property<long>(0, "the minimum time in milliseconds between chugs. if a chug is used within X milliseconds of a previous one, it will heal for 0. if value is set to 0 the feature is disabled.")),
                 ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out")),
-                ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting"))
-                
+                ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting")),
+                ("current_season", new Property<long>(1, "the current season for Doctide Seasons"))
+
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<double>> DefaultDoubleProperties =
@@ -781,8 +782,15 @@ namespace ACE.Server.Managers
                 ("pvp_cs_critrate_mod", new Property<double>(1.0, "Scales the crit rate for CS")),
                 ("pvp_void_hybrid_mod", new Property<double>(1.0, "Scales the amount of DOT damage when a player is a hybrid void.")),
                 ("pvp_dmg_mod_void_dot_rating_reduction", new Property<double>(1.0, "Scales the amount of rating reduction received from a void DOT that's cast by a PK on another player.")),
-                //("pvp_dmg_mod_ratings_bonus", new Property<double>(1.0, "Scales the bonus received from dmg related ratings during pvp")),
-                //("pvp_dmg_mod_ratings_cap", new Property<double>(100.0, "Caps the ratings amount that can be applied for any given rating type during pvp")),
+                //("pvp_dmg_mod_dmg_rating", new Property<double>(1.0, "Scales the bonus received from dmg rating during pvp")),
+                //("pvp_dmg_mod_dmg_resist_rating", new Property<double>(1.0, "Scales the bonus received from dmg resist rating during pvp")),
+                //("pvp_dmg_mod_crit_dmg_rating", new Property<double>(1.0, "Scales the bonus received from crit dmg rating during pvp")),
+                //("pvp_dmg_mod_crit_dmg_resist_rating", new Property<double>(1.0, "Scales the bonus received from crit dmg resist rating during pvp")),
+                //("pvp_dmg_mod_dot_resist_rating", new Property<double>(1.0, "Scales the bonus received from DoT resist rating during pvp")),
+                //("pvp_dmg_mod_life_resist_rating", new Property<double>(1.0, "Scales the bonus received from life resist rating during pvp")),
+                //("pvp_dmg_mod_dmg_ratings_cap", new Property<double>(100.0, "Caps the ratings amount that can be applied for any given damage related rating type during pvp")),
+                //("vit_ratings_cap", new Property<double>(100.0, "Caps the effective Vitality rating bonus amount that can be applied for a given character")),
+                //("hb_ratings_cap", new Property<double>(100.0, "Caps the effective Healing Boost rating bonus amount that can be applied for a given character")),
                 ("cloak_max_proc_rate", new Property<double>(25.0, "Cap cloak proc chance to this percentage (100.0 will effectively use the standard ACE proc rate).")),
                 ("town_control_trophy_chance", new Property<double>(0.25, "the change that a town control trophy is given to a player that is within the landblock of an active town control event with each player tick")),
                 ("arena_corpse_rot_seconds", new Property<double>(900, "the number of seconds a corpse that is generated in an arena landblock takes to rot. Default 15 mins.")),

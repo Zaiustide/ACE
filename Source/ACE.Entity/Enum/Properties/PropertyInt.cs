@@ -639,6 +639,9 @@ namespace ACE.Entity.Enum.Properties
 
         //The number of times a character has been renamed
         CharacterRenameCount = 9016,
+
+        //The Season this character or item is associated with
+        Season = 10001,
     }
 
     public static class PropertyIntExtensions

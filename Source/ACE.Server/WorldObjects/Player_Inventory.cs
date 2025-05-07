@@ -3464,9 +3464,20 @@ namespace ACE.Server.WorldObjects
                         Session.Network.EnqueueSend(new GameMessageSystemChat($"You give {target.Name} {stackMsg}{itemName}.", ChatMessageType.Broadcast));
                         target.EnqueueBroadcast(new GameMessageSound(target.Guid, Sound.ReceiveItem));
 
+                        if (item.WeenieClassId == 86753000 && target.WeenieClassId == 86753001) //Seasons Token given to Janus
+                        {
+                            this.Season = Convert.ToInt32(PropertyManager.GetLong("current_season").Item);
+                            Session.Network.EnqueueSend(new GameMessageSystemChat($"You have joined Season {this.Season} of Doctide Seasons.", ChatMessageType.Broadcast));
+
+                            //Your location is: 0xE4D60014[56.506828 86.735535 8.004999] -0.029580 0.000000 0.000000 0.999562
+                            Position startLoc = new Position(0xE4D60014, 56.506828f, 86.735535f, 8.004999f, 0f, 0f, 0.999562f, -0.029580f);
+                            this.Sanctuary = startLoc;
+                            this.Teleport(startLoc);
+                        }
+
                         target.EmoteManager.ExecuteEmoteSet(emoteResult, this);
 
-                        itemToGive.Destroy();
+                        itemToGive.Destroy();                        
                     }
                 }
                 else if (emoteResult.Category == EmoteCategory.Refuse)
@@ -3499,7 +3510,7 @@ namespace ACE.Server.WorldObjects
                     HandleActionAbandonHouse();
 
                     return;
-                }
+                }                
 
                 Session.Network.EnqueueSend(new GameEventWeenieErrorWithString(Session, (WeenieErrorWithString)WeenieError.TradeAiDoesntWant, target.Name));
                 Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, item.Guid.Full));
