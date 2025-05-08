@@ -23,6 +23,7 @@ using System.Threading;
 using ACE.Database.Models.Auth;
 using ACE.DatLoader;
 using ACE.Server.Network.Enum;
+using ACE.DatLoader.Entity;
 
 namespace ACE.Server.Command.Handlers
 {
@@ -1295,5 +1296,53 @@ namespace ACE.Server.Command.Handlers
         }
 
         #endregion
+
+        [CommandHandler("show-xp", AccessLevel.Player, CommandHandlerFlag.None, 0, "Show xp cap information.")]
+        public static void HandleShowXp(Session session, params string[] paramters)
+        {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
+            if (session.Player.Season != PropertyManager.GetLong("current_season").Item)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"You are not currently flagged for the current season!");
+                return;
+            }
+
+            var player = session.Player;
+
+            var xpTable = DatManager.PortalDat.XpTable;
+
+            var levelCap = PropertyManager.GetLong("season_max_level_cap").Item;
+            var previousLevelCap = player.PreviousLevelCap;
+
+            var maxDailyXp = (long)xpTable.CharacterLevelXPList[(int)levelCap];
+            var xpRemaining = maxDailyXp - Math.Max(0, (player.TotalExperience ?? 0));
+            double categoryRatio = PropertyManager.GetDouble("daily_xp_category_ratio", 0.7).Item;
+
+            if (levelCap != previousLevelCap)
+            {
+                player.QuestXp = 0;
+                player.MonsterXp = 0;
+                player.PvpXp = 0;
+                player.DailyMaxXpPerCategory = (long)(xpRemaining * categoryRatio);
+                player.PreviousLevelCap = levelCap;
+            }
+
+            var queryXp = player.QuestXp;
+            var pvpXp = player.PvpXp;
+            var monsterXp = player.MonsterXp;
+            var maxLevelCap = PropertyManager.GetLong("season_max_level_cap").Item;
+
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n<Showing Xp Cap Information>", ChatMessageType.System));
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> The current max level for the day is {maxLevelCap}.", ChatMessageType.System));
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> The most xp you can earn for a single category today is {Formatting.FormatIntWithCommas((ulong)player.DailyMaxXpPerCategory)}.", ChatMessageType.System));
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> You have {Formatting.FormatIntWithCommas((ulong)xpRemaining)} daily xp remaining.", ChatMessageType.System));
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> You have currently earned {Formatting.FormatIntWithCommas((ulong)queryXp)} quest xp for the day.", ChatMessageType.System));
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> You have currently earned {Formatting.FormatIntWithCommas((ulong)pvpXp)} pvp xp for the day.", ChatMessageType.System));
+            session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> You have currently earned {Formatting.FormatIntWithCommas((ulong)monsterXp)} monster xp for the day.", ChatMessageType.System));
+
+            //session.Network.EnqueueSend(new GameMessageSystemChat($"\n--> The next daily xp reset will happen on {Formatting.FormatUtcToPst(DailyXpManager.CurrentDailyXp.EndTimeStamp)}.", ChatMessageType.System));
+        }
     }
 }

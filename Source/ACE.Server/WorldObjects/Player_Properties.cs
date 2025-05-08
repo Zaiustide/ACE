@@ -1579,5 +1579,63 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyString.PKQuestInfo) ?? String.Empty;
             set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.PKQuestInfo); else SetProperty(PropertyString.PKQuestInfo, value); }
         }
+
+        /* Seasonal */
+
+        public long QuestXp
+        {
+            get => GetProperty(PropertyInt64.QuestXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.QuestXp); else SetProperty(PropertyInt64.QuestXp, value); }
+        }
+
+        public long MonsterXp
+        {
+            get => GetProperty(PropertyInt64.MonsterXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.MonsterXp); else SetProperty(PropertyInt64.MonsterXp, value); }
+        }
+
+        public long PvpXp
+        {
+            get => GetProperty(PropertyInt64.PvpXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.PvpXp); else SetProperty(PropertyInt64.PvpXp, value); }
+        }
+
+        public long SeasonalQuestXp
+        {
+            get => GetProperty(PropertyInt64.SeasonalQuestXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.SeasonalQuestXp); else SetProperty(PropertyInt64.SeasonalQuestXp, value); }
+        }
+
+        public long SeasonalMonsterXp
+        {
+            get => GetProperty(PropertyInt64.SeasonalMonsterXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.SeasonalMonsterXp); else SetProperty(PropertyInt64.SeasonalMonsterXp, value); }
+        }
+
+        public long SeasonalPvpXp
+        {
+            get => GetProperty(PropertyInt64.SeasonalPvpXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.SeasonalPvpXp); else SetProperty(PropertyInt64.SeasonalPvpXp, value); }
+        }
+
+        public long SeasonalAdminXp
+        {
+            get => GetProperty(PropertyInt64.SeasonalAdminXp) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.SeasonalAdminXp); else SetProperty(PropertyInt64.SeasonalAdminXp, value); }
+        }
+
+        public long PreviousLevelCap
+        {
+            get => GetProperty(PropertyInt64.PreviousLevelCap) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.PreviousLevelCap); else SetProperty(PropertyInt64.PreviousLevelCap, value); }
+        }
+
+        public long DailyMaxXpPerCategory
+        {
+            get => GetProperty(PropertyInt64.DailyMaxXpPerCategory) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt64.DailyMaxXpPerCategory); else SetProperty(PropertyInt64.DailyMaxXpPerCategory, value); }
+        }
+
+
     }
 }

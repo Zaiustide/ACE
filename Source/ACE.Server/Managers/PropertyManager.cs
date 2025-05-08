@@ -665,7 +665,8 @@ namespace ACE.Server.Managers
                 ("pvp_chug_timer", new Property<long>(0, "the minimum time in milliseconds between chugs. if a chug is used within X milliseconds of a previous one, it will heal for 0. if value is set to 0 the feature is disabled.")),
                 ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out")),
                 ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting")),
-                ("current_season", new Property<long>(1, "the current season for Doctide Seasons"))
+                ("current_season", new Property<long>(1, "the current season for Doctide Seasons")),
+                ("season_max_level_cap", new Property<long>(20, "the current level cap for the season"))
 
                 );
 
@@ -794,7 +795,9 @@ namespace ACE.Server.Managers
                 ("cloak_max_proc_rate", new Property<double>(25.0, "Cap cloak proc chance to this percentage (100.0 will effectively use the standard ACE proc rate).")),
                 ("town_control_trophy_chance", new Property<double>(0.25, "the change that a town control trophy is given to a player that is within the landblock of an active town control event with each player tick")),
                 ("arena_corpse_rot_seconds", new Property<double>(900, "the number of seconds a corpse that is generated in an arena landblock takes to rot. Default 15 mins.")),
-                ("arena_pk_respite_timer", new Property<double>(120, "the number of seconds that a player killer is set to non-player killer status after dying to another player killer in an arena match.  Should be a value less than pk_respite_timer, or else pk_respite_timer will override."))
+                ("arena_pk_respite_timer", new Property<double>(120, "the number of seconds that a player killer is set to non-player killer status after dying to another player killer in an arena match.  Should be a value less than pk_respite_timer, or else pk_respite_timer will override.")),
+                ("daily_xp_category_ratio", new Property<double>(0.7, "the max percentage of xp a single seasonal xp category can earn for daily xp (0.7 is 70% for a single catgegory)."))
+
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<string>> DefaultStringProperties =
