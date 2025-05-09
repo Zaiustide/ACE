@@ -129,6 +129,78 @@ namespace ACE.Server.Entity.Seasons
                         LandblockId = 0x0105,
                         Name = "Black Spawn Den"
                     }); //OP BSD
+
+                    _seasonsDungeonMap.Add(0x019E, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x019E,
+                        Name = "Drudge Hideout"
+                    }); //Drudge Hideout
+
+                    _seasonsDungeonMap.Add(0x0153, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x0153,
+                        Name = "Shreth Hive"
+                    }); //Shreth Hive
+
+                    _seasonsDungeonMap.Add(0x01D9, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01D9,
+                        Name = "Red Rat Lair"
+                    }); //Red Rat Lair
+
+                    _seasonsDungeonMap.Add(0x0156, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x0156,
+                        Name = "Sea Temple Catacombs"
+                    }); //Sea Temple Catacombs
+
+                    _seasonsDungeonMap.Add(0x01DD, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01DD,
+                        Name = "Rat Nest"
+                    }); //Rat Nest
+
+                    _seasonsDungeonMap.Add(0x01B3, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01B3,
+                        Name = "Dungeon Fern"
+                    }); //Dungeon Fern
+
+                    _seasonsDungeonMap.Add(0x02F1, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x02F1,
+                        Name = "Ridge Citadel"
+                    }); //Ridge Citadel
+
+                    _seasonsDungeonMap.Add(0x02F3, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x02F3,
+                        Name = "Halls of Metos"
+                    }); //Halls of Metos
+
+                    _seasonsDungeonMap.Add(0x02FD, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x02FD,
+                        Name = "Olthoi Horde Nest"
+                    }); //Olthoi Horde Nest
+
+                    _seasonsDungeonMap.Add(0x574E, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x574E,
+                        Name = "Deeper Catacombs"
+                    }); //Deeper Catacombs
+
+                    _seasonsDungeonMap.Add(0x01F6, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01F6,
+                        Name = "Holtburg Dungeon"
+                    }); //Holtburg Dungeon
+
+                    _seasonsDungeonMap.Add(0x01B4, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01B4,
+                        Name = "Golem Burial Ground"
+                    }); //Golem Burial Ground
                 }
 
                 return _seasonsDungeonMap;

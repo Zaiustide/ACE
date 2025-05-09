@@ -23,3 +23,7 @@ VALUES (0x7E4D6004,   412, 0xE4D6000B, 40.7439, 70.1908, 8.082, 0.019958, 0, 0, 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7E4D6030,   509, 0xE4D60014, 54.5707, 91.0396, 8, -0.06847, 0, 0, 0.997653, False, '2025-05-06 12:09:51'); /* Life Stone */
 /* @teleloc 0xE4D60014 [54.570702 91.039597 8.000000] -0.068470 0.000000 0.000000 0.997653 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7E4D6031,  2068, 0xE4D60007, 10.7728, 163.003, -0.063, -0.242511, 0, 0, 0.970149, False, '2025-05-08 08:49:45'); /* Drudge Hideout */
+/* @teleloc 0xE4D60007 [10.772800 163.003006 -0.063000] -0.242511 0.000000 0.000000 0.970149 */

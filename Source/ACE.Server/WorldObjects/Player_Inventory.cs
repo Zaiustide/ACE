@@ -3466,6 +3466,18 @@ namespace ACE.Server.WorldObjects
 
                         if (item.WeenieClassId == 86753000 && target.WeenieClassId == 86753001) //Seasons Token given to Janus
                         {
+                            if(this.Level > 1)
+                            {
+                                Session.Network.EnqueueSend(new GameMessageSystemChat($"Only level 1 players may enter Season {this.Season} of Doctide Seasons.", ChatMessageType.Broadcast));
+                                return;
+                            }
+
+                            if(this.Allegiance != null && this.Allegiance.TotalMembers > 1)
+                            {
+                                Session.Network.EnqueueSend(new GameMessageSystemChat($"Players entering Season {this.Season} of Doctide Seasons may not be a member of an allegiance at the time of entry.", ChatMessageType.Broadcast));
+                                return;
+                            }
+
                             this.Season = Convert.ToInt32(PropertyManager.GetLong("current_season").Item);
                             Session.Network.EnqueueSend(new GameMessageSystemChat($"You have joined Season {this.Season} of Doctide Seasons.", ChatMessageType.Broadcast));
 

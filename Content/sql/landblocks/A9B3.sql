@@ -1,10 +1,6 @@
 DELETE FROM `landblock_instance` WHERE `landblock` = 0xA9B3;
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7A9B3000,  2068, 0xA9B30000, 5.44567, 29.4682, 94.005, -0.445343, 0, 0, -0.89536, False, '2021-11-01 00:00:00'); /* Drudge Hideout */
-/* @teleloc 0xA9B30000 [5.445670 29.468201 94.004997] -0.445343 0.000000 0.000000 -0.895360 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7A9B3001,   921, 0xA9B30000, 27.8337, 173.833, 93.0395, -0.965787, 0, 0, 0.259338, False, '2021-11-01 00:00:00'); /* Holtburg */
 /* @teleloc 0xA9B30000 [27.833700 173.832993 93.039497] -0.965787 0.000000 0.000000 0.259338 */
 
