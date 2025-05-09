@@ -5278,5 +5278,32 @@ namespace ACE.Server.Command.Handlers
                 log.Error($"Error in call to AdminCommands.HandleRemoveWhitelist. ex: {ex}");
             }
         }
+
+        [CommandHandler("ffs", AccessLevel.Admin, CommandHandlerFlag.None, 0,
+            "flag a character for seasonal content (mostly for testing)")]
+        [CommandHandler("flag-for-season", AccessLevel.Admin, CommandHandlerFlag.None, 0,
+            "flag a character for seasonal content (mostly for testing)")]
+        public static void HandleFlagForSeason(Session session, params string[] parameters)
+        {
+            if (parameters.Count() < 1)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /ffs {characterName}");
+                return;
+            }
+
+            var playerName = string.Join(" ", parameters);
+            var player = PlayerManager.GetAllOnline().Where(p => p.Name.ToLower() == playerName.ToLower()).FirstOrDefault();
+            if (player == null)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"No player found with name = {playerName}");
+                return;
+            }
+
+            player.Season = (int)PropertyManager.GetLong("current_season").Item;
+            Position startLoc = new Position(0xE4D60014, 56.506828f, 86.735535f, 8.004999f, 0f, 0f, 0.999562f, -0.029580f);
+            player.Sanctuary = startLoc;
+            player.Teleport(startLoc);
+            CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} has been flagged for the current season");
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 
 using ACE.Common.Extensions;
+using ACE.Database.Models.Auth;
 using ACE.DatLoader;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
@@ -189,6 +190,21 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         private void UpdateXpAndLevel(long amount, XpType xpType)
         {
+            if (Season == PropertyManager.GetLong("current_season").Item)
+            {
+                {
+                    try
+                    {
+                        amount = HandleSeasonalXp(amount, xpType);
+                    } catch (Exception ex)
+                    {
+                        log.Error(ex);
+                        Session.Network.EnqueueSend(new GameMessageSystemChat($"Failed to calculate seasonal xp, please notify an admin.", ChatMessageType.Broadcast));
+                        amount = 0;
+                    }
+                }
+            }
+
             // until we are max level we must make sure that we send
             var xpTable = DatManager.PortalDat.XpTable;
 
@@ -218,6 +234,89 @@ namespace ACE.Server.WorldObjects
 
             if (HasVitae && xpType != XpType.Allegiance)
                 UpdateXpVitae(amount);
+        }
+
+        private long HandleSeasonalXp(long amount, XpType xpType)
+        {
+            if (HasVitae && xpType != XpType.Allegiance)
+                UpdateXpVitae(amount);
+
+            var xpTable = DatManager.PortalDat.XpTable;
+
+            var levelCap = PropertyManager.GetLong("season_max_level_cap").Item;
+            var previousLevelCap = PreviousLevelCap;
+
+            var maxDailyXp = (long)xpTable.CharacterLevelXPList[(int)levelCap];
+            var xpRemaining = maxDailyXp - Math.Max(0, (TotalExperience ?? 0));
+            double categoryRatio = PropertyManager.GetDouble("daily_xp_category_ratio", 0.7).Item;
+
+            if (levelCap != previousLevelCap)
+            {
+                QuestXp = 0;
+                MonsterXp = 0;
+                PvpXp = 0;
+                DailyMaxXpPerCategory = (long)(xpRemaining * categoryRatio);
+                PreviousLevelCap = levelCap;
+            }
+
+            if (xpRemaining < 0 || xpRemaining > maxDailyXp)
+                throw new Exception($"Player {Name} with Id = {Guid}, with Level = {Level}, with remaining xp = {xpRemaining}, is out of range, this should never happen!");
+
+            var dailyMaxXpPerCategory = DailyMaxXpPerCategory != 0 ? DailyMaxXpPerCategory : (long)(maxDailyXp * categoryRatio);
+            var questXp = QuestXp;
+            var monsterXp = MonsterXp;
+            var pvpXp = PvpXp;
+
+            var seasonalQuestXp = SeasonalQuestXp;
+            var seasonalMonsterXp = SeasonalMonsterXp;
+            var seasonalPvpXp = SeasonalPvpXp;
+
+            var questXpRemaining = Math.Max(0, dailyMaxXpPerCategory - questXp);
+            var monsterXpRemaining = Math.Max(0, dailyMaxXpPerCategory - monsterXp);
+            var pvpXpRemaining = Math.Max(0, dailyMaxXpPerCategory - pvpXp);
+
+            long xpToAdd = 0;
+
+            switch (xpType)
+            {
+                case XpType.Quest:
+                case XpType.Emote:
+                    if (questXpRemaining > 0)
+                    {
+                        xpToAdd = Math.Min(amount, Math.Min(xpRemaining, questXpRemaining));
+                        QuestXp = questXp + xpToAdd;
+                        SeasonalQuestXp = seasonalQuestXp + xpToAdd;
+                    }
+                    break;
+
+                case XpType.Kill:
+                case XpType.Fellowship:
+                case XpType.Allegiance:
+                case XpType.Proficiency:
+                    if (monsterXpRemaining > 0)
+                    {
+                        xpToAdd = Math.Min(amount, Math.Min(xpRemaining, monsterXpRemaining));
+                        MonsterXp = monsterXp + xpToAdd;
+                        SeasonalMonsterXp = seasonalMonsterXp + xpToAdd;
+                    }
+                    break;
+
+                case XpType.PvP:
+                    if (pvpXpRemaining > 0)
+                    {
+                        xpToAdd = Math.Min(amount, Math.Min(xpRemaining, pvpXpRemaining));
+                        PvpXp = pvpXp + xpToAdd;
+                        SeasonalPvpXp = seasonalPvpXp + xpToAdd;
+                    }
+                    break;
+
+                case XpType.Admin:
+                    xpToAdd = Math.Min(amount, xpRemaining);
+                    SeasonalAdminXp = SeasonalAdminXp + xpToAdd;
+                    break;
+            }
+
+            return xpToAdd;
         }
 
         /// <summary>
