@@ -201,6 +201,42 @@ namespace ACE.Server.Entity.Seasons
                         LandblockId = 0x01B4,
                         Name = "Golem Burial Ground"
                     }); //Golem Burial Ground
+
+                    _seasonsDungeonMap.Add(0x01A6, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01A6,
+                        Name = "Disaster Maze"
+                    }); //Disaster Maze
+
+                    _seasonsDungeonMap.Add(0x01EF, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01EF,
+                        Name = "Arwic Mines"
+                    }); //Arwic Mines
+
+                    _seasonsDungeonMap.Add(0x01EF, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01EF,
+                        Name = "Arwic Mines"
+                    }); //Arwic Mines
+
+                    _seasonsDungeonMap.Add(0x0110, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x0110,
+                        Name = "Nexus"
+                    }); //Nexus
+
+                    _seasonsDungeonMap.Add(0x0138, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x0138,
+                        Name = "Frore"
+                    }); //Frore
+
+                    _seasonsDungeonMap.Add(0x01A2, new SeasonsDungeon()
+                    {
+                        LandblockId = 0x01A2,
+                        Name = "Swamp Temple"
+                    }); //Swamp Temple
                 }
 
                 return _seasonsDungeonMap;

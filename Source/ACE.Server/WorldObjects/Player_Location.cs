@@ -17,6 +17,7 @@ using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Managers;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.Entity.Seasons;
 
 namespace ACE.Server.WorldObjects
 {
@@ -780,6 +781,21 @@ namespace ACE.Server.WorldObjects
                 {
                     log.Error($"Exception checking zerg limit on player teleport. Player: {this.Name}, Ex: {ex}");
                 }
+            }
+
+            //Seasons
+            var isSeasonLandblock = Seasons.IsSeasonsLandblock(newPosition.Landblock);
+            if(isSeasonLandblock && this.Season != PropertyManager.GetLong("current_season").Item)
+            {
+                this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a restricted area for Seasons players and you are not a participant in the Season. I keel you.", ChatMessageType.Broadcast));
+                this.Die();
+                return;
+            }
+            else if (!isSeasonLandblock && this.Season == PropertyManager.GetLong("current_season").Item)
+            {
+                this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You are a participant in Seasons and have attempted to leave the Seasons restricted area. I keel you.", ChatMessageType.Broadcast));
+                this.Die();
+                return;
             }
 
             ////If you're teleporting to an arena landblock and aren't in an arena event, disallow

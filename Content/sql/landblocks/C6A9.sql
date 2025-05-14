@@ -1,10 +1,6 @@
 DELETE FROM `landblock_instance` WHERE `landblock` = 0xC6A9;
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7C6A9000,  1088, 0xC6A90000, 90.5567, 140.355, 41.937, -0.521251, 0, 0, -0.853403, False, '2021-11-01 00:00:00'); /* Arwic Mines Portal */
-/* @teleloc 0xC6A90000 [90.556702 140.354996 41.937000] -0.521251 0.000000 0.000000 -0.853403 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7C6A9001,  5486, 0xC6A90000, 174.198, 84.2549, 42.005, 0.329592, 0, 0, -0.944124, False, '2021-11-01 00:00:00'); /* Destroyed Al-Jalima Portal */
 /* @teleloc 0xC6A90000 [174.197998 84.254898 42.005001] 0.329592 0.000000 0.000000 -0.944124 */
 
@@ -277,7 +273,7 @@ VALUES (0x7C6A9049, 45501, 0xC6A9016E, 100.863, 82.1363, 46.8065, 0.748611, 0, 0
 /* @teleloc 0xC6A9016E [100.862999 82.136299 46.806499] 0.748611 0.000000 0.000000 -0.663010 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7C6A904A, 45489, 0xC6A90175, 116.356, 86.7094, 42.0065, -0.949158, 0, 0, -0.314801, False, '2021-11-01 00:00:00'); /* Free Weapon Vendor */
+VALUES (0x7C6A904A, 45489, 0xC6A90175, 116.356, 86.7094, 42.0065, -0.949158, 0, 0, -0.314801, False, '2021-11-01 00:00:00'); /* Quest Weapon Vendor */
 /* @teleloc 0xC6A90175 [116.356003 86.709396 42.006500] -0.949158 0.000000 0.000000 -0.314801 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
