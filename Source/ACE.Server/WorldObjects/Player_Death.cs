@@ -715,6 +715,26 @@ namespace ACE.Server.WorldObjects
                     shouldDropTcRewards = false;
                 }
 
+                // Seasonal characters earn pvp xp if the possibility of dropping a trophy exists
+                if (IsSeasonal && shouldDropTrophy)
+                {
+                    var killer = PlayerManager.FindByGuid(corpse.KillerId.Value);
+                    var victim = PlayerManager.FindByGuid(corpse.VictimId.Value);
+
+                    // calculate mod for seasonal pvp xp
+                    var mod = (double)victim.Level / (double)killer.Level;
+                    // give 10% total xp * mod
+                    var playerXp = (victim.GetProperty(PropertyInt64.TotalExperience) ?? 0) * 0.01;
+
+                    // give some xp if a player is fresh
+                    if (playerXp == 0)
+                        playerXp = 500 * 0.01;
+
+                    var earnedPvpXp = playerXp * mod;
+                    var killerPlayer = PlayerManager.GetOnlinePlayer(killer.Guid);
+                    killerPlayer?.EarnXP((long)Math.Round((double)earnedPvpXp), XpType.PvP, ShareType.None);
+                }
+
                 //Don't drop trophy if two dropped within last hour
                 if (LastPkTrophyDropTime.HasValue &&
                     Last2PkTrophyDropTime.HasValue &&

@@ -3381,5 +3381,10 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyInt.Season) ?? 0;
             set { if (value < 1) RemoveProperty(PropertyInt.Season); else SetProperty(PropertyInt.Season, value); }
         }
+
+        public bool IsSeasonal
+        {
+            get => PropertyManager.GetLong("current_season").Item == Season;
+        }
     }
 }

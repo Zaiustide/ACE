@@ -6,6 +6,7 @@ using ACE.Common;
 using ACE.Entity;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
+using ACE.Server.Managers;
 using ACE.Server.Network.GameMessages;
 using ACE.Server.Network.GameMessages.Messages;
 
@@ -1581,7 +1582,6 @@ namespace ACE.Server.WorldObjects
         }
 
         /* Seasonal */
-
         public long QuestXp
         {
             get => GetProperty(PropertyInt64.QuestXp) ?? 0;
@@ -1635,7 +1635,5 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyInt64.DailyMaxXpPerCategory) ?? 0;
             set { if (value == 0) RemoveProperty(PropertyInt64.DailyMaxXpPerCategory); else SetProperty(PropertyInt64.DailyMaxXpPerCategory, value); }
         }
-
-
     }
 }
