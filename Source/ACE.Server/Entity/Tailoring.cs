@@ -587,7 +587,8 @@ namespace ACE.Server.Entity
             MorphGemJewelersSawblade,
             MorphGemDotResist,
             MorphGemVitality,
-            MorphGemHealBoost
+            MorphGemHealBoost,
+            MorphGemImpen
         };
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
@@ -1358,6 +1359,15 @@ namespace ACE.Server.Entity
                         if (target.WeenieType != WeenieType.Clothing)
                         {
                             playerMsg = "The gem can only be applied to armor and underclothes";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //If target isn't loot gen, it can only be applied to rare armor
+                        if(target.ArmorLevel > 0 && target.ItemWorkmanship == null && !target.GetProperty(PropertyInt.RareId).HasValue)
+                        {
+                            playerMsg = "The gem cannot be applied quest armor, only loot gen or rare armor";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
