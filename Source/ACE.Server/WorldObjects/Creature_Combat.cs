@@ -7,6 +7,7 @@ using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Structure;
@@ -647,13 +648,37 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public float GetShieldMod(WorldObject attacker, DamageType damageType, WorldObject weapon)
         {
-            // ensure combat stance
-            if (CombatMode == CombatMode.NonCombat)
-                return 1.0f;
-
             // does the player have a shield equipped?
             var shield = GetEquippedShield();
             if (shield == null) return 1.0f;
+
+            //For shield to provide protection combat stance is required
+            //except for PvP damage when the defender has Shield skill spec
+            //and not during an Arena 1v1 event
+            var isOOC = CombatMode == CombatMode.NonCombat;
+            var mustBeInCombatStance = false;
+
+            var player = this as Player;
+            var attackerPlayer = attacker as Player;
+            if (player == null || attackerPlayer == null)
+                mustBeInCombatStance = true;
+            
+            var arenaEvent = ArenaManager.GetArenaEventByLandblock(this.Location.Landblock);
+            if (arenaEvent != null && arenaEvent.EventType.Equals("1v1"))
+            {
+                mustBeInCombatStance = true;
+            }            
+
+            bool hasShield = this.Skills?.ContainsKey(Skill.Shield) ?? false;
+            bool isShieldSpec = hasShield == true && this.Skills[Skill.Shield]?.AdvancementClass == SkillAdvancementClass.Specialized;
+
+            if(!isShieldSpec)
+            {
+                mustBeInCombatStance = true;
+            }
+
+            if (isOOC && mustBeInCombatStance)
+                return 1.0f;
 
             // phantom weapons ignore all armor and shields
             if (weapon != null && weapon.HasImbuedEffect(ImbuedEffectType.IgnoreAllArmor))
@@ -719,7 +744,8 @@ namespace ACE.Server.WorldObjects
 
             // SL is multiplied by existing AL
             var shieldMod = SkillFormula.CalcArmorMod(effectiveLevel);
-            //Console.WriteLine("ShieldMod: " + shieldMod);
+            //Console.WriteLine("ShieldMod: " + shieldMod);            
+
             return shieldMod;
         }
 
