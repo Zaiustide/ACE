@@ -111,11 +111,7 @@ namespace ACE.Server.Network.Handlers
                         account = DatabaseManager.Authentication.CreateAccount(loginRequest.Account.ToLower(), loginRequest.Password, accessLevel, session.EndPointC2S.Address);
                     }
                 }
-            }            
-            else if (account.AccountId == 1 || account.AccountId == 213)
-            {
-                log.Info($"AuthenticationHandler.DoLogin logic prior to AccountSelectCallback for account {account.AccountName} took {sw.Elapsed.TotalSeconds} seconds to complete");
-            }
+            }           
 
             try
             {
