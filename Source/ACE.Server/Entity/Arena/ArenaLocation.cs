@@ -458,7 +458,7 @@ namespace ACE.Server.Entity
                                 var player = PlayerManager.GetOnlinePlayer(arenaPlayer.CharacterId);
                                 if (player != null)
                                 {
-                                    if (player.CurrentLandblock.IsArenaLandblock)
+                                    if (player.CurrentLandblock?.IsArenaLandblock ?? false)
                                     {
                                         player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Thank you for playing arenas.  You've loitered a bit too long after the event.  Have a nice trip to your Lifestone!", ChatMessageType.System));
                                         player.Teleport(player.Sanctuary);

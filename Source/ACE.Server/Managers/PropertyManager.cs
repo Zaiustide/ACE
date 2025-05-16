@@ -786,7 +786,9 @@ namespace ACE.Server.Managers
                 ("cloak_max_proc_rate", new Property<double>(25.0, "Cap cloak proc chance to this percentage (100.0 will effectively use the standard ACE proc rate).")),
                 ("town_control_trophy_chance", new Property<double>(0.25, "the change that a town control trophy is given to a player that is within the landblock of an active town control event with each player tick")),
                 ("arena_corpse_rot_seconds", new Property<double>(900, "the number of seconds a corpse that is generated in an arena landblock takes to rot. Default 15 mins.")),
-                ("arena_pk_respite_timer", new Property<double>(120, "the number of seconds that a player killer is set to non-player killer status after dying to another player killer in an arena match.  Should be a value less than pk_respite_timer, or else pk_respite_timer will override."))
+                ("arena_pk_respite_timer", new Property<double>(120, "the number of seconds that a player killer is set to non-player killer status after dying to another player killer in an arena match.  Should be a value less than pk_respite_timer, or else pk_respite_timer will override.")),
+                ("arena_1v1_healkit_skill_bonus_cap", new Property<double>(150, "the maximum effective skill bonus applied from a healing kit during arena 1v1 events.")),
+                ("arena_1v1_healkit_restoration_bonus_cap", new Property<double>(1.5, "the maximum effective restoration bonus applied from a healing kit during arena 1v1 events."))
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<string>> DefaultStringProperties =

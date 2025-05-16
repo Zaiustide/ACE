@@ -261,8 +261,15 @@ namespace ACE.Server.WorldObjects
             var trainedMod = healingSkill.AdvancementClass == SkillAdvancementClass.Specialized ? 1.3f : 1.1f;
 
             var combatMod = healer.CombatMode == CombatMode.NonCombat ? 1.0f : 1.1f;
+            int boostValue = BoostValue;
+            var arenaEvent = ArenaManager.GetArenaEventByLandblock(target.Location.Landblock);
+            bool isArena = target != null && ArenaLocation.IsArenaLandblock(target.Location.Landblock);
+            if (isArena && arenaEvent != null && arenaEvent.EventType.Equals("1v1"))
+            {
+                boostValue = Math.Min(BoostValue, (int)PropertyManager.GetDouble("arena_1v1_healkit_skill_bonus_cap").Item);
+            }
 
-            var effectiveSkill = (int)Math.Round((healingSkill.Current + BoostValue) * trainedMod);
+            var effectiveSkill = (int)Math.Round((healingSkill.Current + boostValue) * trainedMod);
             difficulty = (int)Math.Round(missingVital * 2 * combatMod);
 
             var skillCheck = SkillCheck.GetSkillChance(effectiveSkill, difficulty);
@@ -282,9 +289,19 @@ namespace ACE.Server.WorldObjects
                 return 0;
             }
 
+            var arenaEvent = ArenaManager.GetArenaEventByLandblock(target.Location.Landblock);
+            bool isArena = target != null && ArenaLocation.IsArenaLandblock(target.Location.Landblock);
+
+            //Cap HealkitMod during arena 1v1s
+            var healkitMod = (float)HealkitMod.Value;
+            if (isArena && arenaEvent != null && arenaEvent.EventType.Equals("1v1"))
+            {
+                healkitMod = Math.Min(healkitMod, (float)PropertyManager.GetDouble("arena_1v1_healkit_restoration_bonus_cap").Item);
+            }
+
             // factors: healing skill, healing kit bonus, stamina, critical chance
             var healingSkill = healer.GetCreatureSkill(Skill.Healing).Current;
-            var healBase = healingSkill * (float)HealkitMod.Value;
+            var healBase = healingSkill * healkitMod;
 
             // todo: determine applicable range from pcaps
             var healMin = healBase * 0.2f;      // ??
@@ -296,13 +313,9 @@ namespace ACE.Server.WorldObjects
             if (criticalHeal) healAmount *= 2;
 
             //Reduce healing in arena overtime
-            if(target != null && ArenaLocation.IsArenaLandblock(target.Location.Landblock))
+            if(isArena && arenaEvent != null && arenaEvent.IsOvertime)
             {
-                var arenaEvent = ArenaManager.GetArenaEventByLandblock(target.Location.Landblock);
-                if(arenaEvent != null && arenaEvent.IsOvertime)
-                {
-                    healAmount = Math.Round(healAmount * arenaEvent.OvertimeHealingModifier);
-                }
+                healAmount = Math.Round(healAmount * arenaEvent.OvertimeHealingModifier);                
             }
 
             // cap to missing vital
