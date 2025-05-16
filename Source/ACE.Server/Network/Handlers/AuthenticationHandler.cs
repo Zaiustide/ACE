@@ -82,7 +82,6 @@ namespace ACE.Server.Network.Handlers
 
         private static void DoLogin(Session session, PacketInboundLoginRequest loginRequest)
         {
-            Stopwatch sw = Stopwatch.StartNew();
             var account = DatabaseManager.Authentication.GetAccountByName(loginRequest.Account);
 
             if (account == null)
@@ -127,19 +126,12 @@ namespace ACE.Server.Network.Handlers
             {
                 log.Error("Error in HandleLoginRequest trying to find the account.", ex);
                 session.Terminate(SessionTerminationReason.AccountSelectCallbackException);
-            }
-
-            sw.Stop();
-            if (account.AccountId == 1 || account.AccountId == 213 || (account == null && !loginRequest.Account.Equals("acservertracker:jj9h26hcsggc")))
-            {
-                log.Info($"AuthenticationHandler.DoLogin total for account {(account == null ? "NULL" : account.AccountName)} took {sw.Elapsed.TotalSeconds} seconds to complete");
-            }
+            }         
         }
 
 
         private static void AccountSelectCallback(Account account, Session session, PacketInboundLoginRequest loginRequest)
         {
-            Stopwatch sw = Stopwatch.StartNew();
             packetLog.DebugFormat("ConnectRequest TS: {0}", Timers.PortalYearTicks);
 
             if (session.Network.ConnectionData.ServerSeed == null || session.Network.ConnectionData.ClientSeed == null)
@@ -321,17 +313,10 @@ namespace ACE.Server.Network.Handlers
             //{
             //    log.Error($"Exception in AuthenticationHandler.AccountSelectCallback logging account session start. Ex: {ex}");
             //}
-
-            sw.Stop();
-            if(session.AccountId == 1 || session.AccountId == 213)
-            {
-                log.Info($"AccountSelectCallback for account {session.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
-            }
         }
 
         public static void HandleConnectResponse(Session session)
         {
-            Stopwatch sw = Stopwatch.StartNew();
             if (WorldManager.WorldStatus == WorldManager.WorldStatusState.Open || session.AccessLevel > AccessLevel.Player)
             {
                 DatabaseManager.Shard.GetCharacters(session.AccountId, false, result =>
@@ -344,12 +329,6 @@ namespace ACE.Server.Network.Handlers
             else
             {
                 session.Terminate(SessionTerminationReason.WorldClosed, new GameMessageCharacterError(CharacterError.LogonServerFull));
-            }
-
-            sw.Stop();
-            if (session.AccountId == 1 || session.AccountId == 213)
-            {
-                log.Info($"AuthenticationHandler.HandleConnectResponse for account {session.Account} took {sw.Elapsed.TotalSeconds} seconds to complete");
             }
         }
 
