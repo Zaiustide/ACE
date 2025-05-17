@@ -6,7 +6,7 @@ VALUES (52025, 'ace52025-luminouscrystalofraredamagereductionv', 38, '2021-11-01
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (52025,   1,       2048) /* ItemType - Gem */
      , (52025,   5,          5) /* EncumbranceVal */
-     , (52025,  11,         10) /* MaxStackSize */
+     , (52025,  11,         100) /* MaxStackSize */
      , (52025,  12,          1) /* StackSize */
      , (52025,  13,          5) /* StackUnitEncumbrance */
      , (52025,  15,      50000) /* StackUnitValue */
