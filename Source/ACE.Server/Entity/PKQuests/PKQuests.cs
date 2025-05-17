@@ -319,7 +319,7 @@ namespace ACE.Server.Entity.PKQuests
                     //- Kill 3 players from a whitelisted clan that isn’t your clan in Mites
                     var pkkill_islandmites_3 = new PKQuest();
                     pkkill_islandmites_3.QuestCode = "PKKILL_ISLANDMITES_3";
-                    pkkill_islandmites_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
+                    pkkill_islandmites_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Mite Hole.";
                     pkkill_islandmites_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
                     pkkill_islandmites_3.TaskCount = 3;
                     pkkill_islandmites_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
