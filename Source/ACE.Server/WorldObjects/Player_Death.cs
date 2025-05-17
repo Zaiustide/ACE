@@ -19,6 +19,7 @@ using ACE.Server.Network.Handlers;
 using ACE.Database;
 using ACE.Server.Entity.TownControl;
 using ACE.Server.Entity.PKQuests;
+using ACE.Database.Models.TownControl;
 
 namespace ACE.Server.WorldObjects
 {
@@ -136,7 +137,7 @@ namespace ACE.Server.WorldObjects
 
                 if (isPkQuestEligible)
                 {
-                    //pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
+                    pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
 
                     switch (Location.Landblock)
                     {
@@ -154,7 +155,41 @@ namespace ACE.Server.WorldObjects
                             //TN
                             pkPlayer.CompletePkQuestTask("PKKILL_TN_3");
                             break;
+                        case 0x5966:
+                            //VR Roots
+                            pkPlayer.CompletePkQuestTask("PKKILL_VRROOTS_3");
+                            break;
+                        case 0x00C8:
+                            //Island Shreths
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDSHRETHS_3");
+                            break;
+                        case 0x00AE:
+                            //Island Wasps
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDWASPS_3");
+                            break;
+                        case 0x00E1:
+                            //Island Mites
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDMITES_3");
+                            break;
+                        case 0x0174:
+                            //Island Golems
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDGOLEMS_3");
+                            break;
+                        case 0x7E04:
+                            //Island Rats
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDWASPS_3");
+                            break;
+                        case 0x0026:
+                            //Island Drudges
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDDRUDGES_3");
+                            break;
+                        case 0x003F:
+                            //Island Dragons
+                            pkPlayer.CompletePkQuestTask("PKKILL_ISLANDDRAGONS_3");
+                            break;
+
                         default:
+                            
                             break;
                     }
                 }
@@ -779,9 +814,13 @@ namespace ACE.Server.WorldObjects
 
                             if (TownControlLandblocks.IsTownControlRewardLandblock(this.Location.Landblock))
                             {
+                                //Drop a DB key on corpse
                                 var dbKey = WorldObjectFactory.CreateNewWorldObject(480608);
                                 dbKey.SetStackSize(1);
                                 dropItems.Add(dbKey);
+
+                                //Complete TC related PK quests for killer
+                                (_killer as Player)?.CompletePkQuestTasks(PKQuests.PKQuests_KillTC);
                             }
                         }
                     }

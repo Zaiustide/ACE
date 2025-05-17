@@ -73,22 +73,22 @@ namespace ACE.Server.Entity.PKQuests
                     _pkQuestList.Add(arena_any_win_30);
 
                     //- Kill 10 players from a whitelisted clan that isn’t your clan(open world or arena)
-                    //var kill_any_10 = new PKQuest();
-                    //kill_any_10.QuestCode = "KILL_ANY_10";
-                    //kill_any_10.Description = "Kill any 10 players from an opposing whitelisted allegiance";
-                    //kill_any_10.RewardDescription = "80k luminance, 50% XP to next level, 5 Darkbeat Keys, 200 PK Trophies, 2 Boxes";
-                    //kill_any_10.Rewards = new List<string>() { "LUM,80000", "XP%,50", "DBKEY,5", "PKTROPHY,200", "BOX,2" };
-                    //kill_any_10.TaskCount = 10;
-                    //_pkQuestList.Add(kill_any_10);
+                    var kill_any_10 = new PKQuest();
+                    kill_any_10.QuestCode = "KILL_ANY_10";
+                    kill_any_10.Description = "Kill any 10 players from an opposing whitelisted allegiance";
+                    kill_any_10.RewardDescription = "80k luminance, 50% XP to next level, 50 PK Trophies";
+                    kill_any_10.Rewards = new List<string>() { "LUM,80000", "XP%,50", "PKTROPHY,50" };
+                    kill_any_10.TaskCount = 10;
+                    _pkQuestList.Add(kill_any_10);
 
-                    //- Kill 30 players from a whitelisted clan that isn’t your clan(open world or arena)
-                    //var kill_any_30 = new PKQuest();
-                    //kill_any_30.QuestCode = "KILL_ANY_30";
-                    //kill_any_30.Description = "Kill any 30 players from an opposing whitelisted allegiance";
-                    //kill_any_30.RewardDescription = "200k luminance, 75% XP to next level, 8 Darkbeat Keys, 300 PK Trophies, 4 Boxes";
-                    //kill_any_30.Rewards = new List<string>() { "LUM,200000", "XP%,75", "DBKEY,8", "PKTROPHY,300", "BOX,4" };
-                    //kill_any_30.TaskCount = 30;
-                    //_pkQuestList.Add(kill_any_30);
+                    //-Kill 30 players from a whitelisted clan that isn’t your clan(open world or arena)
+                    var kill_any_30 = new PKQuest();
+                    kill_any_30.QuestCode = "KILL_ANY_30";
+                    kill_any_30.Description = "Kill any 30 players from an opposing whitelisted allegiance";
+                    kill_any_30.RewardDescription = "200k luminance, 50% XP to next level, 100 PK Trophies";
+                    kill_any_30.Rewards = new List<string>() { "LUM,200000", "XP%,50", "PKTROPHY,100" };
+                    kill_any_30.TaskCount = 30;
+                    _pkQuestList.Add(kill_any_30);
 
                     //-Participate in 10 1v1 arena matches
                     var arena_1v1_10 = new PKQuest();
@@ -298,54 +298,104 @@ namespace ACE.Server.Entity.PKQuests
                     _pkQuestList.Add(pkkill_islandls_3);
 
                     //- Kill 3 players from a whitelisted clan that isn’t your clan in VR Roots
+                    var pkkill_vrroots_3 = new PKQuest();
+                    pkkill_vrroots_3.QuestCode = "PKKILL_VRROOTS_3";
+                    pkkill_vrroots_3.Description = "Kill 3 members of an opposing whitelisted allegiance in the Viridian Rise Roots dungeon";
+                    pkkill_vrroots_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_vrroots_3.TaskCount = 3;
+                    pkkill_vrroots_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_vrroots_3);
 
-                    ////- Kill 3 players from a whitelisted clan that isn’t your clan in Shreths
-                    //var pkkill_islandshreths_3 = new PKQuest();
-                    //pkkill_islandshreths_3.QuestCode = "PKKILL_ISLANDSHRETHS_3";
-                    //pkkill_islandshreths_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
-                    //pkkill_islandshreths_3.TaskCount = 3;
-                    //pkkill_islandshreths_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
-                    //_pkQuestList.Add(pkkill_islandshreths_3);
 
-                    ////- Kill 3 players from a whitelisted clan that isn’t your clan in Mites
-                    //var pkkill_islandmites_3 = new PKQuest();
-                    //pkkill_islandmites_3.QuestCode = "PKKILL_ISLANDMITES_3";
-                    //pkkill_islandmites_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
-                    //pkkill_islandmites_3.TaskCount = 3;
-                    //pkkill_islandmites_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
-                    //_pkQuestList.Add(pkkill_islandmites_3);
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Shreths
+                    var pkkill_islandshreths_3 = new PKQuest();
+                    pkkill_islandshreths_3.QuestCode = "PKKILL_ISLANDSHRETHS_3";
+                    pkkill_islandshreths_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Shreth Caverns.";
+                    pkkill_islandshreths_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islandshreths_3.TaskCount = 3;
+                    pkkill_islandshreths_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islandshreths_3);
 
-                    ////- Kill 3 players from a whitelisted clan that isn’t your clan in Dragons
-                    //var pkkill_islanddragons_3 = new PKQuest();
-                    //pkkill_islanddragons_3.QuestCode = "PKKILL_ISLANDDRAGONS_3";
-                    //pkkill_islanddragons_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
-                    //pkkill_islanddragons_3.TaskCount = 3;
-                    //pkkill_islanddragons_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
-                    //_pkQuestList.Add(pkkill_islanddragons_3);
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Mites
+                    var pkkill_islandmites_3 = new PKQuest();
+                    pkkill_islandmites_3.QuestCode = "PKKILL_ISLANDMITES_3";
+                    pkkill_islandmites_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
+                    pkkill_islandmites_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islandmites_3.TaskCount = 3;
+                    pkkill_islandmites_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islandmites_3);
 
-                    ////- Kill 3 players from a whitelisted clan that isn’t your clan in Golems
-                    //var pkkill_islandgolems_3 = new PKQuest();
-                    //pkkill_islandgolems_3.QuestCode = "PKKILL_ISLANDGOLEMS_3";
-                    //pkkill_islandgolems_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
-                    //pkkill_islandgolems_3.TaskCount = 3;
-                    //pkkill_islandgolems_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
-                    //_pkQuestList.Add(pkkill_islandgolems_3);
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Dragons
+                    var pkkill_islanddragons_3 = new PKQuest();
+                    pkkill_islanddragons_3.QuestCode = "PKKILL_ISLANDDRAGONS_3";
+                    pkkill_islanddragons_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Dragon's Den.";
+                    pkkill_islanddragons_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islanddragons_3.TaskCount = 3;
+                    pkkill_islanddragons_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islanddragons_3);
 
-                    ////- Kill 3 players from a whitelisted clan that isn’t your clan in Wasps
-                    //var pkkill_islandwasps_3 = new PKQuest();
-                    //pkkill_islandwasps_3.QuestCode = "PKKILL_ISLANDWASPS_3";
-                    //pkkill_islandwasps_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
-                    //pkkill_islandwasps_3.TaskCount = 3;
-                    //pkkill_islandwasps_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
-                    //_pkQuestList.Add(pkkill_islandwasps_3);
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Golems
+                    var pkkill_islandgolems_3 = new PKQuest();
+                    pkkill_islandgolems_3.QuestCode = "PKKILL_ISLANDGOLEMS_3";
+                    pkkill_islandgolems_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Ancient Temple.";
+                    pkkill_islandgolems_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islandgolems_3.TaskCount = 3;
+                    pkkill_islandgolems_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islandgolems_3);
 
-                    ////- Kill 3 players from a whitelisted clan that isn’t your clan in Drudges
-                    //var pkkill_islanddrudges_3 = new PKQuest();
-                    //pkkill_islanddrudges_3.QuestCode = "PKKILL_ISLANDDRUDGES_3";
-                    //pkkill_islanddrudges_3.Description = "Kill 3 members of an opposing whitelisted allegiance in . Reward = 30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies.";
-                    //pkkill_islanddrudges_3.TaskCount = 3;
-                    //pkkill_islanddrudges_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
-                    //_pkQuestList.Add(pkkill_islanddrudges_3);
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Wasps
+                    var pkkill_islandwasps_3 = new PKQuest();
+                    pkkill_islandwasps_3.QuestCode = "PKKILL_ISLANDWASPS_3";
+                    pkkill_islandwasps_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Swarm Hive.";
+                    pkkill_islandwasps_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islandwasps_3.TaskCount = 3;
+                    pkkill_islandwasps_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islandwasps_3);
+
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Rats
+                    var pkkill_islandrats_3 = new PKQuest();
+                    pkkill_islandrats_3.QuestCode = "PKKILL_ISLANDRATS_3";
+                    pkkill_islandrats_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Rat Nest.";
+                    pkkill_islandrats_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islandrats_3.TaskCount = 3;
+                    pkkill_islandrats_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islandrats_3);
+
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in Drudges
+                    var pkkill_islanddrudges_3 = new PKQuest();
+                    pkkill_islanddrudges_3.QuestCode = "PKKILL_ISLANDDRUDGES_3";
+                    pkkill_islanddrudges_3.Description = "Kill 3 members of an opposing whitelisted allegiance in Drudge Stronghold.";
+                    pkkill_islanddrudges_3.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies";
+                    pkkill_islanddrudges_3.TaskCount = 3;
+                    pkkill_islanddrudges_3.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25", "PHIAL,1" };
+                    _pkQuestList.Add(pkkill_islanddrudges_3);
+
+                    //- Kill 1 players from a whitelisted clan that isn’t your clan in a Town Control Event
+                    var pkkill_TC_1 = new PKQuest();
+                    pkkill_TC_1.QuestCode = "PKKILL_TC_1";
+                    pkkill_TC_1.Description = "Kill 1 member of an opposing whitelisted allegiance in a Town Control event.";
+                    pkkill_TC_1.RewardDescription = "30k luminance, 25% XP to next level, 2 Darkbeat Keys, 25 PK Trophies";
+                    pkkill_TC_1.TaskCount = 1;
+                    pkkill_TC_1.Rewards = new List<string>() { "LUM,30000", "XP%,25", "DBKEY,2", "PKTROPHY,25"};
+                    _pkQuestList.Add(pkkill_TC_1);
+
+                    //- Kill 5 players from a whitelisted clan that isn’t your clan in a Town Control Event
+                    var pkkill_TC_5 = new PKQuest();
+                    pkkill_TC_5.QuestCode = "PKKILL_TC_5";
+                    pkkill_TC_5.Description = "Kill 5 members of an opposing whitelisted allegiance in a Town Control event.";
+                    pkkill_TC_5.RewardDescription = "100k luminance, 75% XP to next level, 4 Darkbeat Keys, 1 Phial of Bloody Tears, 50 PK Trophies, a Box";
+                    pkkill_TC_5.TaskCount = 5;
+                    pkkill_TC_5.Rewards = new List<string>() { "LUM,100000", "XP%,75", "DBKEY,4", "PKTROPHY,50", "PHIAL,1", "BOX,1" };
+                    _pkQuestList.Add(pkkill_TC_5);
+
+                    //- Kill 30 players from a whitelisted clan that isn’t your clan in a Town Control Event
+                    var pkkill_TC_30 = new PKQuest();
+                    pkkill_TC_30.QuestCode = "PKKILL_TC_30";
+                    pkkill_TC_30.Description = "Kill 30 members of an opposing whitelisted allegiance in a Town Control event.";
+                    pkkill_TC_30.RewardDescription = "750k luminance, 150% XP to next level, 8 Darkbeat Keys, 3 Hera Keys, 3 Phials of Bloody Tears, 250 PK Trophies, 5 Boxes";
+                    pkkill_TC_30.TaskCount = 30;
+                    pkkill_TC_30.Rewards = new List<string>() { "LUM,750000", "XP%,150", "DBKEY,8", "HERA,3", "PKTROPHY,250", "PHIAL,3", "BOX,5" };
+                    _pkQuestList.Add(pkkill_TC_30);
                 }
 
                 return _pkQuestList;
@@ -368,7 +418,10 @@ namespace ACE.Server.Entity.PKQuests
 
         public static string[] PKQuests_WinGroupArena = { "ARENA_GROUP_WIN_1", "ARENA_GROUP_WIN_5", "ARENA_GROUP_WIN_10" };
 
-        //public static string[] PKQuests_KillAnywhere = { "KILL_ANY_10", "KILL_ANY_30" };
+        public static string[] PKQuests_KillAnywhere = { "KILL_ANY_10", "KILL_ANY_30" };
+
+        public static string[] PKQuests_KillTC = { "PKKILL_TC_1", "PKKILL_TC_5", "PKKILL_TC_30" };
+        
 
         public static PKQuest GetPkQuestByCode(string questCode)
         {
