@@ -731,7 +731,7 @@ namespace ACE.Server.WorldObjects
                 { HookGroupType.Undef,                          -1 },
                 { HookGroupType.NoisemakingItems,               -1 },
                 { HookGroupType.TestItems,                      -1 },
-                { HookGroupType.PortalItems,                     0 },
+                { HookGroupType.PortalItems,                    -1 },
                 { HookGroupType.WritableItems,                   0 },
                 { HookGroupType.SpellCastingItems,              -1 },
                 { HookGroupType.SpellTeachingItems,              0 } }
