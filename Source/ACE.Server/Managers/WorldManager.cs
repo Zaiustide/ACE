@@ -458,6 +458,16 @@ namespace ACE.Server.Managers
                     log.Error($"Exception executing WorldBossManager Tick. ex: {ex}");
                 }
 
+                //Seasons
+                try
+                {
+                    SeasonsManager.Tick();
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Exception executing Seasons Tick. ex: {ex}");
+                }
+
                 ServerPerformanceMonitor.RestartEvent(ServerPerformanceMonitor.MonitorType.NetworkManager_InboundClientMessageQueueRun);
                 NetworkManager.InboundMessageQueue.RunActions();
                 ServerPerformanceMonitor.RegisterEventEnd(ServerPerformanceMonitor.MonitorType.NetworkManager_InboundClientMessageQueueRun);

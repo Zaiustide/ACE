@@ -292,7 +292,7 @@ namespace ACE.Server.WorldObjects
         public (long maxDailyXp, long xpRemaining, long dailyMaxXpPerCategory) UpdateSeasonalXpCap()
         {
             var xpTable = DatManager.PortalDat.XpTable;
-            var levelCap = PropertyManager.GetLong("season_max_level_cap").Item;
+            var levelCap = PropertyManager.GetLong("season_level_cap").Item;
             double categoryRatio = PropertyManager.GetDouble("daily_xp_category_ratio", 0.7).Item;
 
             var maxDailyXp = (long)xpTable.CharacterLevelXPList[(int)levelCap];

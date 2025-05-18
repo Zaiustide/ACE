@@ -1310,7 +1310,7 @@ namespace ACE.Server.Command.Handlers
             }
 
             var player = session.Player;
-            var levelCap = PropertyManager.GetLong("season_max_level_cap").Item;
+            var levelCap = PropertyManager.GetLong("season_level_cap").Item;
             var (maxDailyXp, xpRemaining, dailyMaxXpPerCategory) = player.UpdateSeasonalXpCap();
 
             session.Network.EnqueueSend(new GameMessageSystemChat($"\n<Showing Xp Cap Information>", ChatMessageType.System));

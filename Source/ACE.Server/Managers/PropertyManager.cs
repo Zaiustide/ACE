@@ -666,7 +666,9 @@ namespace ACE.Server.Managers
                 ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out")),
                 ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting")),
                 ("current_season", new Property<long>(1, "the current season for Doctide Seasons")),
-                ("season_max_level_cap", new Property<long>(20, "the current level cap for the season"))
+                ("season_start_timestamp", new Property<long>(0, "a timestamp to track when the the current season was launched")),
+                ("season_level_cap", new Property<long>(15, "the current level cap for the season")),
+                ("season_level_cap_timestamp", new Property<long>(0, "a timestamp to track when the level cap for the season was last adjusted"))
 
                 );
 

@@ -214,12 +214,6 @@ namespace ACE.Server.Entity.Seasons
                         Name = "Arwic Mines"
                     }); //Arwic Mines
 
-                    _seasonsDungeonMap.Add(0x01EF, new SeasonsDungeon()
-                    {
-                        LandblockId = 0x01EF,
-                        Name = "Arwic Mines"
-                    }); //Arwic Mines
-
                     _seasonsDungeonMap.Add(0x0110, new SeasonsDungeon()
                     {
                         LandblockId = 0x0110,
