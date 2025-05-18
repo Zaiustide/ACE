@@ -218,6 +218,12 @@ namespace ACE.Server.WorldObjects
                 return;
             }
 
+            if (IsSeasonal)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.ExitTrainingAcademyToUseCommand));
+                return;
+            }    
+
             if (CombatMode != CombatMode.NonCombat)
             {
                 // this should be handled by a different thing, probably a function that forces player into peacemode
@@ -486,6 +492,12 @@ namespace ACE.Server.WorldObjects
             if (TooBusyToRecall)
             {
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
+            if (IsSeasonal)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.ExitTrainingAcademyToUseCommand));
                 return;
             }
 
