@@ -29,6 +29,7 @@ using ACE.Server.Entity.Actions;
 using Microsoft.Extensions.Logging;
 using ACE.Server.Entity;
 using log4net.Core;
+using ACE.Server.Entity.Seasons;
 
 namespace ACE.Server.Managers
 {
@@ -102,8 +103,7 @@ namespace ACE.Server.Managers
             {
                 //var currLevelCap = PropertyManager.GetLong("season_level_cap").Item;
                 double newLevelCap = 15;
-                var seasonStartDate = Time.GetDateTimeFromTimestamp(PropertyManager.GetLong("season_start_timestamp").Item).Date;
-                var daysSinceStart = Math.Floor((DateTime.Now - seasonStartDate).TotalDays);
+                var daysSinceStart = Seasons.SeasonDayNumber;
 
                 for (int i = 0; i < daysSinceStart; i++)
                 {

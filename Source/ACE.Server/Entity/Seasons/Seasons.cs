@@ -1,4 +1,5 @@
 using ACE.Common;
+using ACE.Server.Managers;
 using ACE.Server.WorldObjects;
 using System;
 using System.Collections.Generic;
@@ -255,7 +256,22 @@ namespace ACE.Server.Entity.Seasons
         public static bool IsSeasonsOutdoorLandblock(uint landblockId)
         {
             return SeasonsOutdoorLandblocks.Contains(landblockId);
-        }        
+        }
+
+        public static DateTime SeasonStartDate
+        {
+            get
+            {
+                return Time.GetDateTimeFromTimestamp(PropertyManager.GetLong("season_start_timestamp").Item).Date;
+            }
+        }
+
+        public static int SeasonDayNumber
+        {
+            get
+            {
+                return Convert.ToInt32(Math.Floor((DateTime.Now - SeasonStartDate).TotalDays));
+            }
     }
 
     public class SeasonsDungeon
