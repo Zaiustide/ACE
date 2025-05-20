@@ -42,23 +42,24 @@ namespace ACE.Server.Managers
             
         }
 
-        private static DateTime LastTickDateTime = DateTime.MinValue;
+        private static DateTimeOffset LastTickDateTime = DateTimeOffset.MinValue;
+
         public static void Tick()
         {
-            if (DateTime.Now.AddMinutes(-15) < LastTickDateTime)
+            var now = DateTimeOffset.UtcNow;
+            if (now < LastTickDateTime.AddMinutes(15))
                 return;
 
-            LastTickDateTime = DateTime.Now;
+            LastTickDateTime = now;
 
             try
             {
                 var currentSeason = PropertyManager.GetLong("current_season").Item;
-
                 if (currentSeason < 1)
                     return;
 
                 var lastLevelCapUpdate = Time.GetDateTimeFromTimestamp(PropertyManager.GetLong("season_level_cap_timestamp").Item);
-                if(lastLevelCapUpdate < DateTime.Today)
+                if (lastLevelCapUpdate < DateTimeOffset.UtcNow.Date)
                 {
                     UpdateLevelCap();
                 }
@@ -126,7 +127,7 @@ namespace ACE.Server.Managers
                 }
 
                 PropertyManager.ModifyLong("season_level_cap", Convert.ToInt64(Math.Ceiling(newLevelCap)));
-                PropertyManager.ModifyLong("season_level_cap_timestamp", (long)Time.GetUnixTime(DateTime.Now));
+                PropertyManager.ModifyLong("season_level_cap_timestamp", (long)Time.GetUnixTime(DateTime.UtcNow));
             }
             catch (Exception ex)
             {
