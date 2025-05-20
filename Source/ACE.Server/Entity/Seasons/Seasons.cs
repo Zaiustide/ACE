@@ -240,7 +240,7 @@ namespace ACE.Server.Entity.Seasons
 
         public static bool IsSeasonsLandblock(uint landblockId)
         {
-            if(SeasonsDungeonMap.ContainsKey(landblockId) || SeasonsOutdoorLandblocks.Contains(landblockId))
+            if (SeasonsDungeonMap.ContainsKey(landblockId) || SeasonsOutdoorLandblocks.Contains(landblockId))
             {
                 return true;
             }
@@ -272,15 +272,16 @@ namespace ACE.Server.Entity.Seasons
             {
                 return Convert.ToInt32(Math.Floor((DateTime.Now - SeasonStartDate).TotalDays));
             }
-    }
+        }
 
-    public class SeasonsDungeon
-    {
-        public uint LandblockId { get; set; }
+        public class SeasonsDungeon
+        {
+            public uint LandblockId { get; set; }
 
-        public string Name { get; set; }
+            public string Name { get; set; }
 
-        //Todo track whether nolog or force materialization here?
-        //what other config do we want to track about each dungeon?
+            //Todo track whether nolog or force materialization here?
+            //what other config do we want to track about each dungeon?
+        }
     }
 }
