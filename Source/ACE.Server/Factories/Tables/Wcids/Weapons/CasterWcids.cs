@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ACE.Database.Models.World;
 using ACE.Server.Factories.Entity;
 using ACE.Server.Factories.Enum;
@@ -183,6 +184,11 @@ namespace ACE.Server.Factories.Tables.Wcids
         public static bool Contains(WeenieClassName wcid)
         {
             return _combined.Contains(wcid);
+        }
+
+        public static List<WeenieClassName> GetWcidList()
+        {
+            return _combined.ToList();
         }
     }
 }

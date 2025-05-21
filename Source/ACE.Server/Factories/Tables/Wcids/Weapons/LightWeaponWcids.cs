@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using ACE.Common;
 using ACE.Server.Factories.Entity;
 using ACE.Server.Factories.Enum;
@@ -256,6 +256,11 @@ namespace ACE.Server.Factories.Tables.Wcids
         public static bool TryGetValue(WeenieClassName wcid, out TreasureWeaponType weaponType)
         {
             return _combined.TryGetValue(wcid, out weaponType);
+        }
+
+        public static List<WeenieClassName> GetWcidList()
+        {
+            return _combined.Keys.ToList();
         }
     }
 }
