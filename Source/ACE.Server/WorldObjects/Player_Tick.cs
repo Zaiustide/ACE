@@ -12,6 +12,7 @@ using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Entity.Seasons;
 using ACE.Server.Entity.TownControl;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
@@ -128,6 +129,8 @@ namespace ACE.Server.WorldObjects
             GagsTick();
 
             TownControlTick();
+
+            SeasonsPlayerTick();
 
             if (IsArenaObserver)
             {
@@ -752,6 +755,43 @@ namespace ACE.Server.WorldObjects
             catch (Exception ex)
             {
                 log.ErrorFormat("Exception in Player_Tick.TownControlTick. ex: {0}", ex);
+            }
+        }
+
+        public void SeasonsPlayerTick()
+        {
+            try
+            {
+                if (CurrentLandblock == null)
+                    return;
+
+                if(IsSeasonal && !IsAdmin)
+                {
+                    //Don't allow Season flagged characters to enter a non-Season landblock
+                    if (!Seasons.IsSeasonsLandblock(this.Location.Landblock))
+                    {
+                        PlayerManager.BroadcastToAuditChannel(this, $"Seasons flagged player has entered a non-Seasons landblock and has been killed. Landblock = {this.Location.Landblock}");
+                        this.OnDeath();
+                        this.Die();
+                        return;
+                    }
+                }
+                else if(!IsSeasonal && !IsAdmin)
+                {
+                    //Don't allow non-Season flagged characters to enter a Season landblock
+                    if (Seasons.IsSeasonsLandblock(this.Location.Landblock))
+                    {
+                        PlayerManager.BroadcastToAuditChannel(this, $"Non-Seasons flagged player has entered a Seasons landblock and has been killed. Landblock = {this.Location.Landblock}");
+                        this.OnDeath();
+                        this.Die();
+                        return;
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Exception in Player_Tick.SeasonsPlayerTick. ex: {0}", ex);
             }
         }
 
