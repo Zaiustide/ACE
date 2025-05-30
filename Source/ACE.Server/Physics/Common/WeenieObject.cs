@@ -26,6 +26,8 @@ namespace ACE.Server.Physics.Common
 
         public bool IsFactionMob { get; set; }
 
+        public bool IsOutlaw { get; set; }
+
         public FactionBits Faction1Bits { get; set; }
 
         public CreatureType? FoeType { get; set; }
@@ -52,6 +54,8 @@ namespace ACE.Server.Physics.Common
             FoeType = creature.FoeType;
 
             PlayerKillerStatus = creature.PlayerKillerStatus;
+
+            IsOutlaw = creature.IsOutlaw;
         }
 
         public bool SameFaction(PhysicsObj obj)

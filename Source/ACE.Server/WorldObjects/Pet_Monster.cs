@@ -1,4 +1,5 @@
 using ACE.Entity.Enum;
+using ACE.Server.Managers;
 
 namespace ACE.Server.WorldObjects
 {
@@ -43,6 +44,16 @@ namespace ACE.Server.WorldObjects
                     return false;
 
                 monster.AddRetaliateTarget(this);
+            }
+
+            //Seasons town guardian only attacks outlaws
+            if(monster.WeenieClassId == 86753005 && this.OwnerId.HasValue)
+            {
+                var player = PlayerManager.GetOnlinePlayer(this.OwnerId.Value);
+                if(player != null && !player.IsOutlaw)
+                {
+                    return false;
+                }
             }
 
             monster.AttackTarget = this;

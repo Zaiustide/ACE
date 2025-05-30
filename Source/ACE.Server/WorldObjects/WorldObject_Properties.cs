@@ -3386,5 +3386,11 @@ namespace ACE.Server.WorldObjects
         {
             get => PropertyManager.GetLong("current_season").Item == Season;
         }
+
+        public bool IsOutlaw
+        {
+            get => GetProperty(PropertyBool.IsOutlaw) ?? false;
+            set { if (!value) RemoveProperty(PropertyBool.IsOutlaw); else SetProperty(PropertyBool.IsOutlaw, value); }
+        }
     }
 }

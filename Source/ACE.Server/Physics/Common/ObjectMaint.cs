@@ -931,6 +931,14 @@ namespace ACE.Server.Physics.Common
                     return false;
                 }
             }
+            else if(PhysicsObj.WeenieObj.ID == 86753005)
+            {
+                //Only track players who are outlaws for Town Guardians
+                if(!obj.WeenieObj.IsOutlaw)
+                {
+                    return false;
+                }
+            }
             else
             {
                 // handle special case:

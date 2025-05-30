@@ -797,13 +797,13 @@ namespace ACE.Server.WorldObjects
 
             //Seasons
             var isSeasonLandblock = Seasons.IsSeasonsLandblock(newPosition.Landblock);
-            if(isSeasonLandblock && this.Season != PropertyManager.GetLong("current_season").Item)
+            if(isSeasonLandblock && this.Season != PropertyManager.GetLong("current_season").Item && !this.IsAdmin)
             {
                 this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a restricted area for Seasons players and you are not a participant in the Season. I keel you.", ChatMessageType.Broadcast));
                 this.Die();
                 return;
             }
-            else if (!isSeasonLandblock && this.Season == PropertyManager.GetLong("current_season").Item)
+            else if (!isSeasonLandblock && this.Season == PropertyManager.GetLong("current_season").Item && !this.IsAdmin)
             {
                 this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You are a participant in Seasons and have attempted to leave the Seasons restricted area. I keel you.", ChatMessageType.Broadcast));
                 this.Die();

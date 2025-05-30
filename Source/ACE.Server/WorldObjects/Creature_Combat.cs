@@ -7,6 +7,7 @@ using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Structure;
@@ -1055,6 +1056,10 @@ namespace ACE.Server.WorldObjects
         {
             if (target is Player)
             {
+                //Seasons town guardian only attacks outlaws                
+                if (this.WeenieClassId == 86753005 && !target.IsOutlaw)
+                    return false;
+
                 // monster attacking player
                 return true;    // other checks handled elsewhere
             }
@@ -1153,6 +1158,12 @@ namespace ACE.Server.WorldObjects
                 return false;
 
             // add to retaliate targets?
+
+            //Seasons town guardian only attacks outlaws
+            if (monster.WeenieClassId == 86753005 && this is Player && !this.IsOutlaw)
+            {
+                return false;
+            }
 
             //Console.WriteLine($"[{Timers.RunningTime}] - {monster.Name} ({monster.Guid}) - waking up");
             monster.AttackTarget = this;

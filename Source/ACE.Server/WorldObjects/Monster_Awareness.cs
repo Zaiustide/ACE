@@ -270,6 +270,10 @@ namespace ACE.Server.WorldObjects
                 if (Tolerance.HasFlag(Tolerance.Monster) && (creature is Player || creature is CombatPet))
                     continue;
 
+                //Seasons Town Guardian only attacks Outlaws
+                if (this.WeenieClassId == 86753005 && !creature.IsOutlaw)
+                    continue;
+
                 visibleTargets.Add(creature);
             }
 
@@ -351,10 +355,16 @@ namespace ACE.Server.WorldObjects
             foreach (var creature in PhysicsObj.ObjMaint.GetVisibleTargetsValuesOfTypeCreature())
             {
                 if (creature is Player player && (!player.Attackable || player.Teleporting || (player.Hidden ?? false)))
-                    continue;
+                    continue;                               
 
                 if (Tolerance.HasFlag(Tolerance.Monster) && (creature is Player || creature is CombatPet))
                     continue;
+
+                //Seasons town guardian only attacks outlaws
+                if (this.WeenieClassId == 86753005 && creature is Player && !creature.IsOutlaw)
+                {
+                    continue;
+                }
 
                 //var distSq = Location.SquaredDistanceTo(creature.Location);
                 var distSq = PhysicsObj.get_distance_sq_to_object(creature.PhysicsObj, true);
