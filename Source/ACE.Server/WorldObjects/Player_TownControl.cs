@@ -52,7 +52,7 @@ namespace ACE.Server.WorldObjects
                 }
 
                 //Get a list of towns currently owned by player's monarchy and add the quest stamps
-                var townList = DatabaseManager.TownControl.GetAllTowns();
+                var townList = TownControl.Towns;
                 var allegiance = AllegianceManager.GetAllegiance(this);
 
                 if (allegiance == null || !allegiance.MonarchId.HasValue)
@@ -88,7 +88,7 @@ namespace ACE.Server.WorldObjects
 
                 if (alleg != null && alleg.MonarchId.HasValue && TownControlAllegiances.IsAllowedAllegiance((int)alleg.MonarchId.Value))
                 {
-                    var towns = DatabaseManager.TownControl.GetAllTowns();
+                    var towns = TownControl.Towns;
                     if (towns != null)
                     {
                         foreach (var town in towns)

@@ -89,18 +89,18 @@ namespace ACE.Server.Managers
             //End any open town control events
             try
             {
-                foreach (var town in DatabaseManager.TownControl.GetAllTowns())
+                foreach (var town in TownControl.Towns)
                 {
-                    var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
+                    var latestEvent = TownControl.GetLatestTownControlEventByTownId(town.TownId);
                     if (latestEvent != null)
                     {
                         if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
                         {
                             latestEvent.EventEndDateTime = DateTime.UtcNow;
                             latestEvent.IsAttackSuccess = false;
-                            DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);
+                            TownControl.UpdateTownControlEvent(latestEvent);
                             town.IsInConflict = false;
-                            DatabaseManager.TownControl.UpdateTown(town);
+                            TownControl.UpdateTown(town);
                         }
                     }
                 }

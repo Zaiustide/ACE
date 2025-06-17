@@ -57,12 +57,12 @@ namespace ACE.Server.WorldObjects
                 try
                 {
                     var tcBoss = TownControlBosses.TownControlBossMap[this.WeenieClassId];
-                    var town = DatabaseManager.TownControl.GetTownById(tcBoss.TownID);
+                    var town = TownControl.GetTownById(tcBoss.TownID);
 
                     if (this.IsTownControlConflictBoss)
                     {
                         //Check if there is an active Town Control event for this boss                        
-                        var tcEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
+                        var tcEvent = TownControl.GetLatestTownControlEventByTownId(town.TownId);
 
                         if (!town.IsInConflict || tcEvent == null || !tcEvent.EventStartDateTime.HasValue || tcEvent.EventEndDateTime.HasValue)
                         {

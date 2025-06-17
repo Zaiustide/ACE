@@ -1194,7 +1194,7 @@ namespace ACE.Server.Command.Handlers
             {
                 StringBuilder townOwnerMsg = new StringBuilder(_townOwnerMessageHeader);
 
-                var townList = DatabaseManager.TownControl.GetAllTowns();
+                var townList = TownControl.Towns;
 
                 foreach (var town in townList)
                 {
@@ -1244,7 +1244,7 @@ namespace ACE.Server.Command.Handlers
 
                     townName = townName.Trim();
 
-                    var townList = DatabaseManager.TownControl.GetAllTowns();
+                    var townList = TownControl.Towns;
 
                     var town = townList.Find(x => x.TownName.Equals(townName, StringComparison.OrdinalIgnoreCase));
                     if (town == null)
@@ -1265,7 +1265,7 @@ namespace ACE.Server.Command.Handlers
                         return;
                     }
 
-                    var latestTcEvent = DatabaseManager.TownControl.GetLatestTownControlEventByAttackingMonarchId(session.Player.MonarchId.Value, town.TownId);
+                    var latestTcEvent = TownControl.GetLatestTownControlEventByAttackingMonarchId(session.Player.MonarchId.Value, town.TownId);
 
                     if (latestTcEvent != null)
                     {

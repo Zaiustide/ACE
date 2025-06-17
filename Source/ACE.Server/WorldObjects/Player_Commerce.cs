@@ -50,7 +50,7 @@ namespace ACE.Server.WorldObjects
                     bool playerOwnsTown = false;
 
                     var tcVendor = TownControlVendors.TownControlVendorMap[vendor.WeenieClassId];
-                    var town = DatabaseManager.TownControl.GetTownById(tcVendor.TownID);
+                    var town = TownControl.GetTownById(tcVendor.TownID);
 
                     var playerAlleg = AllegianceManager.GetAllegiance(this);
                     if (playerAlleg != null)

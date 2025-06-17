@@ -425,7 +425,7 @@ namespace ACE.Server.WorldObjects
                         //Don't allow the owning clan to damage the town control bosses
                         bool playerOwnsTown = false;
                         var boss = TownControlBosses.TownControlBossMap[target.WeenieClassId];
-                        var town = DatabaseManager.TownControl.GetTownById(boss.TownID);
+                        var town = TownControl.GetTownById(boss.TownID);
                         var playerAlleg = AllegianceManager.GetAllegiance(sourcePlayer);
                         if (playerAlleg != null)
                         {

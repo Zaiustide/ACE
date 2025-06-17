@@ -645,12 +645,12 @@ namespace ACE.Server.WorldObjects
                     if (townId.HasValue)
                     {
                         //Console.WriteLine($"{inLandblock}");
-                        var town = DatabaseManager.TownControl.GetTownById(townId.Value);                        
+                        var town = TownControl.GetTownById(townId.Value);                        
                         if (!town.IsInConflict)
                             return;
 
                         //Check that an active event exists and isn't past its expiration
-                        var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(townId.HasValue ? townId.Value : 0);
+                        var latestEvent = TownControl.GetLatestTownControlEventByTownId(townId.HasValue ? townId.Value : 0);
                         if (latestEvent != null)
                         {
                             var tcEventDurationExpiredTime = latestEvent.EventStartDateTime.Value.AddSeconds(town.ConflictLength);

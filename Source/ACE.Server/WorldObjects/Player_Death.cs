@@ -805,7 +805,7 @@ namespace ACE.Server.WorldObjects
 
                     if (townId.HasValue)
                     {
-                        var town = DatabaseManager.TownControl.GetTownById(townId.Value);
+                        var town = TownControl.GetTownById(townId.Value);
                         if (town.IsInConflict)
                         {
                             var pkTrophy = WorldObjectFactory.CreateNewWorldObject(1000002);

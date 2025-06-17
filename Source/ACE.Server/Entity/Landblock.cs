@@ -221,12 +221,12 @@ namespace ACE.Server.Entity
                 try
                 {
                     uint? townId = TownControlLandblocks.GetTownIdByLandblockId(this.Id.Landblock);
-                    var latestEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(townId.HasValue ? townId.Value : 0);
+                    var latestEvent = TownControl.TownControl.GetLatestTownControlEventByTownId(townId.HasValue ? townId.Value : 0);
                     if (latestEvent != null && townId.HasValue)
                     {
                         if (!latestEvent.EventEndDateTime.HasValue || !latestEvent.IsAttackSuccess.HasValue)
                         {
-                            var town = DatabaseManager.TownControl.GetTownById(townId.Value);
+                            var town = TownControl.TownControl.GetTownById(townId.Value);
                             if (town != null)
                             {
                                 var tcEventDurationExpiredTime = latestEvent.EventStartDateTime.Value.AddSeconds(town.ConflictLength);
@@ -257,12 +257,12 @@ namespace ACE.Server.Entity
 
                                     //Update the Town's conflict status
                                     town.IsInConflict = false;
-                                    DatabaseManager.TownControl.UpdateTown(town);
+                                    TownControl.TownControl.UpdateTown(town);
 
                                     //End the TownControlEvent
                                     latestEvent.IsAttackSuccess = false;
                                     latestEvent.EventEndDateTime = DateTime.UtcNow;
-                                    DatabaseManager.TownControl.UpdateTownControlEvent(latestEvent);
+                                    TownControl.TownControl.UpdateTownControlEvent(latestEvent);
 
                                     //End the content generated event
                                     if(TownControlLandblocks.LandblockEventsMap.TryGetValue(this.Id.Landblock, out var eventName))

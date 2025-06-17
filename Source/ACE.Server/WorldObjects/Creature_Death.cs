@@ -836,7 +836,7 @@ namespace ACE.Server.WorldObjects
                 var deadBossNameProp = deadBossWeenie.WeeniePropertiesString.FirstOrDefault(x => x.Type == (ushort)PropertyString.Name);
                 var deadBossName = deadBossNameProp?.Value;
 
-                var town = DatabaseManager.TownControl.GetTownById(deadBoss.TownID);
+                var town = TownControl.GetTownById(deadBoss.TownID);
 
                 if (deadBoss.BossType.Equals(TownControlBossType.InitiationBoss))
                 {
@@ -944,7 +944,7 @@ namespace ACE.Server.WorldObjects
                     //Check if the attacking clan has started a conflict too recently in this town
                     //  get most recent conflict event for this town where this same clan was the attacker
                     //  check if respite time has elapsed - i.e. Now is > the most recent event's start + respite time for the town
-                    var recentSameAttackerEvent = DatabaseManager.TownControl.GetLatestTownControlEventByAttackingMonarchId(killerMonarchId.Value, town.TownId);
+                    var recentSameAttackerEvent = TownControl.GetLatestTownControlEventByAttackingMonarchId(killerMonarchId.Value, town.TownId);
                     if (recentSameAttackerEvent != null)
                     {
                         var sameAttackerRespiteExpiration = recentSameAttackerEvent.EventStartDateTime.Value.AddSeconds(town.ConflictRespiteLength.HasValue ? town.ConflictRespiteLength.Value : 0);
@@ -973,9 +973,9 @@ namespace ACE.Server.WorldObjects
                     }
 
                     //create the conflict event and update the town status in the DB
-                    var tcEvent = DatabaseManager.TownControl.StartTownControlEvent(town.TownId, killerMonarchId.Value, killerAllegName, defendingClanId, defendingClanName);
+                    var tcEvent = TownControl.StartTownControlEvent(town.TownId, killerMonarchId.Value, killerAllegName, defendingClanId, defendingClanName);
                     town.IsInConflict = true;
-                    DatabaseManager.TownControl.UpdateTown(town);
+                    TownControl.UpdateTown(town);
 
                     //send a global message about the conflict starting
                     string conflictStartMsg = "";
@@ -1029,7 +1029,7 @@ namespace ACE.Server.WorldObjects
                 else //If this is a Conflict boss
                 {
                     //verify that a conflict event is still active for this town
-                    var tcEvent = DatabaseManager.TownControl.GetLatestTownControlEventByTownId(town.TownId);
+                    var tcEvent = TownControl.GetLatestTownControlEventByTownId(town.TownId);
 
                     //End the content generated event
                     if (TownControlLandblocks.LandblockEventsMap.TryGetValue(this.CurrentLandblock?.Id.Landblock ?? 0, out var eventName))
@@ -1066,12 +1066,12 @@ namespace ACE.Server.WorldObjects
                         //Update the Town's owner and conflict status
                         town.CurrentOwnerID = tcEvent.AttackingClanId;
                         town.IsInConflict = false;
-                        DatabaseManager.TownControl.UpdateTown(town);
+                        TownControl.UpdateTown(town);
 
                         //End the TownControlEvent
                         tcEvent.IsAttackSuccess = true;
                         tcEvent.EventEndDateTime = DateTime.UtcNow;
-                        DatabaseManager.TownControl.UpdateTownControlEvent(tcEvent);
+                        TownControl.UpdateTownControlEvent(tcEvent);
 
                         string tcQuestName = town.TownName.Trim().Replace(" ", "") + "TownControlOwner";
 
@@ -1171,12 +1171,12 @@ namespace ACE.Server.WorldObjects
 
                         //Update the Town's conflict status
                         town.IsInConflict = false;
-                        DatabaseManager.TownControl.UpdateTown(town);
+                        TownControl.UpdateTown(town);
 
                         //End the TownControlEvent
                         tcEvent.IsAttackSuccess = false;
                         tcEvent.EventEndDateTime = DateTime.UtcNow;
-                        DatabaseManager.TownControl.UpdateTownControlEvent(tcEvent);
+                        TownControl.UpdateTownControlEvent(tcEvent);
 
                         //Award bonus tears to defenders in the landblock
                         var landblockList = TownControlLandblocks.TownControlRewardLandblocksMap[town.TownId];
