@@ -115,7 +115,8 @@ VALUES (490259,  0,  4, 350, 0.75,  650,  650,  358,  293,  618,  553,  618,  55
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490259,  4312,   2.15)  /* Gossamer Flesh */
      , (490259,  4433,   2.15)  /* Disintegration */
-     , (490259,  4473,   2.02)  /* Olthoi's Gift */;
+     , (490259,  4473,   2.02)  /* Incantation of Acid Vulnerability Other */
+	 , (490259,  4475,   2.02)  /* Incantation of Blade Vulnerability Other */;
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES  (490259, 9, 34277,  1, 0, 1, False) /* Create Ancient Falatacot Trinket (34277) for ContainTreasure */;

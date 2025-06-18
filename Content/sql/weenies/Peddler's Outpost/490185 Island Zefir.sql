@@ -15,7 +15,8 @@ VALUES (490185,   1,         16) /* ItemType - Creature */
      , (490185,  93,    4195336) /* PhysicsState - ReportCollisions, Gravity, EdgeSlide */
      , (490185, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (490185, 146,    50005000) /* XpOverride */
-     , (490185, 332,        200) /* LuminanceAward */
+     , (490185, 307,         30) /* DamageRating */
+	 , (490185, 332,        200) /* LuminanceAward */	 
      , (490185, 386,         20) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
@@ -109,6 +110,7 @@ VALUES (490185,  0,  2, 1100,  0.5,  500,  450,  450,  450,  400,  500,  400,  5
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (490185,  6159,   2.05)  /* Thorn Volley */
      , (490185,  6160,  2.053)  /* Thorns */
+	 , (490185,  4475,   2.02)  /* Incantation of Blade Vulnerability Other */
      , (490185,  4485,  2.056)  /* Incantation of Piercing Vulnerability Other */
      , (490185,  6162,  2.059)  /* Thorn Arc */
      , (490185,  6163,  2.063)  /* Ring of Thorns */;
