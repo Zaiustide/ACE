@@ -141,8 +141,10 @@ VALUES (490309, 2, 25641,  0, 4, 0, False) /* Create Leather Cuirass (25641) for
      , (490309, 2, 25661,  0, 4, 0, False) /* Create Leather Boots (25661) for Wield */
      , (490309, 2,   130,  0, 88, 0.4, False) /* Create Shirt (130) for Wield */
      , (490309, 4, 490311, -1, 0, 0, False) /* Create Darkbeat Key */
+	 , (490309, 4, 41541200, -1, 0, 0, False) /* Colo Gem for Lvl 2 Paragon */
 	 , (490309, 4, 37058, -1, 0, 0, False) /* Aerbax Mask Shard for Lvl 3 Paragon*/
 	 , (490309, 4, 39467, -1, 0, 0, False) /* Tchk'Tain the Tender's Severed Head for Lvl 6 Paragon*/
+	 , (490309, 4, 41541201, -1, 0, 0, False) /* Slave Master NeftetFreeHatsheputWait gem for Lvl 8 Paragon*/
 	 , (490309, 4, 53472, -1, 0, 0, False) /* Lord Cynreft Mhoire's Signet Ring for Lvl 11 Paragon*/
 	 , (490309, 4, 41982, -1, 0, 0, False) /* Rytheran's Jeweled Ring for Lvl 13 Paragon*/
 	 , (490309, 4, 53473, -1, 0, 0, False) /* Lady Tairla Mhoire's Signet Ring for Lvl 16 Paragon*/
@@ -153,9 +155,12 @@ VALUES (490309, 2, 25641,  0, 4, 0, False) /* Create Leather Cuirass (25641) for
 	 , (490309, 4, 35871, -1, 0, 0, False) /* The Master Token for Lvl 31 Paragon*/
 	 , (490309, 4, 52008, -1, 0, 0, False) /* Shard of the Curator of Torment's Mask for Lvl 32 Paragon*/
 	 , (490309, 4, 53476, -1, 0, 0, False) /* Daimyo Idah's Tattered Mask for Lvl 36 Paragon*/
+	 , (490309, 4, 41541202, -1, 0, 0, False) /* Legendary Quest gem for Lvl 37 and 47 Paragon*/
 	 , (490309, 4, 34452, -1, 0, 0, False) /* Gladiator Diemos Token for Lvl 38 Paragon*/
 	 , (490309, 4, 53475, -1, 0, 0, False) /* Daimyo Nobanuga's Shattered Helm for Lvl 41 Paragon*/
 	 , (490309, 4, 52817, -1, 0, 0, False) /* Helm of Tremb'Orh for Lvl 42 Paragon*/
 	 , (490309, 4, 48876, -1, 0, 0, False) /* Mirror Shard for Lvl 43 Paragon*/
 	 , (490309, 4, 53360, -1, 0, 0, False) /* Essence of Zerzelikyr for Lvl 46 Paragon*/
-	 , (490309, 4, 52815, -1, 0, 0, False) /* Holcha's Head for Lvl 48 Paragon */;
+	 , (490309, 4, 52815, -1, 0, 0, False) /* Holcha's Head for Lvl 48 Paragon */
+	 
+	 ;
