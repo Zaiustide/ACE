@@ -61,7 +61,7 @@ VALUES (490309,   1,       5) /* HeartbeatInterval */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490309,   1, 'Adrian the Smuggler') /* Name */
-     , (490309,   5, 'Stipend Vendor') /* Template */;
+     , (490309,   5, 'Peddler of Paragon') /* Template */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490309,   1, 0x02000001) /* Setup */
@@ -76,7 +76,7 @@ VALUES (490309,   1, 0x02000001) /* Setup */
      , (490309,  16, 0x040004AE) /* EyesPalette */
      , (490309,  17, 0x040002AE) /* SkinPalette */
      , (490309,  18, 0x01004802) /* HeadObject */
-     , (490309,  57,      46423) /* AlternateCurrency - Stipend */;
+     , (490309,  57,    1000003) /* AlternateCurrency - Phial of Bloody Tears */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (490309,   1, 220, 0, 0) /* Strength */
@@ -108,7 +108,7 @@ VALUES (490309,  2 /* Vendor */,      1, NULL, NULL, NULL, NULL, 1 /* Open */, N
 SET @parent_id = LAST_INSERT_ID();
 
 INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `delay`, `extent`, `motion`, `message`, `test_String`, `min`, `max`, `min_64`, `max_64`, `min_Dbl`, `max_Dbl`, `stat`, `display`, `amount`, `amount_64`, `hero_X_P_64`, `percent`, `spell_Id`, `wealth_Rating`, `treasure_Class`, `treasure_Type`, `p_Script`, `sound`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
-VALUES (@parent_id,  0,  10 /* Tell */, 0, 1, NULL, 'Welcome, do you have any stipends you''d like to spend today?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+VALUES (@parent_id,  0,  10 /* Tell */, 0, 1, NULL, 'Welcome, do you have any Phials of Bloody Tears you''d like to spend today?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (490309,  2 /* Vendor */,      1, NULL, NULL, NULL, NULL, 2 /* Close */, NULL, NULL);
@@ -124,7 +124,7 @@ VALUES (490309,  2 /* Vendor */,    0.5, NULL, NULL, NULL, NULL, 4 /* Buy */, NU
 SET @parent_id = LAST_INSERT_ID();
 
 INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `delay`, `extent`, `motion`, `message`, `test_String`, `min`, `max`, `min_64`, `max_64`, `min_Dbl`, `max_Dbl`, `stat`, `display`, `amount`, `amount_64`, `hero_X_P_64`, `percent`, `spell_Id`, `wealth_Rating`, `treasure_Class`, `treasure_Type`, `p_Script`, `sound`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
-VALUES (@parent_id,  0,  10 /* Tell */, 0, 1, NULL, 'I find this to be a far easier way to get stipends than to actually work for them, thanks for the business.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+VALUES (@parent_id,  0,  10 /* Tell */, 0, 1, NULL, 'I find this to be a far easier way to get Phials of Bloody Tears than to actually work for them, thanks for the business.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (490309,  2 /* Vendor */,      1, NULL, NULL, NULL, NULL, 4 /* Buy */, NULL, NULL);
@@ -140,4 +140,22 @@ VALUES (490309, 2, 25641,  0, 4, 0, False) /* Create Leather Cuirass (25641) for
      , (490309, 2, 25651,  0, 4, 0, False) /* Create Leather Sleeves (25651) for Wield */
      , (490309, 2, 25661,  0, 4, 0, False) /* Create Leather Boots (25661) for Wield */
      , (490309, 2,   130,  0, 88, 0.4, False) /* Create Shirt (130) for Wield */
-     , (490309, 4, 490311, -1, 0, 0, False) /* Create Attribute Reset Certificate (46421) for Shop */;
+     , (490309, 4, 490311, -1, 0, 0, False) /* Create Darkbeat Key */
+	 , (490309, 4, 37058, -1, 0, 0, False) /* Aerbax Mask Shard for Lvl 3 Paragon*/
+	 , (490309, 4, 39467, -1, 0, 0, False) /* Tchk'Tain the Tender's Severed Head for Lvl 6 Paragon*/
+	 , (490309, 4, 53472, -1, 0, 0, False) /* Lord Cynreft Mhoire's Signet Ring for Lvl 11 Paragon*/
+	 , (490309, 4, 41982, -1, 0, 0, False) /* Rytheran's Jeweled Ring for Lvl 13 Paragon*/
+	 , (490309, 4, 53473, -1, 0, 0, False) /* Lady Tairla Mhoire's Signet Ring for Lvl 16 Paragon*/
+	 , (490309, 4, 35910, -1, 0, 0, False) /* Carapace Shard for Lvl 18 Paragon*/
+	 , (490309, 4, 34457, -1, 0, 0, False) /* Thunder Chicken Token for Lvl 21 Paragon*/
+	 , (490309, 4, 41541, -1, 0, 0, False) /* Shattered Aetherium Core Sample for Lvl 23 Paragon*/
+	 , (490309, 4, 53474, -1, 0, 0, False) /* Spectral Amber Shard for Lvl 28 Paragon*/
+	 , (490309, 4, 35871, -1, 0, 0, False) /* The Master Token for Lvl 31 Paragon*/
+	 , (490309, 4, 52008, -1, 0, 0, False) /* Shard of the Curator of Torment's Mask for Lvl 32 Paragon*/
+	 , (490309, 4, 53476, -1, 0, 0, False) /* Daimyo Idah's Tattered Mask for Lvl 36 Paragon*/
+	 , (490309, 4, 34452, -1, 0, 0, False) /* Gladiator Diemos Token for Lvl 38 Paragon*/
+	 , (490309, 4, 53475, -1, 0, 0, False) /* Daimyo Nobanuga's Shattered Helm for Lvl 41 Paragon*/
+	 , (490309, 4, 52817, -1, 0, 0, False) /* Helm of Tremb'Orh for Lvl 42 Paragon*/
+	 , (490309, 4, 48876, -1, 0, 0, False) /* Mirror Shard for Lvl 43 Paragon*/
+	 , (490309, 4, 53360, -1, 0, 0, False) /* Essence of Zerzelikyr for Lvl 46 Paragon*/
+	 , (490309, 4, 52815, -1, 0, 0, False) /* Holcha's Head for Lvl 48 Paragon */;
