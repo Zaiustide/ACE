@@ -17,7 +17,7 @@ VALUES (490185,   1,         16) /* ItemType - Creature */
      , (490185, 146,    50005000) /* XpOverride */
      , (490185, 307,         30) /* DamageRating */
 	 , (490185, 332,        200) /* LuminanceAward */	 
-     , (490185, 386,         20) /* Overpower */;
+     , (490185, 386,         200) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490185,   1, True ) /* Stuck */
