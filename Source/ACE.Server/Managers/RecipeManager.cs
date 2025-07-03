@@ -325,7 +325,7 @@ namespace ACE.Server.Managers
                 floorMsg += $"\n{player.EnlightenmentCustomLevel * 10} percent is due to your enlightenment.";
             }
 
-            if(player.NextTinkIsFoolproof)
+            if(player.NextTinkIsFoolproof && (recipe.IsTinkering() || recipe.IsImbuing()))
             {
                 floorMsg = "You have a 100% chance to succeed due to being filled with the essence of a tinkering tool";
             }
