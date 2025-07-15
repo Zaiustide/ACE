@@ -1236,7 +1236,12 @@ namespace ACE.Server.Entity
 
                             clone.DeleteObject(player);
 
-                            playerMsg = $"You apply the Morph Gem skillfully and have altered your item so that its element has changed to {target.W_DamageType.GetName()}";
+                            var isMultiDamage = target.W_DamageType.IsMultiDamage();
+                            var damageName = isMultiDamage
+                                ? "Slashing/Piercing" 
+                                : target.W_DamageType.GetName();
+
+                            playerMsg = $"You apply the Morph Gem skillfully and have altered your item so that its element has changed to {damageName}";
                             AddMorphGemLog(target, MorphGemRandomizeWeaponElement);
 
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
