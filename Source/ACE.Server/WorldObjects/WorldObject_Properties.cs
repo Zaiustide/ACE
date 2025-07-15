@@ -3068,6 +3068,18 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyString.TinkerLog); else SetProperty(PropertyString.TinkerLog, value); }
         }
 
+        public string TinkerName
+        {
+            get => GetProperty(PropertyString.TinkerName);
+            set { if (value == null) RemoveProperty(PropertyString.TinkerName); else SetProperty(PropertyString.TinkerName, value); }
+        }
+
+        public string ImbuerName
+        {
+            get => GetProperty(PropertyString.ImbuerName);
+            set { if (value == null) RemoveProperty(PropertyString.ImbuerName); else SetProperty(PropertyString.ImbuerName, value); }
+        }
+
         public string TinkerLottoLog
         {
             get => GetProperty(PropertyString.TinkerLottoLog);

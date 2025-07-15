@@ -628,7 +628,8 @@ namespace ACE.Server.Managers
                 ("disable_pvp_cleave", new Property<bool>(false, "disables melee cleave attacks from targeting players")),
                 ("disable_world_bosses", new Property<bool>(true, "disables spawning of world bosses")),
                 ("jump_cancels_melee", new Property<bool>(false, "cancels melee attacks when the target is jumping")),
-                ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
+                ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world")),
+                ("test_server", new Property<bool>(false, "enable this to flag server as a test server"))
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<long>> DefaultLongProperties =
