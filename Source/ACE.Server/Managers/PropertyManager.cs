@@ -628,6 +628,7 @@ namespace ACE.Server.Managers
                 ("disable_pvp_cleave", new Property<bool>(false, "disables melee cleave attacks from targeting players")),
                 ("disable_world_bosses", new Property<bool>(true, "disables spawning of world bosses")),
                 ("jump_cancels_melee", new Property<bool>(false, "cancels melee attacks when the target is jumping")),
+                ("vendor_disable_resell", new Property<bool>(false, "disables all vendor reselling of items bought from players; i.e. all items a players sells to a vendor are destroyed")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
 
@@ -664,8 +665,9 @@ namespace ACE.Server.Managers
                 ("arenas_reward_min_age", new Property<long>(864000, "the minimum in-game age in seconds required to get arena rewards")),
                 ("pvp_chug_timer", new Property<long>(0, "the minimum time in milliseconds between chugs. if a chug is used within X milliseconds of a previous one, it will heal for 0. if value is set to 0 the feature is disabled.")),
                 ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out")),
-                ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting"))
-                
+                ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting")),
+                ("vendor_max_items_per_sale", new Property<long>(24, "the maximum number of items a player can sell to a vendor in a single transaction")),
+                ("vendor_sale_rate_limit_seconds", new Property<long>(60, "the minimum number of seconds that must pass after a player sells to a vendor before a player can sell to a vendor again"))
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<double>> DefaultDoubleProperties =

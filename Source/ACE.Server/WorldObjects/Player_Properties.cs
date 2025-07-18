@@ -1558,6 +1558,12 @@ namespace ACE.Server.WorldObjects
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastPlayerCommandTimestamp); else SetProperty(PropertyFloat.LastPlayerCommandTimestamp, value.Value); }
         }
 
+        //Rate limit player sales to vendors
+        public double? LastPlayerVendorSaleTimestamp
+        {
+            get => GetProperty(PropertyFloat.LastPlayerVendorSaleTimestamp) ?? 0;
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastPlayerVendorSaleTimestamp); else SetProperty(PropertyFloat.LastPlayerVendorSaleTimestamp, value.Value); }
+        }        
 
         /* Chug Timer */
         public double? LastChugTimestamp

@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ACE.Common;
 using ACE.Database;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
@@ -8,8 +6,12 @@ using ACE.Server.Entity;
 using ACE.Server.Entity.TownControl;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
+using ACE.Server.Network;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ACE.Server.WorldObjects
 {
@@ -163,13 +165,32 @@ namespace ACE.Server.WorldObjects
                 return;
             }
 
+            //Limit how many items can be sold to a vendor in one transaction
+            if (itemProfiles?.Count > PropertyManager.GetLong("vendor_max_items_per_sale", 24).Item)
+            {
+                Session.Network.EnqueueSend(new GameEventCommunicationTransientString(Session, "You have attempted to sell too many items in one transaction!"));
+                Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, Guid.Full));
+                SendUseDoneEvent();
+                return;
+            }
+
+            //Limit how often items can be sold to a vendor
+            var rateLimitSeconds = PropertyManager.GetLong("vendor_sale_rate_limit_seconds").Item;
+            if (this.LastPlayerVendorSaleTimestamp.HasValue && Time.GetDateTimeFromTimestamp(this.LastPlayerVendorSaleTimestamp.Value) > DateTime.UtcNow.AddSeconds(-1 * rateLimitSeconds))
+            {
+                Session.Network.EnqueueSend(new GameEventCommunicationTransientString(Session, $"You have attempted to sell items to a vendor too recently! You may only complete a sales transaction once every {rateLimitSeconds} seconds."));
+                Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, Guid.Full));
+                SendUseDoneEvent();
+                return;
+            }            
+
             var vendor = CurrentLandblock?.GetObject(vendorGuid) as Vendor;
 
             if (vendor == null)
             {
                 SendUseDoneEvent(WeenieError.NoObject);
                 return;
-            }
+            }            
 
             // perform validations on requested sell items,
             // and filter to list of validated items
@@ -249,6 +270,8 @@ namespace ACE.Server.WorldObjects
             }
 
             // UpdateCoinValue removed -- already handled in TryCreateInInventoryWithNetworking
+
+            this.LastPlayerVendorSaleTimestamp = Time.GetUnixTime(DateTime.UtcNow);
 
             Session.Network.EnqueueSend(new GameMessageSound(Guid, Sound.PickUpItem));
 

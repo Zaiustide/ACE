@@ -654,7 +654,7 @@ namespace ACE.Server.WorldObjects
         {
             foreach (var item in items.Values)
             {
-                var resellItem = true;
+                var resellItem = !PropertyManager.GetBool("vendor_disable_resell").Item;
 
                 // don't resell DestroyOnSell
                 if (item.GetProperty(PropertyBool.DestroyOnSell) ?? false)
