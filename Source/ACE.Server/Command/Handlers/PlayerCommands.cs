@@ -1040,9 +1040,11 @@ namespace ACE.Server.Command.Handlers
             }            
         }
 
-        // rename <Current Name> <New Name>
+        private const int renameBaseCost = 200;
+        private const int renameMaxCost = 20000;
+        // buyrename <Current Name> <New Name>
         [CommandHandler("buyrename", AccessLevel.Player, CommandHandlerFlag.None, 1,
-            "Purchase a character rename for 200 PK trophies",
+            "Purchase a character rename. The first rename is free, second rename costs 200 PK trophies, and the cost of the 3rd rename and above grows exponentially, capped at 20k.",
             "< New Name >")]
         public static void HandleBuyRename(Session session, params string[] parameters)
         {
@@ -1055,11 +1057,12 @@ namespace ACE.Server.Command.Handlers
                 return;
             }
 
-            var isFirstRenameUsed = session.Player.CharacterRenameCount > 0;            
+            int renameCost = CalculateRenameCost(session.Player.CharacterRenameCount);
+            bool isFirstRenameUsed = session.Player.CharacterRenameCount > 0;
             var numPkTrophiesInInventory = session.Player.GetNumInventoryItemsOfWCID(1000002);
-            if(isFirstRenameUsed && numPkTrophiesInInventory < 200)
+            if(isFirstRenameUsed && numPkTrophiesInInventory < renameCost)
             {
-                CommandHandlerHelper.WriteOutputInfo(session, $"Renaming your character costs 200 PK trophies. You don't have enough PK trophies in your inventory to cover the cost.", ChatMessageType.Broadcast);
+                CommandHandlerHelper.WriteOutputInfo(session, $"Your character has previously been renamed {session.Player.CharacterRenameCount} times. Renaming your character costs {renameCost} PK trophies. You don't have enough PK trophies in your inventory to cover the cost.", ChatMessageType.Broadcast);
                 return;
             }
 
@@ -1094,17 +1097,23 @@ namespace ACE.Server.Command.Handlers
             }
 
             var hasInvalidChars = false;
+            var hasAtLeastOneLetter = false;
             foreach(Char c in newName)
             {
                 if(!Char.IsLetter(c) && c != '\'' && c != '-' && c != ' ')
                 {
                     hasInvalidChars = true;
                 }
+
+                if(Char.IsLetter(c))
+                {
+                    hasAtLeastOneLetter = true;
+                }
             }
 
-            if (hasInvalidChars)
+            if (hasInvalidChars || !hasAtLeastOneLetter)
             {
-                CommandHandlerHelper.WriteOutputInfo(session, $"Error, unable to rename your character to \"{newName}\" as that name contains invalid characters for a player name.  Player names may only contain characters A-Z, spaces, apostrophes or dashes.", ChatMessageType.Broadcast);
+                CommandHandlerHelper.WriteOutputInfo(session, $"Error, unable to rename your character to \"{newName}\" as that name contains invalid characters for a player name.  Player names may only contain characters A-Z, spaces, apostrophes or dashes and must contain at least one A-Z character.", ChatMessageType.Broadcast);
                 return;
             }
 
@@ -1121,22 +1130,22 @@ namespace ACE.Server.Command.Handlers
 
                     //Check if the player has sufficient funds to purchase the rename
                     numPkTrophiesInInventory = session.Player.GetNumInventoryItemsOfWCID(1000002);
-                    if (isFirstRenameUsed && numPkTrophiesInInventory < 200)
+                    if (isFirstRenameUsed && numPkTrophiesInInventory < renameCost)
                     {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"Renaming your character costs 200 PK trophies. You don't have enough PK trophies in your inventory to cover the cost.", ChatMessageType.Broadcast);
+                        CommandHandlerHelper.WriteOutputInfo(session, $"Your character has previously been renamed {session.Player.CharacterRenameCount} times. Renaming your character costs {renameCost} PK trophies. You don't have enough PK trophies in your inventory to cover the cost.", ChatMessageType.Broadcast);
                         return;
                     }
                     else
                     {
                         if (isFirstRenameUsed)
                         {
-                            if (session.Player.TryConsumeFromInventoryWithNetworking(1000002, 200))
+                            if (session.Player.TryConsumeFromInventoryWithNetworking(1000002, renameCost))
                             {
-                                CommandHandlerHelper.WriteOutputInfo(session, $"200 PK trophies have been removed from your inventory", ChatMessageType.Broadcast);
+                                CommandHandlerHelper.WriteOutputInfo(session, $"{renameCost} PK trophies have been removed from your inventory", ChatMessageType.Broadcast);
                             }
                             else
                             {
-                                CommandHandlerHelper.WriteOutputInfo(session, $"Error: failed consuming 200 PK trophies from your inventory. Please try again or contact an admin for support.", ChatMessageType.Broadcast);
+                                CommandHandlerHelper.WriteOutputInfo(session, $"Error: failed consuming {renameCost} PK trophies from your inventory. Please try again or contact an admin for support.", ChatMessageType.Broadcast);
 
                                 //Log this failure to the audit log
                                 PlayerManager.BroadcastToAuditChannel(session.Player, $"Error: player {session.Player.Name} used /BuyRename command, and was verified to have enough PK trophies, but failed to consume the PK trophies with TryConsumeFromInventoryWithNetworking.");
@@ -1153,10 +1162,107 @@ namespace ACE.Server.Command.Handlers
 
                     CommandHandlerHelper.WriteOutputInfo(session, $"Player named \"{oldName}\" renamed to \"{newName}\" successfully!", ChatMessageType.Broadcast);
 
-                    PlayerManager.BroadcastToAuditChannel(session.Player, $"Player {oldName} used /BuyRename command to rename themselves to {newName}.");
+                    PlayerManager.BroadcastToAuditChannel(session.Player, $"Player {oldName} used /BuyRename command to rename themselves to {newName} for a cost of {renameCost} PK Trophies.");
 
                     onlinePlayer.Session.LogOffPlayer();
                 });
+            }
+        }
+
+        private static int CalculateRenameCost(int renameCount)
+        {
+            return renameCount == 0 ? 0
+                 : renameCount == 1 ? 200
+                 : Math.Min((int)(renameBaseCost * Math.Pow(1.35, renameCount - 1)), renameMaxCost);
+        }
+
+        private const int titleBaseCost = 200;
+        // buytitle <Current Name> <New Name>
+        [CommandHandler("buytitle", AccessLevel.Player, CommandHandlerFlag.None, 1,
+            "Purchase a custom title for your character for PK trophies",
+            "< New Title >")]
+        public static void HandleBuyTitle(Session session, params string[] parameters)
+        {
+            if (!CheckPlayerCommandRateLimit(session))
+                return;
+
+            if (parameters.Length < 1)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters: please provide a new character title. Usage: /BuyTitle <NewCharacterTitle>", ChatMessageType.Broadcast);
+                return;
+            }
+            
+            var numPkTrophiesInInventory = session.Player.GetNumInventoryItemsOfWCID(1000002);
+            if (numPkTrophiesInInventory < titleBaseCost)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Buying a custom title for your character costs {titleBaseCost} PK trophies. You don't have enough PK trophies in your inventory to cover the cost.", ChatMessageType.Broadcast);
+                return;
+            }
+
+            var newTitle = string.Join(" ", parameters).Trim();
+
+            if (newTitle.StartsWith("+"))
+                newTitle = newTitle.Substring(1);
+
+            //Verify the new title is not in the taboo table
+            if (PropertyManager.GetBool("taboo_table").Item && DatManager.PortalDat.TabooTable.ContainsBadWord(newTitle.ToLowerInvariant()))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Error, unable to set your character title to \"{newTitle}\" as that name is not allowed per the taboo table.", ChatMessageType.Broadcast);
+                return;
+            }            
+
+            //Verify the new title has only alpha characters, apostrophies or dashes, and isn't more than 32 characters
+            if (newTitle.Length > 32)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Error, unable to set your character title to \"{newTitle}\" as that name exceeds the maximum 32 character limit.", ChatMessageType.Broadcast);
+                return;
+            }
+
+            var hasInvalidChars = false;
+            foreach (Char c in newTitle)
+            {
+                if (!Char.IsLetter(c) && c != '\'' && c != '-' && c != ' ')
+                {
+                    hasInvalidChars = true;
+                }
+            }
+
+            if (hasInvalidChars)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Error, unable to set your character title to \"{newTitle}\" as that name contains invalid characters for a player title.  Player titles may only contain characters A-Z, spaces, apostrophes or dashes.", ChatMessageType.Broadcast);
+                return;
+            }
+
+            var onlinePlayer = session.Player;
+            if (onlinePlayer != null)
+            {
+                //Check if the player has sufficient funds to purchase the rename
+                numPkTrophiesInInventory = session.Player.GetNumInventoryItemsOfWCID(1000002);
+                if (numPkTrophiesInInventory < titleBaseCost)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Buying a custom title for your character costs {titleBaseCost} PK trophies. You don't have enough PK trophies in your inventory to cover the cost.", ChatMessageType.Broadcast);
+                    return;
+                }
+                else
+                {                        
+                    if (session.Player.TryConsumeFromInventoryWithNetworking(1000002, titleBaseCost))
+                    {
+                        CommandHandlerHelper.WriteOutputInfo(session, $"{titleBaseCost} PK trophies have been removed from your inventory", ChatMessageType.Broadcast);                        
+                        onlinePlayer.SetProperty(PropertyString.Template, newTitle);
+                        onlinePlayer.RemoveProperty(PropertyInt.CharacterTitleId);
+                        onlinePlayer.CharacterChangesDetected = true;
+                        onlinePlayer.SavePlayerToDatabase();
+                        CommandHandlerHelper.WriteOutputInfo(session, $"Your title has been changed to \"{newTitle}\" successfully!", ChatMessageType.Broadcast);
+                    }
+                    else
+                    {
+                        CommandHandlerHelper.WriteOutputInfo(session, $"Error: failed consuming {titleBaseCost} PK trophies from your inventory. Please try again or contact an admin for support.", ChatMessageType.Broadcast);
+
+                        //Log this failure to the audit log
+                        PlayerManager.BroadcastToAuditChannel(session.Player, $"Error: player {session.Player.Name} used /BuyTitle command, and was verified to have enough PK trophies, but failed to consume the PK trophies with TryConsumeFromInventoryWithNetworking.");
+                        return;
+                    }                        
+                }                                     
             }
         }
 
