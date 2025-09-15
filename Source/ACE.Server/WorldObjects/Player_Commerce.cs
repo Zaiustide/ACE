@@ -167,16 +167,19 @@ namespace ACE.Server.WorldObjects
 
             //Limit how many items can be sold to a vendor in one transaction
             if (itemProfiles?.Count > PropertyManager.GetLong("vendor_max_items_per_sale", 24).Item)
-            {
+            {                
                 Session.Network.EnqueueSend(new GameEventCommunicationTransientString(Session, "You have attempted to sell too many items in one transaction!"));
                 Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, Guid.Full));
                 SendUseDoneEvent();
                 return;
             }
 
+            //Check if only selling MMDs, if so bypass the rate limit
+            var sellingNonMMDs = itemProfiles.Any(x => GetInventoryItem(x.ObjectGuid)?.WeenieClassId != 20630);            
+
             //Limit how often items can be sold to a vendor
             var rateLimitSeconds = PropertyManager.GetLong("vendor_sale_rate_limit_seconds").Item;
-            if (this.LastPlayerVendorSaleTimestamp.HasValue && Time.GetDateTimeFromTimestamp(this.LastPlayerVendorSaleTimestamp.Value) > DateTime.UtcNow.AddSeconds(-1 * rateLimitSeconds))
+            if (sellingNonMMDs && this.LastPlayerVendorSaleTimestamp.HasValue && Time.GetDateTimeFromTimestamp(this.LastPlayerVendorSaleTimestamp.Value) > DateTime.UtcNow.AddSeconds(-1 * rateLimitSeconds))
             {
                 Session.Network.EnqueueSend(new GameEventCommunicationTransientString(Session, $"You have attempted to sell items to a vendor too recently! You may only complete a sales transaction once every {rateLimitSeconds} seconds."));
                 Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, Guid.Full));
