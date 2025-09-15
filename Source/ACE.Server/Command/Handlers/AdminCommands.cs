@@ -5278,5 +5278,102 @@ namespace ACE.Server.Command.Handlers
                 log.Error($"Error in call to AdminCommands.HandleRemoveWhitelist. ex: {ex}");
             }
         }
+
+        [CommandHandler("arenablacklist", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+            "Adds a player to the arena blacklist preventing them from joining arena events")]
+        public static void HandleArenaBlacklist(Session session, params string[] parameters)
+        {
+            try
+            {
+                if (parameters.Count() < 1)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /ArenaBlacklist {characterName}");
+                    return;
+                }
+
+                //Verify the player
+                var playerName = string.Join(" ", parameters);
+                var player = PlayerManager.FindByName(playerName);
+                if (player == null)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"No player found with name = {playerName}");
+                    return;
+                }                
+
+                //Check if already blacklisted
+                var blackList = PropertyManager.GetString("arenas_blacklist").Item;
+                if (blackList.Contains(player.Guid.Full.ToString()))
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} is already blacklisted from arenas");
+                    return;
+                }
+
+                //Add to the blacklist
+                blackList += "," + player.Guid.Full.ToString();
+
+                PropertyManager.ModifyString("arenas_blacklist", blackList);
+                CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} has been blacklisted from arenas");
+                PlayerManager.BroadcastToAuditChannel(session.Player, $"{session.Player.Name} has blacklisted {playerName} from arenas");
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in call to AdminCommands.HandleArenaBlacklist. ex: {ex}");
+            }
+        }
+
+        [CommandHandler("removearenablacklist", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+            "Removes a player from the arena blacklist allowing them to once again join arena events")]
+        public static void HandleRemoveArenaBlacklist(Session session, params string[] parameters)
+        {
+            try
+            {
+                if (parameters.Count() < 1)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /RemoveArenaBlacklist {characterName}");
+                    return;
+                }
+
+                //Verify the player
+                var playerName = string.Join(" ", parameters);
+                var player = PlayerManager.FindByName(playerName);
+                if (player == null)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"No player found with name = {playerName}");
+                    return;
+                }
+
+                //Check if already blacklisted
+                var blackList = PropertyManager.GetString("arenas_blacklist").Item;
+                if (!blackList.Contains(player.Guid.Full.ToString()))
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} is not currently blacklisted from arenas");
+                    return;
+                }
+
+                //Remove from the blacklist
+                var blacklistArr = blackList.Split(",");
+                string newBlacklist = string.Empty;
+                for (int i = 0; i < blacklistArr.Length; i++)
+                {
+                    if (!blacklistArr[i].Equals(player.Guid.Full.ToString()) && Int64.TryParse(blacklistArr[i], out long x))
+                    {
+                        newBlacklist += blacklistArr[i] + ",";
+                    }
+                }
+
+                if (newBlacklist.StartsWith(','))
+                    newBlacklist = newBlacklist.Substring(1);
+                if (newBlacklist.EndsWith(','))
+                    newBlacklist = newBlacklist.Substring(0, newBlacklist.Length - 1);
+
+                PropertyManager.ModifyString("arenas_blacklist", newBlacklist);
+                CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} has been removed from the arena blacklist");
+                PlayerManager.BroadcastToAuditChannel(session.Player, $"{session.Player.Name} has removed {playerName} from the arena blacklist");
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in call to AdminCommands.HandleRemoveArenaBlacklist. ex: {ex}");
+            }
+        }
     }
 }
