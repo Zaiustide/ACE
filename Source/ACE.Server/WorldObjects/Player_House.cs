@@ -588,7 +588,7 @@ namespace ACE.Server.WorldObjects
             {
                 if (House == null || House.SlumLord == null) return;
 
-                if (House.HouseStatus == HouseStatus.Active && !House.SlumLord.IsRentPaid() && PropertyManager.GetBool("house_rent_enabled", true).Item)
+                if (House.HouseStatus == HouseStatus.Active && !House.SlumLord.IsRentPaid() && PropertyManager.GetBool("house_rent_enabled", true).Item && House.HouseType == HouseType.Mansion)
                 {
                     Session.Network.EnqueueSend(new GameMessageSystemChat($"Warning!  You have not paid your maintenance costs for the last {(House.IsApartment ? "90" : "30")} day maintenance period.  Please pay these costs by this deadline or you will lose your house, and all your items within it.", ChatMessageType.System));
                 }

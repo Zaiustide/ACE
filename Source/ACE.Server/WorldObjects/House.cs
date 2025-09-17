@@ -112,6 +112,9 @@ namespace ACE.Server.WorldObjects
             if (HouseStatus == HouseStatus.InActive)
                 houseData.MaintenanceFree = true;
 
+            if(HouseType != HouseType.Mansion)
+                houseData.MaintenanceFree = true;
+
             return houseData;
         }
 

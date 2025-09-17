@@ -445,7 +445,7 @@ namespace ACE.Server.Managers
 
             var player = PlayerManager.FindByGuid(playerGuid, out bool isOnline);
 
-            if (!PropertyManager.GetBool("house_rent_enabled", true).Item && !multihouse && !force)
+            if ((!PropertyManager.GetBool("house_rent_enabled", true).Item || house.HouseType != HouseType.Mansion) && !multihouse && !force)
             {
                 // rent disabled, push forward
                 var purchaseTime = (uint)(player.HousePurchaseTimestamp ?? 0);
@@ -615,6 +615,9 @@ namespace ACE.Server.Managers
             houseData.SetPaidItems(house.SlumLord);
 
             if (house.HouseStatus == HouseStatus.InActive)
+                houseData.MaintenanceFree = true;
+
+            if(house.HouseType != HouseType.Mansion)
                 houseData.MaintenanceFree = true;
 
             return houseData;

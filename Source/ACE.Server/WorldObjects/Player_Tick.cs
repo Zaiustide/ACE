@@ -91,7 +91,7 @@ namespace ACE.Server.WorldObjects
                 FellowVitalUpdate = false;
             }
 
-            if (House != null && PropertyManager.GetBool("house_rent_enabled").Item)
+            if (House != null && PropertyManager.GetBool("house_rent_enabled").Item && House.HouseType == HouseType.Mansion)
             {
                 if (houseRentWarnTimestamp > 0 && currentUnixTime > houseRentWarnTimestamp)
                 {
