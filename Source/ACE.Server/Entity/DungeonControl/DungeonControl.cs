@@ -220,14 +220,12 @@ namespace ACE.Server.Entity.DungeonControl
                     miteHole.DungeonName = "Mite Hole";
                     miteHole.LandblockId = 0x00E1;
                     miteHole.GuardianWeenieId = 514108551;
-                    miteHole.ControlPointCellId = 24379693;
+                    miteHole.ControlPointCellId = 14746276;
                     miteHole.XpAndLumBonus = 2.0f;
                     miteHole.OwnershipExpirationHours = 8;
                     miteHole.TreasureWeenieId = 514108532;
                     miteHole.TreasureSpawnRateMins = 15;
-                    miteHole.GuardianSpawnLocs = new List<Position>();
-                    //0x0174015C [67.659897 -110.523407 0.005000] 0.719811 0.000000 0.000000 0.694170
-                    miteHole.GuardianSpawnLocs.Add(new Position(0x0174015C, 67.659897f, -110.523407f, 0.005000f, 0f, 0f, 0.694170f, 0.719811f));
+                    miteHole.GuardianSpawnLocs = new List<Position>();                    
                     //0x00E1034A [51.393631 -248.015274 0.005000] 0.887417 0.000000 0.000000 -0.460967
                     miteHole.GuardianSpawnLocs.Add(new Position(0x00E1034A, 51.393631f, -248.015274f, 0.005000f, 0f, 0f, -0.460967f, 0.887417f));
                     //0x00E10327 [58.519081 -228.326736 -5.995000] 0.193848 0.000000 0.000000 0.981031
@@ -276,8 +274,6 @@ namespace ACE.Server.Entity.DungeonControl
                     miteHole.GuardianSpawnLocs.Add(new Position(0x00E10326, 62.661293f, -216.291138f, -5.995000f, 0f, 0f, 0.945294f, 0.326218f));
 
                     miteHole.TreasureSpawnLocs = new List<Position>();
-                    //0x0174015C [67.659897 -110.523407 0.005000] 0.719811 0.000000 0.000000 0.694170
-                    miteHole.TreasureSpawnLocs.Add(new Position(0x0174015C, 67.659897f, -110.523407f, 0.005000f, 0f, 0f, 0.694170f, 0.719811f));
                     //0x00E101E3 [169.814545 -109.413879 -17.995001] -0.593973 0.000000 0.000000 -0.804485
                     miteHole.TreasureSpawnLocs.Add(new Position(0x00E101E3, 169.814545f, -109.413879f, -17.995001f, 0f, 0f, -0.804485f, -0.593973f));
                     //0x00E10263 [89.904701 -120.080444 -11.995001] 0.023936 0.000000 0.000000 -0.999713
@@ -361,6 +357,7 @@ namespace ACE.Server.Entity.DungeonControl
                     _guardianList = new List<uint>();
                     _guardianList.Add(514108531); //Peddler's Outpost - Shreth Caverns
                     _guardianList.Add(514108541); //Peddler's Outpost - Ancient Temple
+                    _guardianList.Add(514108551); //Peddler's Outpost - Mite Hole
                 }
 
                 return _guardianList;
