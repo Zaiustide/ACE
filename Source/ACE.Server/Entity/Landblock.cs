@@ -51,11 +51,7 @@ namespace ACE.Server.Entity
         public static float IndoorChatRange { get; } = 25f;
         public static float MaxXY { get; } = 192f;
         public static float MaxObjectRange { get; } = 192f;
-        public static float MaxObjectGhostRange { get; } = 250f;
-
-        private static DateTime lastTownControlTickDateTime = DateTime.MinValue;
-        private static DateTime lastZergControlTickDateTime = DateTime.MinValue;
-        private static DateTime lastDungeonControlTickDateTime = DateTime.MinValue;
+        public static float MaxObjectGhostRange { get; } = 250f;        
 
         public LandblockId Id { get; }
 
@@ -150,6 +146,10 @@ namespace ACE.Server.Entity
         public List<ModelMesh> Buildings { get; private set; }
         public List<ModelMesh> WeenieMeshes { get; private set; }
         public List<ModelMesh> Scenery { get; private set; }
+
+        private DateTime lastTownControlTickDateTime = DateTime.MinValue;
+        private DateTime lastZergControlTickDateTime = DateTime.MinValue;
+        private DateTime lastDungeonControlTickDateTime = DateTime.MinValue;
 
         private bool? _isTownControlLandblock = null;
         public bool IsTownControlLandblock
