@@ -474,7 +474,7 @@ namespace ACE.Server.Managers
         /// <summary>
         /// Returns a reference to a landblock, loading the landblock if not already active
         /// </summary>
-        public static Landblock GetLandblock(LandblockId landblockId, bool loadAdjacents, bool permaload = false)
+        public static Landblock GetLandblock(LandblockId landblockId, bool loadAdjacents, bool permaload = false, DateTime? permaloadEndDate = null)
         {
             Landblock landblock;
 
@@ -512,7 +512,11 @@ namespace ACE.Server.Managers
                 }
 
                 if (permaload)
+                {                    
                     landblock.Permaload = true;
+                    if (permaloadEndDate.HasValue)
+                        landblock.PermaloadEndDate = landblock.PermaloadEndDate.HasValue && landblock.PermaloadEndDate.Value > permaloadEndDate.Value ? landblock.PermaloadEndDate : permaloadEndDate.Value;
+                }
 
                 // load adjacents, if applicable
                 if (loadAdjacents)

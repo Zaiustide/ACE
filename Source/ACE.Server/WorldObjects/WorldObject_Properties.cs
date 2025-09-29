@@ -3375,5 +3375,11 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyInt.CharacterRenameCount) ?? 0;
             set { if (value < 1) RemoveProperty(PropertyInt.CharacterRenameCount); else SetProperty(PropertyInt.CharacterRenameCount, value); }
         }
+
+        public int GuardianAllegianceId
+        {
+            get => GetProperty(PropertyInt.GuardianAllegianceId) ?? 0;
+            set { if (value < 1) RemoveProperty(PropertyInt.GuardianAllegianceId); else SetProperty(PropertyInt.GuardianAllegianceId, value); }
+        }
     }
 }

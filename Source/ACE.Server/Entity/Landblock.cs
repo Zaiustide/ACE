@@ -1,17 +1,7 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
-
-using log4net;
-
+using ACE.Adapter.GDLE.Models;
 using ACE.Common.Performance;
 using ACE.Database;
+using ACE.Database.Models.TownControl;
 using ACE.Database.Models.World;
 using ACE.DatLoader;
 using ACE.DatLoader.FileTypes;
@@ -19,20 +9,30 @@ using ACE.Entity;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
+using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using DC = ACE.Server.Entity.DungeonControl;
+using ACE.Server.Entity.TownControl;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
-using ACE.Server.Physics.Common;
 using ACE.Server.Network.GameMessages;
-using ACE.Server.WorldObjects;
-
-using Position = ACE.Entity.Position;
-using ACE.Server.Entity.TownControl;
 using ACE.Server.Network.GameMessages.Messages;
-using ACE.Adapter.GDLE.Models;
-using ACE.Database.Models.TownControl;
 using ACE.Server.Network.Handlers;
-using ACE.Server.Entity;
+using ACE.Server.Physics.Common;
+using ACE.Server.WorldObjects;
+using log4net;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Numerics;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+using Position = ACE.Entity.Position;
 
 namespace ACE.Server.Entity
 {
@@ -55,6 +55,7 @@ namespace ACE.Server.Entity
 
         private static DateTime lastTownControlTickDateTime = DateTime.MinValue;
         private static DateTime lastZergControlTickDateTime = DateTime.MinValue;
+        private static DateTime lastDungeonControlTickDateTime = DateTime.MinValue;
 
         public LandblockId Id { get; }
 
@@ -62,6 +63,11 @@ namespace ACE.Server.Entity
         /// Flag indicates if this landblock is permanently loaded (for example, towns on high-traffic servers)
         /// </summary>
         public bool Permaload = false;
+
+        /// <summary>
+        /// An optional end date in UTC at which the permaload flag is removed
+        /// </summary>
+        public DateTime? PermaloadEndDate = null;
 
         /// <summary>
         /// Flag indicates if this landblock has no keep alive objects
@@ -145,7 +151,59 @@ namespace ACE.Server.Entity
         public List<ModelMesh> WeenieMeshes { get; private set; }
         public List<ModelMesh> Scenery { get; private set; }
 
-        public bool IsTownControlLandblock { get; set; }
+        private bool? _isTownControlLandblock = null;
+        public bool IsTownControlLandblock
+        {
+            get
+            {
+                if(_isTownControlLandblock == null)
+                {
+                    _isTownControlLandblock = TownControlLandblocks.IsTownControlLandblock(this.Id.Landblock);
+                }
+
+                return _isTownControlLandblock.Value;
+            }
+            set
+            {
+                _isTownControlLandblock = value;
+            }
+        }
+
+        private bool? _isOwnableDungeon = null;
+        public bool IsOwnableDungeon
+        {
+            get
+            {
+                if(_isOwnableDungeon == null )
+                {
+                    _isOwnableDungeon = DungeonControl.DungeonControl.IsOwnableDungeon(this.Id.Landblock);
+                }
+
+                return _isOwnableDungeon.Value;
+            }
+            set
+            {
+                _isOwnableDungeon = value;
+            }
+        }
+
+        private uint? _dungeonControlPointCell = null;
+        public uint DungeonControlPointCell
+        {
+            get
+            {
+                if(_dungeonControlPointCell == null)
+                {
+                    _dungeonControlPointCell = DungeonControl.DungeonControl.GetOwnableDungeonByLandblockId(this.Id.Landblock).ControlPointCellId;
+                }
+
+                return (_dungeonControlPointCell.Value);
+            }
+            set
+            {
+                _dungeonControlPointCell = value;
+            }
+        }
 
         public readonly RateMonitor Monitor5m = new RateMonitor();
         private readonly TimeSpan last5mClearInteval = TimeSpan.FromMinutes(5);
@@ -211,11 +269,16 @@ namespace ACE.Server.Entity
             {
                 log.Debug($"Town Control landblock {this.Id.Raw.ToString("X4")} initialized");
             }
+
+            if(this.IsOwnableDungeon)
+            {
+                log.Debug($"Dungeon Control landblock {this.Id.Raw.ToString("X4")} initialized");
+            }
         }
 
         public void HandleTownControl()
         {
-            IsTownControlLandblock = TownControlLandblocks.IsTownControlLandblock(this.Id.Landblock);
+            //IsTownControlLandblock = TownControlLandblocks.IsTownControlLandblock(this.Id.Landblock);
             if (IsTownControlLandblock)
             {
                 try
@@ -371,6 +434,68 @@ namespace ACE.Server.Entity
             }
         }
 
+        public void HandleDungeonControl()
+        {
+            try
+            {
+                //Get all players on the landblock that are inside the control point's landcell
+                var players = this.GetCurrentLandblockPlayers();
+                Dictionary <uint, List<Player>> playersInControlPointByAlleg = new Dictionary<uint, List<Player>>();
+                bool shouldAwardPoints = true;
+                foreach(var player in players)
+                {
+                    if (player.Location.GetCell() == this.DungeonControlPointCell)
+                    {
+                        //Track by alleg - points are only awarded if two or more members of a whitelisted allegiance are in the control point and no enemies are in the control point
+                        var allegId = player.Allegiance?.MonarchId;
+                        if (allegId.HasValue)
+                        {
+                            if(playersInControlPointByAlleg.ContainsKey(allegId.Value))
+                            {
+                                playersInControlPointByAlleg[allegId.Value].Add(player);
+                            }
+                            else
+                            {
+                                playersInControlPointByAlleg.Add(allegId.Value, new List<Player>() { player });
+                            }
+                        }
+                        else
+                        {
+                            playersInControlPointByAlleg.Add(player.Character.Id, new List<Player>() { player });
+                        }
+
+                        //Drain Health, Stamina and Mana while standing in the control point
+                        player.UpdateVitalDelta(player.Health, -100);
+                        player.UpdateVitalDelta(player.Stamina, -100);
+                        player.UpdateVitalDelta(player.Mana, -100);
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The hungry whispers of the slain scratch at the edges of your mind as your life force slowly seeps from your very being.", ChatMessageType.Broadcast));
+                    }
+                }
+
+                if(playersInControlPointByAlleg.Keys.Count != 1)
+                {
+                    shouldAwardPoints = false;
+                }
+                else if (playersInControlPointByAlleg.Values?.First()?.Count < 2)
+                {
+                    shouldAwardPoints = false;
+                }
+
+                if(shouldAwardPoints)
+                {
+                    DC.DungeonControl.EarnAllegiancePoints(playersInControlPointByAlleg.Keys.First(), this.Id.Landblock);
+                }
+
+                DC.DungeonControl.SpawnTreasure(this.Id.Landblock);
+
+                DC.DungeonControl.ExpireOwnership(this.Id.Landblock);
+                
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in HandleDungeonControl. Ex: {ex}");
+            }
+        }
 
         /// <summary>
         /// Monster Locations, Generators<para />
@@ -704,6 +829,12 @@ namespace ACE.Server.Entity
                     }
                 }
 
+                if (Permaload && PermaloadEndDate.HasValue && thisHeartBeat < PermaloadEndDate.Value)
+                {
+                    Permaload = false;
+                    PermaloadEndDate = null;
+                }
+
                 if (!Permaload && HasNoKeepAliveObjects)
                 {
                     if (lastActiveTime + dormantInterval < thisHeartBeat)
@@ -797,6 +928,12 @@ namespace ACE.Server.Entity
             {
                 HandleZergControl();
                 lastZergControlTickDateTime = DateTime.Now;
+            }
+
+            if(this.IsOwnableDungeon && lastDungeonControlTickDateTime < DateTime.Now.AddSeconds(-10))
+            {
+                HandleDungeonControl();
+                lastDungeonControlTickDateTime = DateTime.Now;
             }
 
             Monitor5m.RegisterEventEnd();

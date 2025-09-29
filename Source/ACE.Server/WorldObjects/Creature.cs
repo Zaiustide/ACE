@@ -16,6 +16,7 @@ using ACE.Server.WorldObjects.Entity;
 
 using Position = ACE.Entity.Position;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.Entity.DungeonControl;
 
 namespace ACE.Server.WorldObjects
 {
@@ -419,6 +420,20 @@ namespace ACE.Server.WorldObjects
                 }
 
                 return _isTownControlConflictBoss.Value;
+            }
+        }
+
+        private bool? _isDungeonControlGuardian = null;
+        public bool IsDungeonControlGuardian
+        {
+            get
+            {
+                if (!_isDungeonControlGuardian.HasValue)
+                {
+                    _isDungeonControlGuardian = DungeonControl.IsDungeonControlGuardian(this.WeenieClassId);
+                }
+
+                return _isDungeonControlGuardian.Value;
             }
         }
 

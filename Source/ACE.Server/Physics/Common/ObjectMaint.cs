@@ -931,6 +931,19 @@ namespace ACE.Server.Physics.Common
                     return false;
                 }
             }
+            else if ((PhysicsObj.WeenieObj.WorldObject as Creature)?.IsDungeonControlGuardian ?? false &&
+                        PhysicsObj.WeenieObj.WorldObject?.GuardianAllegianceId > 0)
+            {
+                //Don't track owners of the dungeon
+                if (obj.IsPlayer)
+                {
+                    var player = obj.WeenieObj.WorldObject as Player;
+                    if (player != null && PhysicsObj.WeenieObj.WorldObject?.GuardianAllegianceId == player.Allegiance?.MonarchId)
+                    {
+                        return false;
+                    }
+                }
+            }
             else
             {
                 // handle special case:

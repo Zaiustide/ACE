@@ -37,6 +37,7 @@ using System.Text;
 using ACE.Database.Models.Log;
 using Microsoft.Extensions.Logging;
 using ACE.Server.Entity.WorldBoss;
+using ACE.Server.Entity.DungeonControl;
 
 namespace ACE.Server.Command.Handlers
 {
@@ -5369,6 +5370,54 @@ namespace ACE.Server.Command.Handlers
                 PropertyManager.ModifyString("arenas_blacklist", newBlacklist);
                 CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} has been removed from the arena blacklist");
                 PlayerManager.BroadcastToAuditChannel(session.Player, $"{session.Player.Name} has removed {playerName} from the arena blacklist");
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in call to AdminCommands.HandleRemoveArenaBlacklist. ex: {ex}");
+            }
+        }
+
+        [CommandHandler("resetdungeoncontrol", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
+            "Resets ownership of dungeon control dungeons")]
+        public static void HandleResetDungeonControl(Session session, params string[] parameters)
+        {
+            try
+            {
+                if(parameters.Count() > 1)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /ResetDungeonControl {optional: landblockId}");
+                    return;
+                }
+
+                //If no parameters given, clear ownership of all dungeons
+                if(parameters.Count() < 1)
+                {
+                    DungeonControl.ClearOwnership();
+                    CommandHandlerHelper.WriteOutputInfo(session, $"All ownable dungeons have had their ownership reset");
+                    return;
+                }
+
+                //If parameters given, try to clear ownership of the specified dungeon                
+                if(!UInt32.TryParse(parameters[0], out uint landblockId))
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /ResetDungeonControl {optional: landblockId}");
+                    return;
+                }
+
+                var dungeon = DungeonControl.GetOwnableDungeonByLandblockId(landblockId);
+
+                if (dungeon == null)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"No Ownable Dungeon found for LandblockId = {landblockId}");
+                    return;
+                }
+                else
+                {
+                    DungeonControl.ClearOwnership(dungeon);
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Dungeon {dungeon.DungeonName} has had its ownership reset");
+                    return;
+                }
+                
             }
             catch (Exception ex)
             {

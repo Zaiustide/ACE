@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ACE.Common;
 using ACE.Database;
 using ACE.Database.Models.TownControl;
 using ACE.Entity.Enum;
@@ -10,6 +11,7 @@ using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Network.Handlers;
+using ACE.Server.WorldObjects.Entity;
 
 namespace ACE.Server.WorldObjects
 {
@@ -282,6 +284,24 @@ namespace ACE.Server.WorldObjects
                 if(this.WeenieClassId != (WorldBossManager.GetActiveWorldBoss()?.WeenieID ?? 0))
                 {
                     this.Die();
+                }
+            }
+
+            else if(this.IsDungeonControlGuardian)
+            {
+                //Decay guardian's health and ratings based on time since creation
+                var ageSeconds = Time.GetUnixTime() - this.CreationTimestamp;
+                var percentLifespanRemaining = Math.Max(1.0f - ((float)ageSeconds / 28800f), 0); //Assumes an 8 hour lifespan
+
+                if (percentLifespanRemaining > 0)
+                {
+                    var currentHealthPercent = Health.Percent;
+                    if (currentHealthPercent > percentLifespanRemaining)
+                    {
+                        UpdateVital(Health, Convert.ToInt32(Math.Round(Health.MaxValue * percentLifespanRemaining)));
+                    }
+
+                    this.DamageRating = this.DamageResistRating = Convert.ToInt32(Math.Round(Math.Pow(percentLifespanRemaining, 7) * 1000)); 
                 }
             }
 

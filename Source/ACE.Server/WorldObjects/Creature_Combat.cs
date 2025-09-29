@@ -1081,6 +1081,13 @@ namespace ACE.Server.WorldObjects
         {
             if (target is Player)
             {
+                var player = target as Player;
+                //Dungone control guardians don't attack owners of the dungeon
+                if(this.IsDungeonControlGuardian && player.Allegiance?.MonarchId == this.GuardianAllegianceId)
+                {
+                    return false;
+                }
+
                 // monster attacking player
                 return true;    // other checks handled elsewhere
             }
@@ -1179,6 +1186,12 @@ namespace ACE.Server.WorldObjects
                 return false;
 
             // add to retaliate targets?
+
+            //Dungon Control Guardians don't target dungeon owners
+            if(monster.IsDungeonControlGuardian && monster.GuardianAllegianceId == (this as Player)?.Allegiance?.MonarchId)
+            {
+                return false;
+            }
 
             //Console.WriteLine($"[{Timers.RunningTime}] - {monster.Name} ({monster.Guid}) - waking up");
             monster.AttackTarget = this;

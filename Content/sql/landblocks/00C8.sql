@@ -721,3 +721,7 @@ VALUES (0x700C8090, 490247, 0x00C80119, 46.8082, -96.3182, -59.995, -0.339143, 0
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x700C86A5,  1154, 0x00C8010C, 25.059, -125.081, -60, 1, 0, 0, 0, False, '2021-11-01 00:00:00'); /* Linkable Monster Generator */
 /* @teleloc 0x00C8010C [25.059000 -125.081001 -60.000000] 1.000000 0.000000 0.000000 0.000000 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x700C86A6, 514108530, 0x00C801A9, 190.663, -100.693, -53.925, 0, 0, 0, 1, False, '2025-09-19 16:50:20'); /* Dungeon Control Point */
+/* @teleloc 0x00C801A9 [190.662994 -100.693001 -53.924999] 0.000000 0.000000 0.000000 1.000000 */

@@ -270,6 +270,10 @@ namespace ACE.Server.WorldObjects
                 if (Tolerance.HasFlag(Tolerance.Monster) && (creature is Player || creature is CombatPet))
                     continue;
 
+                //Dungon control guardians don't target dungeon owners
+                if (this.IsDungeonControlGuardian && (creature as Player)?.Allegiance?.MonarchId == this.GuardianAllegianceId)
+                    continue;
+
                 visibleTargets.Add(creature);
             }
 
@@ -354,6 +358,10 @@ namespace ACE.Server.WorldObjects
                     continue;
 
                 if (Tolerance.HasFlag(Tolerance.Monster) && (creature is Player || creature is CombatPet))
+                    continue;
+
+                //Dungeon control guardians don't target dungeon owners
+                if (this.IsDungeonControlGuardian && (creature as Player)?.Allegiance?.MonarchId == this.GuardianAllegianceId)
                     continue;
 
                 //var distSq = Location.SquaredDistanceTo(creature.Location);

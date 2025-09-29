@@ -639,6 +639,7 @@ namespace ACE.Entity.Enum.Properties
 
         //The number of times a character has been renamed
         CharacterRenameCount = 9016,
+        GuardianAllegianceId = 19000
     }
 
     public static class PropertyIntExtensions

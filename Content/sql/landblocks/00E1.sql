@@ -418,3 +418,7 @@ VALUES (0x700E1052, 1910489, 0x00E10156, 60.115, -93.2812, -35.995, -0.16616, 0,
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x700E1053, 1910489, 0x00E1013F, 39.739, -93.1086, -35.995, -0.298294, 0, 0, 0.954474,  True, '2021-11-01 00:00:00'); /* Rabid Mite */
 /* @teleloc 0x00E1013F [39.738998 -93.108597 -35.994999] -0.298294 0.000000 0.000000 0.954474 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x700E1054, 514108530, 0x00E102A4, 108.914, -9.6325, -11.945, 0.756964, 0, 0, 0.653456, False, '2025-09-29 09:16:29'); /* Dungeon Control Point */
+/* @teleloc 0x00E102A4 [108.914001 -9.632500 -11.945000] 0.756964 0.000000 0.000000 0.653456 */

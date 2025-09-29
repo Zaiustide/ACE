@@ -10,6 +10,7 @@ using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Entity.DungeonControl;
 using ACE.Server.Entity.TownControl;
 using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Factories;
@@ -194,6 +195,20 @@ namespace ACE.Server.WorldObjects
             if (totalHealth == 0)
                 return;
 
+            //If this is a Dungeon Control landblock, grant bonus XP and Lum to dungeon owners
+            var dungeonOwnerMod = 1.0f;
+            uint dungeonOwnerAllegId = 0;
+            var landblock = LandblockManager.GetLandblock(this.Location.LandblockId, false, false);
+            if(landblock.IsOwnableDungeon)
+            {
+                var dungeon = DungeonControl.GetOwnableDungeonByLandblockId(landblock.Id.Landblock);
+                if(dungeon != null && dungeon.OwningAllegianceId.HasValue)
+                {
+                    dungeonOwnerMod = dungeon.XpAndLumBonus;
+                    dungeonOwnerAllegId = dungeon.OwningAllegianceId.Value;
+                }
+            }
+
             foreach (var kvp in DamageHistory.TotalDamage)
             {
                 var damager = kvp.Value.TryGetAttacker();
@@ -212,12 +227,23 @@ namespace ACE.Server.WorldObjects
 
                 var totalXP = (XpOverride ?? 0) * damagePercent;
 
+                if(playerDamager.Allegiance?.MonarchId == dungeonOwnerAllegId)
+                {
+                    totalXP *= dungeonOwnerMod;
+                }
+
                 playerDamager.EarnXP((long)Math.Round(totalXP), XpType.Kill);
 
                 // handle luminance
                 if (LuminanceAward != null)
                 {
                     var totalLuminance = (long)Math.Round(LuminanceAward.Value * damagePercent);
+
+                    if (playerDamager.Allegiance?.MonarchId == dungeonOwnerAllegId)
+                    {
+                        totalLuminance = Convert.ToInt64(Math.Round(totalLuminance * dungeonOwnerMod));
+                    }
+
                     playerDamager.EarnLuminance(totalLuminance, XpType.Kill);
                 }
             }

@@ -45,6 +45,17 @@ namespace ACE.Server.WorldObjects
                 monster.AddRetaliateTarget(this);
             }
 
+            // if the target monster is a dungeon control guardian and the combat pet's owner controls the dungeon
+            // don't aggro the monster?
+            if (monster.IsDungeonControlGuardian && P_PetOwner.Allegiance?.MonarchId == monster.GuardianAllegianceId)
+            {
+                // unless the pet owner or the pet is being retaliated against?
+                if (!monster.HasRetaliateTarget(P_PetOwner) && !monster.HasRetaliateTarget(this))
+                    return false;
+
+                monster.AddRetaliateTarget(this);
+            }
+
             monster.AttackTarget = this;
             monster.WakeUp();
 
