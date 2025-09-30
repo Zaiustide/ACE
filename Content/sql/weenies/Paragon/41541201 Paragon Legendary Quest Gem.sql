@@ -11,7 +11,7 @@ VALUES (41541202,   1,        128) /* ItemType - Misc */
      , (41541202,  13,         50) /* StackUnitEncumbrance */
      , (41541202,  15,         25) /* StackUnitValue */
      , (41541202,  16,          8) /* ItemUseable - Contained */
-     , (41541202,  19,         25) /* Value */
+     , (41541202,  19,          5) /* Value */
      , (41541202,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (41541202,  94,         16) /* TargetType - Creature */
      , (41541202, 151,          1) /* HookType - Floor */;
