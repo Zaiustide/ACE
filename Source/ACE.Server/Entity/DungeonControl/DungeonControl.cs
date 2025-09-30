@@ -1,4 +1,5 @@
 using ACE.Database;
+using ACE.Database.Models.TownControl;
 using ACE.Entity;
 using ACE.Entity.Enum;
 using ACE.Server.Entity;
@@ -33,6 +34,7 @@ namespace ACE.Server.Entity.DungeonControl
                     shrethCaverns.LandblockId = 0x00C8;
                     shrethCaverns.GuardianWeenieId = 514108531;                    
                     shrethCaverns.ControlPointCellId = 13107625;
+                    shrethCaverns.CaptureScore = 600;
                     shrethCaverns.XpAndLumBonus = 2.0f;
                     shrethCaverns.OwnershipExpirationHours = 8;
                     shrethCaverns.TreasureWeenieId = 514108532;
@@ -131,6 +133,7 @@ namespace ACE.Server.Entity.DungeonControl
                     ancientTemple.LandblockId = 0x0174;
                     ancientTemple.GuardianWeenieId = 514108541;
                     ancientTemple.ControlPointCellId = 24379693;
+                    ancientTemple.CaptureScore = 600;
                     ancientTemple.XpAndLumBonus = 2.0f;
                     ancientTemple.OwnershipExpirationHours = 8;
                     ancientTemple.TreasureWeenieId = 514108532;
@@ -178,6 +181,12 @@ namespace ACE.Server.Entity.DungeonControl
                     ancientTemple.GuardianSpawnLocs.Add(new Position(0x01740134, 60.108665f, -59.782345f, 0.005000f, 0f, 0f, -0.999850f, 0.017292f));
                     //0x01740205 [19.642527 -140.577148 18.004999] 0.999656 0.000000 0.000000 0.026234
                     ancientTemple.GuardianSpawnLocs.Add(new Position(0x01740205, 19.642527f, -140.577148f, 18.004999f, 0f, 0f, 0.026234f, 0.999656f));
+                    //0x0174011A [47.233166 - 14.187041 0.005000] - 0.781343 0.000000 0.000000 0.624102
+                    ancientTemple.GuardianSpawnLocs.Add(new Position(0x0174011A, 47.233166f, -14.187041f, 0.005000f, 0f, 0f, 0.624102f, -0.781343f));
+                    //0x0174014B [69.197670 -7.839717 0.005000] -0.538133 0.000000 0.000000 -0.842860
+                    ancientTemple.GuardianSpawnLocs.Add(new Position(0x0174014B, 69.197670f, -7.839717f, 0.005000f, 0f, 0f, -0.842860f, -0.538133f));
+                    //0x0174012F [59.736706 -30.639841 0.005000] -0.999982 0.000000 0.000000 -0.005921
+                    ancientTemple.GuardianSpawnLocs.Add(new Position(0x0174012F, 59.736706f, -30.639841f, 0.005000f, 0f, 0f, -0.005921f, -0.999982f));
 
                     ancientTemple.TreasureSpawnLocs = new List<Position>();                    
                     //0x01740137 [57.894352 -76.899010 0.005000] -0.412681 0.000000 0.000000 0.910876
@@ -221,6 +230,7 @@ namespace ACE.Server.Entity.DungeonControl
                     miteHole.LandblockId = 0x00E1;
                     miteHole.GuardianWeenieId = 514108551;
                     miteHole.ControlPointCellId = 14746276;
+                    miteHole.CaptureScore = 600;
                     miteHole.XpAndLumBonus = 2.0f;
                     miteHole.OwnershipExpirationHours = 8;
                     miteHole.TreasureWeenieId = 514108532;
@@ -325,27 +335,7 @@ namespace ACE.Server.Entity.DungeonControl
             }
 
             return null;
-        }
-
-        private static List<uint> _controlPointList;
-        public static List<uint> ControlPointList
-        {
-            get
-            {
-                if(_controlPointList == null)
-                {
-                    _controlPointList = new List<uint>();
-                    _controlPointList.Add(514108530); //Peddler's Outpost
-                }
-
-                return _controlPointList;
-            }
-        }
-
-        public static bool IsDungeonControlPoint(uint weenieId)
-        {
-            return ControlPointList.Contains(weenieId);
-        }
+        }        
 
         private static List<uint> _guardianList;
         public static List<uint> GuardianList
@@ -413,7 +403,7 @@ namespace ACE.Server.Entity.DungeonControl
                 }
 
                 //Check if there's a winner
-                if (dungeon.AllegianceScoreBoard[allegianceId].Score > 30)
+                if (dungeon.AllegianceScoreBoard[allegianceId].Score >= dungeon.CaptureScore)
                 {
                     //Declare a winner
                     dungeon.OwningAllegianceId = allegianceId;
@@ -424,8 +414,8 @@ namespace ACE.Server.Entity.DungeonControl
                     //Spawn Guardians
                     SpawnGuardians(dungeon, allegianceId, landblock);
 
-                    //Broadcast the win
-                    landblock.EnqueueBroadcast(null, false, null, null, new GameMessageSystemChat($"{dungeon.OwningAllegianceName} has gained control of the dungeon and summoned its protectors.", ChatMessageType.Broadcast));
+                    //Broadcast the win                    
+                    PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{dungeon.OwningAllegianceName} has gained control of the {dungeon.DungeonName} dungeon and summoned its protectors.", ChatMessageType.Broadcast));                    
                 }
                 else
                 {
@@ -511,6 +501,7 @@ namespace ACE.Server.Entity.DungeonControl
                 treasureWorldObj.CurrentLandblock = landblock;
                 treasureWorldObj.TimeToRot = -1;
                 treasureWorldObj.Lifespan = 900;
+                treasureWorldObj.Name = $"{dungeon.OwningAllegianceName}''s Treasure";
                 treasureWorldObj.EnterWorld();
 
                 dungeon.LastTreasureSpawnTime  = DateTime.UtcNow;
@@ -590,6 +581,8 @@ namespace ACE.Server.Entity.DungeonControl
         public string OwningAllegianceName { get; set; }
 
         public int OwnershipExpirationHours { get; set; }
+
+        public int CaptureScore { get; set; }
 
         public DateTime? CaptureTime { get; set; }
 

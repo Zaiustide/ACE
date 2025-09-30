@@ -16,11 +16,11 @@ VALUES (514108541,   1,         16) /* ItemType - Creature */
      , (514108541,  68,          9) /* TargetingTactic - Random, TopDamager */
      , (514108541,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (514108541, 133,          2) /* ShowableOnRadar - ShowMovement */
-	 , (514108541, 146,  100000000) /* XpOverride */
-	 , (514108541, 307,       1000) /* DamageRating */
-	 , (514108541, 308,       1000) /* DamageResistRating */
-	 , (514108541, 332,      25000) /* LuminanceAward */
-	 , (514108541, 386,         10) /* Overpower */;
+	 , (514108541, 146,  150000000) /* XpOverride */
+	 , (514108541, 307,       2000) /* DamageRating */
+	 , (514108541, 308,       2000) /* DamageResistRating */
+	 , (514108541, 332,     250000) /* LuminanceAward */
+	 , (514108541, 386,        100) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (514108541,   1, True ) /* Stuck */

@@ -301,7 +301,7 @@ namespace ACE.Server.WorldObjects
                         UpdateVital(Health, Convert.ToInt32(Math.Round(Health.MaxValue * percentLifespanRemaining)));
                     }
 
-                    this.DamageRating = this.DamageResistRating = Convert.ToInt32(Math.Round(Math.Pow(percentLifespanRemaining, 7) * 1000)); 
+                    this.DamageRating = this.DamageResistRating = Convert.ToInt32(Math.Round(Math.Pow(percentLifespanRemaining, 7) * 2000)); 
                 }
             }
 
