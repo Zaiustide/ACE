@@ -348,6 +348,16 @@ namespace ACE.Server.WorldObjects
                                     Session.Network.EnqueueSend(new GameMessageCreateObject(box));
                                 }
                                 break;
+                            case "AMBER":
+                                msg = $"Reward: {rewardCount} Radiant Amber Crystal{(rewardCount > 1 ? "s" : "")}";
+                                Session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.System));
+                                for (int i = 0; i < rewardCount; i++)
+                                {
+                                    var box = WorldObjectFactory.CreateNewWorldObject(1000005);
+                                    this.TryCreateInInventoryWithNetworking(box);
+                                    Session.Network.EnqueueSend(new GameMessageCreateObject(box));
+                                }
+                                break;
                             default:
                                 break;
                         }

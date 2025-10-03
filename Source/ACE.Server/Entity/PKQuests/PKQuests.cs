@@ -45,6 +45,15 @@ namespace ACE.Server.Entity.PKQuests
                     arena_any_30.TaskCount = 30;
                     _pkQuestList.Add(arena_any_30);
 
+                    //- Participate in 50 arena matches
+                    var arena_any_50 = new PKQuest();
+                    arena_any_50.QuestCode = "ARENA_ANY_50";
+                    arena_any_50.Description = "Participate in 50 Arena matches";
+                    arena_any_50.RewardDescription = "200k luminance, 100% XP to next level, 3 Darkbeat Keys, 3 Phials of Bloody Tears, 100 PK Trophies, 2 Boxes, 1 Hera Key, 1 Radiant Amber Crystal.";
+                    arena_any_50.Rewards = new List<string>() { "LUM,200000", "XP%,100", "DBKEY,3", "PKTROPHY,100", "PHIAL,3", "BOX,2", "HERA,1", "AMBER,1" };
+                    arena_any_50.TaskCount = 50;
+                    _pkQuestList.Add(arena_any_50);
+
                     //- Win 10 arena matches
                     var arena_any_win_10 = new PKQuest();
                     arena_any_win_10.QuestCode = "ARENA_ANY_WIN_10";
@@ -402,7 +411,7 @@ namespace ACE.Server.Entity.PKQuests
             }
         }
 
-        public static string[] PKQuests_ParticipateAnyArena = { "ARENA_ANY_5", "ARENA_ANY_15", "ARENA_ANY_30" };
+        public static string[] PKQuests_ParticipateAnyArena = { "ARENA_ANY_5", "ARENA_ANY_15", "ARENA_ANY_30", "ARENA_ANY_50" };
 
         public static string[] PKQuests_WinAnyArena = { "ARENA_ANY_WIN_10", "ARENA_ANY_WIN_20", "ARENA_ANY_WIN_30" };
 
