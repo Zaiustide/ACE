@@ -316,7 +316,7 @@ namespace ACE.Server.WorldObjects
                                 msg = $"Reward: {rewardCount} PK Trophies";
                                 Session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.System));
                                 var trophy = WorldObjectFactory.CreateNewWorldObject(1000002);
-                                trophy.SetStackSize(rewardCount);
+                                trophy.SetStackSize(Math.Min(rewardCount, (int)trophy.MaxStackSize));
                                 this.TryCreateInInventoryWithNetworking(trophy);
                                 Session.Network.EnqueueSend(new GameMessageCreateObject(trophy));
                                 break;
@@ -324,7 +324,7 @@ namespace ACE.Server.WorldObjects
                                 msg = $"Reward: {rewardCount} Phial{(rewardCount > 1 ? "s" : "")} of Bloody Tears";
                                 Session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.System));
                                 var phial = WorldObjectFactory.CreateNewWorldObject(1000003);
-                                phial.SetStackSize(rewardCount);
+                                phial.SetStackSize(Math.Min(rewardCount, (int)phial.MaxStackSize));
                                 this.TryCreateInInventoryWithNetworking(phial);
                                 Session.Network.EnqueueSend(new GameMessageCreateObject(phial));
                                 break;
@@ -351,12 +351,10 @@ namespace ACE.Server.WorldObjects
                             case "AMBER":
                                 msg = $"Reward: {rewardCount} Radiant Amber Crystal{(rewardCount > 1 ? "s" : "")}";
                                 Session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.System));
-                                for (int i = 0; i < rewardCount; i++)
-                                {
-                                    var box = WorldObjectFactory.CreateNewWorldObject(1000005);
-                                    this.TryCreateInInventoryWithNetworking(box);
-                                    Session.Network.EnqueueSend(new GameMessageCreateObject(box));
-                                }
+                                var amber = WorldObjectFactory.CreateNewWorldObject(1000005);
+                                amber.SetStackSize(Math.Min(rewardCount, (int)amber.MaxStackSize));
+                                this.TryCreateInInventoryWithNetworking(amber);
+                                Session.Network.EnqueueSend(new GameMessageCreateObject(amber));
                                 break;
                             default:
                                 break;
