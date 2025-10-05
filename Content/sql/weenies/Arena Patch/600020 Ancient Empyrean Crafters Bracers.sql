@@ -11,17 +11,17 @@ VALUES (600020,   1,          2) /* ItemType - Armor */
      , (600020,   9,       4096) /* ValidLocations - LowerArmArmor */
      , (600020,  16,          1) /* ItemUseable - No */
      , (600020,  19,       100) /* Value */
-     , (600025,  28,        0) /* ArmorLevel */
-     , (600025,  33,          -1) /* Bonded - Slipper */
-     , (600025,  36,       9999) /* ResistMagic */
-     , (600025,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-	 , (600025, 106,        325) /* ItemSpellcraft */
-     , (600025, 107,      10000) /* ItemCurMana */
-     , (600025, 108,      10000) /* ItemMaxMana */
-     , (600025, 158,          1) /* WieldRequirements - Skill */
-     , (600025, 159,          18) /* WieldSkillType - Item Tinkering */
-     , (600025, 160,        450) /* WieldDifficulty */
-     , (600025, 265,        17) /* EquipmentSetId - TinkersSet */;
+     , (600020,  28,        0) /* ArmorLevel */
+     , (600020,  33,          -1) /* Bonded - Slipper */
+     , (600020,  36,       9999) /* ResistMagic */
+     , (600020,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
+	 , (600020, 106,        325) /* ItemSpellcraft */
+     , (600020, 107,      10000) /* ItemCurMana */
+     , (600020, 108,      10000) /* ItemMaxMana */
+     , (600020, 158,          1) /* WieldRequirements - Skill */
+     , (600020, 159,          18) /* WieldSkillType - Item Tinkering */
+     , (600020, 160,        450) /* WieldDifficulty */
+     , (600020, 265,        17) /* EquipmentSetId - TinkersSet */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (600020,  22, True ) /* Inscribable */
