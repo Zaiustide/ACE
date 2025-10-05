@@ -468,3 +468,7 @@ VALUES (0x7DA5509D, 4200044, 0xDA550015, 64.4302, 118.808, 19.937, 0.278122, 0, 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7DA5509E, 42128707, 0xDA550015, 64.2647, 106.918, 20.01, 0.67559, 0, 0, 0.737277, False, '2022-01-19 20:34:41'); /* Shoushi Town Treasurer */
 /* @teleloc 0xDA550015 [64.264702 106.917999 20.010000] 0.675590 0.000000 0.000000 0.737277 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7DA5509F, 600014, 0xDA55001C, 84.2529, 86.1806, 20.005, 0.9998, 0, 0, 0.019998, False, '2025-09-22 16:19:48'); /* Mikey K. */
+/* @teleloc 0xDA55001C [84.252899 86.180603 20.004999] 0.999800 0.000000 0.000000 0.019998 */

@@ -184,5 +184,21 @@ VALUES (0x701C905D, 32000110, 0x01C901F2, 123.182, -27.6672, -5.99675, 0.707107,
 /* @teleloc 0x01C901F2 [123.181999 -27.667200 -5.996750] 0.707107 0.000000 0.000000 0.707107 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x701C905E, 49100001, 0x01C901F2, 116.599, -27.6509, -5.9925, -0.731951, 0, 0, 0.681358, False, '2025-03-08 14:00:30');
+VALUES (0x701C905E, 49100001, 0x01C901F2, 116.599, -27.6509, -5.9925, -0.731951, 0, 0, 0.681358, False, '2025-03-08 14:00:30'); /* Thorsten */
 /* @teleloc 0x01C901F2 [116.598999 -27.650900 -5.992500] -0.731951 0.000000 0.000000 0.681358 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C905F, 600012, 0x01C901D7, 69.6212, -84.1307, -5.995, 0.999994, 0, 0, -0.003536, False, '2025-09-21 18:03:14'); /* Tier IV Rare Exchanger */
+/* @teleloc 0x01C901D7 [69.621201 -84.130699 -5.995000] 0.999994 0.000000 0.000000 -0.003536 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9060, 600008, 0x01C901D7, 67.4102, -84.0324, -5.995, 0.999778, 0, 0, -0.021067, False, '2025-09-21 18:03:48'); /* Tier V Rare Exchanger */
+/* @teleloc 0x01C901D7 [67.410202 -84.032402 -5.995000] 0.999778 0.000000 0.000000 -0.021067 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9061, 600010, 0x01C901D7, 65.3511, -84.0615, -5.995, 0.999995, 0, 0, 0.003078, False, '2025-09-21 18:06:53'); /* Tier VI Rare Exchanger */
+/* @teleloc 0x01C901D7 [65.351097 -84.061501 -5.995000] 0.999995 0.000000 0.000000 0.003078 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9062, 600000, 0x01C901F0, 120.285, -7.99674, -5.985, 0.031867, 0, 0, -0.999492, False, '2025-09-21 18:20:44'); /* Fargon */
+/* @teleloc 0x01C901F0 [120.285004 -7.996740 -5.985000] 0.031867 0.000000 0.000000 -0.999492 */

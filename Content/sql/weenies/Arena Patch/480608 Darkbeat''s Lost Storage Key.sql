@@ -8,7 +8,7 @@ VALUES (480608,   1,      16384) /* ItemType - Key */
      , (480608,   5,        500) /* EncumbranceVal */
 	 , (480608,   8,          5) /* Mass */
      , (480608,  16,    2097160) /* ItemUseable - SourceContainedTargetRemote */
-     , (480608,  19,          0) /* Value */
+     , (480608,  19,          100) /* Value */
 	 , (480608,  33,         -1) /* Bonded - Slippery */
      , (480608,  91,          1) /* MaxStructure */
      , (480608,  92,          1) /* Structure */

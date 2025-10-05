@@ -146,14 +146,14 @@ namespace ACE.Server.WorldObjects
             //Custom XP Bottle
             else if (WeenieClassId == 490071)
             {
-                if(!ItemTotalXp.HasValue || ItemTotalXp < 1)
+                if (!ItemTotalXp.HasValue || ItemTotalXp < 1)
                 {
                     player.SendTransientError($"Your XP bottle is empty");
                     return;
                 }
 
                 //XP bottle is capped at 10 bil xp
-                if(ItemTotalXp > 10000000000)
+                if (ItemTotalXp > 10000000000)
                 {
                     ItemTotalXp = 10000000000;
                 }
@@ -208,10 +208,10 @@ namespace ACE.Server.WorldObjects
             }
 
             //Custom Island Gem
-            else if(WeenieClassId == 490322)
+            else if (WeenieClassId == 490322)
             {
                 //Don't allow gem to be used if PK tagged
-                if(player.PKTimerActive)
+                if (player.PKTimerActive)
                 {
                     var playerMsg = $"You have been involved in a PK battle too recently to use your {this.Name}.";
                     player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -220,73 +220,133 @@ namespace ACE.Server.WorldObjects
                 }
                 else
                 {
-                    var islandLoc = new Position(0xF76B0036, 148.463013f, 138.334213f, 0.00500f, 0f, 0f, -0.530781f, -0.847509f);                    
+                    var islandLoc = new Position(0xF76B0036, 148.463013f, 138.334213f, 0.00500f, 0f, 0f, -0.530781f, -0.847509f);
                     player.Teleport(islandLoc);
                     var playerMsg = $"The {this.Name} has teleported you to Peddler's Outpost.";
                     player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                 }
             }
 
-            #endregion Custom gems
-
-            // trying to use a dispel potion while pk timer is active
-            // send error message and cancel - do not consume item
-            if (SpellDID != null)
+            //Custom Shoushi Outpost Gem
+            else if (WeenieClassId == 600005)
             {
-                var spell = new Spell(SpellDID.Value);
-
-                if (spell.MetaSpellType == SpellType.Dispel && !VerifyDispelPKStatus(this, player))
+                //Don't allow gem to be used if PK tagged
+                if (player.PKTimerActive)
+                {
+                    var playerMsg = $"You have been involved in a PK battle too recently to use your {this.Name}.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                     return;
-            }
-
-            if (RareUsesTimer)
-            {
-                var currentTime = Time.GetUnixTime();
-
-                player.LastRareUsedTimestamp = currentTime;
-
-                // local broadcast usage
-                player.EnqueueBroadcast(new GameMessageSystemChat($"{player.Name} used the rare item {Name}", ChatMessageType.Broadcast));
-            }
-
-            if (SpellDID.HasValue)
-            {
-                var spell = new Spell((uint)SpellDID);
-
-                // should be 'You cast', instead of 'Item cast'
-                // omitting the item caster here, so player is also used for enchantment registry caster,
-                // which could prevent some scenarios with spamming enchantments from multiple gem sources to protect against dispels
-
-                // TODO: figure this out better
-                if (spell.MetaSpellType == SpellType.PortalSummon)
-                    TryCastSpell(spell, player, this, tryResist: false);
-                else if (spell.IsImpenBaneType || spell.IsItemRedirectableType)
-                    player.TryCastItemEnchantment_WithRedirects(spell, player, this);
+                }
                 else
-                    player.TryCastSpell(spell, player, this, tryResist: false);
+                {
+                    var shoushiTCLoc = new Position(0xDE510016, 48.076149f, 121.470108f, 16.005001f, 0f, 0f, -0.999995f, 0.003087f);
+                    player.Teleport(shoushiTCLoc);
+                    var playerMsg = $"The {this.Name} has teleported you to the Shoushi Outpost.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                }
             }
 
-            if (UseCreateContractId > 0)
+            //Custom Yaraq Outpost Gem
+            else if (WeenieClassId == 600006)
             {
-                if (!player.ContractManager.Add(UseCreateContractId.Value))
+                //Don't allow gem to be used if PK tagged
+                if (player.PKTimerActive)
+                {
+                    var playerMsg = $"You have been involved in a PK battle too recently to use your {this.Name}.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                     return;
-
-                // this wasn't in retail, but the lack of feedback when using a contract gem just seems jarring so...
-                player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{Name} accepted. Click on the quill icon in the lower right corner to open your contract tab to view your active contracts.", ChatMessageType.Broadcast));
+                }
+                else
+                {
+                    var yaraqTCLoc = new Position(0x81640006, 0.576489f, 143.601151f, 0.699269f, 0f, 0f, -0.714859f, 0.697868f);
+                    player.Teleport(yaraqTCLoc);
+                    var playerMsg = $"The {this.Name} has teleported you to the Yaraq Outpost.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                }
             }
 
-            if (UseCreateItem > 0)
+            //Custom Holtburg Outpost Gem
+            else if (WeenieClassId == 600007)
             {
-                if (!HandleUseCreateItem(player))
+                //Don't allow gem to be used if PK tagged
+                if (player.PKTimerActive)
+                {
+                    var playerMsg = $"You have been involved in a PK battle too recently to use your {this.Name}.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                     return;
+                }
+                else
+                {
+                    var holtburgTCLoc = new Position(0xA5B4003B, 176.617722f, 71.680115f, 46.005001f, 0f, 0f, 0.716226f, 0.697868f);
+                    player.Teleport(holtburgTCLoc);
+                    var playerMsg = $"The {this.Name} has teleported you to the Holtburg Outpost.";
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                }
             }
 
-            if (UseSound > 0)
-                player.Session.Network.EnqueueSend(new GameMessageSound(player.Guid, UseSound));
+                #endregion Custom gems
 
-            if ((GetProperty(PropertyBool.UnlimitedUse) ?? false) == false)
-                player.TryConsumeFromInventoryWithNetworking(this, 1);
-        }
+                // trying to use a dispel potion while pk timer is active
+                // send error message and cancel - do not consume item
+                if (SpellDID != null)
+                {
+                    var spell = new Spell(SpellDID.Value);
+
+                    if (spell.MetaSpellType == SpellType.Dispel && !VerifyDispelPKStatus(this, player))
+                        return;
+                }
+
+                if (RareUsesTimer)
+                {
+                    var currentTime = Time.GetUnixTime();
+
+                    player.LastRareUsedTimestamp = currentTime;
+
+                    // local broadcast usage
+                    player.EnqueueBroadcast(new GameMessageSystemChat($"{player.Name} used the rare item {Name}", ChatMessageType.Broadcast));
+                }
+
+                if (SpellDID.HasValue)
+                {
+                    var spell = new Spell((uint)SpellDID);
+
+                    // should be 'You cast', instead of 'Item cast'
+                    // omitting the item caster here, so player is also used for enchantment registry caster,
+                    // which could prevent some scenarios with spamming enchantments from multiple gem sources to protect against dispels
+
+                    // TODO: figure this out better
+                    if (spell.MetaSpellType == SpellType.PortalSummon)
+                        TryCastSpell(spell, player, this, tryResist: false);
+                    else if (spell.IsImpenBaneType || spell.IsItemRedirectableType)
+                        player.TryCastItemEnchantment_WithRedirects(spell, player, this);
+                    else
+                        player.TryCastSpell(spell, player, this, tryResist: false);
+                }
+
+                if (UseCreateContractId > 0)
+                {
+                    if (!player.ContractManager.Add(UseCreateContractId.Value))
+                        return;
+
+                    // this wasn't in retail, but the lack of feedback when using a contract gem just seems jarring so...
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{Name} accepted. Click on the quill icon in the lower right corner to open your contract tab to view your active contracts.", ChatMessageType.Broadcast));
+                }
+
+                if (UseCreateItem > 0)
+                {
+                    if (!HandleUseCreateItem(player))
+                        return;
+                }
+
+                if (UseSound > 0)
+                    player.Session.Network.EnqueueSend(new GameMessageSound(player.Guid, UseSound));
+
+                if ((GetProperty(PropertyBool.UnlimitedUse) ?? false) == false)
+                    player.TryConsumeFromInventoryWithNetworking(this, 1);
+            }
 
         public bool HandleUseCreateItem(Player player)
         {

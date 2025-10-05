@@ -112,3 +112,7 @@ VALUES (0x7F418018, 25451, 0xF4180005, 7.11509, 113.117, 159.998, 0.938984, 0, 0
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x7F418019, 490152, 0xF4180005, 1.78044, 114.783, 160.008, -0.356137, 0, 0, 0.934434, False, '2023-12-31 02:31:38'); /* Outpost Balloon Pilot */
 /* @teleloc 0xF4180005 [1.780440 114.782997 160.007996] -0.356137 0.000000 0.000000 0.934434 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7F41801A, 600001, 0xF4180106, 36.0569, 43.4937, 169.805, -0.999944, 0, 0, 0.01062, False, '2025-09-21 18:19:40'); /* +Spacemonkey */
+/* @teleloc 0xF4180106 [36.056900 43.493698 169.804993] -0.999944 0.000000 0.000000 0.010620 */
