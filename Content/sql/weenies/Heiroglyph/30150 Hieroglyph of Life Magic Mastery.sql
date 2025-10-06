@@ -8,7 +8,7 @@ VALUES (30150,   1,       2048) /* ItemType - Gem */
      , (30150,   3,         39) /* PaletteTemplate - Black */
      , (30150,   5,          5) /* EncumbranceVal */
      , (30150,   8,          5) /* Mass */
-     , (30150,  16,          524296) /* ItemUseable - SourceContainedTargetContained *//
+     , (30150,  16,          524296) /* ItemUseable - SourceContainedTargetContained */
      , (30150,  17,        101) /* RareId */
      , (30150,  18,          1) /* UiEffects - Magical */
      , (30150,  19,          0) /* Value */

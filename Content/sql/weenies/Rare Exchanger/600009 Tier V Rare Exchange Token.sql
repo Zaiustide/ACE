@@ -12,11 +12,9 @@ VALUES (600009,   1,     128) /* ItemType - PromissoryNote */
      , (600009,  12,          1) /* StackSize */
      , (600009,  13,          1) /* StackUnitEncumbrance */
      , (600009,  14,          1) /* StackUnitMass */
-     , (600009,  15,          100) /* StackUnitValue */
+     , (600009,  15,          1) /* StackUnitValue */
      , (600009,  16,          1) /* ItemUseable - No */
-     , (600009,  19,          100) /* Value */
-     , (600009,  33,          1) /* Bonded - Bonded */
-	 , (600009, 114,          1) /* Attuned - Attuned */
+     , (600009,  19,          1) /* Value */
      , (600009,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */;
 
      INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)

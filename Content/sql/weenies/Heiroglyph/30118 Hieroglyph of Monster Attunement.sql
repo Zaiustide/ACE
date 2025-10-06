@@ -23,7 +23,7 @@ VALUES (30118,  22, True ) /* Inscribable */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (30118,   1, 'Hieroglyph of Monster Attunement') /* Name */
-     , (30118,  16, 'Use this gem to cast Incantation of Monster Attunement Self. This gem does not run out of charges. It will not be destroyed upon use.') /* LongDesc */;
+     , (30118,  16, 'Use this gem to add Legendary Assess Creature. This gem will be destroyed upon use.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (30118,   1, 0x020009A7) /* Setup */

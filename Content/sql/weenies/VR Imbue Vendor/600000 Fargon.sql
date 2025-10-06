@@ -199,6 +199,8 @@ VALUES (600000, 4, 53016,  0, 0, 0, False) /* Create Corrupted Amber_ Bracers of
 	, (600000, 4, 53073,  0, 0, 0, False) /* Create Empowered Ambers: Sollerets of Life (53073) for Shop */
 	, (600000, 4, 53074,  0, 0, 0, False) /* Create Empowered Ambers: Tassets of Life (53074) for Shop */
 	, (600000, 4, 53294,  0, 0, 0, False) /* Create Luminous Amber: Pauldrons of Thunderous Blows (53294) for Shop */
+	, (600000, 4, 53293,  0, 0, 0, False) /* Create Luminous Amber:  Luminous Amber: Bracers of Thunderous Blows (53295) for Shop */
+	 , (600000, 4, 53297,  0, 0, 0, False) /* Create Luminous Amber: Luminous Amber: Breastplate of the Bulwark (53296) for Shop */
 	 , (600000, 4, 53295,  0, 0, 0, False) /* Create Luminous Amber: Greaves of the Tower (53295) for Shop */
 	 , (600000, 4, 53296,  0, 0, 0, False) /* Create Luminous Amber: Tassets of the Tower (53296) for Shop */
 	 , (600000, 4, 53298,  0, 0, 0, False) /* Create Luminous Amber: Girth of the Bulwark (53298) for Shop */

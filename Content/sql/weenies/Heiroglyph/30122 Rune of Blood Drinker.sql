@@ -14,10 +14,9 @@ VALUES (30122,   1,       2048) /* ItemType - Gem */
      , (30122,  19,          0) /* Value */
      , (30122,  33,         -1) /* Bonded - Slippery */
      , (30122,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-     , (30122,  94,         16) /* TargetType - Creature */
+     , (30122,  94,         257) /* TargetType - Weapon */
      , (30122, 150,        103) /* HookPlacement - Hook */
-     , (30122, 151,         11) /* HookType - Floor, Wall, Yard */
-     , (30122, 280,         10) /* SharedCooldown */;
+     , (30122, 151,         11) /* HookType - Floor, Wall, Yard */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (30122,  22, True ) /* Inscribable */;
