@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Policy;
 using ACE.Common;
 using ACE.Database.Models.Auth;
 using ACE.Entity.Enum;
@@ -18,6 +11,13 @@ using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.WorldObjects;
 using log4net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Security.Policy;
 using EquipMask = ACE.Entity.Enum.EquipMask;
 using ItemType = ACE.Entity.Enum.ItemType;
 
@@ -2640,35 +2640,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofAcidBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6088, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Acid Bane (6088) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6088))
-                        {
-                            playerMsg = "Your target item already has Legendary Acid Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6088, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Acid Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofAcidBane);
                         break;
 
                     #endregion MorphGemRuneofAcidBane
@@ -2677,35 +2652,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofAcidProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6080, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Acid Ward (6080) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6080))
-                        {
-                            playerMsg = "Your target item already has Legendary Acid Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6080, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Acid Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofAcidProtection);
                         break;
 
                     #endregion MorphGemIdeographofAcidProtection
@@ -2714,73 +2664,22 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofAlchemyMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6040, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Alchemical Prowess (6040) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6040))
-                        {
-                            playerMsg = "Your target item already has Legendary Alchemical Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6040, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Alchemical Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofAlchemyMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofAlchemyMastery
-
 
                     #region MorphGemHieroglyphofArcaneEnlightenment
 
                     case MorphGemHieroglyphofArcaneEnlightenment:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6041, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Arcane Prowess (6041) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6041))
-                        {
-                            playerMsg = "Your target item already has Legendary Arcane Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6041, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Arcane Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofArcaneEnlightenment);
                         break;
 
                     #endregion MorphGemHieroglyphofArcaneEnlightenment
@@ -2789,73 +2688,22 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofArmor:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6102, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Armor (6102) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6102))
-                        {
-                            playerMsg = "Your target item already has Legendary Armor on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6102, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Armor";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofArmor);
                         break;
 
                     #endregion MorphGemIdeographofArmor
-
 
                     #region MorphGemHieroglyphofArmorTinkeringExpertise
 
                     case MorphGemHieroglyphofArmorTinkeringExpertise:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6042, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Armor Tinkering Expertise (6042) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6042))
-                        {
-                            playerMsg = "Your target item already has Legendary Armor Tinkering Expertise on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6042, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Armor Tinkering Expertise";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofArmorTinkeringExpertise);
                         break;
 
                     #endregion MorphGemHieroglyphofArmorTinkeringExpertise
@@ -2864,35 +2712,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofMonsterAttunement:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6065, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Monster Attunement (6065) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6065))
-                        {
-                            playerMsg = "Your target item already has Legendary Monster Attunement on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6065, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Monster Attunement";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofMonsterAttunement);
                         break;
 
                     #endregion MorphGemHieroglyphofMonsterAttunement
@@ -2901,35 +2724,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofPersonAttunement:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6065, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Person Attunement (6065) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6065))
-                        {
-                            playerMsg = "Your target item already has Legendary Person Attunement on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6065, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Person Attunement";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofPersonAttunement);
                         break;
 
                     #endregion MorphGemHieroglyphofPersonAttunement
@@ -2938,35 +2736,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofLightWeaponMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6043, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Light Weapon Aptitude (6043) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6043))
-                        {
-                            playerMsg = "Your target item already has Legendary Light Weapon Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6043, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Light Weapon Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofLightWeaponMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofLightWeaponMastery
@@ -2975,35 +2748,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofBladeBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6097, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Slashing Bane (6097) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6097))
-                        {
-                            playerMsg = "Your target item already has Legendary Slashing Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6097, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Slashing Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofBladeBane);
                         break;
 
                     #endregion MorphGemRuneofBladeBane
@@ -3012,12 +2760,12 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofBloodDrinker:
 
-                        //Verify the target is a weapon or caster
+                        //Verify the target is a melee or missile weapon
                         if (target as MeleeWeapon == null &&
                             !target.IsBow &&
                             !target.IsThrownWeapon)
                         {
-                            playerMsg = "This gem can only be used on weapons";
+                            playerMsg = "This gem can only be used on melee or missile weapons";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
@@ -3039,6 +2787,9 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        //Remove any other lower level cantrips of same type
+                        RemoveAllCantripsInProgression(target, 6089);
+
                         target.Biota.GetOrAddKnownSpell(6089, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Slashing Bane";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -3051,35 +2802,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofBludgeonBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6090, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Bludgeoning Bane (6090) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6090))
-                        {
-                            playerMsg = "Your target item already has Legendary Bludgeoning Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6090, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Bludgeoning Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofBludgeonBane);
                         break;
 
                     #endregion MorphGemRuneofBludgeonBane
@@ -3088,35 +2814,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofBludgeoningProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6081, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Bludgeoning Ward (6081) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6081))
-                        {
-                            playerMsg = "Your target item already has Legendary Bludgeoning Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6081, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Bludgeoning Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofBludgeoningProtection);
                         break;
 
                     #endregion MorphGemIdeographofBludgeoningProtection
@@ -3125,35 +2826,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofMissileWeaponMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6044, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Missile Weapon Aptitude (6044) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6044))
-                        {
-                            playerMsg = "Your target item already has Legendary Missile Weapon Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6044, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Missile Weapon Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofMissileWeaponMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofMissileWeaponMastery
@@ -3162,35 +2838,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofCookingMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6045, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Cooking Prowess (6045) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6045))
-                        {
-                            playerMsg = "Your target item already has Legendary Cooking Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6045, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Cooking Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofCookingMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofCookingMastery
@@ -3199,35 +2850,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemPictographofCoordination:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6103, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Coordination (6103) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6103))
-                        {
-                            playerMsg = "Your target item already has Legendary Coordination on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6103, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Coordination";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemPictographofCoordination);
                         break;
 
                     #endregion MorphGemPictographofCoordination
@@ -3236,35 +2862,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofCreatureEnchantmentMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6046, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Creature Enchantment Aptitude (6046) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6046))
-                        {
-                            playerMsg = "Your target item already has Legendary Creature Enchantment Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6046, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Creature Enchantment Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofCreatureEnchantmentMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofCreatureEnchantmentMastery
@@ -3273,35 +2874,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofFinesseWeaponMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6047, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Finesse Weapon Aptitude (6047) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6047))
-                        {
-                            playerMsg = "Your target item already has Legendary Finesse Weapon Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6047, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Finesse Weapon Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofFinesseWeaponMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofFinesseWeaponMastery
@@ -3310,35 +2886,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofDeceptionMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6048, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Deception Prowess (6048) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6048))
-                        {
-                            playerMsg = "Your target item already has Legendary Deception Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6048, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Deception Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofDeceptionMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofDeceptionMastery
@@ -3375,6 +2926,9 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        //Remove any other lower level cantrips of same type
+                        RemoveAllCantripsInProgression(target, 6091);
+
                         target.Biota.GetOrAddKnownSpell(6091, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Defender";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -3387,35 +2941,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemPictographofEndurance:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6104, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Endurance (6104) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6104))
-                        {
-                            playerMsg = "Your target item already has Legendary Endurance on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6104, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Endurance";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemPictographofEndurance);
                         break;
 
                     #endregion MorphGemPictographofEndurance
@@ -3424,35 +2953,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofFireProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6082, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Flame Ward (6082) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6082))
-                        {
-                            playerMsg = "Your target item already has Legendary Flame Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6082, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Flame Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofFireProtection);
                         break;
 
                     #endregion MorphGemIdeographofFireProtection
@@ -3461,35 +2965,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofFlameBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6092, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Flame Bane (6092) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6092))
-                        {
-                            playerMsg = "Your target item already has Legendary Flame Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6092, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Flame Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofFlameBane);
                         break;
 
                     #endregion MorphGemRuneofFlameBane
@@ -3498,35 +2977,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofFletchingMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6052, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Fletching Prowess (6052) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6052))
-                        {
-                            playerMsg = "Your target item already has Legendary Fletching Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6052, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Fletching Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofFletchingMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofFletchingMastery
@@ -3535,35 +2989,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemPictographofFocus:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6105, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Focus (6105) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6105))
-                        {
-                            playerMsg = "Your target item already has Legendary Focus on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6105, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Focus";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemPictographofFocus);
                         break;
 
                     #endregion MorphGemPictographofFocus
@@ -3572,35 +3001,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofFrostBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6093, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Frost Bane (6093) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6093))
-                        {
-                            playerMsg = "Your target item already has Legendary Frost Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6093, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Frost Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofFrostBane);
                         break;
 
                     #endregion MorphGemRuneofFrostBane
@@ -3609,35 +3013,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofFrostProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6083, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Frost Ward (6083) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6083))
-                        {
-                            playerMsg = "Your target item already has Legendary Frost Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6083, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Frost Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofFrostProtection);
                         break;
 
                     #endregion MorphGemIdeographofFrostProtection
@@ -3646,35 +3025,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofHealingMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6053, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Healing Prowess (6053) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6053))
-                        {
-                            playerMsg = "Your target item already has Legendary Healing Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6053, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Healing Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofHealingMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofHealingMastery
@@ -3683,35 +3037,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofRegeneration:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6077, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Health Gain (6077) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6077))
-                        {
-                            playerMsg = "Your target item already has Legendary Health Gain on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6077, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Health Gain";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofRegeneration);
                         break;
 
                     #endregion MorphGemIdeographofRegeneration
@@ -3744,6 +3073,9 @@ namespace ACE.Server.Entity
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
+
+                        //Remove any other lower level cantrips of same type
+                        RemoveAllCantripsInProgression(target, 6094);
 
                         target.Biota.GetOrAddKnownSpell(6094, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Heart Thirst";
@@ -3782,6 +3114,9 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        //Remove any other lower level cantrips of same type
+                        RemoveAllCantripsInProgression(target, 6087);
+
                         target.Biota.GetOrAddKnownSpell(6087, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Hermetic Link";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -3794,35 +3129,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofImpenetrability:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6095, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Impenetrability (6095) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6095))
-                        {
-                            playerMsg = "Your target item already has Legendary Impenetrability on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6095, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Impenetrability";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofImpenetrability);
                         break;
 
                     #endregion MorphGemRuneofImpenetrability
@@ -3831,35 +3141,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofItemEnchantmentMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6056, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Item Enchantment Aptitude (6056) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6056))
-                        {
-                            playerMsg = "Your target item already has Legendary Item Enchantment Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6056, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Item Enchantment Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofItemEnchantmentMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofItemEnchantmentMastery
@@ -3868,35 +3153,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofItemTinkeringExpertise:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6057, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Item Tinkering Expertise (6057) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6057))
-                        {
-                            playerMsg = "Your target item already has Legendary Item Tinkering Expertise on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6057, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Item Tinkering Expertise";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofItemTinkeringExpertise);
                         break;
 
                     #endregion MorphGemHieroglyphofItemTinkeringExpertise
@@ -3905,35 +3165,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofJumpingMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6058, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Jumping Prowess (6058) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6058))
-                        {
-                            playerMsg = "Your target item already has Legendary Jumping Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6058, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Jumping Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofJumpingMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofJumpingMastery
@@ -3942,35 +3177,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofLeadershipMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6059, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Leadership (6059) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6059))
-                        {
-                            playerMsg = "Your target item already has Legendary Leadership on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6059, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Leadership";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofLeadershipMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofLeadershipMastery
@@ -3979,35 +3189,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofLifeMagicMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6060, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Life Magic Aptitude (6060) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6060))
-                        {
-                            playerMsg = "Your target item already has Legendary Life Magic Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6060, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Life Magic Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofLifeMagicMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofLifeMagicMastery
@@ -4016,35 +3201,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofLightningBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6099, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Storm Bane (6099) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6099))
-                        {
-                            playerMsg = "Your target item already has Legendary Storm Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6099, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Storm Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofLightningBane);
                         break;
 
                     #endregion MorphGemRuneofLightningBane
@@ -4053,35 +3213,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofLightningProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6079, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Storm Ward (6079) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6079))
-                        {
-                            playerMsg = "Your target item already has Legendary Storm Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6079, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Storm Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofLightningProtection);
                         break;
 
                     #endregion MorphGemIdeographofLightningProtection
@@ -4090,35 +3225,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofLockpickMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6061, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Lockpick Prowess (6061) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6061))
-                        {
-                            playerMsg = "Your target item already has Legendary Lockpick Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6061, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Lockpick Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofLockpickMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofLockpickMastery
@@ -4127,35 +3237,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofFealtyMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6051, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Fealty (6051) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6051))
-                        {
-                            playerMsg = "Your target item already has Legendary Fealty on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6051, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Fealty";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofFealtyMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofFealtyMastery
@@ -4164,35 +3249,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofMagicResistance:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6063, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Magic Resistance (6063) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6063))
-                        {
-                            playerMsg = "Your target item already has Legendary Magic Resistance on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6063, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Magic Resistance";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofMagicResistance);
                         break;
 
                     #endregion MorphGemHieroglyphofMagicResistance
@@ -4201,35 +3261,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofMagicItemTinkeringExpertise:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6062, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Magic Item Tinkering Expertise (6062) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6062))
-                        {
-                            playerMsg = "Your target item already has Legendary Magic Item Tinkering Expertise on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6062, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Magic Item Tinkering Expertise";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofMagicItemTinkeringExpertise);
                         break;
 
                     #endregion MorphGemHieroglyphofMagicItemTinkeringExpertise
@@ -4238,35 +3273,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofManaConversionMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6064, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Mana Conversion Prowess (6064) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6064))
-                        {
-                            playerMsg = "Your target item already has Legendary Mana Conversion Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6064, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Mana Conversion Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofManaConversionMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofManaConversionMastery
@@ -4275,35 +3285,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofBattlemagesBlessing:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6078, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Mana Gain (6078) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6078))
-                        {
-                            playerMsg = "Your target item already has Legendary Mana Gain on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6078, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Mana Gain";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofBattlemagesBlessing);
                         break;
 
                     #endregion MorphGemIdeographofBattlemagesBlessing
@@ -4312,35 +3297,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofInvulnerability:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6055, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Invulnerability (6055) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6055))
-                        {
-                            playerMsg = "Your target item already has Legendary Invulnerability on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6055, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Invulnerability";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofInvulnerability);
                         break;
 
                     #endregion MorphGemHieroglyphofInvulnerability
@@ -4349,35 +3309,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofImpregnability:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6054, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Impregnability (6054) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6054))
-                        {
-                            playerMsg = "Your target item already has Legendary Impregnability on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6054, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Impregnability";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofImpregnability);
                         break;
 
                     #endregion MorphGemHieroglyphofImpregnability
@@ -4386,35 +3321,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofPierceBane:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6096, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Piercing Bane (6096) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6096))
-                        {
-                            playerMsg = "Your target item already has Legendary Piercing Bane on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6096, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Piercing Bane";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRuneofPierceBane);
                         break;
 
                     #endregion MorphGemRuneofPierceBane
@@ -4423,35 +3333,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofPiercingProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6084, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Piercing Ward (6084) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6084))
-                        {
-                            playerMsg = "Your target item already has Legendary Piercing Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6084, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Piercing Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofPiercingProtection);
                         break;
 
                     #endregion MorphGemIdeographofPiercingProtection
@@ -4460,35 +3345,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemPictographofQuickness:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6106, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Quickness (6106) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6106))
-                        {
-                            playerMsg = "Your target item already has Legendary Quickness on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6106, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Quickness";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemPictographofQuickness);
                         break;
 
                     #endregion MorphGemPictographofQuickness
@@ -4497,35 +3357,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofSprint:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6071, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Sprint (6071) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6071))
-                        {
-                            playerMsg = "Your target item already has Legendary Sprint on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6071, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Sprint";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofSprint);
                         break;
 
                     #endregion MorphGemHieroglyphofSprint
@@ -4534,35 +3369,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemPictographofWillpower:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6101, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Willpower (6101) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6101))
-                        {
-                            playerMsg = "Your target item already has Legendary Willpower on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6101, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Willpower";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemPictographofWillpower);
                         break;
 
                     #endregion MorphGemPictographofWillpower
@@ -4571,35 +3381,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofBladeProtection:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6085, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Slashing Ward (6085) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6085))
-                        {
-                            playerMsg = "Your target item already has Legendary Slashing Ward on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6085, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Slashing Ward";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofBladeProtection);
                         break;
 
                     #endregion MorphGemIdeographofBladeProtection
@@ -4609,7 +3394,7 @@ namespace ACE.Server.Entity
                     case MorphGemRuneofSpiritDrinker:
 
 
-                        //Verify the target is a weapon or caster
+                        //Verify the target is a caster
                         if (target as Caster == null)
                         {
                             playerMsg = "This gem can only be used on magic casters";
@@ -4634,6 +3419,9 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        //Remove any other lower level cantrips of same type
+                        RemoveAllCantripsInProgression(target, 6098);
+
                         target.Biota.GetOrAddKnownSpell(6098, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Spirit Thirst";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -4646,35 +3434,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemIdeographofRevitalization:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6076, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Stamina Gain (6076) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6076))
-                        {
-                            playerMsg = "Your target item already has Legendary Stamina Gain on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6076, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Stamina Gain";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemIdeographofRevitalization);
                         break;
 
                     #endregion MorphGemIdeographofRevitalization
@@ -4683,35 +3446,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemPictographofStrength:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6107, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Strength (6107) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6107))
-                        {
-                            playerMsg = "Your target item already has Legendary Strength on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6107, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Strength";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemPictographofStrength);
                         break;
 
                     #endregion MorphGemPictographofStrength
@@ -4720,12 +3458,12 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofSwiftKiller:
 
-                        //Verify the target is a weapon or caster
+                        //Verify the target is a melee or missile weapon
                         if (target as MeleeWeapon == null &&
                             !target.IsBow &&
                             !target.IsThrownWeapon)
                         {
-                            playerMsg = "This gem can only be used on weapons";
+                            playerMsg = "This gem can only be used on melee or missile weapons";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
@@ -4747,6 +3485,19 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        //Remove any other lower level cantrips of same type
+                        var progression = SpellLevelProgression.GetSpellLevels((ACE.Entity.Enum.SpellId)6100);
+                        if (progression != null)
+                        {
+                            foreach (var progressionSpellId in progression)
+                            {
+                                if (targetItemSpells.Contains((int)progressionSpellId))
+                                {
+                                    target.Biota.TryRemoveKnownSpell((int)progressionSpellId, target.BiotaDatabaseLock);
+                                }
+                            }
+                        }
+
                         target.Biota.GetOrAddKnownSpell(6100, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Swift Hunter";
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -4759,35 +3510,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofHeavyWeaponMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6072, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Heavy Weapon Aptitude (6072) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6072))
-                        {
-                            playerMsg = "Your target item already has Legendary Heavy Weapon Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6072, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Heavy Weapon Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofHeavyWeaponMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofHeavyWeaponMastery
@@ -4796,35 +3522,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofWarMagicMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6075, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary War Magic Aptitude (6075) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6075))
-                        {
-                            playerMsg = "Your target item already has Legendary War Magic Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6075, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary War Magic Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofWarMagicMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofWarMagicMastery
@@ -4833,35 +3534,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofWeaponTinkeringExpertise:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6039, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Weapon Tinkering Expertise (6039) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6039))
-                        {
-                            playerMsg = "Your target item already has Legendary Weapon Tinkering Expertise on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6039, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Weapon Tinkering Expertise";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofWeaponTinkeringExpertise);
                         break;
 
                     #endregion MorphGemHieroglyphofWeaponTinkeringExpertise
@@ -4870,35 +3546,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofDirtyFightingMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6049, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Dirty Fighting Prowess (6049) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6049))
-                        {
-                            playerMsg = "Your target item already has Legendary Dirty Fighting Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6049, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Dirty Fighting Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofDirtyFightingMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofDirtyFightingMastery
@@ -4907,35 +3558,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofDualWieldMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6050, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Dual Wield Aptitude (6050) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6050))
-                        {
-                            playerMsg = "Your target item already has Legendary Dual Wield Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6050, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Dual Wield Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofDualWieldMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofDualWieldMastery
@@ -4944,35 +3570,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofRecklessnessMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6067, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Recklessness Prowess (6067) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6067))
-                        {
-                            playerMsg = "Your target item already has Legendary Recklessness Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6067, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Recklessness Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofRecklessnessMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofRecklessnessMastery
@@ -4981,35 +3582,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofShieldMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6069, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Shield Aptitude (6069) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6069))
-                        {
-                            playerMsg = "Your target item already has Legendary Shield Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6069, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Shield Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofShieldMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofShieldMastery
@@ -5018,35 +3594,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofSneakAttackMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6070, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Sneak Attack ProwessLegendary Sneak Attack Prowess (6070) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6070))
-                        {
-                            playerMsg = "Your target item already has Legendary Sneak Attack Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6070, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Sneak Attack Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofSneakAttackMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofSneakAttackMastery
@@ -5055,35 +3606,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofVoidMagicMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6074, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Void Magic Aptitude (6074) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6074))
-                        {
-                            playerMsg = "Your target item already has Legendary Void Magic Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6074, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Void Magic Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofVoidMagicMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofVoidMagicMastery
@@ -5091,36 +3617,11 @@ namespace ACE.Server.Entity
                     #region MorphGemHieroglyphofTwoHandedWeaponsMastery
 
                     case MorphGemHieroglyphofTwoHandedWeaponsMastery:
-
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        
+                        if (!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6073, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Two Handed Combat Aptitude (6073) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6073))
-                        {
-                            playerMsg = "Your target item already has Legendary Two Handed Combat Aptitude on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6073, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Two Handed Combat Aptitude";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofTwoHandedWeaponsMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofTwoHandedWeaponsMastery
@@ -5129,35 +3630,10 @@ namespace ACE.Server.Entity
 
                     case MorphGemHieroglyphofSummoningMastery:
 
-                        //Check if the item is undies, armor or jewelry; everything else is not allowed
-                        if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+                        if(!ApplyMorphGem_RareLegendaryCantrip(player, source, target, 6125, targetItemSpells))
                         {
-                            playerMsg = "The gem can only be applied to armor, clothing or jewelry";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        //Check if the item already has Legendary Summoning Prowess (6125) on it
-                        if (targetItemSpells == null || targetItemSpells.Count < 1)
-                        {
-                            playerMsg = "The gem can only be applied to magical items";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-                        else if (targetItemSpells != null && targetItemSpells.Contains(6125))
-                        {
-                            playerMsg = "Your target item already has Legendary Summoning Prowess on it, you cannot add it twice";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
-                        target.Biota.GetOrAddKnownSpell(6125, target.BiotaDatabaseLock, out _);
-                        playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Summoning Prowess";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemHieroglyphofSummoningMastery);
                         break;
 
                     #endregion MorphGemHieroglyphofSummoningMastery
@@ -5175,6 +3651,67 @@ namespace ACE.Server.Entity
             catch (Exception ex)
             {
                 log.ErrorFormat("Exception in Tailoring.ApplyMorphGem. Ex: {0}", ex);
+            }
+        }
+
+        private static bool ApplyMorphGem_RareLegendaryCantrip(Player player, WorldObject source, WorldObject target, int spellId, List<int> targetItemSpells)
+        {
+            string playerMsg = "";
+
+            var spell = new Spell(spellId);
+            if (spell == null)
+            {
+                return false;
+            }
+            
+            if (target.ItemType == ItemType.Jewelry && (spell.Name.Contains(" Bane", StringComparison.OrdinalIgnoreCase) || spell.Name.Contains(" Impenitrability")))
+            {
+                playerMsg = "The gem can only be applied to armor or clothing";
+                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                return false;
+            }
+            else if (!(target.ItemType == ItemType.Armor || target.ItemType == ItemType.Jewelry || target.ItemType == ItemType.Clothing))
+            {
+                playerMsg = "The gem can only be applied to armor, clothing or jewelry";
+                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                return false;
+            }
+
+            if (targetItemSpells == null || targetItemSpells.Count < 1)
+            {
+                playerMsg = "The gem can only be applied to magical items";
+                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                return false;
+            }
+            else if (targetItemSpells != null && targetItemSpells.Contains(spellId))
+            {
+                playerMsg = $"Your target item already has {spell.Name} on it, you cannot add it twice";
+                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                return false;
+            }
+
+            RemoveAllCantripsInProgression(target, spellId);
+
+            target.Biota.GetOrAddKnownSpell(spellId, target.BiotaDatabaseLock, out _);
+            playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell {spell.Name}";
+            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+            AddMorphGemLog(target, source.WeenieClassId);
+            return true;
+        }
+
+        private static void RemoveAllCantripsInProgression(WorldObject target, int spellId)
+        {
+            var progression = SpellLevelProgression.GetSpellLevels((SpellId)spellId);
+            if (progression != null)
+            {
+                foreach (var progressionSpellId in progression)
+                {
+                    target.Biota.TryRemoveKnownSpell((int)progressionSpellId, target.BiotaDatabaseLock);
+                }
             }
         }
 
