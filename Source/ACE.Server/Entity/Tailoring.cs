@@ -12,6 +12,7 @@ using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Entity.Actions;
 using ACE.Server.Factories;
+using ACE.Server.Factories.Entity;
 using ACE.Server.Factories.Tables;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
@@ -50,6 +51,7 @@ namespace ACE.Server.Entity
         public const uint MorphGemRemoveMissileDReq = 480484;
         public const uint MorphGemRemoveMeleeDReq = 480483;
         public const uint MorphGemRandomizeWeaponImbue = 480486;
+        public const uint MorphGemRandomizeWeaponElement = 480487;
         public const uint MorphGemRemovePlayerReq = 480485;
         public const uint MorphGemSlayerRandom = 480610;
         public const uint MorphGemRemoveLevelReq = 480609;
@@ -58,20 +60,20 @@ namespace ACE.Server.Entity
         public const uint MorphGemImpen = 490025;
         public const uint MorphGemBanditHilt = 490026;
         public const uint MorphGemRareUpgrade = 490040;
-        public const uint MorphGemTinkeringTool = 490298;        
-        public const uint MorphGemCDR = 490273;         
-        public const uint MorphGemCD = 490272;         
-        public const uint MorphGemRareReduction = 490270;        
+        public const uint MorphGemTinkeringTool = 490298;
+        public const uint MorphGemCDR = 490273;
+        public const uint MorphGemCD = 490272;
+        public const uint MorphGemRareReduction = 490270;
         public const uint MorphGemJewelersSawblade = 490271;
         public const uint MorphGemAddSlayer = 490304;
-        public const int  MorphGemMinValue = 20000;
-		public const uint MorphGemHematite = 490284;
-		public const uint MorphGemStrengthbeer = 490327;
-		public const uint MorphGemEndurancebeer = 490328;
-		public const uint MorphGemCoordinationbeer = 490329;
-		public const uint MorphGemQuicknessbeer = 490330;
-		public const uint MorphGemFocusbeer = 490331;
-		public const uint MorphGemWillpowerbeer = 490332;
+        public const int MorphGemMinValue = 20000;
+        public const uint MorphGemHematite = 490284;
+        public const uint MorphGemStrengthbeer = 490327;
+        public const uint MorphGemEndurancebeer = 490328;
+        public const uint MorphGemCoordinationbeer = 490329;
+        public const uint MorphGemQuicknessbeer = 490330;
+        public const uint MorphGemFocusbeer = 490331;
+        public const uint MorphGemWillpowerbeer = 490332;
 
         public const uint MorphGemHeroicMaster = 1548800;
         public const uint MorphGemDotResist = 1548801;
@@ -331,6 +333,7 @@ namespace ACE.Server.Entity
                 case MorphGemRemoveMissileDReq:
                 case MorphGemRemoveMeleeDReq:
                 case MorphGemRandomizeWeaponImbue:
+                case MorphGemRandomizeWeaponElement:
                 case MorphGemRemovePlayerReq:
                 case MorphGemSlayerRandom:
                 case MorphGemRemoveLevelReq:
@@ -345,13 +348,13 @@ namespace ACE.Server.Entity
                 case MorphGemRareReduction:
                 case MorphGemJewelersSawblade:
                 case MorphGemAddSlayer:
-				case MorphGemHematite:
-				case MorphGemStrengthbeer:
-				case MorphGemEndurancebeer:
-				case MorphGemCoordinationbeer:
-				case MorphGemQuicknessbeer:
-				case MorphGemFocusbeer:
-				case MorphGemWillpowerbeer:
+                case MorphGemHematite:
+                case MorphGemStrengthbeer:
+                case MorphGemEndurancebeer:
+                case MorphGemCoordinationbeer:
+                case MorphGemQuicknessbeer:
+                case MorphGemFocusbeer:
+                case MorphGemWillpowerbeer:
                 case MorphGemHeroicMaster:
                 case MorphGemDotResist:
                 case MorphGemRandomSet:
@@ -1290,7 +1293,7 @@ namespace ACE.Server.Entity
                         var roll = ThreadSafeRandom.Next(0, 1);
                         if (target.HasImbuedEffect(ImbuedEffectType.CripplingBlow))
                         {
-                            target.ImbuedEffect = roll == 0 ? ImbuedEffectType.ArmorRending : ImbuedEffectType.CriticalStrike;                            
+                            target.ImbuedEffect = roll == 0 ? ImbuedEffectType.ArmorRending : ImbuedEffectType.CriticalStrike;
                         }
                         else if (target.HasImbuedEffect(ImbuedEffectType.ArmorRending))
                         {
@@ -1306,7 +1309,7 @@ namespace ACE.Server.Entity
                         if (hasFetish)
                         {
                             target.ImbuedEffect |= ImbuedEffectType.IgnoreSomeMagicProjectileDamage;
-                        }                        
+                        }
 
                         playerMsg = $"You apply the Morph Gem skillfully and have changed your weapon's imbue from {origImbueEffect} to {target.ImbuedEffect}";
                         AddMorphGemLog(target, MorphGemRandomizeWeaponImbue);
@@ -1316,6 +1319,77 @@ namespace ACE.Server.Entity
 
                         break;
                     #endregion MorphGemRandomizeWeaponImbue
+
+                    #region MorphGemRandomizeWeaponElement
+                    case MorphGemRandomizeWeaponElement:
+                        Skill[] validSkills = [
+                            Skill.FinesseWeapons,
+                            Skill.HeavyWeapons,
+                            Skill.LightWeapons,
+                            Skill.MissileWeapons,
+                            Skill.TwoHandedCombat,
+                            Skill.WarMagic,
+                        ];
+
+                        if (target.WieldSkillType != null && !validSkills.Contains((Skill)target.WieldSkillType) || !ContainsOnlyPhysicalOrElemental(target.W_DamageType))
+                        {
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{target.NameWithMaterial} must be a valid elemental weapon", ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        var skillMatrixMap = new Dictionary<Skill, (int[][] Matrix, int RandomMax, bool SkipFirst)>
+                        {
+                            { Skill.MissileWeapons, (LootTables.ElementalMissileWeaponsMatrix, 6, false) },
+                            { Skill.WarMagic, (LootTables.CasterWeaponsMatrix, 6, true) },
+                            { Skill.HeavyWeapons, (LootTables.HeavyWeaponsMatrix, 4, false) },
+                            { Skill.FinesseWeapons, (LootTables.FinesseWeaponsMatrix, 4, false) },
+                            { Skill.LightWeapons, (LootTables.LightWeaponsMatrix, 4, false) },
+                            { Skill.TwoHandedCombat, (LootTables.TwoHandedWeaponsMatrix, 4, false) }
+                        };
+
+                        if (skillMatrixMap.TryGetValue((Skill)target.WieldSkillType, out var config))
+                        {
+                            var (matrices, randomMax, skipFirst) = config;
+                            var startIndex = skipFirst ? 1 : 0;
+
+                            for (int i = startIndex; i < matrices.Length; i++)
+                            {
+                                var matrix = matrices[i];
+                                if (matrix.Contains((int)target.WeenieClassId))
+                                {
+                                    int element = ThreadSafeRandom.Next(0, randomMax);
+                                    var wcid = matrix[element];
+                                    var wo = WorldObjectFactory.CreateNewWorldObject((uint)wcid);
+
+                                    if (wo == null)
+                                    {
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Failed to find a valid weapon element for {target.NameWithMaterial}", ChatMessageType.Broadcast));
+                                        player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                        return;
+                                    }
+
+                                    UpdateWeaponElementSwap(player, wo, target);
+                                    wo.DeleteObject(player);
+                                    break;
+                                }
+                            }
+
+                            var isMultiDamage = target.W_DamageType.IsMultiDamage();
+                            var damageName = isMultiDamage
+                                ? "Slashing/Piercing" 
+                                : target.W_DamageType.GetName();
+
+                            playerMsg = $"You apply the Morph Gem skillfully and have altered your item so that its element has changed to {damageName}";
+                            AddMorphGemLog(target, MorphGemRandomizeWeaponElement);
+
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        }
+
+                        break;
+                    #endregion
+
+
 
                     #region MorphGemRemovePlayerReq
                     case MorphGemRemovePlayerReq:
@@ -1502,7 +1576,7 @@ namespace ACE.Server.Entity
                         }
 
                         //If target isn't loot gen, it can only be applied to rare armor
-                        if(target.ArmorLevel > 0 && target.ItemWorkmanship == null && !target.GetProperty(PropertyInt.RareId).HasValue)
+                        if (target.ArmorLevel > 0 && target.ItemWorkmanship == null && !target.GetProperty(PropertyInt.RareId).HasValue)
                         {
                             playerMsg = "The gem cannot be applied quest armor, only loot gen or rare armor";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -2178,7 +2252,7 @@ namespace ACE.Server.Entity
 
                         //Add the spells
                         var spellNames = new List<string>();
-                        foreach(var spellId in spellList)
+                        foreach (var spellId in spellList)
                         {
                             target.Biota.GetOrAddKnownSpell(spellId, target.BiotaDatabaseLock, out _);
                             spellNames.Add(new Spell(spellId).Name);
@@ -2418,7 +2492,7 @@ namespace ACE.Server.Entity
 
                         //Roll amount to reduce burden
                         int encumbranceRoll = 0;
-                        
+
                         if (target.EncumbranceVal >= 1000)
                         {
                             encumbranceRoll = ThreadSafeRandom.Next(100, 650);
@@ -2482,7 +2556,7 @@ namespace ACE.Server.Entity
                         //Broadcast result
                         target.Biota.GetOrAddKnownSpell(5978, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the {source.Name} to your {target.NameWithMaterial} and have successfully added the spell Rare Damage Boost V";
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));                        
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemRareDmgBoost);
                         break;
                     #endregion MorphGemRareDmgBoost
@@ -2592,7 +2666,7 @@ namespace ACE.Server.Entity
                         string vitRemovalMsg = target.GearMaxHealth > 0 ? $" As a result your item's +{target.GearMaxHealth} Vitality Rating has been replaced." : string.Empty;
                         playerMsg = $"You have successfully used the {source.Name} to add +3 Healing Boost Rating to your {target.NameWithMaterial}!{vitRemovalMsg}";
                         target.GearMaxHealth = 0;
-                        target.GearHealingBoost = 3;                        
+                        target.GearHealingBoost = 3;
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemHealBoost);
@@ -2619,7 +2693,7 @@ namespace ACE.Server.Entity
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-                        
+
                         //Add +1 cleave
                         if (currCleave < 2)
                         {
@@ -5170,12 +5244,75 @@ namespace ACE.Server.Entity
 
                 target.SaveBiotaToDatabase();
 
+                if (PropertyManager.GetBool("player_receive_immediate_save").Item)
+                    player.RushNextPlayerSave(5);
+
                 player.SendUseDoneEvent();
             }
             catch (Exception ex)
             {
                 log.ErrorFormat("Exception in Tailoring.ApplyMorphGem. Ex: {0}", ex);
             }
+        }
+
+        private static readonly Dictionary<DamageType, ImbuedEffectType> DamageToImbueMap = new()
+        {
+            { DamageType.Slash, ImbuedEffectType.SlashRending },
+            { DamageType.Pierce, ImbuedEffectType.PierceRending },
+            { DamageType.Bludgeon, ImbuedEffectType.BludgeonRending },
+            { DamageType.Cold, ImbuedEffectType.ColdRending },
+            { DamageType.Fire, ImbuedEffectType.FireRending },
+            { DamageType.Acid, ImbuedEffectType.AcidRending },
+            { DamageType.Electric, ImbuedEffectType.ElectricRending }
+        };
+
+        private static readonly ImbuedEffectType AllRendingFlags =
+            ImbuedEffectType.SlashRending |
+            ImbuedEffectType.PierceRending |
+            ImbuedEffectType.BludgeonRending |
+            ImbuedEffectType.AcidRending |
+            ImbuedEffectType.ColdRending |
+            ImbuedEffectType.ElectricRending |
+            ImbuedEffectType.FireRending;
+
+        private static void UpdateWeaponElementSwap(Player player, WorldObject source, WorldObject target)
+        {
+            player.Session.Network.EnqueueSend(new GameMessageDeleteObject(target));
+
+            UpdateWeaponProps(player, source, target);
+            //player.UpdateProperty(target, PropertyInt.UiEffects, (int?)source.UiEffects);
+            player.UpdateProperty(target, PropertyInt.DamageType, (int)source.W_DamageType);
+            player.UpdateProperty(target, PropertyDataId.TsysMutationFilter, source.TsysMutationFilter);
+            player.UpdateProperty(target, PropertyDataId.MutateFilter, source.MutateFilter);
+            player.UpdateProperty(target, PropertyDataId.PhysicsEffectTable, source.PhysicsTableId);
+            player.UpdateProperty(target, PropertyDataId.SoundTable, source.SoundTableId);
+            player.UpdateProperty(target, PropertyInt.ResistanceModifierType, (int?)source.W_DamageType);
+
+            if ((target.ImbuedEffect & AllRendingFlags) != 0)
+            {
+                target.ImbuedEffect &= ~AllRendingFlags;
+
+                foreach(var mapping in DamageToImbueMap)
+                {
+                    if ((target.W_DamageType & mapping.Key) != 0)
+                    {
+                        target.ImbuedEffect |= mapping.Value;
+                        break;
+                    }
+                }
+            }
+
+            if (target.ImbuedEffect != ImbuedEffectType.Undef)
+                target.IconUnderlayId = RecipeManager.IconUnderlay[target.ImbuedEffect];
+
+            var actionChain = new ActionChain();
+            actionChain.AddDelaySeconds(0.1);
+            actionChain.AddAction(player, () =>
+            {
+                //player.Session.Network.EnqueueSend(new GameMessageUpdateObject(target));
+                player.Session.Network.EnqueueSend(new GameMessageCreateObject(target));
+            });
+            actionChain.EnqueueChain();
         }
 
         /// <summary>
@@ -5422,6 +5559,7 @@ namespace ACE.Server.Entity
                 case MorphGemRemoveMissileDReq:
                 case MorphGemRemoveMeleeDReq:
                 case MorphGemRandomizeWeaponImbue:
+                case MorphGemRandomizeWeaponElement:
                 case MorphGemRemovePlayerReq:
                 case MorphGemSlayerRandom:
                 case MorphGemRemoveLevelReq:
@@ -5546,6 +5684,12 @@ namespace ACE.Server.Entity
             var matchingLogEntries = logEntries.Where(x => x.Equals(gemWeenieId.ToString()));
 
             return matchingLogEntries?.Count() ?? 0;
+        }
+
+        public static bool ContainsOnlyPhysicalOrElemental(DamageType damageType)
+        {
+            const DamageType allowedTypes = DamageType.Physical | DamageType.Elemental;
+            return damageType != DamageType.Undef && (damageType & allowedTypes) == damageType;
         }
     }
 }
