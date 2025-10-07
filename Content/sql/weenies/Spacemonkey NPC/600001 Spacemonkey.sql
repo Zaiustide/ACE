@@ -134,7 +134,7 @@ VALUES (@parent_id,  0,  12 /* TurnToTarget */, 0, 1, NULL, NULL, NULL, NULL, NU
 
 
   INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
-VALUES (600001, 12 /* QuestSuccess */,      0.25, NULL, NULL, NULL, 'DropofAcid', NULL, NULL, NULL);
+VALUES (600001, 12 /* QuestSuccess */,      1, NULL, NULL, NULL, 'DropofAcid', NULL, NULL, NULL);
 
 SET @parent_id = LAST_INSERT_ID();
 
