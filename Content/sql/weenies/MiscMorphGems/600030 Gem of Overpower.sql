@@ -9,12 +9,11 @@ VALUES (600030,   1,       2048) /* ItemType - Gem */
      , (600030,   5,          5) /* EncumbranceVal */
      , (600030,   8,          5) /* Mass */
      , (600030,  16,          524296) /* ItemUseable - SourceContainedTargetContained */
-     , (600030,  17,        129) /* RareId */
      , (600030,  18,          1) /* UiEffects - Magical */
-     , (600030,  19,          0) /* Value */
-     , (600030,  33,         -1) /* Bonded - Slippery */
+     , (600030,  19,         25) /* Value */
+     , (600030,  33,          1) /* Bonded - Slippery */
      , (600030,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-     , (600030,  94,         257) /* TargetType - Weapon */
+     , (600030,  94,         35215) /* TargetType - Vestements */
      , (600030, 150,        103) /* HookPlacement - Hook */
      , (600030, 151,         11) /* HookType - Floor, Wall, Yard */;
 

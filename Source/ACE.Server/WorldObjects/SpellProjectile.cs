@@ -494,7 +494,7 @@ namespace ACE.Server.WorldObjects
             var resistanceType = Creature.GetResistanceType(Spell.DamageType);
 
             var sourceCreature = source as Creature;
-            if (sourceCreature?.Overpower != null)
+            if (sourceCreature?.Overpower != null || sourcePlayer != null)
                 overpower = Creature.GetOverpower(sourceCreature, target);
 
             var weapon = ProjectileLauncher;

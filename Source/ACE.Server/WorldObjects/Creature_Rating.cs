@@ -522,5 +522,29 @@ namespace ACE.Server.WorldObjects
 
             return lumAugBonus;
         }
+
+        public int GetOverpowerRating()
+        {
+            int rating = this.Overpower ?? 0;
+
+            if(this is Player player)
+            {
+                rating += GetEquippedItemsRatingSum(PropertyInt.Overpower);
+            }
+
+            return rating;
+        }
+
+        public int GetOverpowerResistRating()
+        {
+            int rating = this.OverpowerResist ?? 0;
+
+            if (this is Player player)
+            {
+                rating += GetEquippedItemsRatingSum(PropertyInt.OverpowerResist);
+            }
+
+            return rating;
+        }
     }
 }

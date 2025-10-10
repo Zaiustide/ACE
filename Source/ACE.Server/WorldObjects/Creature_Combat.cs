@@ -1276,11 +1276,21 @@ namespace ACE.Server.WorldObjects
 
         public static bool GetOverpower_Method_B(Creature attacker, Creature defender)
         {
-            // implemented similar to critical defense
-            if (attacker.Overpower == null)
+            if (attacker == null || defender == null)
                 return false;
 
-            var overpowerChance = attacker.Overpower.Value;
+            var overpowerChance = attacker.Overpower.HasValue ? attacker.Overpower.Value : 0;
+
+            //Overpower on gear
+            if (attacker is Player)
+            {
+                overpowerChance += attacker.GetEquippedItemsRatingSum(PropertyInt.Overpower);
+            }
+
+            if(overpowerChance == 0)
+            {
+                return false;
+            }
 
             //Console.WriteLine($"Overpower chance: {GetOverpowerChance_Method_B(attacker, defender)}");
 
@@ -1289,10 +1299,17 @@ namespace ACE.Server.WorldObjects
             if (rng >= overpowerChance * 0.01f)
                 return false;
 
-            if (defender.OverpowerResist == null)
-                return true;
+            int resistChance = 0;
 
-            var resistChance = defender.OverpowerResist.Value;
+            if (defender.OverpowerResist.HasValue)
+            {
+                resistChance = defender.OverpowerResist.Value;
+            }
+
+            if(defender is Player)
+            {
+                resistChance += defender.GetEquippedItemsRatingSum(PropertyInt.OverpowerResist);
+            }
 
             rng = ThreadSafeRandom.Next(0.0f, 1.0f);
 
@@ -1324,11 +1341,26 @@ namespace ACE.Server.WorldObjects
 
         public static float GetOverpowerChance_Method_B(Creature attacker, Creature defender)
         {
-            if (attacker.Overpower == null)
+            if (attacker == null || defender == null)
                 return 0.0f;
 
-            var overpowerChance = (attacker.Overpower ?? 0) * 0.01f;
-            var overpowerResistChance = (defender.OverpowerResist ?? 0) * 0.01f;
+            float overpowerChance = (attacker.Overpower ?? 0);
+            if (attacker is Player)
+            {
+                overpowerChance += attacker.GetEquippedItemsRatingSum(PropertyInt.Overpower);
+            }
+
+            if (overpowerChance <= 0)
+                return 0.0f;
+
+            overpowerChance *= 0.01f;
+
+            float overpowerResistChance = (defender.OverpowerResist ?? 0);
+            if (defender is Player)
+            {
+                overpowerResistChance += defender.GetEquippedItemsRatingSum(PropertyInt.OverpowerResist);
+            }
+            overpowerResistChance *= 0.01f;
 
             return overpowerChance * (1.0f - overpowerResistChance);
         }

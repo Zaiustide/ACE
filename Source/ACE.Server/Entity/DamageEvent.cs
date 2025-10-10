@@ -264,8 +264,10 @@ namespace ACE.Server.Entity
                 return 0.0f;
 
             // overpower
-            if (attacker.Overpower != null)
+            if (attacker.Overpower.HasValue || playerAttacker != null)
+            {
                 Overpower = Creature.GetOverpower(attacker, defender);
+            }
 
             // evasion chance
             if (!Overpower)
@@ -925,8 +927,8 @@ namespace ACE.Server.Entity
             info += $"EffectiveAttackSkill: {EffectiveAttackSkill}\n";
             info += $"EffectiveDefenseSkill: {EffectiveDefenseSkill}\n";
 
-            if (Attacker.Overpower != null)
-                info += $"Overpower: {Overpower} ({Creature.GetOverpowerChance(Attacker, Defender)})\n";
+            if (Attacker.Overpower != null || Attacker is Player)
+                info += $"Overpower: {Creature.GetOverpower(Attacker, Defender)} ({Creature.GetOverpowerChance(Attacker, Defender)})\n";            
 
             info += $"EvasionChance: {EvasionChance}\n";
             info += $"Evaded: {Evaded}\n";

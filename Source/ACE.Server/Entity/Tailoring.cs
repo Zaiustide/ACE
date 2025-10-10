@@ -83,8 +83,12 @@ namespace ACE.Server.Entity
         public const uint MorphGemVitality = 490510;
         public const uint MorphGemHealBoost = 490511;
         public const uint MorphGemMeleeCleave = 490512;
-		
-		public const uint MorphGemRuneofAcidBane = 30112;
+
+        public const uint MorphGemOverpower = 600030;
+        public const uint MorphGemOverpowerResist = 600031;
+
+        #region Rare/Cantrip Morph Gem IDs
+        public const uint MorphGemRuneofAcidBane = 30112;
         public const uint MorphGemIdeographofAcidProtection = 30113;
         public const uint MorphGemHieroglyphofAlchemyMastery = 30114;
         public const uint MorphGemHieroglyphofArcaneEnlightenment = 30115;
@@ -152,6 +156,7 @@ namespace ACE.Server.Entity
         public const uint MorphGemHieroglyphofVoidMagicMastery = 70001;
         public const uint MorphGemHieroglyphofTwoHandedWeaponsMastery = 70002;
         public const uint MorphGemHieroglyphofSummoningMastery = 70003;
+        #endregion Rare/Cantrip Morph Gem IDs
 
         public static readonly List<int> HeroicMasterSpells =
             new List<int>()
@@ -362,7 +367,9 @@ namespace ACE.Server.Entity
                 case MorphGemVitality:
                 case MorphGemHealBoost:
                 case MorphGemMeleeCleave:
-				case MorphGemRuneofAcidBane:
+                case MorphGemOverpower:
+                case MorphGemOverpowerResist:
+                case MorphGemRuneofAcidBane:
 				case MorphGemIdeographofAcidProtection:
 				case MorphGemHieroglyphofAlchemyMastery:
 				case MorphGemHieroglyphofArcaneEnlightenment:
@@ -2762,8 +2769,7 @@ namespace ACE.Server.Entity
 
                         //Verify the target is a melee or missile weapon
                         if (target as MeleeWeapon == null &&
-                            !target.IsBow &&
-                            !target.IsThrownWeapon)
+                            !target.IsRanged)
                         {
                             playerMsg = "This gem can only be used on melee or missile weapons";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -2901,8 +2907,7 @@ namespace ACE.Server.Entity
                         //Verify the target is a weapon or caster
                         if (target as MeleeWeapon == null &&
                             !target.IsCaster &&
-                            !target.IsBow &&
-                            !target.IsThrownWeapon)
+                            !target.IsRanged)
                         {
                             playerMsg = "This gem can only be used on weapons or magic casters";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
@@ -3049,7 +3054,7 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofHeartSeeker:
 
-                        //Verify the target is a weapon or caster
+                        //Verify the target is a melee weapon
                         if (target as MeleeWeapon == null)
                         {
                             playerMsg = "This gem can only be used on melee weapons";
@@ -3089,7 +3094,7 @@ namespace ACE.Server.Entity
 
                     case MorphGemRuneofHermeticLink:
 
-                        //Verify the target is a weapon or caster
+                        //Verify the target is a caster
                         if (target as Caster == null)
                         {
                             playerMsg = "This gem can only be used on magic casters";
@@ -3392,8 +3397,6 @@ namespace ACE.Server.Entity
                     #region MorphGemRuneofSpiritDrinker
 
                     case MorphGemRuneofSpiritDrinker:
-
-
                         //Verify the target is a caster
                         if (target as Caster == null)
                         {
@@ -3486,17 +3489,7 @@ namespace ACE.Server.Entity
                         }
 
                         //Remove any other lower level cantrips of same type
-                        var progression = SpellLevelProgression.GetSpellLevels((ACE.Entity.Enum.SpellId)6100);
-                        if (progression != null)
-                        {
-                            foreach (var progressionSpellId in progression)
-                            {
-                                if (targetItemSpells.Contains((int)progressionSpellId))
-                                {
-                                    target.Biota.TryRemoveKnownSpell((int)progressionSpellId, target.BiotaDatabaseLock);
-                                }
-                            }
-                        }
+                        RemoveAllCantripsInProgression(target, 6100);
 
                         target.Biota.GetOrAddKnownSpell(6100, target.BiotaDatabaseLock, out _);
                         playerMsg = $"With a steady hand you skillfully apply the morph gem to your {target.NameWithMaterial} and have successfully added the spell Legendary Swift Hunter";
@@ -3637,6 +3630,67 @@ namespace ACE.Server.Entity
                         break;
 
                     #endregion MorphGemHieroglyphofSummoningMastery
+
+                    #region MorphGemOverpower
+                    case MorphGemOverpower:
+                        //Applies Overpower rating to weapons and casters
+                        if (target as MeleeWeapon == null &&
+                            !target.IsCaster &&
+                            !target.IsRanged)
+                        {
+                            playerMsg = "This gem can only be used on weapons or magic casters";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if (target.Overpower > 0)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Rating of +{target.Overpower} and cannot be further enhanced";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Roll for an Overpower rating
+                        int opRating = ThreadSafeRandom.Next(1, 10);                        
+                        playerMsg = $"You have successfully used the {source.Name} to add +{opRating} Overpower Rating to your {target.NameWithMaterial}!";
+                        target.Overpower = opRating;
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemOverpower);
+                        break;
+                    #endregion MorphGemOverpower
+
+                    #region MorphGemOverpowerResist
+                    case MorphGemOverpowerResist:
+                        //Applies Overpower rating to weapons and casters
+                        if (target as MeleeWeapon == null &&
+                            !target.IsCaster &&
+                            !target.IsRanged)
+                        {
+                            playerMsg = "This gem can only be used on weapons or magic casters";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if (target.OverpowerResist > 0)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Resist Rating of +{target.OverpowerResist} and cannot be further enhanced";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //Roll for an Overpower rating
+                        int oprRating = ThreadSafeRandom.Next(1, 10);
+                        playerMsg = $"You have successfully used the {source.Name} to add +{oprRating} Overpower Resist Rating to your {target.NameWithMaterial}!";
+                        target.OverpowerResist = oprRating;
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemOverpowerResist);
+                        break;
+                    #endregion MorphGemOverpowerResist
+
                     default:
                         player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                         return;
@@ -3991,7 +4045,9 @@ namespace ACE.Server.Entity
                 case MorphGemVitality:
                 case MorphGemHealBoost:
                 case MorphGemMeleeCleave:
-				case MorphGemRuneofAcidBane:
+                case MorphGemOverpower:
+                case MorphGemOverpowerResist:
+                case MorphGemRuneofAcidBane:
 				case MorphGemIdeographofAcidProtection:
 				case MorphGemHieroglyphofAlchemyMastery:
 				case MorphGemHieroglyphofArcaneEnlightenment:

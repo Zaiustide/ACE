@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using ACE.Common.Extensions;
 using ACE.Database;
+using ACE.DatLoader.Entity;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
@@ -10,6 +8,10 @@ using ACE.Server.Entity;
 using ACE.Server.Managers;
 using ACE.Server.Network.Enum;
 using ACE.Server.WorldObjects;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ACE.Server.Network.Structure
 {
@@ -113,7 +115,9 @@ namespace ACE.Server.Network.Structure
                 BuildCreature(creature);
 
             if (wo.Damage != null && !(wo is Clothing) || wo is MeleeWeapon || wo is Missile || wo is MissileLauncher || wo is Ammunition || wo is Caster)
-                BuildWeapon(wo);
+            {
+                BuildWeapon(wo);                
+            }
 
             // TODO: Resolve this issue a better way?
             // Because of the way ACE handles default base values in recipe system (or rather the lack thereof)
@@ -321,7 +325,7 @@ namespace ACE.Server.Network.Structure
             {
                 if (PropertiesInt.ContainsKey(PropertyInt.Structure))
                     PropertiesInt.Remove(PropertyInt.Structure);
-            }
+            }            
 
             if (!Success)
             {
@@ -553,6 +557,8 @@ namespace ACE.Server.Network.Structure
             ArmorColor = ArmorMaskHelper.GetColorMask(wo);
 
             AddEnchantments(wo);
+
+            AddGearOverpower(wo);
         }
 
         private void BuildCreature(Creature creature)
@@ -617,6 +623,9 @@ namespace ACE.Server.Network.Structure
             var pkDamageRating = creature.GetPKDamageRating();
             var pkDamageResistRating = creature.GetPKDamageResistRating();
 
+            var overpowerRating = creature.GetOverpowerRating();
+            var overpowerResistRating = creature.GetOverpowerResistRating();
+
             if (damageRating != 0)
                 PropertiesInt[PropertyInt.DamageRating] = damageRating;
             if (damageResistRating != 0)
@@ -649,6 +658,12 @@ namespace ACE.Server.Network.Structure
             if (pkDamageResistRating != 0)
                 PropertiesInt[PropertyInt.PKDamageResistRating] = pkDamageResistRating;
 
+            if (overpowerRating != 0)
+                PropertiesInt[PropertyInt.Overpower] = overpowerRating;            
+            if(overpowerResistRating != 0)            
+                PropertiesInt[PropertyInt.OverpowerResist] = overpowerResistRating;
+            
+
             // add ratings from equipped items?
         }
 
@@ -669,6 +684,8 @@ namespace ACE.Server.Network.Structure
 
             // item enchantments can also be on wielder currently
             AddEnchantments(weapon);
+
+            AddGearOverpower(weapon);
         }
 
         private void BuildHookProfile(WorldObject hookedItem)
@@ -724,6 +741,39 @@ namespace ACE.Server.Network.Structure
                 Flags |= IdentifyResponseFlags.WeaponEnchantmentBitfield;
             if (ArmorLevels != null)
                 Flags |= IdentifyResponseFlags.ArmorLevels;
+        }
+
+        private void AddGearOverpower(WorldObject wo)
+        {
+            //Custom logic for displaying Overpower and Overpower Resist on weapons
+            //  Removes the AppraisalLongDescDecoration flags which prepend/append flavor text
+            //  Adds the Overpower / Overpower Resist ratings into the LongDesc
+            //  and then manually builds the flavor text back onto the end of LongDesc
+            if (wo.Overpower.HasValue || wo.OverpowerResist.HasValue)
+            {
+                PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
+                var currentLongDesc = PropertiesString[PropertyString.LongDesc];                
+                string newLongDesc = $"Overpower: {wo.Overpower ?? 0}\nOverpower Resist: {wo.OverpowerResist ?? 0}\n\n";
+
+                //Add back the flavor text to the LongDesc
+                if (wo.ItemWorkmanship > 0)
+                {
+                    newLongDesc += $" {AppraiseInfoExtensions.GetWorkmanshipDisplayString(wo.ItemWorkmanship.Value)}";
+                }
+                if (wo.MaterialType > 0)
+                {
+                    newLongDesc += $" {wo.MaterialType}";
+                }
+
+                newLongDesc += $" {currentLongDesc}";
+
+                if (wo.GemType > 0 && wo.GemCount > 0)
+                {
+                    newLongDesc += $", set with {wo.GemCount} {wo.GemType.ToDisplayString()}";
+                }
+
+                PropertiesString[PropertyString.LongDesc] = newLongDesc;
+            }
         }
     }
 
@@ -860,6 +910,35 @@ namespace ACE.Server.Network.Structure
             {
                 writer.Write((uint)kvp.Key);
                 writer.Write(kvp.Value);
+            }
+        }
+
+        public static string GetWorkmanshipDisplayString(int workmanship)
+        {
+            switch (workmanship)
+            {
+                case 1:
+                    return "Poorly crafted";
+                case 2:
+                    return "Well-crafted";
+                case 3:
+                    return "Finely crafted";
+                case 4:
+                    return "Exquisitely crafted";
+                case 5:
+                    return "Magnificent";
+                case 6:
+                    return "Nearly Flawless";
+                case 7:
+                    return "Flawless";
+                case 8:
+                    return "Utterly Flawless";
+                case 9:
+                    return "Incomparable";
+                case 10:
+                    return "Priceless";
+                default:
+                    return String.Empty;
             }
         }
     }
