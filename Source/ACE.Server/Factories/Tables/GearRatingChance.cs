@@ -25,11 +25,26 @@ namespace ACE.Server.Factories.Tables
             ( 2, 0.05f ),
         };
 
+        private static ChanceTable<int> T9_ArmorRating = new ChanceTable<int>()
+        {
+            ( 1, 0.5f ),
+            ( 2, 0.45f ),
+            ( 3, 0.045f ),
+            ( 4, 0.005f ),
+        };
+
         private static ChanceTable<int> ClothingJewelryRating = new ChanceTable<int>()
         {
             ( 1, 0.70f ),
             ( 2, 0.25f ),
             ( 3, 0.05f ),
+        };
+
+        private static ChanceTable<int> T9_ClothingJewelryRating = new ChanceTable<int>()
+        {
+            ( 1, 0.5f ),
+            ( 2, 0.4f ),
+            ( 3, 0.1f ),
         };
 
         public static int Roll(WorldObject wo, TreasureDeath profile, TreasureRoll roll)
@@ -65,11 +80,25 @@ namespace ACE.Server.Factories.Tables
 
             if (roll.HasArmorLevel(wo))
             {
-                rating = ArmorRating;
+                if (profile.Tier >= 9)
+                {
+                    rating = T9_ArmorRating;
+                }
+                else
+                {
+                    rating = ArmorRating;
+                }
             }
             else if (roll.IsClothing || roll.IsJewelry || roll.IsCloak)
             {
-                rating = ClothingJewelryRating;
+                if (profile.Tier >= 9)
+                {
+                    rating = T9_ClothingJewelryRating;
+                }
+                else
+                {
+                    rating = ClothingJewelryRating;
+                }
             }
             else
             {

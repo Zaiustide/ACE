@@ -77,7 +77,7 @@ VALUES (514108531,   1, 0x020005A7) /* Setup */
      , (514108531,   7, 0x10000490) /* ClothingBase */
      , (514108531,   8, 0x06001918) /* Icon */
      , (514108531,  22, 0x34000065) /* PhysicsEffectTable */
-     , (514108531,  35,      10002) /* DeathTreasureType - Loot Tier: 8+ */;
+     , (514108531,  35,      10004) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (514108531,   1, 600, 0, 0) /* Strength */
@@ -162,7 +162,11 @@ INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `dela
 VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 0x10000052 /* Twitch2 */, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (514108531, 9, 34276,  3, 0, 0.04, False) /* MMD */
-     , (514108531, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */
+VALUES (514108531, 9,  34276,  3, 0, 0.04, False) /* MMD */
+     , (514108531, 9,      0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */
 	 , (514108531, 9, 490248,  0, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (514108531, 9,     0,  0, 0, 0.95, False);    /* Create nothing for ContainTreasure */
+	 , (514108531, 9,      0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */
+	 , (514108531, 9, 600030,  1, 0, 0.025, False) /* Overpower Morph Gem */
+	 , (514108531, 9, 600031,  1, 0, 0.025, False) /* Overpower Resist Morph Gem */
+	 , (514108531, 9,      0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */
+	 ;

@@ -90,7 +90,6 @@ namespace ACE.Server.Factories.Tables
             ( TreasureArmorType.Overrobe,       0.02f ),
         };
 
-
         private static ChanceTable<TreasureArmorType> T8_Chances = new ChanceTable<TreasureArmorType>()
         {
             ( TreasureArmorType.Leather,        0.10f ),
@@ -108,6 +107,23 @@ namespace ACE.Server.Factories.Tables
             ( TreasureArmorType.Overrobe,       0.02f ),
         };
 
+        private static ChanceTable<TreasureArmorType> T9_Chances = new ChanceTable<TreasureArmorType>()
+        {
+            ( TreasureArmorType.Leather,        0.05f ),
+            ( TreasureArmorType.StuddedLeather, 0.05f ),
+            ( TreasureArmorType.Chainmail,      0.10f ),
+            ( TreasureArmorType.Platemail,      0.10f ),
+            ( TreasureArmorType.HeritageLow,    0.20f ),
+            ( TreasureArmorType.Covenant,       0.01f ),
+            ( TreasureArmorType.HeritageHigh,   0.20f ),
+            ( TreasureArmorType.Olthoi,         0.01f ),
+            ( TreasureArmorType.OlthoiHeritage, 0.20f ),
+            ( TreasureArmorType.Haebrean,       0.04f ),
+            ( TreasureArmorType.KnorrAcademy,   0.01f ),
+            ( TreasureArmorType.Sedgemail,      0.02f ),
+            ( TreasureArmorType.Overrobe,       0.01f ),
+        };
+
         private static readonly List<ChanceTable<TreasureArmorType>> armorTiers = new List<ChanceTable<TreasureArmorType>>()
         {
             T1_Chances,
@@ -117,7 +133,9 @@ namespace ACE.Server.Factories.Tables
             T5_Chances,
             T6_Chances,
             T7_Chances,
-            T8_Chances
+            T8_Chances,
+            T8_Chances,
+            T9_Chances
         };
 
         public static TreasureArmorType Roll(int tier)

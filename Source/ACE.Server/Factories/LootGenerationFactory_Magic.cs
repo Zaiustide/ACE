@@ -512,6 +512,7 @@ namespace ACE.Server.Factories
             (1200, 1400),   // T6
             (1400, 1600),   // T7
             (1600, 1800),   // T8
+            (1600, 4800),   // T9
         };
 
         private static int RollItemMaxMana(int tier, int numSpells)

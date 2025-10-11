@@ -90,6 +90,16 @@ namespace ACE.Server.Factories.Tables.Wcids
             ( WeenieClassName.staminaphiltre,  0.25f ),
         };
 
+        private static ChanceTable<WeenieClassName> T9_Chances = new ChanceTable<WeenieClassName>()
+        {
+            ( WeenieClassName.ace43504_draughtofrevitalization,     0.16f ),
+            ( WeenieClassName.beefjerkyrenegade,                    0.16f ),
+            ( WeenieClassName.ace38726_blackmarketgemofdispelling,  0.16f ),
+            ( WeenieClassName.ace52700_honeyedlifemead,             0.18f ),
+            ( WeenieClassName.ace52703_honeyedvigormead,            0.17f ),
+            ( WeenieClassName.ace52701_honeyedmanamead,             0.17f ),
+        };
+
         private static readonly List<ChanceTable<WeenieClassName>> consumeTiers = new List<ChanceTable<WeenieClassName>>()
         {
             T1_Chances,
@@ -100,6 +110,7 @@ namespace ACE.Server.Factories.Tables.Wcids
             T6_T8_Chances,
             T6_T8_Chances,
             T6_T8_Chances,
+            T9_Chances,
         };
 
         public static WeenieClassName Roll(TreasureDeath profile)

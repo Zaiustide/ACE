@@ -182,6 +182,7 @@ namespace ACE.Server.Factories
             0.60f,  // T6
             0.60f,  // T7
             0.60f,  // T8
+            0.75f,  // T9
         };
 
         private static readonly List<float> EnchantmentChances_Caster = new List<float>()
@@ -194,6 +195,7 @@ namespace ACE.Server.Factories
             0.75f,  // T6
             0.75f,  // T7
             0.75f,  // T8
+            0.95f,  // T9
         };
 
         private static int RollNumEnchantments_Armor_Weapon(WorldObject wo, TreasureDeath profile, TreasureRoll roll)

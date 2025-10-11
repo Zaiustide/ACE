@@ -58,6 +58,7 @@ namespace ACE.Server.Factories.Tables.Wcids
             T6_T8_Chances,
             T6_T8_Chances,
             T6_T8_Chances,
+            T6_T8_Chances,
         };
 
         public static WeenieClassName Roll(TreasureDeath profile)

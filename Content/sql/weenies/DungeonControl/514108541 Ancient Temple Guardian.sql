@@ -82,7 +82,7 @@ VALUES (514108541,   1, 0x02001496) /* Setup */
      , (514108541,   7, 0x10000637) /* ClothingBase */
      , (514108541,   8, 0x06001224) /* Icon */
      , (514108541,  22, 0x34000064) /* PhysicsEffectTable */
-     , (514108541,  35,      10002) /* DeathTreasureType - Loot Tier: 7 */;
+     , (514108541,  35,      10004) /* DeathTreasureType - Loot Tier: 9 */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (514108541,   1, 500, 0, 0) /* Strength */
@@ -150,5 +150,9 @@ VALUES (@parent_id,  0,   5 /* Motion */, 0, 1, 1090519043 /* Ready */, NULL, NU
      , (@parent_id,  1,   5 /* Motion */, 0, 1, 1090519060 /* Sleeping */, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (514108541, 9, 34277,  2, 0, 0.10, False) /* Trinket */
-	 , (514108541, 9,     0,  0, 0, 0.85, False) /* Create nothing for ContainTreasure */;
+VALUES (514108541, 9,  34277,  5, 0, 0.05, False) /* Trinket */
+     , (514108541, 9,      0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
+	 , (514108541, 9, 600030,  1, 0, 0.025, False) /* Overpower Morph Gem */
+	 , (514108541, 9, 600031,  1, 0, 0.025, False) /* Overpower Resist Morph Gem */
+	 , (514108541, 9,      0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
+	 ;

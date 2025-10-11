@@ -43,6 +43,7 @@ namespace ACE.Server.Factories
                     break;
                 case 7:
                 case 8:
+                case 9:
                     maxType = LootTables.ArmorType.OlthoiAlduressaArmor;
                     break;
             }
@@ -152,7 +153,7 @@ namespace ACE.Server.Factories
             if (profile.Tier > 6 && armorType != LootTables.ArmorType.SocietyArmor)
                 TryRollEquipmentSet(wo, profile, roll);
 
-            if (roll != null && profile.Tier == 8)
+            if (roll != null && profile.Tier >= 8)
                 TryMutateGearRating(wo, profile, roll);
 
             // item value
@@ -620,10 +621,10 @@ namespace ACE.Server.Factories
 
             if (roll == null)
             {                
-                if (profile.Tier < 6 || !wo.HasArmorLevel())
+                if (profile.Tier < 6 || (!wo.HasArmorLevel() && wo.ItemType != ItemType.Jewelry && !(wo.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false) && wo.WeenieType != WeenieType.Clothing))
                     return false;
 
-                if (wo.ClothingPriority == null || (wo.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0)
+                if ((wo.ClothingPriority == null || (wo.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0) && !wo.HasArmorLevel() && wo.ItemType != ItemType.Jewelry && !(wo.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false) && wo.WeenieType != WeenieType.Clothing)
                     return false;
 
                 var dropRate = PropertyManager.GetDouble("equipmentsetid_drop_rate").Item;
@@ -842,7 +843,7 @@ namespace ACE.Server.Factories
             // workmanship
             wo.Workmanship = WorkmanshipChance.Roll(profile.Tier);
 
-            if (roll != null && profile.Tier == 8)
+            if (roll != null && profile.Tier >= 8)
                 TryMutateGearRating(wo, profile, roll);
 
             // item value
@@ -988,7 +989,7 @@ namespace ACE.Server.Factories
             if (profile.DisableRatings)
                 return false;
 
-            if (profile.Tier != 8)
+            if (profile.Tier < 8)
                 return false;
 
             // shields don't have gear ratings

@@ -77,7 +77,7 @@ VALUES (514108551,   1,   33558656) /* Setup */
      , (514108551,   7,  268436816) /* ClothingBase */
      , (514108551,   8,  100667448) /* Icon */
      , (514108551,  22,  872415263) /* PhysicsEffectTable */
-     , (514108551,  35,      10002) /* DeathTreasureType - Loot Tier: 8+ */;
+     , (514108551,  35,      10004) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (514108551,   1, 360, 0, 0) /* Strength */
@@ -115,4 +115,8 @@ VALUES (514108551,  0,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (514108551, 9, 490244,  0, 0, 0.05, False) /* 4200028 Set Randomizer Morph Gem */
-	 , (514108551, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */;
+	 , (514108551, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */
+	 , (514108551, 9, 600030,  1, 0, 0.025, False) /* Overpower Morph Gem */
+	 , (514108551, 9, 600031,  1, 0, 0.025, False) /* Overpower Resist Morph Gem */
+	 , (514108551, 9,     0,  0, 0, 0.95, False)    /* Create nothing for ContainTreasure */
+	 ;

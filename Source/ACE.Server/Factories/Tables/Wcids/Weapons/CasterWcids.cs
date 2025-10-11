@@ -153,6 +153,34 @@ namespace ACE.Server.Factories.Tables.Wcids
             ( WeenieClassName.ace43383_netherstaff,   0.035f ),
         };
 
+        private static ChanceTable<WeenieClassName> T9_Chances = new ChanceTable<WeenieClassName>()
+        {            
+            ( WeenieClassName.wandslashing,           0.0416f ),
+            ( WeenieClassName.wandpiercing,           0.0416f ),
+            ( WeenieClassName.wandblunt,              0.0416f ),
+            ( WeenieClassName.wandacid,               0.0416f ),
+            ( WeenieClassName.wandfire,               0.0416f ),
+            ( WeenieClassName.wandfrost,              0.0416f ),
+            ( WeenieClassName.wandelectric,           0.0416f ),
+            ( WeenieClassName.ace43381_nethersceptre, 0.0416f ),
+            ( WeenieClassName.ace31819_slashingbaton, 0.0417f ),
+            ( WeenieClassName.ace31825_piercingbaton, 0.0417f ),
+            ( WeenieClassName.ace31821_bluntbaton,    0.0417f ),
+            ( WeenieClassName.ace31820_acidbaton,     0.0417f ),
+            ( WeenieClassName.ace31823_firebaton,     0.0417f ),
+            ( WeenieClassName.ace31824_frostbaton,    0.0417f ),
+            ( WeenieClassName.ace31822_electricbaton, 0.0417f ),
+            ( WeenieClassName.ace43382_netherbaton,   0.0416f ),
+            ( WeenieClassName.ace37223_slashingstaff, 0.0417f ),
+            ( WeenieClassName.ace37222_piercingstaff, 0.0417f ),
+            ( WeenieClassName.ace37225_bluntstaff,    0.0418f ),
+            ( WeenieClassName.ace37224_acidstaff,     0.0417f ),
+            ( WeenieClassName.ace37220_firestaff,     0.0417f ),
+            ( WeenieClassName.ace37221_froststaff,    0.0417f ),
+            ( WeenieClassName.ace37219_electricstaff, 0.0418f ),
+            ( WeenieClassName.ace43383_netherstaff,   0.0416f ),
+        };
+
         private static readonly List<ChanceTable<WeenieClassName>> casterTiers = new List<ChanceTable<WeenieClassName>>()
         {
             T1_T2_Chances,
@@ -162,7 +190,8 @@ namespace ACE.Server.Factories.Tables.Wcids
             T5_T6_Chances,
             T5_T6_Chances,
             T7_Chances,
-            T8_Chances
+            T8_Chances,
+            T9_Chances
         };
 
         public static WeenieClassName Roll(int tier)

@@ -30,6 +30,7 @@ namespace ACE.Server.Factories.Tables
                 // even chance between blue / yellow / red
                 case 7:
                 case 8:
+                case 9:
                     rng = ThreadSafeRandom.Next(0, 2);
                     return aetheriaColors[rng];
             }

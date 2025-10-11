@@ -76,7 +76,7 @@ namespace ACE.Server.Factories
                 }
                 else
                 {
-                    elementalDamageMod = RollElementalDamageMod(wieldDifficulty.Value);
+                    elementalDamageMod = RollElementalDamageMod(wieldDifficulty.Value, profile);
 
                     if (wo.W_DamageType == DamageType.Nether)
                         wieldSkillType = Skill.VoidMagic;
@@ -354,7 +354,7 @@ namespace ACE.Server.Factories
         /// <summary>
         /// Rolls for ElementalDamageMod for caster weapons
         /// </summary>
-        private static double RollElementalDamageMod(int wield)
+        private static double RollElementalDamageMod(int wield, TreasureDeath profile = null)
         {
             double elementBonus = 0;
 
@@ -417,12 +417,32 @@ namespace ACE.Server.Factories
 
                 default:
                     // 385
-                    if (chance > 95)
-                        elementBonus = 0.18;
-                    else if (chance > 65)
-                        elementBonus = 0.17;
+                    if ((profile?.Tier ?? 0) >= 9)
+                    {
+                        if (chance > 99)
+                            elementBonus = 0.22;
+                        else if (chance > 98)
+                            elementBonus = 0.21;
+                        else if (chance > 95)
+                            elementBonus = 0.20;
+                        else if (chance > 90)
+                            elementBonus = 0.19;
+                        else if (chance > 65)
+                            elementBonus = 0.18;
+                        else if (chance > 45)
+                            elementBonus = 0.17;
+                        else
+                            elementBonus = 0.16;
+                    }
                     else
-                        elementBonus = 0.16;
+                    {                        
+                        if (chance > 95)
+                            elementBonus = 0.18;
+                        else if (chance > 65)
+                            elementBonus = 0.17;
+                        else
+                            elementBonus = 0.16;
+                    }
                     break;
             }
 

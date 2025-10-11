@@ -424,6 +424,7 @@ namespace ACE.Server.Factories
             new int[] { 4,5 },
             new int[] { 5,6 },
             new int[] { 6,7 },
+            new int[] { 6,7 },
             new int[] { 6,7 }
         };
 

@@ -44,7 +44,9 @@ namespace ACE.Server.Factories.Tables
             if (!PropertyManager.GetBool("equipmentsetid_enabled").Item || profile.DisableSets)
                 return null;
 
-            if (profile.Tier < 6 || !roll.HasArmorLevel(wo))
+            if (profile.Tier < 6)
+                return null;
+            if(!roll.HasArmorLevel(wo) && wo.ItemType != ItemType.Jewelry && !(wo.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false) && wo.WeenieType != WeenieType.Clothing)
                 return null;
 
             if(profile.DisableSets)
@@ -52,7 +54,7 @@ namespace ACE.Server.Factories.Tables
                 return null;
             }
 
-            if (wo.ClothingPriority == null || (wo.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0)
+            if ((wo.ClothingPriority == null || (wo.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0) && wo.ItemType != ItemType.Jewelry && !(wo.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false) && wo.WeenieType != WeenieType.Clothing)
                 return null;
 
             // loot quality mod?

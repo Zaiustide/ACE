@@ -1,12 +1,12 @@
-using System.Linq;
-
 using ACE.Common;
 using ACE.Database.Models.World;
 using ACE.Entity.Enum;
 using ACE.Server.Entity;
 using ACE.Server.Factories.Entity;
 using ACE.Server.Factories.Tables;
+using ACE.Server.Managers;
 using ACE.Server.WorldObjects;
+using System.Linq;
 
 namespace ACE.Server.Factories
 {
@@ -76,15 +76,18 @@ namespace ACE.Server.Factories
             }
 
             // gear rating (t8)
-            if (roll != null && profile.Tier == 8)
+            if (roll != null && profile.Tier >= 8)
+            {
                 TryMutateGearRating(wo, profile, roll);
+                TryRollEquipmentSet(wo, profile, roll);
+            }
 
             // item value
             //  if (wo.HasMutateFilter(MutateFilter.Value))     // fixme: data
                 MutateValue(wo, profile.Tier, roll);
 
             wo.LongDesc = GetLongDesc(wo);
-        }
+        }        
 
         private static bool GetMutateJewelryData(uint wcid)
         {
