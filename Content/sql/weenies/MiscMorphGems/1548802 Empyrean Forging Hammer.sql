@@ -24,7 +24,7 @@ VALUES (1548802,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (1548802,   1, 'Empyrean Forging Hammer') /* Name */
-     , (1548802,  14, 'An extremely well-made blacksmithing hammer. This hammer looks ancient, crafted by the greatest of Empyrean Blacksmiths. This tool looks as if it was used to alter the set on armor or add one if no set is present. This can only be applied to a piece of armor once. May be used to alter the set on a peice of armor, or a chance to add one.') /* Use */;
+     , (1548802,  14, 'An extremely well-made blacksmithing hammer. This hammer looks ancient, crafted by the greatest of Empyrean Blacksmiths. This tool looks as if it was used to alter the set on armor or add one if no set is present. May be used to alter the set on a peice of armor, jewelry and clothing or a chance to add one.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (1548802,   1, 0x02000179) /* Setup */

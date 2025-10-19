@@ -7,7 +7,7 @@ INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (600003,   1,        128) /* ItemType - Misc */
      , (600003,   5,          5) /* EncumbranceVal */
      , (600003,  16,          8) /* ItemUseable - Contained */
-     , (600003,  19,         10) /* Value */
+     , (600003,  19,         50) /* Value */
      , (600003,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (600003,  94,         16) /* TargetType - Creature */
      , (600003, 266,      600002) /* PetClass - Pet Virindi Servant */;
@@ -21,7 +21,7 @@ VALUES (600003,  39,       2) /* DefaultScale */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (600003,   1, 'Virindi Cage') /* Name */
-     , (600003,  14, 'Using this cage will release your Virindi Servant. Hand it a pyreal and it will cast beneficial spells on you!') /* Use */;
+     , (600003,  14, 'Using this cage will release your Virindi Servant. Hand it a PK Trophy to work vitae and it will cast beneficial spells on you!') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (600003,   1, 0x020016F3) /* Setup */

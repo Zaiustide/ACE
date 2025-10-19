@@ -14,7 +14,7 @@ VALUES (600026,   1,          2) /* ItemType - Armor */
      , (600026,  33,          -1) /* Bonded - Slipper */
      , (600026,  36,       9999) /* ResistMagic */
      , (600026,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-	 , (600026, 106,        325) /* ItemSpellcraft */
+	 , (600026, 106,        999) /* ItemSpellcraft */
      , (600026, 107,      10000) /* ItemCurMana */
      , (600026, 108,      10000) /* ItemMaxMana */
      , (600026, 158,          1) /* WieldRequirements - Skill */
