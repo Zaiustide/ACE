@@ -5,8 +5,7 @@ VALUES (514108531, 'ShrethCavernsGuardian', 10, '2019-09-13 00:00:00') /* Creatu
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (514108531,   1,         16) /* ItemType - Creature */
-     , (514108531,   2,         32) /* CreatureType - Shreth */
-     , (514108531,   3,         61) /* PaletteTemplate - White */
+     , (514108531,   2,         97) /* CreatureType - Touched */
      , (514108531,   6,         -1) /* ItemsCapacity */
      , (514108531,   7,         -1) /* ContainersCapacity */
      , (514108531,  16,          1) /* ItemUseable - No */
@@ -66,17 +65,16 @@ VALUES (514108531,   1,       5) /* HeartbeatInterval */
 	 , (514108531, 151,       1) /* IgnoreShield */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (514108531,   1, 'Shreth Caverns Guardian') /* Name */;
+VALUES (514108531,   1, 'Empyrean Guardian') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
-VALUES (514108531,   1, 0x020005A7) /* Setup */
-     , (514108531,   2, 0x09000080) /* MotionTable */
-     , (514108531,   3, 0x2000004A) /* SoundTable */
-     , (514108531,   4, 0x3000001F) /* CombatTable */
-     , (514108531,   6, 0x04000474) /* PaletteBase */
-     , (514108531,   7, 0x10000490) /* ClothingBase */
-     , (514108531,   8, 0x06001918) /* Icon */
-     , (514108531,  22, 0x34000065) /* PhysicsEffectTable */
+VALUES (514108531,   1, 0x020016D7) /* Setup */
+     , (514108531,   2, 0x09000186) /* MotionTable */
+     , (514108531,   3, 0x20000015) /* SoundTable */
+     , (514108531,   4, 0x30000000) /* CombatTable */
+     , (514108531,   7, 0x1000049A) /* ClothingBase */
+     , (514108531,   8, 0x06002B2E) /* Icon */
+     , (514108531,  22, 0x34000025) /* PhysicsEffectTable */
      , (514108531,  35,      10004) /* DeathTreasureType - Loot Tier: 8+ */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)

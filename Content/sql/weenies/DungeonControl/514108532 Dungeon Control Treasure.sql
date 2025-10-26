@@ -31,19 +31,21 @@ VALUES (514108532,   1,  True) /* Stuck */
 
 INSERT INTO `weenie_properties_float` (`object_Id`, `type`, `value`)
 VALUES (514108532,  11, 9999999999) /* ResetInterval */
-     , (514108532,  39,          2) /* DefaultScale */
+     , (514108532,  39,          1) /* DefaultScale */
      , (514108532,  41, 9999999999) /* RegenerationInterval */
      , (514108532,  43,          1) /* GeneratorRadius */
      , (514108532,  54,          1) /* UseRadius */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (514108532,   1, 'Dungeon Cache') /* Name */;
+VALUES (514108532,   1, 'Empyrean Cache') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
-VALUES (514108532,   1, 0x0200007C) /* Setup */
-     , (514108532,   2, 0x090001B3) /* MotionTable */
-     , (514108532,   3, 0x20000021) /* SoundTable */
-     , (514108532,   8, 0x06006208) /* Icon */
+VALUES (514108532,   1, 0x02000BF1) /* Setup */
+     , (514108532,   2, 0x090000D2) /* MotionTable */
+     , (514108532,   3, 0x20000089) /* SoundTable */
+     , (514108532,   6, 0x04000F68) /* PaletteBase */
+     , (514108532,   7, 0x10000363) /* ClothingBase */
+     , (514108532,   8, 0x060023E9) /* Icon */
      , (514108532,  22, 0x3400002B) /* PhysicsEffectTable */;
 
 INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)

@@ -202,3 +202,7 @@ VALUES (0x701C9061, 600010, 0x01C901D7, 65.3511, -84.0615, -5.995, 0.999995, 0, 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x701C9062, 600000, 0x01C901F0, 120.285, -7.99674, -5.985, 0.031867, 0, 0, -0.999492, False, '2025-09-21 18:20:44'); /* Fargon */
 /* @teleloc 0x01C901F0 [120.285004 -7.996740 -5.985000] 0.031867 0.000000 0.000000 -0.999492 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9063, 600036, 0x01C90213, 149.803, -92.7497, -6, 0, 0, 0, 1, False, '2025-10-26 15:45:09'); /* Empyrean Storage Vault */
+/* @teleloc 0x01C90213 [149.802994 -92.749702 -6.000000] 0.000000 0.000000 0.000000 1.000000 */
