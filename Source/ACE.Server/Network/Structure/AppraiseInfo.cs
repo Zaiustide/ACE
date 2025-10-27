@@ -752,7 +752,7 @@ namespace ACE.Server.Network.Structure
             if (wo.Overpower.HasValue || wo.OverpowerResist.HasValue || wo.IgnoreShield.HasValue || wo.SlayerDamageBonus.HasValue)
             {
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
-                var currentLongDesc = PropertiesString[PropertyString.LongDesc];
+                var currentLongDesc = PropertiesString.ContainsKey(PropertyString.LongDesc) ? PropertiesString[PropertyString.LongDesc] : "";
                 string newLongDesc = "";
                 if (wo.Overpower.HasValue)
                     newLongDesc += $"Overpower: {wo.Overpower}\n";
