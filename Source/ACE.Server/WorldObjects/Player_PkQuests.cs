@@ -372,7 +372,7 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public void CompletePkQuestTasks(string[] questCodes)
+        public void CompletePkQuestTasks(string[] questCodes, int completionCount = 1)
         {
             try
             {
@@ -381,7 +381,7 @@ namespace ACE.Server.WorldObjects
                     var playerQuest = PkQuestList.FirstOrDefault(x => x.QuestCode.Equals(questCode));
                     if (playerQuest != null)
                     {
-                        playerQuest.TaskDoneCount++;
+                        playerQuest.TaskDoneCount += completionCount;
                         var quest = PKQuests.GetPkQuestByCode(playerQuest.QuestCode);
                         if (quest == null)
                             continue;
@@ -405,7 +405,7 @@ namespace ACE.Server.WorldObjects
             }
             catch (Exception ex)
             {
-                log.Error($"Exception in Player_PKQuests.CompletePkQuestTask for Player {this.Name}, CharacterID = {this.Character.Id}. Ex: {ex}");
+                log.Error($"Exception in Player_PKQuests.CompletePkQuestTasks for Player {this.Name}, CharacterID = {this.Character.Id}. Ex: {ex}");
             }
         }        
 
