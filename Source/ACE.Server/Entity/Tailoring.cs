@@ -743,7 +743,8 @@ namespace ACE.Server.Entity
             MorphGemHealBoost,
             MorphGemImpen,
             MorphGemRandomSet,
-            MorphGemRandomSetDurable
+            MorphGemRandomSetDurable,
+            MorphGemCloakUpgrade
         };
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)

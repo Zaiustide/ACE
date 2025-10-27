@@ -112,7 +112,7 @@ namespace ACE.Server.Factories
                         scriptName = "MeleeWeapons.WeaponRatings.WeaponRatings_2H.txt";
                     }
 
-                        mutationFilter = MutationCache.GetMutation(scriptName);
+                    mutationFilter = MutationCache.GetMutation(scriptName);
                     mutationFilter.TryMutate(wo, profile.Tier);
                 }
             }
