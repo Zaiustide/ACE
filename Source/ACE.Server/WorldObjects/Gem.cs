@@ -158,7 +158,7 @@ namespace ACE.Server.WorldObjects
                     ItemTotalXp = 10000000000;
                 }
 
-                player.GrantXP(ItemTotalXp.Value, XpType.Kill, ShareType.None, false);
+                player.GrantXP(ItemTotalXp.Value, XpType.Kill, ShareType.None, false, true);
                 player.TryConsumeFromInventoryWithNetworking(this, 1);
                 return;
             }

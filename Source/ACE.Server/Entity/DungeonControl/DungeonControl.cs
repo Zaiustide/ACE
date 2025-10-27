@@ -131,7 +131,7 @@ namespace ACE.Server.Entity.DungeonControl
                     var ancientTemple = new OwnableDungeon();
                     ancientTemple.DungeonName = "Ancient Temple";
                     ancientTemple.LandblockId = 0x0174;
-                    ancientTemple.GuardianWeenieId = 514108541;
+                    ancientTemple.GuardianWeenieId = 514108531;
                     ancientTemple.ControlPointCellId = 24379693;
                     ancientTemple.CaptureScore = 600;
                     ancientTemple.XpAndLumBonus = 2.0f;
@@ -228,7 +228,7 @@ namespace ACE.Server.Entity.DungeonControl
                     var miteHole = new OwnableDungeon();
                     miteHole.DungeonName = "Mite Hole";
                     miteHole.LandblockId = 0x00E1;
-                    miteHole.GuardianWeenieId = 514108551;
+                    miteHole.GuardianWeenieId = 514108531;
                     miteHole.ControlPointCellId = 14746276;
                     miteHole.CaptureScore = 600;
                     miteHole.XpAndLumBonus = 2.0f;
@@ -400,7 +400,7 @@ namespace ACE.Server.Entity.DungeonControl
                         var currScore = dungeon.AllegianceScoreBoard[alleg.Key].Score;
                         dungeon.AllegianceScoreBoard[alleg.Key].Score = Math.Max(0, currScore - 2);
                     }
-                }
+                }                
 
                 //Check if there's a winner
                 if (dungeon.AllegianceScoreBoard[allegianceId].Score >= dungeon.CaptureScore)
@@ -413,6 +413,8 @@ namespace ACE.Server.Entity.DungeonControl
 
                     //Spawn Guardians
                     SpawnGuardians(dungeon, allegianceId, landblock);
+
+                    PKQuest_Win(allegianceId, landblock);
 
                     //Broadcast the win                    
                     PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{dungeon.OwningAllegianceName} has gained control of the {dungeon.DungeonName} dungeon and summoned its protectors.", ChatMessageType.Broadcast));                    
@@ -510,6 +512,28 @@ namespace ACE.Server.Entity.DungeonControl
             }
 
             return false;
+        }
+
+        public static void PKQuest_Win(uint allegianceId, Landblock landblock)
+        {
+            foreach(var player in landblock.GetCurrentLandblockPlayers())
+            {
+                if (player.Allegiance?.MonarchId == allegianceId)
+                {
+                    player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_DungeonControl_Win);
+                }
+            }            
+        }
+
+        public static void PKQuest_Score(uint allegianceId, Landblock landblock)
+        {
+            foreach (var player in landblock.GetCurrentLandblockPlayers())
+            {
+                if (player.Allegiance?.MonarchId == allegianceId)
+                {
+                    player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_DungeonControl_ScorePoints, 5);
+                }
+            }
         }
 
         public static void ExpireOwnership(uint landblockId)

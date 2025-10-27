@@ -5,6 +5,7 @@ using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Entity.Actions;
 using ACE.Server.Factories;
+using ACE.Server.Factories.Enum;
 using ACE.Server.Factories.Tables;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameEvent.Events;
@@ -86,6 +87,10 @@ namespace ACE.Server.Entity
 
         public const uint MorphGemOverpower = 600030;
         public const uint MorphGemOverpowerResist = 600031;
+        public const uint MorphGemCloakUpgrade = 600032;        
+        public const uint MorphGemDmgRating = 600033;
+        public const uint MorphGemDmgResistRating = 600034;
+        public const uint MorphGemRandomSetDurable = 600035;
 
         #region Rare/Cantrip Morph Gem IDs
         public const uint MorphGemRuneofAcidBane = 30112;
@@ -360,6 +365,9 @@ namespace ACE.Server.Entity
                 case MorphGemHeroicMaster:
                 case MorphGemDotResist:
                 case MorphGemRandomSet:
+                case MorphGemRandomSetDurable:
+                case MorphGemDmgRating:
+                case MorphGemDmgResistRating:
                 case MorphGemRandomCantrip:
                 case MorphGemBurden:
                 case MorphGemRareDmgBoost:
@@ -369,6 +377,7 @@ namespace ACE.Server.Entity
                 case MorphGemMeleeCleave:
                 case MorphGemOverpower:
                 case MorphGemOverpowerResist:
+                case MorphGemCloakUpgrade:
                 case MorphGemRuneofAcidBane:
 				case MorphGemIdeographofAcidProtection:
 				case MorphGemHieroglyphofAlchemyMastery:
@@ -720,7 +729,7 @@ namespace ACE.Server.Entity
             player.SendUseDoneEvent();
         }
 
-        private static readonly List<uint> morphGemsAllowedNonLootGen = new List<uint>()
+        private static readonly HashSet<uint> morphGemsAllowedNonLootGen = new HashSet<uint>()
         {
             MorphGemRemoveLevelReq,
             MorphGemRemovePlayerReq,
@@ -732,7 +741,9 @@ namespace ACE.Server.Entity
             MorphGemDotResist,
             MorphGemVitality,
             MorphGemHealBoost,
-            MorphGemImpen
+            MorphGemImpen,
+            MorphGemRandomSet,
+            MorphGemRandomSetDurable
         };
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
@@ -1150,8 +1161,10 @@ namespace ACE.Server.Entity
 
                     #region MorphGemRandomSet
                     case MorphGemRandomSet:
+                    case MorphGemRandomSetDurable:
 
-                        if (target.ClothingPriority == null || (target.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0)
+                        //Allow loot gen jewelry, undies and armor
+                        if (target.ItemType != ItemType.Jewelry && !target.ItemType.HasFlag(ItemType.Clothing))
                         {
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item does not meet the requirements for adding an Equipment Set", ChatMessageType.Broadcast));
@@ -1182,13 +1195,13 @@ namespace ACE.Server.Entity
 
                         if (setRollResult)
                         {
-                            target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.Lightningproof);
+                            target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.SocietyArmor);
                             if (originalSetId.HasValue && target.EquipmentSetId.Value == originalSetId.Value)
                             {
                                 int counter = 0;
                                 while (target.EquipmentSetId.Value == originalSetId.Value && counter < 10)
                                 {
-                                    target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.Lightningproof);
+                                    target.EquipmentSetId = (EquipmentSet)ThreadSafeRandom.Next((int)EquipmentSet.Soldiers, (int)EquipmentSet.SocietyArmor);
                                     counter++;
                                 }
                             }
@@ -1222,7 +1235,17 @@ namespace ACE.Server.Entity
                         }
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(resultMsg, ChatMessageType.Broadcast));
-                        AddMorphGemLog(target, MorphGemRandomSet);
+                        AddMorphGemLog(target, source.WeenieClassId);
+
+                        //Don't consume the gem if it's durable unless its out of uses
+                        if(source.WeenieClassId == MorphGemRandomSetDurable && (target.Structure ?? 0) > 1)
+                        {
+                            target.Structure--;
+                            target.SaveBiotaToDatabase();
+                            player.SendUseDoneEvent();
+                            return;
+                        }
+
                         break;
                     #endregion MorphGemRandomSet
 
@@ -3691,6 +3714,231 @@ namespace ACE.Server.Entity
                         break;
                     #endregion MorphGemOverpowerResist
 
+                    #region MorphGemCloakUpgrade
+
+                    case MorphGemCloakUpgrade:
+                        
+                        if (!(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false))
+                        {
+                            playerMsg = "This gem can only be used on cloaks";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if (!target.ItemMaxLevel.HasValue || target.ItemMaxLevel >= 5 || target.ItemMaxLevel < 1)
+                        {
+                            playerMsg = $"Your {target.NameWithMaterial} already has a maximum level of {(target.ItemMaxLevel.HasValue ? target.ItemMaxLevel.Value : "NULL")} and cannot be further enhanced";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        target.ItemMaxLevel++;
+
+                        switch(target.ItemMaxLevel)
+                        {
+                            case 2:
+                                target.WieldDifficulty = 60;
+                                break;
+                            case 3:
+                                target.WieldDifficulty = 90;
+                                break;
+                            case 4:
+                                target.WieldDifficulty = 120;
+                                break;
+                            case 5:
+                                target.WieldDifficulty = 150;
+                                break;
+                            default:
+                                playerMsg = $"Your {target.NameWithMaterial} has an invalid maximum level of {(target.ItemMaxLevel.HasValue ? target.ItemMaxLevel.Value : "NULL")} and cannot be further enhanced. This shouldn't happen, you should probably tell an admin about it.";
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                        }
+
+                        target.IconOverlayId = LootGenerationFactory.IconOverlay_ItemMaxLevel[target.ItemMaxLevel.Value - 1];
+                        
+                        playerMsg = $"You have successfully used the {source.Name} to upgrade your {target.NameWithMaterial} to level {target.ItemMaxLevel}!";
+                        
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemOverpowerResist);
+                        break;
+
+                    #endregion MorphGemCloakUpgrade
+
+                    #region MorphGemDmgRating
+                    case MorphGemDmgRating:
+
+                        //Can only be applied to melee weapons, casters, missile weapons, cloaks and undies
+                        if (target as MeleeWeapon == null &&
+                            !target.IsCaster &&
+                            !target.IsRanged &&
+                            !(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) &&                            
+                            !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) &&
+                            !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
+                        {
+                            playerMsg = "This gem can only be used on weapons, magic casters, shields, cloaks or underwear";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        int newDmgRating = 0;
+                        int oldDmgRating = target.GearDamage ?? 0;
+                        var targetMeleeWeapon = target as MeleeWeapon;
+
+                        //For undies and cloaks, apply Dmg 3
+                        if ((target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) ||
+                            (target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) ||
+                            (target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
+                        {
+                            if(oldDmgRating >= 3)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgRating} and cannot be further upgraded.";                                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            newDmgRating = 3;
+                        }
+                        //For weapons and shields, roll a random Dmg rating of 1 to 10 for casters, missile, 2 hand and shields and 1 to 5 for 1 hand melee weps                        
+                        else if(targetMeleeWeapon != null && targetMeleeWeapon.W_WeaponType != WeaponType.TwoHanded)
+                        {
+                            if (oldDmgRating >= 5)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            newDmgRating = ThreadSafeRandom.Next(1, 5);
+                        }
+                        else
+                        {
+                            if (oldDmgRating >= 10)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            newDmgRating = ThreadSafeRandom.Next(1, 10);
+                        }
+
+                        //Apply the new Dmg Rating
+                        target.GearDamage = newDmgRating;
+
+                        //Remove Dmg Resist rating if it exists
+                        int oldDmgResist = target.GearDamageResist ?? 0;
+                        if (target.GearDamageResist.HasValue)
+                        {
+                            target.GearDamageResist = null;
+                        }
+                        if (newDmgRating > oldDmgRating)
+                        {
+                            playerMsg = $"You have successfully used the {source.Name} to upgrade your {target.NameWithMaterial} with Damage Rating {newDmgRating}!{(oldDmgResist > 0 ? $" As a result the previous Damage Resist Rating of {oldDmgResist} has been removed." : "")}";
+                        }
+                        else if (newDmgRating == oldDmgRating)
+                        {
+                            playerMsg = $"The {source.Name} has failed to upgrade your {target.NameWithMaterial} with its Damage Rating of {newDmgRating} remaining unchanged.{(oldDmgResist > 0 ? $" As a result the previous Damage Resist Rating of {oldDmgResist} has been removed." : "")}";
+                        }
+                        else
+                        {
+                            playerMsg = $"The {source.Name} has failed and has damaged your {target.NameWithMaterial} resulting in a new Damage Rating of {newDmgRating}.{(oldDmgResist > 0 ? $" As a result the previous Damage Resist Rating of {oldDmgResist} has been removed." : "")}";
+                        }
+
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemDmgRating);
+                        break;
+                    #endregion MorphGemDmgRating
+
+                    #region MorphGemDmgResistRating
+                    case MorphGemDmgResistRating:
+
+                        //Can only be applied to melee weapons, casters, missile weapons, cloaks and undies
+                        if (target as MeleeWeapon == null &&
+                            !target.IsCaster &&
+                            !target.IsRanged &&
+                            !(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) &&
+                            !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) &&
+                            !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
+                        {
+                            playerMsg = "This gem can only be used on weapons, magic casters, shields, cloaks or underwear";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        int newDmgResistRating = 0;
+                        int oldDmgResistRating = target.GearDamageResist ?? 0;
+                        var targetMeleeWeap = target as MeleeWeapon;
+
+                        //For undies and cloaks, apply Dmg 3
+                        if ((target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) ||
+                            (target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) ||
+                            (target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
+                        {
+                            if (oldDmgResistRating >= 3)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Resist Rating of {oldDmgResistRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            newDmgResistRating = 3;
+                        }
+                        //For weapons and shields, roll a random Dmg rating of 1 to 10 for casters, missile, 2 hand and shields and 1 to 5 for 1 hand melee weps                        
+                        else if (targetMeleeWeap != null && targetMeleeWeap.W_WeaponType != WeaponType.TwoHanded)
+                        {
+                            if (oldDmgResistRating >= 5)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgResistRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            newDmgResistRating = ThreadSafeRandom.Next(1, 5);
+                        }
+                        else
+                        {
+                            if (oldDmgResistRating >= 10)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgResistRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            newDmgResistRating = ThreadSafeRandom.Next(1, 10);
+                        }
+
+                        //Apply the new Dmg Rating
+                        target.GearDamageResist = newDmgResistRating;
+
+                        //Remove Dmg Resist rating if it exists
+                        int oldDamageRating = target.GearDamage ?? 0;
+                        if (target.GearDamage.HasValue)
+                        {
+                            target.GearDamage = null;
+                        }
+                        if (newDmgResistRating > oldDmgResistRating)
+                        {
+                            playerMsg = $"You have successfully used the {source.Name} to upgrade your {target.NameWithMaterial} with Damage Resist Rating {newDmgResistRating}!{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";
+                        }
+                        else if (newDmgResistRating == oldDmgResistRating)
+                        {
+                            playerMsg = $"The {source.Name} has failed to upgrade your {target.NameWithMaterial} with its Damage Rating of {newDmgResistRating} remaining unchanged.{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";
+                        }
+                        else
+                        {
+                            playerMsg = $"The {source.Name} has failed and has damaged your {target.NameWithMaterial} resulting in a new Damage Resist Rating of {newDmgResistRating}.{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";
+                        }
+
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        AddMorphGemLog(target, MorphGemDmgResistRating);
+                        break;
+                    #endregion MorphGemDmgResistRating
+
                     default:
                         player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                         return;
@@ -4038,6 +4286,9 @@ namespace ACE.Server.Entity
                 case MorphGemHeroicMaster:
                 case MorphGemDotResist:
                 case MorphGemRandomSet:
+                case MorphGemRandomSetDurable:
+                case MorphGemDmgRating:
+                case MorphGemDmgResistRating:
                 case MorphGemRandomCantrip:
                 case MorphGemBurden:
                 case MorphGemRareDmgBoost:

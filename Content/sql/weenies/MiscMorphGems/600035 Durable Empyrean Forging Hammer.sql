@@ -10,8 +10,8 @@ VALUES (600035,   1,       2048) /* ItemType - Gem */
      , (600035,  18,          1) /* UiEffects - Magical */
      , (600035,  19,         25) /* Value */
      , (600035,  65,        101) /* Placement - Resting */
-	 , (600035,  91,         5) /* MaxStructure */
-     , (600035,  92,         5) /* Structure */
+	 , (600035,  91,          5) /* MaxStructure */
+     , (600035,  92,          5) /* Structure */
      , (600035,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (600035,  94,      35215) /* TargetType - Vestements */;
 
@@ -26,7 +26,7 @@ VALUES (600035,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (600035,   1, 'Durable Empyrean Forging Hammer') /* Name */
-     , (600035,  14, 'An extremely well-made blacksmithing hammer. This hammer looks ancient, crafted by the greatest of Empyrean Blacksmiths. This tool looks as if it was used to alter the set on armor or add one if no set is present. May be used to alter the set on a peice of loot generated armor, jewelry or clothing or a chance to add one.') /* Use */;
+     , (600035,  14, 'An extremely well-made blacksmithing hammer. This hammer looks ancient, crafted by the greatest of Empyrean Blacksmiths. Use on a piece of looted armor, jewelry or clothing for a chance to add an Equipment Set or alter the existing Equipment Set. But proceed with caution, even a small mistake when using this tool could cause your Equipment Set to be removed.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (600035,   1, 0x02000179) /* Setup */

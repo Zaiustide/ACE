@@ -8,12 +8,12 @@ VALUES (600032,   1,       2048) /* ItemType - Gem */
      , (600032,   3,         39) /* PaletteTemplate - Black */
      , (600032,   5,          5) /* EncumbranceVal */
      , (600032,   8,          5) /* Mass */
-     , (600032,  16,          524296) /* ItemUseable - SourceContainedTargetContained */
+     , (600032,  16,     524296) /* ItemUseable - SourceContainedTargetContained */
      , (600032,  18,          1) /* UiEffects - Magical */
      , (600032,  19,         25) /* Value */
      , (600032,  33,          1) /* Bonded - Slippery */
      , (600032,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-     , (600032,  94,         35215) /* TargetType - Vestements */
+     , (600032,  94,      35215) /* TargetType - Vestements */
      , (600032, 150,        103) /* HookPlacement - Hook */
      , (600032, 151,         11) /* HookType - Floor, Wall, Yard */;
 
@@ -22,7 +22,7 @@ VALUES (600032,  22, True ) /* Inscribable */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (600032,   1, 'Empyrean Tailoring Scissors') /* Name */
-     , (600032,  16, 'An ancient pair of scissors crafted using the finest of materials. Empyrean Tailors were able to alter cloaks to upgrade them to the highest quality. Using these scissors on a cloak will upgrade it level 5.') /* LongDesc */;
+     , (600032,  16, 'An ancient pair of scissors crafted using the finest of materials. Empyrean Tailors were able to alter cloaks to upgrade them to the highest quality. Using these scissors on a cloak will upgrade its maximum level.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (600032,   1, 0x020009A7) /* Setup */

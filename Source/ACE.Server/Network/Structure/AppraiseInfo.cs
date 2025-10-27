@@ -558,7 +558,7 @@ namespace ACE.Server.Network.Structure
 
             AddEnchantments(wo);
 
-            AddGearOverpower(wo);
+            AddGearLongDescProperties(wo);
         }
 
         private void BuildCreature(Creature creature)
@@ -685,7 +685,7 @@ namespace ACE.Server.Network.Structure
             // item enchantments can also be on wielder currently
             AddEnchantments(weapon);
 
-            AddGearOverpower(weapon);
+            AddGearLongDescProperties(weapon);
         }
 
         private void BuildHookProfile(WorldObject hookedItem)
@@ -743,17 +743,28 @@ namespace ACE.Server.Network.Structure
                 Flags |= IdentifyResponseFlags.ArmorLevels;
         }
 
-        private void AddGearOverpower(WorldObject wo)
+        private void AddGearLongDescProperties(WorldObject wo)
         {
-            //Custom logic for displaying Overpower and Overpower Resist on weapons
+            //Custom logic for displaying gear properties that are normally not in appraisal
             //  Removes the AppraisalLongDescDecoration flags which prepend/append flavor text
             //  Adds the Overpower / Overpower Resist ratings into the LongDesc
             //  and then manually builds the flavor text back onto the end of LongDesc
-            if (wo.Overpower.HasValue || wo.OverpowerResist.HasValue)
+            if (wo.Overpower.HasValue || wo.OverpowerResist.HasValue || wo.IgnoreShield.HasValue || wo.SlayerDamageBonus.HasValue)
             {
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
-                var currentLongDesc = PropertiesString[PropertyString.LongDesc];                
-                string newLongDesc = $"Overpower: {wo.Overpower ?? 0}\nOverpower Resist: {wo.OverpowerResist ?? 0}\n\n";
+                var currentLongDesc = PropertiesString[PropertyString.LongDesc];
+                string newLongDesc = "";
+                if (wo.Overpower.HasValue)
+                    newLongDesc += $"Overpower: {wo.Overpower}\n";
+
+                if(wo.Overpower.HasValue)
+                    newLongDesc += $"Overpower Resist: {wo.OverpowerResist}\n";
+
+                if (wo.IgnoreShield.HasValue && wo.IgnoreShield.Value > 0)
+                    newLongDesc += $"Shield Hollow: {(wo.IgnoreShield.Value * 100)}%\n";
+
+                if (wo.SlayerDamageBonus.HasValue && wo.SlayerDamageBonus.Value > 0)
+                    newLongDesc += $"Slayer Bonus: {(wo.SlayerDamageBonus.Value * 100)}%\n";
 
                 //Add back the flavor text to the LongDesc
                 if (wo.ItemWorkmanship > 0)

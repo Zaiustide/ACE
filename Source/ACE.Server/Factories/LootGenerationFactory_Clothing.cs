@@ -619,6 +619,9 @@ namespace ACE.Server.Factories
             if (!PropertyManager.GetBool("equipmentsetid_enabled").Item || profile.DisableSets)
                 return false;
 
+            if (wo.IsShield)
+                return false;
+
             if (roll == null)
             {                
                 if (profile.Tier < 6 || (!wo.HasArmorLevel() && wo.ItemType != ItemType.Jewelry && !(wo.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false) && wo.WeenieType != WeenieType.Clothing))
@@ -990,10 +993,14 @@ namespace ACE.Server.Factories
                 return false;
 
             if (profile.Tier < 8)
-                return false;
+                return false;            
 
-            // shields don't have gear ratings
-            if (wo.IsShield) return false;
+            if(wo.IsShield && profile.Tier >= 9)
+            {
+                var mutationFilter = MutationCache.GetMutation("ArmorLevel.shield_ratings.txt");
+                var success = mutationFilter.TryMutate(wo, profile.Tier);
+                return success;
+            }
 
             var gearRating = GearRatingChance.Roll(wo, profile, roll);
 
