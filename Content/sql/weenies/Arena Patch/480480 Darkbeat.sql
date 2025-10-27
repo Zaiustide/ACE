@@ -279,7 +279,7 @@ VALUES  (480480, 2,   6046, 0, 93, 1.1, False) /* Greater Shadow Amuli Coat (660
 	 , (480480, 4, 600026,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 600027,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 600028,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
-	, (480480, 4, 600029,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */;
+	, (480480, 4, 600029,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
      , (480480, 4, 52785,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	, (480480, 4, 52786,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
 	 , (480480, 4, 52787,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */
