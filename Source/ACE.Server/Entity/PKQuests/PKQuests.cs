@@ -430,7 +430,11 @@ namespace ACE.Server.Entity.PKQuests
         public static string[] PKQuests_KillAnywhere = { "KILL_ANY_10", "KILL_ANY_30" };
 
         public static string[] PKQuests_KillTC = { "PKKILL_TC_1", "PKKILL_TC_5", "PKKILL_TC_30" };
-        
+
+        public static string[] PKQuests_DungeonControl_ScorePoints = { "DC_SCORE_100","DC_SCORE_1000","DC_SCORE_5000" };
+
+        public static string[] PKQuests_DungeonControl_Win = { "DC_WIN_1", "DC_WIN_15", "DC_WIN_100" };
+
 
         public static PKQuest GetPkQuestByCode(string questCode)
         {
