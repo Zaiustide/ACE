@@ -109,7 +109,7 @@ namespace ACE.Server.Factories
                     }
                     else
                     {
-                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatings_2H.txt";
+                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatingsTwoHand.txt";
                     }
 
                     mutationFilter = MutationCache.GetMutation(scriptName);
