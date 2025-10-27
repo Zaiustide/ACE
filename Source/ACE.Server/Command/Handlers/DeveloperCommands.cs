@@ -2343,21 +2343,32 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("ciloot", AccessLevel.Developer, CommandHandlerFlag.RequiresWorld, 1, "Generates randomized loot in player's inventory", "<tier> optional: <# items>")]
         public static void HandleCILoot(Session session, params string[] parameters)
         {
-            var tier = 1;
-            int.TryParse(parameters[0], out tier);
-            tier = Math.Clamp(tier, 1, 8);
+            var tierOrProfileId = 1;
+            int.TryParse(parameters[0], out tierOrProfileId);
+            //tier = Math.Clamp(tier, 1, 8);
+            TreasureDeath profile = null;
+
+            //If second parameter is > 10, treat it as a TreasureDeath ID instead of a Tier
+            if (tierOrProfileId > 10)
+            {
+                profile = DatabaseManager.World.GetCachedDeathTreasure((uint)tierOrProfileId);
+            }
 
             var numItems = 1;
             if (parameters.Length > 1)
                 int.TryParse(parameters[1], out numItems);
 
             // Create a dummy treasure profile for passing in tier value
-            TreasureDeath profile = new TreasureDeath
+            if (profile == null)
             {
-                Tier = tier,
-                LootQualityMod = 0,
-                MagicItemTreasureTypeSelectionChances = 9,  // 8 or 9?
-            };
+                tierOrProfileId = Math.Clamp(tierOrProfileId, 1, 9);
+                profile = new TreasureDeath
+                {
+                    Tier = tierOrProfileId,
+                    LootQualityMod = 0,
+                    MagicItemTreasureTypeSelectionChances = 9,  // 8 or 9?
+                };
+            }
 
             for (var i = 0; i < numItems; i++)
             {
@@ -2366,7 +2377,7 @@ namespace ACE.Server.Command.Handlers
                 if (wo != null)
                     session.Player.TryCreateInInventoryWithNetworking(wo);
                 else
-                    log.Error($"{session.Player.Name}.HandleCILoot: LootGenerationFactory.CreateRandomLootObjects({tier}) returned null");
+                    log.Error($"{session.Player.Name}.HandleCILoot: LootGenerationFactory.CreateRandomLootObjects({tierOrProfileId}) returned null");
             }
         }
 

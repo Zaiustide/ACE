@@ -27,10 +27,8 @@ namespace ACE.Server.Factories.Tables
 
         private static ChanceTable<int> T9_ArmorRating = new ChanceTable<int>()
         {
-            ( 1, 0.5f ),
-            ( 2, 0.45f ),
-            ( 3, 0.045f ),
-            ( 4, 0.005f ),
+            ( 1, 0.4f ),
+            ( 2, 0.6f ),
         };
 
         private static ChanceTable<int> ClothingJewelryRating = new ChanceTable<int>()

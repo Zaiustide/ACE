@@ -483,7 +483,13 @@ namespace ACE.Server.Entity
 
                 if(shouldAwardPoints)
                 {
-                    DC.DungeonControl.EarnAllegiancePoints(playersInControlPointByAlleg.Keys.First(), this.Id.Landblock);
+                    var allegId = playersInControlPointByAlleg.Keys.First();
+                    DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);
+
+                    foreach (var player in playersInControlPointByAlleg[allegId])
+                    {
+                        DC.DungeonControl.PKQuest_Score(allegId, this);
+                    }
                 }
 
                 DC.DungeonControl.SpawnTreasure(this.Id.Landblock);

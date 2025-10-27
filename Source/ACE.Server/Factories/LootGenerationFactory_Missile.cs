@@ -89,6 +89,13 @@ namespace ACE.Server.Factories
                 mutationFilter = MutationCache.GetMutation("MissileWeapons.weapon_defense.txt");
 
                 mutationFilter.TryMutate(wo, profile.Tier);
+
+                // mutate Ratings
+                if (profile.Tier >= 9)
+                {
+                    mutationFilter = MutationCache.GetMutation("MissileWeapons.WeaponRatings.txt");
+                    mutationFilter.TryMutate(wo, profile.Tier);
+                }
             }
 
             // weapon speed

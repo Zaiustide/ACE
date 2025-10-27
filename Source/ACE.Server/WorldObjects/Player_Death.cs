@@ -1269,7 +1269,12 @@ namespace ACE.Server.WorldObjects
             var pkLevel = PkLevel;
 
             if (PropertyManager.GetBool("pk_server").Item)
+            {
+                if (pkLevel == PKLevel.PK)
+                    return;
+
                 pkLevel = PKLevel.PK;
+            }
             else if (PropertyManager.GetBool("pkl_server").Item)
                 pkLevel = PKLevel.PKLite;
 

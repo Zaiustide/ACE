@@ -114,7 +114,7 @@ namespace ACE.Server.Factories
             {
                 // new method - mutation scripts
 
-                // mutate ManaConversionMod
+                // mutate ManaConversionMod + ratings
                 var mutationFilter = MutationCache.GetMutation("Casters.caster.txt");
                 mutationFilter.TryMutate(wo, profile.Tier);
 

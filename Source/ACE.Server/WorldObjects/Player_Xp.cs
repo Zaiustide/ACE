@@ -51,7 +51,7 @@ namespace ACE.Server.WorldObjects
         /// <param name="amount">The amount of XP to grant to the player</param>
         /// <param name="xpType">The source of the XP being granted</param>
         /// <param name="shareable">If TRUE, this XP can be shared with fellowship members</param>
-        public void GrantXP(long amount, XpType xpType, ShareType shareType = ShareType.All, bool isArena = false)
+        public void GrantXP(long amount, XpType xpType, ShareType shareType = ShareType.All, bool isArena = false, bool bypassEnlightenmentPenalty = false)
         {
             if (IsOlthoiPlayer)
             {
@@ -80,27 +80,30 @@ namespace ACE.Server.WorldObjects
                 return;
             }
 
-            switch (EnlightenmentCustomLevel)
+            if (!bypassEnlightenmentPenalty)
             {
-                case 0:
-                    break;
-                case 1:
-                    amount = (long)Math.Round((double)amount * 0.9d);
-                    break;
-                case 2:
-                    amount = (long)Math.Round((double)amount * 0.7d);
-                    break;
-                case 3:
-                    amount = (long)Math.Round((double)amount * 0.5d);
-                    break;
-                case 4:
-                    amount = (long)Math.Round((double)amount * 0.3d);
-                    break;
-                case 5:
-                    amount = (long)Math.Round((double)amount * 0.2d);
-                    break;
-                default:
-                    break;
+                switch (EnlightenmentCustomLevel)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        amount = (long)Math.Round((double)amount * 0.9d);
+                        break;
+                    case 2:
+                        amount = (long)Math.Round((double)amount * 0.7d);
+                        break;
+                    case 3:
+                        amount = (long)Math.Round((double)amount * 0.5d);
+                        break;
+                    case 4:
+                        amount = (long)Math.Round((double)amount * 0.3d);
+                        break;
+                    case 5:
+                        amount = (long)Math.Round((double)amount * 0.2d);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             //Town Control - give bonus % to xp for each town your clan owns
