@@ -40,6 +40,7 @@
     <None Remove="Entity\Mutations\ArmorLevel\olthoi_armor.txt" />
     <None Remove="Entity\Mutations\ArmorLevel\olthoi_shield.txt" />
     <None Remove="Entity\Mutations\ArmorLevel\shield_level.txt" />
+    <None Remove="Entity\Mutations\ArmorLevel\shield_ratings.txt" />
     <None Remove="Entity\Mutations\Casters\caster.txt" />
     <None Remove="Entity\Mutations\Casters\caster_elemental.txt" />
     <None Remove="Entity\Mutations\Casters\caster_non_elemental.txt" />
@@ -77,6 +78,8 @@
     <None Remove="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\two_handed_spear_offense_defense.txt" />
     <None Remove="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\two_handed_sword_offense_defense.txt" />
     <None Remove="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\unarmed_offense_defense.txt" />
+    <None Remove="Entity\Mutations\MeleeWeapons\WeaponRatings\WeaponRatings.txt" />
+    <None Remove="Entity\Mutations\MeleeWeapons\WeaponRatings\WeaponRatingsTwoHand.txt" />
     <None Remove="Entity\Mutations\MissileWeapons\atlatl_elemental.txt" />
     <None Remove="Entity\Mutations\MissileWeapons\atlatl_non_elemental.txt" />
     <None Remove="Entity\Mutations\MissileWeapons\bow_elemental.txt" />
@@ -84,6 +87,7 @@
     <None Remove="Entity\Mutations\MissileWeapons\crossbow_elemental.txt" />
     <None Remove="Entity\Mutations\MissileWeapons\crossbow_non_elemental.txt" />
     <None Remove="Entity\Mutations\MissileWeapons\weapon_defense.txt" />
+    <None Remove="Entity\Mutations\MissileWeapons\WeaponRatings.txt" />
     <None Remove="Entity\Mutations\Recipes\3800000F - Stamp.txt" />
     <None Remove="Entity\Mutations\Recipes\38000011 - Steel.txt" />
     <None Remove="Entity\Mutations\Recipes\38000012 - Armoredillo Hide.txt" />
@@ -142,6 +146,7 @@
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\covenant_shield.txt" />
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\olthoi_armor.txt" />
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\olthoi_shield.txt" />
+    <EmbeddedResource Include="Entity\Mutations\ArmorLevel\shield_ratings.txt" />
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\shield_level.txt" />
     <EmbeddedResource Include="Entity\Mutations\Casters\caster.txt" />
     <EmbeddedResource Include="Entity\Mutations\Casters\caster_elemental.txt" />
@@ -168,6 +173,8 @@
     <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\light_finesse_unarmed.txt" />
     <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\two_handed_cleaver.txt" />
     <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\two_handed_spear.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponRatings\WeaponRatingsTwoHand.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponRatings\WeaponRatings.txt" />
     <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\axe_offense_defense.txt" />
     <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\dagger_offense_defense.txt" />
     <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\mace_jitte_offense_defense.txt" />
@@ -186,6 +193,7 @@
     <EmbeddedResource Include="Entity\Mutations\MissileWeapons\bow_non_elemental.txt" />
     <EmbeddedResource Include="Entity\Mutations\MissileWeapons\crossbow_elemental.txt" />
     <EmbeddedResource Include="Entity\Mutations\MissileWeapons\crossbow_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\WeaponRatings.txt" />
     <EmbeddedResource Include="Entity\Mutations\MissileWeapons\weapon_defense.txt" />
     <EmbeddedResource Include="Entity\Mutations\Recipes\3800000F - Stamp.txt" />
     <EmbeddedResource Include="Entity\Mutations\Recipes\38000011 - Steel.txt" />

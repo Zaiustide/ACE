@@ -101,20 +101,20 @@ namespace ACE.Server.Factories
 
                 mutationFilter.TryMutate(wo, profile.Tier);
 
-                //if (profile.Tier >= 9)
-                //{
-                //    if(weaponSkill == MeleeWeaponSkill.TwoHandedCombat)
-                //    {
-                //        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatings.txt";
-                //    }
-                //    else
-                //    {
-                //        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatingsTwoHand.txt";
-                //    }
+                if (profile.Tier >= 9)
+                {
+                    if (weaponSkill == MeleeWeaponSkill.TwoHandedCombat)
+                    {
+                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatings.txt";
+                    }
+                    else
+                    {
+                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatingsTwoHand.txt";
+                    }
 
-                //    mutationFilter = MutationCache.GetMutation(scriptName);
-                //    mutationFilter.TryMutate(wo, profile.Tier);
-                //}
+                    mutationFilter = MutationCache.GetMutation(scriptName);
+                    mutationFilter.TryMutate(wo, profile.Tier);
+                }
             }
 
             // weapon speed
