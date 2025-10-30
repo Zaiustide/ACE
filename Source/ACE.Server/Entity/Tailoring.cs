@@ -1074,7 +1074,11 @@ namespace ACE.Server.Entity
                     case MorphGemRandomSetDurable:
 
                         //Allow loot gen jewelry, undies and armor
-                        if ((target.ItemType != ItemType.Jewelry && !target.ItemType.HasFlag(ItemType.Clothing)) || (target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false))
+                        if ((target.ItemType != ItemType.Jewelry &&                            
+                            target.ItemType != ItemType.Armor &&
+                            target.ItemType != ItemType.Clothing)
+                            || (target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false)
+                            || target.IsShield)
                         {
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item does not meet the requirements for adding an Equipment Set", ChatMessageType.Broadcast));
