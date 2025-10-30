@@ -1,86 +1,33 @@
-Mutation #0: GearDamage
-
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-
-    - Chance: 22%:
-        GearDamage = 1
-
-    - Chance: 25%:
-        GearDamage = 2
-
-    - Chance: 25%:
-        GearDamage = 3
-
-    - Chance: 25%:
-        GearDamage = 4
-
-    - Chance: 3%:
-        GearDamage = 5
-
-Mutation #2: Overpower
-
+Mutation #0 Ratings:
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
 
     - Chance: 5%:
-        Overpower = 1
-
-    - Chance: 10%:
-        Overpower = 2
-
-    - Chance: 16%:
-        Overpower = 3
-
-    - Chance: 16%:
-        Overpower = 4
-
-    - Chance: 17%:
-        Overpower = 5
-
-    - Chance: 17%:
-        Overpower = 6
-
-    - Chance: 11%:
-        Overpower = 7
+        Overpower = Random(1, 5)
 
     - Chance: 5%:
-        Overpower = 8
+        OverpowerResist = Random(1, 5)
 
-    - Chance: 2%:
-        Overpower = 9
+    - Chance: 25%:
+        GearDamage = Random(1, 5)
+
+    - Chance: 20%:
+        GearDamage = Random(1, 5)
+        Overpower = Random(1, 5)
+
+    - Chance: 20%:
+        GearDamage = Random(1, 5)
+        OverpowerResist = Random(1, 5)   
+
+    - Chance: 20%:
+        Overpower = Random(1, 5)
+        OverpowerResist = Random(1, 5)
+
+    - Chance: 4%:
+        GearDamage = Random(1, 5)
+        Overpower = Random(1, 5)
+        OverpowerResist = Random(1, 5)
 
     - Chance: 1%:
-        Overpower = 10
-
-Mutation #3: OverpowerResist
-
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-
-    - Chance: 5%:
-        OverpowerResist = 1
-
-    - Chance: 10%:
-        OverpowerResist = 2
-
-    - Chance: 16%:
-        OverpowerResist = 3
-
-    - Chance: 16%:
-        OverpowerResist = 4
-
-    - Chance: 17%:
-        OverpowerResist = 5
-
-    - Chance: 17%:
-        OverpowerResist = 6
-
-    - Chance: 11%:
-        OverpowerResist = 7
-
-    - Chance: 5%:
-        OverpowerResist = 8
-
-    - Chance: 2%:
-        OverpowerResist = 9
-
-    - Chance: 1%:
-        OverpowerResist = 10
+        GearDamage = Random(2, 5)
+        Overpower = Random(2, 5)
+        OverpowerResist = Random(2, 5)

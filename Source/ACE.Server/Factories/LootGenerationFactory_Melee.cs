@@ -103,13 +103,13 @@ namespace ACE.Server.Factories
 
                 if (profile.Tier >= 9)
                 {
-                    if (weaponSkill == MeleeWeaponSkill.TwoHandedCombat)
+                    if (wo.WeaponSkill == Skill.TwoHandedCombat)
                     {
-                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatings.txt";
+                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatingsTwoHand.txt";
                     }
                     else
                     {
-                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatingsTwoHand.txt";
+                        scriptName = "MeleeWeapons.WeaponRatings.WeaponRatings.txt";
                     }
 
                     mutationFilter = MutationCache.GetMutation(scriptName);

@@ -754,10 +754,10 @@ namespace ACE.Server.Network.Structure
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
                 var currentLongDesc = PropertiesString.ContainsKey(PropertyString.LongDesc) ? PropertiesString[PropertyString.LongDesc] : "";
                 string newLongDesc = "";
-                if (wo.Overpower.HasValue)
+                if (wo.Overpower.HasValue && wo.Overpower > 0)
                     newLongDesc += $"Overpower: {wo.Overpower}\n";
 
-                if(wo.Overpower.HasValue)
+                if(wo.OverpowerResist.HasValue && wo.OverpowerResist > 0)
                     newLongDesc += $"Overpower Resist: {wo.OverpowerResist}\n";
 
                 if (wo.IgnoreShield.HasValue && wo.IgnoreShield.Value > 0)

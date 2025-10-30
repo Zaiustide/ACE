@@ -9,14 +9,14 @@ namespace ACE.Server.Entity
 {
     public static class Whitelist
     {
-        private static List<uint> _epicWhitelistedLandblocks;
-        private static List<uint> EpicWhitelistedLandblocks
+        private static HashSet<uint> _epicWhitelistedLandblocks;
+        private static HashSet<uint> EpicWhitelistedLandblocks
         {
             get
             {
                 if (_epicWhitelistedLandblocks == null)
                 {
-                    _epicWhitelistedLandblocks = new List<uint>() { 0x0031 }; //Example adds Creepy Canyons landblock to the whitelist
+                    _epicWhitelistedLandblocks = new HashSet<uint>() { 0x0031 }; //Example adds Creepy Canyons landblock to the whitelist
                 }
 
                 return _epicWhitelistedLandblocks;
@@ -29,14 +29,14 @@ namespace ACE.Server.Entity
         }
 
 
-        private static List<uint> _legendaryWhitelistedLandblocks;
-        private static List<uint> LegendaryWhitelistedLandblocks
+        private static HashSet<uint> _legendaryWhitelistedLandblocks;
+        private static HashSet<uint> LegendaryWhitelistedLandblocks
         {
             get
             {
                 if (_legendaryWhitelistedLandblocks == null)
                 {
-                    _legendaryWhitelistedLandblocks = new List<uint>() { };
+                    _legendaryWhitelistedLandblocks = new HashSet<uint>() { };
                 }
 
                 return _legendaryWhitelistedLandblocks;
@@ -48,14 +48,14 @@ namespace ACE.Server.Entity
             return LegendaryWhitelistedLandblocks.Contains(landblockId);
         }
 
-        private static List<uint> _ratingsWhitelistedLandblocks;
-        private static List<uint> RatingsWhitelistedLandblocks
+        private static HashSet<uint> _ratingsWhitelistedLandblocks;
+        private static HashSet<uint> RatingsWhitelistedLandblocks
         {
             get
             {
                 if (_ratingsWhitelistedLandblocks == null)
                 {
-                    _ratingsWhitelistedLandblocks = new List<uint>()
+                    _ratingsWhitelistedLandblocks = new HashSet<uint>()
                     {
                         0x0174, //Ancient Temple
                         0x003F, //Dragon's Den
@@ -138,14 +138,14 @@ namespace ACE.Server.Entity
             }
         }
 
-        private static List<uint> _ratingsWhitelistedChestWeenies;
-        private static List<uint> RatingsWhitelistedChestWeenies
+        private static HashSet<uint> _ratingsWhitelistedChestWeenies;
+        private static HashSet<uint> RatingsWhitelistedChestWeenies
         {
             get
             {
                 if (_ratingsWhitelistedChestWeenies == null)
                 {
-                    _ratingsWhitelistedChestWeenies = new List<uint>()
+                    _ratingsWhitelistedChestWeenies = new HashSet<uint>()
                     {
                         480607,
                         38490,
@@ -191,14 +191,14 @@ namespace ACE.Server.Entity
             return RatingsWhitelistedChestWeenies.Contains(weenieId);
         }        
 
-        private static List<uint> _equipmentSetWhitelistedLandblocks;
-        private static List<uint> EquipmentSetWhitelistedLandblocks
+        private static HashSet<uint> _equipmentSetWhitelistedLandblocks;
+        private static HashSet<uint> EquipmentSetWhitelistedLandblocks
         {
             get
             {
                 if (_equipmentSetWhitelistedLandblocks == null)
                 {
-                    _equipmentSetWhitelistedLandblocks = new List<uint>()
+                    _equipmentSetWhitelistedLandblocks = new HashSet<uint>()
                     {
                         0x002D, //DD
                         //0x00E1, //PotB East
@@ -319,14 +319,14 @@ namespace ACE.Server.Entity
             return EquipmentSetWhitelistedLandblocks.Contains(landblockId);
         }
 
-        private static List<uint> _aetheriaWhitelistedLandblocks;
-        private static List<uint> AetheriaWhitelistedLandblocks
+        private static HashSet<uint> _aetheriaWhitelistedLandblocks;
+        private static HashSet<uint> AetheriaWhitelistedLandblocks
         {
             get
             {
                 if (_aetheriaWhitelistedLandblocks == null)
                 {
-                    _aetheriaWhitelistedLandblocks = new List<uint>()
+                    _aetheriaWhitelistedLandblocks = new HashSet<uint>()
                     {                        
                         //150 has these diagonal stripes of landblocks across it
                         0xCBEB, //150 Island

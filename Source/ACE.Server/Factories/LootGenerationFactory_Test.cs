@@ -10,20 +10,30 @@ namespace ACE.Server.Factories
 {
     public static class LootGenerationFactory_Test
     {
-        public static string TestLootGen(int numItems, int tier, bool logStats, string displayTable)
+        public static string TestLootGen(int numItems, int tierOrProfileId, bool logStats, string displayTable)
         {
             string displayHeader = $"\n LootFactory Simulator - Items\n ---------------------\n";
 
-            Console.WriteLine($"Creating {numItems} items, that are in tier {tier}");
+            Console.WriteLine($"Creating {numItems} items, that are in Tier/DeathTreasureType {tierOrProfileId}");
 
             var lootStats = new LootStats(logStats);
 
             // Create a dummy treasure profile for passing in tier value
-            TreasureDeath profile = new TreasureDeath
+            TreasureDeath profile = null;
+
+            if(tierOrProfileId > 10)
             {
-                Tier = tier,
-                LootQualityMod = 0
-            };
+                profile = DatabaseManager.World.GetCachedDeathTreasure((uint)tierOrProfileId);
+            }
+
+            if(profile == null)
+            {
+                profile = new TreasureDeath
+                {
+                    Tier = Math.Clamp(tierOrProfileId, 1, 9),
+                    LootQualityMod = 0
+                };
+            }
 
             // Loop depending on how many items you are creating
             for (int i = 0; i < numItems; i++)
@@ -37,7 +47,7 @@ namespace ACE.Server.Factories
             Console.WriteLine(displayHeader);
             Console.WriteLine(displayStats);
 
-            displayHeader += $" A total of {lootStats.TotalItems} items were generated in Tier {tier}. \n";
+            displayHeader += $" A total of {lootStats.TotalItems} items were generated in Tier/DeathTreasureType {tierOrProfileId}. \n";
 
             if (logStats)
             {

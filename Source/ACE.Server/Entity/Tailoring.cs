@@ -336,118 +336,13 @@ namespace ACE.Server.Entity
                     WeaponApply(player, source, target);
                     return;
 
-                case MorphGemValue:
-                case MorphGemArcane:
-                case MorphGemRemoveMissileDReq:
-                case MorphGemRemoveMeleeDReq:
-                case MorphGemRandomizeWeaponImbue:
-                case MorphGemRemovePlayerReq:
-                case MorphGemSlayerRandom:
-                case MorphGemRemoveLevelReq:
-                case MorphGemSlayerUpgrade:
-                case MorphGemBurningCoal:
-                case MorphGemImpen:
-                case MorphGemRandomWorkmanship:
-                case MorphGemBanditHilt:
-                case MorphGemRareUpgrade:
-                case MorphGemCDR:
-                case MorphGemCD:
-                case MorphGemRareReduction:
-                case MorphGemJewelersSawblade:
-                case MorphGemAddSlayer:
-				case MorphGemHematite:
-				case MorphGemStrengthbeer:
-				case MorphGemEndurancebeer:
-				case MorphGemCoordinationbeer:
-				case MorphGemQuicknessbeer:
-				case MorphGemFocusbeer:
-				case MorphGemWillpowerbeer:
-                case MorphGemHeroicMaster:
-                case MorphGemDotResist:
-                case MorphGemRandomSet:
-                case MorphGemRandomSetDurable:
-                case MorphGemDmgRating:
-                case MorphGemDmgResistRating:
-                case MorphGemRandomCantrip:
-                case MorphGemBurden:
-                case MorphGemRareDmgBoost:
-                case MorphGemRareDmgReduction:
-                case MorphGemVitality:
-                case MorphGemHealBoost:
-                case MorphGemMeleeCleave:
-                case MorphGemOverpower:
-                case MorphGemOverpowerResist:
-                case MorphGemCloakUpgrade:
-                case MorphGemRuneofAcidBane:
-				case MorphGemIdeographofAcidProtection:
-				case MorphGemHieroglyphofAlchemyMastery:
-				case MorphGemHieroglyphofArcaneEnlightenment:
-				case MorphGemIdeographofArmor:
-				case MorphGemHieroglyphofArmorTinkeringExpertise:
-				case MorphGemHieroglyphofMonsterAttunement:
-				case MorphGemHieroglyphofPersonAttunement:
-				case MorphGemHieroglyphofLightWeaponMastery:
-				case MorphGemRuneofBladeBane:
-				case MorphGemRuneofBloodDrinker:
-				case MorphGemRuneofBludgeonBane:
-				case MorphGemIdeographofBludgeoningProtection:
-				case MorphGemHieroglyphofMissileWeaponMastery:
-				case MorphGemHieroglyphofCookingMastery:
-				case MorphGemPictographofCoordination:
-				case MorphGemHieroglyphofCreatureEnchantmentMastery:
-				case MorphGemHieroglyphofFinesseWeaponMastery:
-				case MorphGemHieroglyphofDeceptionMastery:
-				case MorphGemRuneofDefender:
-				case MorphGemPictographofEndurance:
-				case MorphGemIdeographofFireProtection:
-				case MorphGemRuneofFlameBane:
-				case MorphGemHieroglyphofFletchingMastery:
-				case MorphGemPictographofFocus:
-				case MorphGemRuneofFrostBane:
-				case MorphGemIdeographofFrostProtection:
-				case MorphGemHieroglyphofHealingMastery:
-				case MorphGemIdeographofRegeneration:
-				case MorphGemRuneofHeartSeeker:
-				case MorphGemRuneofHermeticLink:
-				case MorphGemRuneofImpenetrability:
-				case MorphGemHieroglyphofItemEnchantmentMastery:
-				case MorphGemHieroglyphofItemTinkeringExpertise:
-				case MorphGemHieroglyphofJumpingMastery:
-				case MorphGemHieroglyphofLeadershipMastery:
-				case MorphGemHieroglyphofLifeMagicMastery:
-				case MorphGemRuneofLightningBane:
-				case MorphGemIdeographofLightningProtection:
-				case MorphGemHieroglyphofLockpickMastery:
-				case MorphGemHieroglyphofFealtyMastery:
-				case MorphGemHieroglyphofMagicResistance:
-				case MorphGemHieroglyphofMagicItemTinkeringExpertise:
-				case MorphGemHieroglyphofManaConversionMastery:
-				case MorphGemIdeographofBattlemagesBlessing:
-				case MorphGemHieroglyphofInvulnerability:
-				case MorphGemHieroglyphofImpregnability:
-				case MorphGemRuneofPierceBane:
-				case MorphGemIdeographofPiercingProtection:
-				case MorphGemPictographofQuickness:
-				case MorphGemHieroglyphofSprint:
-				case MorphGemPictographofWillpower:
-				case MorphGemIdeographofBladeProtection:
-				case MorphGemRuneofSpiritDrinker:
-				case MorphGemIdeographofRevitalization:
-				case MorphGemPictographofStrength:
-				case MorphGemRuneofSwiftKiller:
-				case MorphGemHieroglyphofHeavyWeaponMastery:
-				case MorphGemHieroglyphofWarMagicMastery:
-				case MorphGemHieroglyphofWeaponTinkeringExpertise:
-				case MorphGemHieroglyphofDirtyFightingMastery:
-				case MorphGemHieroglyphofDualWieldMastery:
-				case MorphGemHieroglyphofRecklessnessMastery:
-				case MorphGemHieroglyphofShieldMastery:
-				case MorphGemHieroglyphofSneakAttackMastery:
-				case MorphGemHieroglyphofVoidMagicMastery:
-				case MorphGemHieroglyphofTwoHandedWeaponsMastery:
-				case MorphGemHieroglyphofSummoningMastery:
-                    ApplyMorphGem(player, source, target);
-                    return;
+                default:
+                    if (MorphGems.Contains(source.WeenieClassId))
+                    {
+                        ApplyMorphGem(player, source, target);
+                        return;
+                    }
+                    break;
             }
 
             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
@@ -744,7 +639,8 @@ namespace ACE.Server.Entity
             MorphGemImpen,
             MorphGemRandomSet,
             MorphGemRandomSetDurable,
-            MorphGemCloakUpgrade
+            MorphGemCloakUpgrade,
+            MorphGemDmgRating
         };
 
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
@@ -3779,7 +3675,16 @@ namespace ACE.Server.Entity
                             !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) &&
                             !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
                         {
-                            playerMsg = "This gem can only be used on weapons, magic casters, shields, cloaks or underwear";
+                            playerMsg = "This gem can only be used on loot generated weapons, magic casters, shields, cloaks or underwear";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        //For anything other than a cloak, require a workmanship
+                        if(!(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) && !target.Workmanship.HasValue)
+                        {
+                            playerMsg = "This gem can only be used on loot generated weapons, magic casters, shields, cloaks or underwear";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
@@ -3857,84 +3762,35 @@ namespace ACE.Server.Entity
                     #region MorphGemDmgResistRating
                     case MorphGemDmgResistRating:
 
-                        //Can only be applied to melee weapons, casters, missile weapons, cloaks and undies
-                        if (target as MeleeWeapon == null &&
-                            !target.IsCaster &&
-                            !target.IsRanged &&
-                            !(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) &&
+                        //Can only be applied to cloaks and undies
+                        if (!(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) &&
                             !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) &&
                             !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
                         {
-                            playerMsg = "This gem can only be used on weapons, magic casters, shields, cloaks or underwear";
+                            playerMsg = "This gem can only be used on cloaks or underwear";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
-
-                        int newDmgResistRating = 0;
-                        int oldDmgResistRating = target.GearDamageResist ?? 0;
-                        var targetMeleeWeap = target as MeleeWeapon;
-
-                        //For undies and cloaks, apply Dmg 3
-                        if ((target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) ||
-                            (target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) ||
-                            (target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
+                       
+                        if (target.GearDamageResist >= 3)
                         {
-                            if (oldDmgResistRating >= 3)
-                            {
-                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Resist Rating of {oldDmgResistRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                                return;
-                            }
+                            playerMsg = $"Your {target.NameWithMaterial} already has a Damage Resist Rating of {target.GearDamageResist} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }                        
+                       
+                        //Apply the new Dmg Resist Rating
+                        target.GearDamageResist = 3;
 
-                            newDmgResistRating = 3;
-                        }
-                        //For weapons and shields, roll a random Dmg rating of 1 to 10 for casters, missile, 2 hand and shields and 1 to 5 for 1 hand melee weps                        
-                        else if (targetMeleeWeap != null && targetMeleeWeap.W_WeaponType != WeaponType.TwoHanded)
-                        {
-                            if (oldDmgResistRating >= 5)
-                            {
-                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgResistRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                                return;
-                            }
-
-                            newDmgResistRating = ThreadSafeRandom.Next(1, 5);
-                        }
-                        else
-                        {
-                            if (oldDmgResistRating >= 10)
-                            {
-                                playerMsg = $"Your {target.NameWithMaterial} already has a Damage Rating of {oldDmgResistRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                                return;
-                            }
-
-                            newDmgResistRating = ThreadSafeRandom.Next(1, 10);
-                        }
-
-                        //Apply the new Dmg Rating
-                        target.GearDamageResist = newDmgResistRating;
-
-                        //Remove Dmg Resist rating if it exists
+                        //Remove Dmg rating if it exists
                         int oldDamageRating = target.GearDamage ?? 0;
                         if (target.GearDamage.HasValue)
                         {
                             target.GearDamage = null;
                         }
-                        if (newDmgResistRating > oldDmgResistRating)
-                        {
-                            playerMsg = $"You have successfully used the {source.Name} to upgrade your {target.NameWithMaterial} with Damage Resist Rating {newDmgResistRating}!{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";
-                        }
-                        else if (newDmgResistRating == oldDmgResistRating)
-                        {
-                            playerMsg = $"The {source.Name} has failed to upgrade your {target.NameWithMaterial} with its Damage Rating of {newDmgResistRating} remaining unchanged.{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";
-                        }
-                        else
-                        {
-                            playerMsg = $"The {source.Name} has failed and has damaged your {target.NameWithMaterial} resulting in a new Damage Resist Rating of {newDmgResistRating}.{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";
-                        }
-
+                        
+                        playerMsg = $"You have successfully used the {source.Name} to upgrade your {target.NameWithMaterial} with Damage Resist Rating {target.GearDamageResist}!{(oldDamageRating > 0 ? $" As a result the previous Damage Rating of {oldDamageRating} has been removed." : "")}";                        
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemDmgResistRating);
                         break;
@@ -4229,149 +4085,293 @@ namespace ACE.Server.Entity
         public const uint Tentacles = 44863;
         public const uint DarkHeart = 51451;
 
+        public static HashSet<uint> TailoringKits = new HashSet<uint>()
+        {
+            ArmorTailoringKit,
+            WeaponTailoringKit,
+            ArmorMainReductionTool,
+            ArmorLowerReductionTool,
+            ArmorMiddleReductionTool,
+            ArmorLayeringToolTop,
+            ArmorLayeringToolBottom,
+            Heaume,
+            PlatemailGauntlets,
+            LeatherBoots,
+            LeatherVest,
+            YoroiGirth,
+            YoroiPauldrons,
+            CeldonSleeves,
+            YoroiGreaves,
+            YoroiLeggings,
+            AmuliLeggings,
+            WingedCoat,
+            Tentacles,
+            DarkHeart
+        };
+
+        public static HashSet<uint> MorphGems = new HashSet<uint>()
+        {
+            MorphGemValue,
+            MorphGemArcane,
+            MorphGemRemoveMissileDReq,
+            MorphGemRemoveMeleeDReq,
+            MorphGemRandomizeWeaponImbue,
+            MorphGemRemovePlayerReq,
+            MorphGemSlayerRandom,
+            MorphGemRemoveLevelReq,
+            MorphGemSlayerUpgrade,
+            MorphGemBurningCoal,
+            MorphGemImpen,
+            MorphGemRandomWorkmanship,
+            MorphGemBanditHilt,
+            MorphGemRareUpgrade,
+            MorphGemTinkeringTool,
+            MorphGemJewelersSawblade,
+            MorphGemCDR,
+            MorphGemCD,
+            MorphGemRareReduction,
+            MorphGemAddSlayer,
+            MorphGemHematite,
+            MorphGemStrengthbeer,
+            MorphGemEndurancebeer,
+            MorphGemCoordinationbeer,
+            MorphGemQuicknessbeer,
+            MorphGemFocusbeer,
+            MorphGemWillpowerbeer,
+            MorphGemHeroicMaster,
+            MorphGemDotResist,
+            MorphGemRandomSet,
+            MorphGemRandomSetDurable,
+            MorphGemDmgRating,
+            MorphGemDmgResistRating,
+            MorphGemRandomCantrip,
+            MorphGemBurden,
+            MorphGemRareDmgBoost,
+            MorphGemRareDmgReduction,
+            MorphGemVitality,
+            MorphGemHealBoost,
+            MorphGemMeleeCleave,
+            MorphGemOverpower,
+            MorphGemOverpowerResist,
+            MorphGemCloakUpgrade,
+            MorphGemRuneofAcidBane,
+            MorphGemIdeographofAcidProtection,
+            MorphGemHieroglyphofAlchemyMastery,
+            MorphGemHieroglyphofArcaneEnlightenment,
+            MorphGemIdeographofArmor,
+            MorphGemHieroglyphofArmorTinkeringExpertise,
+            MorphGemHieroglyphofMonsterAttunement,
+            MorphGemHieroglyphofPersonAttunement,
+            MorphGemHieroglyphofLightWeaponMastery,
+            MorphGemRuneofBladeBane,
+            MorphGemRuneofBloodDrinker,
+            MorphGemRuneofBludgeonBane,
+            MorphGemIdeographofBludgeoningProtection,
+            MorphGemHieroglyphofMissileWeaponMastery,
+            MorphGemHieroglyphofCookingMastery,
+            MorphGemPictographofCoordination,
+            MorphGemHieroglyphofCreatureEnchantmentMastery,
+            MorphGemHieroglyphofFinesseWeaponMastery,
+            MorphGemHieroglyphofDeceptionMastery,
+            MorphGemRuneofDefender,
+            MorphGemPictographofEndurance,
+            MorphGemIdeographofFireProtection,
+            MorphGemRuneofFlameBane,
+            MorphGemHieroglyphofFletchingMastery,
+            MorphGemPictographofFocus,
+            MorphGemRuneofFrostBane,
+            MorphGemIdeographofFrostProtection,
+            MorphGemHieroglyphofHealingMastery,
+            MorphGemIdeographofRegeneration,
+            MorphGemRuneofHeartSeeker,
+            MorphGemRuneofHermeticLink,
+            MorphGemRuneofImpenetrability,
+            MorphGemHieroglyphofItemEnchantmentMastery,
+            MorphGemHieroglyphofItemTinkeringExpertise,
+            MorphGemHieroglyphofJumpingMastery,
+            MorphGemHieroglyphofLeadershipMastery,
+            MorphGemHieroglyphofLifeMagicMastery,
+            MorphGemRuneofLightningBane,
+            MorphGemIdeographofLightningProtection,
+            MorphGemHieroglyphofLockpickMastery,
+            MorphGemHieroglyphofFealtyMastery,
+            MorphGemHieroglyphofMagicResistance,
+            MorphGemHieroglyphofMagicItemTinkeringExpertise,
+            MorphGemHieroglyphofManaConversionMastery,
+            MorphGemIdeographofBattlemagesBlessing,
+            MorphGemHieroglyphofInvulnerability,
+            MorphGemHieroglyphofImpregnability,
+            MorphGemRuneofPierceBane,
+            MorphGemIdeographofPiercingProtection,
+            MorphGemPictographofQuickness,
+            MorphGemHieroglyphofSprint,
+            MorphGemPictographofWillpower,
+            MorphGemIdeographofBladeProtection,
+            MorphGemRuneofSpiritDrinker,
+            MorphGemIdeographofRevitalization,
+            MorphGemPictographofStrength,
+            MorphGemRuneofSwiftKiller,
+            MorphGemHieroglyphofHeavyWeaponMastery,
+            MorphGemHieroglyphofWarMagicMastery,
+            MorphGemHieroglyphofWeaponTinkeringExpertise,
+            MorphGemHieroglyphofDirtyFightingMastery,
+            MorphGemHieroglyphofDualWieldMastery,
+            MorphGemHieroglyphofRecklessnessMastery,
+            MorphGemHieroglyphofShieldMastery,
+            MorphGemHieroglyphofSneakAttackMastery,
+            MorphGemHieroglyphofVoidMagicMastery,
+            MorphGemHieroglyphofTwoHandedWeaponsMastery,
+            MorphGemHieroglyphofSummoningMastery
+        };
+
         /// <summary>
         /// Returns TRUE if the input wcid is a tailoring kit
         /// </summary>
         public static bool IsTailoringKit(uint wcid)
         {
-            // ...
-            switch (wcid)
-            {
-                case ArmorTailoringKit:
-                case WeaponTailoringKit:
-                case ArmorMainReductionTool:
-                case ArmorLowerReductionTool:
-                case ArmorMiddleReductionTool:
-                case ArmorLayeringToolTop:
-                case ArmorLayeringToolBottom:
-                case Heaume:
-                case PlatemailGauntlets:
-                case LeatherBoots:
-                case LeatherVest:
-                case YoroiGirth:
-                case YoroiPauldrons:
-                case CeldonSleeves:
-                case YoroiGreaves:
-                case YoroiLeggings:
-                case AmuliLeggings:
-                case WingedCoat:
-                case Tentacles:
-                case DarkHeart:
-                case MorphGemValue:                
-                case MorphGemArcane:
-                case MorphGemRemoveMissileDReq:
-                case MorphGemRemoveMeleeDReq:
-                case MorphGemRandomizeWeaponImbue:
-                case MorphGemRemovePlayerReq:
-                case MorphGemSlayerRandom:
-                case MorphGemRemoveLevelReq:
-                case MorphGemSlayerUpgrade:
-                case MorphGemBurningCoal:
-                case MorphGemImpen:
-                case MorphGemRandomWorkmanship:
-                case MorphGemBanditHilt:
-                case MorphGemRareUpgrade:
-                case MorphGemTinkeringTool:
-                case MorphGemJewelersSawblade:
-                case MorphGemCDR:
-                case MorphGemCD:
-                case MorphGemRareReduction:
-                case MorphGemAddSlayer:
-				case MorphGemHematite:
-				case MorphGemStrengthbeer:
-				case MorphGemEndurancebeer:
-				case MorphGemCoordinationbeer:
-				case MorphGemQuicknessbeer:
-				case MorphGemFocusbeer:
-				case MorphGemWillpowerbeer:
-                case MorphGemHeroicMaster:
-                case MorphGemDotResist:
-                case MorphGemRandomSet:
-                case MorphGemRandomSetDurable:
-                case MorphGemDmgRating:
-                case MorphGemDmgResistRating:
-                case MorphGemRandomCantrip:
-                case MorphGemBurden:
-                case MorphGemRareDmgBoost:
-                case MorphGemRareDmgReduction:
-                case MorphGemVitality:
-                case MorphGemHealBoost:
-                case MorphGemMeleeCleave:
-                case MorphGemOverpower:
-                case MorphGemOverpowerResist:
-                case MorphGemRuneofAcidBane:
-				case MorphGemIdeographofAcidProtection:
-				case MorphGemHieroglyphofAlchemyMastery:
-				case MorphGemHieroglyphofArcaneEnlightenment:
-				case MorphGemIdeographofArmor:
-				case MorphGemHieroglyphofArmorTinkeringExpertise:
-				case MorphGemHieroglyphofMonsterAttunement:
-				case MorphGemHieroglyphofPersonAttunement:
-				case MorphGemHieroglyphofLightWeaponMastery:
-				case MorphGemRuneofBladeBane:
-				case MorphGemRuneofBloodDrinker:
-				case MorphGemRuneofBludgeonBane:
-				case MorphGemIdeographofBludgeoningProtection:
-				case MorphGemHieroglyphofMissileWeaponMastery:
-				case MorphGemHieroglyphofCookingMastery:
-				case MorphGemPictographofCoordination:
-				case MorphGemHieroglyphofCreatureEnchantmentMastery:
-				case MorphGemHieroglyphofFinesseWeaponMastery:
-				case MorphGemHieroglyphofDeceptionMastery:
-				case MorphGemRuneofDefender:
-				case MorphGemPictographofEndurance:
-				case MorphGemIdeographofFireProtection:
-				case MorphGemRuneofFlameBane:
-				case MorphGemHieroglyphofFletchingMastery:
-				case MorphGemPictographofFocus:
-				case MorphGemRuneofFrostBane:
-				case MorphGemIdeographofFrostProtection:
-				case MorphGemHieroglyphofHealingMastery:
-				case MorphGemIdeographofRegeneration:
-				case MorphGemRuneofHeartSeeker:
-				case MorphGemRuneofHermeticLink:
-				case MorphGemRuneofImpenetrability:
-				case MorphGemHieroglyphofItemEnchantmentMastery:
-				case MorphGemHieroglyphofItemTinkeringExpertise:
-				case MorphGemHieroglyphofJumpingMastery:
-				case MorphGemHieroglyphofLeadershipMastery:
-				case MorphGemHieroglyphofLifeMagicMastery:
-				case MorphGemRuneofLightningBane:
-				case MorphGemIdeographofLightningProtection:
-				case MorphGemHieroglyphofLockpickMastery:
-				case MorphGemHieroglyphofFealtyMastery:
-				case MorphGemHieroglyphofMagicResistance:
-				case MorphGemHieroglyphofMagicItemTinkeringExpertise:
-				case MorphGemHieroglyphofManaConversionMastery:
-				case MorphGemIdeographofBattlemagesBlessing:
-				case MorphGemHieroglyphofInvulnerability:
-				case MorphGemHieroglyphofImpregnability:
-				case MorphGemRuneofPierceBane:
-				case MorphGemIdeographofPiercingProtection:
-				case MorphGemPictographofQuickness:
-				case MorphGemHieroglyphofSprint:
-				case MorphGemPictographofWillpower:
-				case MorphGemIdeographofBladeProtection:
-				case MorphGemRuneofSpiritDrinker:
-				case MorphGemIdeographofRevitalization:
-				case MorphGemPictographofStrength:
-				case MorphGemRuneofSwiftKiller:
-				case MorphGemHieroglyphofHeavyWeaponMastery:
-				case MorphGemHieroglyphofWarMagicMastery:
-				case MorphGemHieroglyphofWeaponTinkeringExpertise:
-				case MorphGemHieroglyphofDirtyFightingMastery:
-				case MorphGemHieroglyphofDualWieldMastery:
-				case MorphGemHieroglyphofRecklessnessMastery:
-				case MorphGemHieroglyphofShieldMastery:
-				case MorphGemHieroglyphofSneakAttackMastery:
-				case MorphGemHieroglyphofVoidMagicMastery:
-				case MorphGemHieroglyphofTwoHandedWeaponsMastery:
-				case MorphGemHieroglyphofSummoningMastery:
-                    return true;
-                default:
-                    return false;
-            }
+            return TailoringKits.Contains(wcid) || MorphGems.Contains(wcid);
         }
+        //    public static bool IsTailoringKit(uint wcid)
+        //    {
+        //        // ...
+        //        switch (wcid)
+        //        {
+        //            case ArmorTailoringKit:
+        //            case WeaponTailoringKit:
+        //            case ArmorMainReductionTool:
+        //            case ArmorLowerReductionTool:
+        //            case ArmorMiddleReductionTool:
+        //            case ArmorLayeringToolTop:
+        //            case ArmorLayeringToolBottom:
+        //            case Heaume:
+        //            case PlatemailGauntlets:
+        //            case LeatherBoots:
+        //            case LeatherVest:
+        //            case YoroiGirth:
+        //            case YoroiPauldrons:
+        //            case CeldonSleeves:
+        //            case YoroiGreaves:
+        //            case YoroiLeggings:
+        //            case AmuliLeggings:
+        //            case WingedCoat:
+        //            case Tentacles:
+        //            case DarkHeart:
+        //            case MorphGemValue:                
+        //            case MorphGemArcane:
+        //            case MorphGemRemoveMissileDReq:
+        //            case MorphGemRemoveMeleeDReq:
+        //            case MorphGemRandomizeWeaponImbue:
+        //            case MorphGemRemovePlayerReq:
+        //            case MorphGemSlayerRandom:
+        //            case MorphGemRemoveLevelReq:
+        //            case MorphGemSlayerUpgrade:
+        //            case MorphGemBurningCoal:
+        //            case MorphGemImpen:
+        //            case MorphGemRandomWorkmanship:
+        //            case MorphGemBanditHilt:
+        //            case MorphGemRareUpgrade:
+        //            case MorphGemTinkeringTool:
+        //            case MorphGemJewelersSawblade:
+        //            case MorphGemCDR:
+        //            case MorphGemCD:
+        //            case MorphGemRareReduction:
+        //            case MorphGemAddSlayer:
+        //case MorphGemHematite:
+        //case MorphGemStrengthbeer:
+        //case MorphGemEndurancebeer:
+        //case MorphGemCoordinationbeer:
+        //case MorphGemQuicknessbeer:
+        //case MorphGemFocusbeer:
+        //case MorphGemWillpowerbeer:
+        //            case MorphGemHeroicMaster:
+        //            case MorphGemDotResist:
+        //            case MorphGemRandomSet:
+        //            case MorphGemRandomSetDurable:
+        //            case MorphGemDmgRating:
+        //            case MorphGemDmgResistRating:
+        //            case MorphGemRandomCantrip:
+        //            case MorphGemBurden:
+        //            case MorphGemRareDmgBoost:
+        //            case MorphGemRareDmgReduction:
+        //            case MorphGemVitality:
+        //            case MorphGemHealBoost:
+        //            case MorphGemMeleeCleave:
+        //            case MorphGemOverpower:
+        //            case MorphGemOverpowerResist:
+        //            case MorphGemCloakUpgrade:
+        //            case MorphGemRuneofAcidBane:
+        //case MorphGemIdeographofAcidProtection:
+        //case MorphGemHieroglyphofAlchemyMastery:
+        //case MorphGemHieroglyphofArcaneEnlightenment:
+        //case MorphGemIdeographofArmor:
+        //case MorphGemHieroglyphofArmorTinkeringExpertise:
+        //case MorphGemHieroglyphofMonsterAttunement:
+        //case MorphGemHieroglyphofPersonAttunement:
+        //case MorphGemHieroglyphofLightWeaponMastery:
+        //case MorphGemRuneofBladeBane:
+        //case MorphGemRuneofBloodDrinker:
+        //case MorphGemRuneofBludgeonBane:
+        //case MorphGemIdeographofBludgeoningProtection:
+        //case MorphGemHieroglyphofMissileWeaponMastery:
+        //case MorphGemHieroglyphofCookingMastery:
+        //case MorphGemPictographofCoordination:
+        //case MorphGemHieroglyphofCreatureEnchantmentMastery:
+        //case MorphGemHieroglyphofFinesseWeaponMastery:
+        //case MorphGemHieroglyphofDeceptionMastery:
+        //case MorphGemRuneofDefender:
+        //case MorphGemPictographofEndurance:
+        //case MorphGemIdeographofFireProtection:
+        //case MorphGemRuneofFlameBane:
+        //case MorphGemHieroglyphofFletchingMastery:
+        //case MorphGemPictographofFocus:
+        //case MorphGemRuneofFrostBane:
+        //case MorphGemIdeographofFrostProtection:
+        //case MorphGemHieroglyphofHealingMastery:
+        //case MorphGemIdeographofRegeneration:
+        //case MorphGemRuneofHeartSeeker:
+        //case MorphGemRuneofHermeticLink:
+        //case MorphGemRuneofImpenetrability:
+        //case MorphGemHieroglyphofItemEnchantmentMastery:
+        //case MorphGemHieroglyphofItemTinkeringExpertise:
+        //case MorphGemHieroglyphofJumpingMastery:
+        //case MorphGemHieroglyphofLeadershipMastery:
+        //case MorphGemHieroglyphofLifeMagicMastery:
+        //case MorphGemRuneofLightningBane:
+        //case MorphGemIdeographofLightningProtection:
+        //case MorphGemHieroglyphofLockpickMastery:
+        //case MorphGemHieroglyphofFealtyMastery:
+        //case MorphGemHieroglyphofMagicResistance:
+        //case MorphGemHieroglyphofMagicItemTinkeringExpertise:
+        //case MorphGemHieroglyphofManaConversionMastery:
+        //case MorphGemIdeographofBattlemagesBlessing:
+        //case MorphGemHieroglyphofInvulnerability:
+        //case MorphGemHieroglyphofImpregnability:
+        //case MorphGemRuneofPierceBane:
+        //case MorphGemIdeographofPiercingProtection:
+        //case MorphGemPictographofQuickness:
+        //case MorphGemHieroglyphofSprint:
+        //case MorphGemPictographofWillpower:
+        //case MorphGemIdeographofBladeProtection:
+        //case MorphGemRuneofSpiritDrinker:
+        //case MorphGemIdeographofRevitalization:
+        //case MorphGemPictographofStrength:
+        //case MorphGemRuneofSwiftKiller:
+        //case MorphGemHieroglyphofHeavyWeaponMastery:
+        //case MorphGemHieroglyphofWarMagicMastery:
+        //case MorphGemHieroglyphofWeaponTinkeringExpertise:
+        //case MorphGemHieroglyphofDirtyFightingMastery:
+        //case MorphGemHieroglyphofDualWieldMastery:
+        //case MorphGemHieroglyphofRecklessnessMastery:
+        //case MorphGemHieroglyphofShieldMastery:
+        //case MorphGemHieroglyphofSneakAttackMastery:
+        //case MorphGemHieroglyphofVoidMagicMastery:
+        //case MorphGemHieroglyphofTwoHandedWeaponsMastery:
+        //case MorphGemHieroglyphofSummoningMastery:
+        //                return true;
+        //            default:
+        //                return false;
+        //        }
+        //    }
 
         public static void AddMorphGemLog(WorldObject target, uint gemWeenieId)
         {

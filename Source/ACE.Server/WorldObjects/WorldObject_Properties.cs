@@ -3184,7 +3184,7 @@ namespace ACE.Server.WorldObjects
         public int? GearDamage
         {
             get => GetProperty(PropertyInt.GearDamage);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearDamage); else SetProperty(PropertyInt.GearDamage, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearDamage); else SetProperty(PropertyInt.GearDamage, value.Value); }
         }
 
         /// <summary>
@@ -3193,7 +3193,7 @@ namespace ACE.Server.WorldObjects
         public int? GearDamageResist
         {
             get => GetProperty(PropertyInt.GearDamageResist);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearDamageResist); else SetProperty(PropertyInt.GearDamageResist, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearDamageResist); else SetProperty(PropertyInt.GearDamageResist, value.Value); }
         }
 
         /// <summary>
@@ -3202,7 +3202,7 @@ namespace ACE.Server.WorldObjects
         public int? GearCritDamage
         {
             get => GetProperty(PropertyInt.GearCritDamage);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearCritDamage); else SetProperty(PropertyInt.GearCritDamage, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearCritDamage); else SetProperty(PropertyInt.GearCritDamage, value.Value); }
         }
 
         /// <summary>
@@ -3211,7 +3211,7 @@ namespace ACE.Server.WorldObjects
         public int? GearCritDamageResist
         {
             get => GetProperty(PropertyInt.GearCritDamageResist);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearCritDamageResist); else SetProperty(PropertyInt.GearCritDamageResist, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearCritDamageResist); else SetProperty(PropertyInt.GearCritDamageResist, value.Value); }
         }
 
         /// <summary>
@@ -3220,7 +3220,7 @@ namespace ACE.Server.WorldObjects
         public int? GearCrit
         {
             get => GetProperty(PropertyInt.GearCrit);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearCrit); else SetProperty(PropertyInt.GearCrit, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearCrit); else SetProperty(PropertyInt.GearCrit, value.Value); }
         }
 
         /// <summary>
@@ -3229,7 +3229,7 @@ namespace ACE.Server.WorldObjects
         public int? GearCritResist
         {
             get => GetProperty(PropertyInt.GearCritResist);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearCritResist); else SetProperty(PropertyInt.GearCritResist, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearCritResist); else SetProperty(PropertyInt.GearCritResist, value.Value); }
         }
 
         /// <summary>
@@ -3238,7 +3238,7 @@ namespace ACE.Server.WorldObjects
         public int? GearHealingBoost
         {
             get => GetProperty(PropertyInt.GearHealingBoost);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearHealingBoost); else SetProperty(PropertyInt.GearHealingBoost, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearHealingBoost); else SetProperty(PropertyInt.GearHealingBoost, value.Value); }
         }
 
         /// <summary>
@@ -3247,19 +3247,19 @@ namespace ACE.Server.WorldObjects
         public int? GearMaxHealth
         {
             get => GetProperty(PropertyInt.GearMaxHealth);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearMaxHealth); else SetProperty(PropertyInt.GearMaxHealth, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearMaxHealth); else SetProperty(PropertyInt.GearMaxHealth, value.Value); }
         }
 
         public int? GearPKDamageRating
         {
             get => GetProperty(PropertyInt.GearPKDamageRating);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearPKDamageRating); else SetProperty(PropertyInt.GearPKDamageRating, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearPKDamageRating); else SetProperty(PropertyInt.GearPKDamageRating, value.Value); }
         }
 
         public int? GearPKDamageResistRating
         {
             get => GetProperty(PropertyInt.GearPKDamageResistRating);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.GearPKDamageResistRating); else SetProperty(PropertyInt.GearPKDamageResistRating, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearPKDamageResistRating); else SetProperty(PropertyInt.GearPKDamageResistRating, value.Value); }
         }
 
         public int? ResistItemAppraisal
@@ -3385,13 +3385,13 @@ namespace ACE.Server.WorldObjects
         public int? Overpower
         {
             get => GetProperty(PropertyInt.Overpower);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.Overpower); else SetProperty(PropertyInt.Overpower, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.Overpower); else SetProperty(PropertyInt.Overpower, value.Value); }
         }
 
         public int? OverpowerResist
         {
             get => GetProperty(PropertyInt.OverpowerResist);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.OverpowerResist); else SetProperty(PropertyInt.OverpowerResist, value.Value); }
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.OverpowerResist); else SetProperty(PropertyInt.OverpowerResist, value.Value); }
         }
     }
 }

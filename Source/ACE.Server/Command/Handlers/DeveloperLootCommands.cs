@@ -33,9 +33,9 @@ namespace ACE.Server.Command.Handlers
                 return;
             }
 
-            if (tier < 1 || tier > 8)
+            if (tier < 1)
             {
-                Console.WriteLine($"Tier must be 1-8.  You entered tier {tier}, which does not exist!");
+                Console.WriteLine($"Tier must be 1-9 or correspond to a DeathTreasureType.  You entered tier {tier}, which does not exist!");
                 return;
             }
 
