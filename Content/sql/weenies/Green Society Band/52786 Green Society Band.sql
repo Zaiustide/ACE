@@ -10,7 +10,7 @@ VALUES (52786,   1,          8) /* ItemType - Jewelry */
      , (52786,   9,     786432) /* ValidLocations - FingerWear */
      , (52786,  16,          1) /* ItemUseable - No */
      , (52786,  18,          1) /* UiEffects - Magical */
-     , (52786,  19,       5000) /* Value */
+     , (52786,  19,       25) /* Value */
      , (52786,  33,          1) /* Bonded - Bonded */
      , (52786,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (52786, 106,        325) /* ItemSpellcraft */
