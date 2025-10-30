@@ -1685,7 +1685,7 @@ namespace ACE.Server.Entity
                         var targetMeleeWeaponCD = target as MeleeWeapon;
 
                         //Handle armor
-                        if ((target.ArmorLevel ?? 0) > 0)
+                        if ((target.ArmorLevel ?? 0) > 0 && !target.IsShield)
                         {
                             if (target.GearCritDamage >= 2)
                             {
@@ -1699,6 +1699,7 @@ namespace ACE.Server.Entity
                             string cdrRemovalMsg = target.GearCritDamageResist > 0 ? $" As a result your item's +{target.GearCritDamageResist} Critical Damage Resist Rating has been replaced." : string.Empty;
                             playerMsg = $"You have successfully used the {source.Name} to add +2 Critical Damage Rating to your {target.NameWithMaterial}!{cdrRemovalMsg}";
                             target.GearCritDamageResist = null;
+                            newCDRating = 2;
                         }
                         else if(targetMeleeWeaponCD != null && targetMeleeWeaponCD.W_WeaponType != WeaponType.TwoHanded)
                         {
@@ -3820,6 +3821,7 @@ namespace ACE.Server.Entity
                         if (target as MeleeWeapon == null &&
                             !target.IsCaster &&
                             !target.IsRanged &&
+                            !target.IsShield &&
                             !(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false) &&                            
                             !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearChest) ?? false) &&
                             !(target.ClothingPriority?.HasFlag(CoverageMask.UnderwearUpperLegs) ?? false))
