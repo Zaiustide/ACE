@@ -643,6 +643,19 @@ namespace ACE.Server.Entity
             MorphGemDmgRating
         };
 
+        public static HashSet<uint> WorldBossJewelry = new HashSet<uint>()
+        {
+            490000,
+            490001,
+            490002,
+            490003,
+            490048,
+            490049,
+            490050,
+            490051,
+            490052,
+        };
+
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
         {
             try
@@ -1061,7 +1074,15 @@ namespace ACE.Server.Entity
                     case MorphGemRandomSetDurable:
 
                         //Allow loot gen jewelry, undies and armor
-                        if (target.ItemType != ItemType.Jewelry && !target.ItemType.HasFlag(ItemType.Clothing))
+                        if ((target.ItemType != ItemType.Jewelry && !target.ItemType.HasFlag(ItemType.Clothing)) || (target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false))
+                        {
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item does not meet the requirements for adding an Equipment Set", ChatMessageType.Broadcast));
+                            return;
+                        }
+
+                        //If item isn't loot gen, only allow WB jewelry
+                        if(!target.Workmanship.HasValue && !WorldBossJewelry.Contains(target.WeenieClassId))
                         {
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat("The target item does not meet the requirements for adding an Equipment Set", ChatMessageType.Broadcast));
@@ -1135,10 +1156,10 @@ namespace ACE.Server.Entity
                         AddMorphGemLog(target, source.WeenieClassId);
 
                         //Don't consume the gem if it's durable unless its out of uses
-                        if(source.WeenieClassId == MorphGemRandomSetDurable && (target.Structure ?? 0) > 1)
+                        if(source.WeenieClassId == MorphGemRandomSetDurable && (source.Structure ?? 0) > 1)
                         {
-                            target.Structure--;
-                            target.SaveBiotaToDatabase();
+                            source.Structure--;
+                            source.SaveBiotaToDatabase();
                             player.SendUseDoneEvent();
                             return;
                         }
@@ -1643,27 +1664,155 @@ namespace ACE.Server.Entity
                         //Apply to any armor piece (loot gen, quest and rare armor and add +2 CD
                         //rating, if piece of armor already has ratings then it replaces but does
                         //not stack. Cap of 2 rating/piece of armor
-                        if (!target.ArmorLevel.HasValue || target.ArmorLevel.Value < 1)
+                        //Also applies to casters, weapons and shields with different rules
+
+                        //Can only be applied to melee weapons, casters, missile weapons, cloaks and undies
+                        if (target as MeleeWeapon == null &&
+                            !target.IsCaster &&
+                            !target.IsRanged &&
+                            !target.IsShield &&
+                            ((target.ArmorLevel ?? 0) < 1))
                         {
-                            playerMsg = "This gem can only be used on armor";
+                            playerMsg = "This gem can only be used on armor, casters, weapons and shields";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
 
-                        if (target.GearCritDamage >= 2)
+                        int newCDRating = 0;
+                        int oldCDRating = target.GearCritDamage ?? 0;
+                        int oldCDRRating = target.GearCritDamageResist ?? 0;
+                        var targetMeleeWeaponCD = target as MeleeWeapon;
+
+                        //Handle armor
+                        if ((target.ArmorLevel ?? 0) > 0)
                         {
-                            playerMsg = $"Your {target.NameWithMaterial} already has a Critical Damage Rating of +{target.GearCritDamage} and thus the gem would have no effect";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
+                            if (target.GearCritDamage >= 2)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Critical Damage Rating of +{target.GearCritDamage} and cannot be further upgraded.";
+                                player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            //Add +2 CD rating
+                            string cdrRemovalMsg = target.GearCritDamageResist > 0 ? $" As a result your item's +{target.GearCritDamageResist} Critical Damage Resist Rating has been replaced." : string.Empty;
+                            playerMsg = $"You have successfully used the {source.Name} to add +2 Critical Damage Rating to your {target.NameWithMaterial}!{cdrRemovalMsg}";
+                            target.GearCritDamageResist = null;
+                        }
+                        else if(targetMeleeWeaponCD != null && targetMeleeWeaponCD.W_WeaponType != WeaponType.TwoHanded)
+                        {
+                            if (oldCDRating >= 5)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Critical Damage Rating of {oldCDRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var bracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (bracketRoll > 0.99f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(6, 10);
+                            }
+                            else if (bracketRoll > 0.9f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(1, 10);
+                            }
+                            else if (bracketRoll > 0.8f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(4, 9);
+                            }
+                            else if (bracketRoll > 0.5f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(4, 8);
+                            }
+                            else
+                            {
+                                newCDRating = ThreadSafeRandom.Next(1, 8);
+                            }
+                        }
+                        else if (target.IsShield)
+                        {
+                            if (oldCDRating >= 15)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Critical Damage Rating of {oldCDRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var bracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (bracketRoll > 0.99f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(6, 15);
+                            }
+                            else if (bracketRoll > 0.9f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(1, 15);
+                            }
+                            else if (bracketRoll > 0.8f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(6, 12);
+                            }
+                            else if (bracketRoll > 0.5f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(4, 12);
+                            }
+                            else
+                            {
+                                newCDRating = ThreadSafeRandom.Next(1, 12);
+                            }
+                        }
+                        else
+                        {
+                            if (oldCDRating >= 10)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has a Critical Damage Rating of {oldCDRating} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var bracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (bracketRoll > 0.99f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(6, 10);
+                            }
+                            else if (bracketRoll > 0.9f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(1, 10);
+                            }
+                            else if (bracketRoll > 0.8f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(4, 9);
+                            }
+                            else if (bracketRoll > 0.5f)
+                            {
+                                newCDRating = ThreadSafeRandom.Next(4, 8);
+                            }
+                            else
+                            {
+                                newCDRating = ThreadSafeRandom.Next(1, 8);
+                            }
                         }
 
-                        //Add +2 CD rating
-                        string cdrRemovalMsg = target.GearCritDamageResist > 0 ? $" As a result your item's +{target.GearCritDamageResist} Critical Damage Resist Rating has been replaced." : string.Empty;
-                        playerMsg = $"You have successfully used the {source.Name} to add +2 Critical Damage Rating to your {target.NameWithMaterial}!{cdrRemovalMsg}";
-                        target.GearCritDamage = 2;
-                        target.GearCritDamageResist = 0;
+                        //Apply the new Dmg Rating
+                        target.GearCritDamage = newCDRating;
+
+                        //Remove Dmg Resist rating if it exists                        
+                        if (newCDRating > oldCDRating)
+                        {
+                            playerMsg = $"You have successfully used the {source.Name} to upgrade your {target.NameWithMaterial} with Critical Damage Rating {newCDRating}!{(oldCDRRating > 0 ? $" As a result the previous Critical Damage Resist Rating of {oldCDRRating} has been removed." : "")}";
+                        }
+                        else if (newCDRating == oldCDRating)
+                        {
+                            playerMsg = $"The {source.Name} has failed to upgrade your {target.NameWithMaterial} with its Critical Damage Rating of {newCDRating} remaining unchanged.{(oldCDRRating > 0 ? $" As a result the previous Critical Damage Resist Rating of {oldCDRRating} has been removed." : "")}";
+                        }
+                        else
+                        {
+                            playerMsg = $"The {source.Name} has failed and has damaged your {target.NameWithMaterial} resulting in a new Critical Damage Rating of {newCDRating}.{(oldCDRRating > 0 ? $" As a result the previous Critical Damage Resist Rating of {oldCDRRating} has been removed." : "")}";
+                        }
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemCD);
@@ -3718,7 +3867,24 @@ namespace ACE.Server.Entity
                                 return;
                             }
 
-                            newDmgRating = ThreadSafeRandom.Next(1, 5);
+                            var dmgBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if(dmgBracketRoll > 0.99f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(3, 5);
+                            }
+                            else if (dmgBracketRoll > 0.9f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(1, 5);
+                            }
+                            else if (dmgBracketRoll > 0.8f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(2, 4);
+                            }
+                            else
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(1, 4);
+                            }
                         }
                         else
                         {
@@ -3729,7 +3895,28 @@ namespace ACE.Server.Entity
                                 return;
                             }
 
-                            newDmgRating = ThreadSafeRandom.Next(1, 10);
+                            var dmgBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (dmgBracketRoll > 0.99f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(6, 10);
+                            }
+                            else if (dmgBracketRoll > 0.9f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(1, 10);
+                            }
+                            else if (dmgBracketRoll > 0.8f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(4, 9);
+                            }
+                            else if (dmgBracketRoll > 0.5f)
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(4, 8);
+                            }
+                            else
+                            {
+                                newDmgRating = ThreadSafeRandom.Next(1, 8);
+                            }
                         }
 
                         //Apply the new Dmg Rating

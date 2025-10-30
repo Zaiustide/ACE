@@ -405,6 +405,54 @@ namespace ACE.Server.Entity.PKQuests
                     pkkill_TC_30.TaskCount = 30;
                     pkkill_TC_30.Rewards = new List<string>() { "LUM,750000", "XP%,150", "DBKEY,8", "HERA,3", "PKTROPHY,250", "PHIAL,3", "BOX,5" };
                     _pkQuestList.Add(pkkill_TC_30);
+
+                    var dc_score_100 = new PKQuest();
+                    dc_score_100.QuestCode = "DC_SCORE_100";
+                    dc_score_100.Description = "Score 100 points in a Dungeon Control event.";
+                    dc_score_100.RewardDescription = "25k luminance, 25% XP to next level, 1 Darkbeat Keys, 1 Hera Keys, 3 Phials of Bloody Tears, 50 PK Trophies, 1 Box";
+                    dc_score_100.TaskCount = 100;
+                    dc_score_100.Rewards = new List<string>() { "LUM,25000", "XP%,25", "DBKEY,1", "HERA,1", "PKTROPHY,50", "PHIAL,3", "BOX,1" };
+                    _pkQuestList.Add(dc_score_100);
+
+                    var dc_score_1000 = new PKQuest();
+                    dc_score_1000.QuestCode = "DC_SCORE_1000";
+                    dc_score_1000.Description = "Score 1000 points in a Dungeon Control event.";
+                    dc_score_1000.RewardDescription = "100k luminance, 50% XP to next level, 3 Darkbeat Keys, 2 Hera Keys, 5 Phials of Bloody Tears, 100 PK Trophies, 2 Boxes, 1 Radiant Amber Crystal.";
+                    dc_score_1000.TaskCount = 1000;
+                    dc_score_1000.Rewards = new List<string>() { "LUM,100000", "XP%,50", "DBKEY,3", "HERA,2", "PKTROPHY,100", "PHIAL,5", "BOX,2", "AMBER,1" };
+                    _pkQuestList.Add(dc_score_1000);
+
+                    var dc_score_5000 = new PKQuest();
+                    dc_score_5000.QuestCode = "DC_SCORE_5000";
+                    dc_score_5000.Description = "Score 5000 points in a Dungeon Control event.";
+                    dc_score_5000.RewardDescription = "1m luminance, 250% XP to next level, 5 Darkbeat Keys, 5 Hera Keys, 25 Phials of Bloody Tears, 250 PK Trophies, 5 Boxes, 2 Radiant Amber Crystal.";
+                    dc_score_5000.TaskCount = 5000;
+                    dc_score_5000.Rewards = new List<string>() { "LUM,1000000", "XP%,250", "DBKEY,5", "HERA,5", "PKTROPHY,250", "PHIAL,25", "BOX,5", "AMBER,2" };
+                    _pkQuestList.Add(dc_score_5000);
+
+                    var dc_win_1 = new PKQuest();
+                    dc_win_1.QuestCode = "DC_WIN_1";
+                    dc_win_1.Description = "Win ownership of one dungeon in a Dungeon Control event.";
+                    dc_win_1.RewardDescription = "25k luminance, 25% XP to next level, 1 Darkbeat Key, 1 Hera Keys, 1 Phial of Bloody Tears, 25 PK Trophies, 1 Box.";
+                    dc_win_1.TaskCount = 1;
+                    dc_win_1.Rewards = new List<string>() { "LUM,25000", "XP%,25", "DBKEY,1", "HERA,1", "PKTROPHY,25", "PHIAL,1", "BOX,1"};
+                    _pkQuestList.Add(dc_win_1);
+
+                    var dc_win_15 = new PKQuest();
+                    dc_win_15.QuestCode = "DC_WIN_15";
+                    dc_win_15.Description = "Win ownership of 15 dungeons in Dungeon Control events.";
+                    dc_win_15.RewardDescription = "250k luminance, 100% XP to next level, 5 Darkbeat Keys, 5 Hera Keys, 15 Phials of Bloody Tears, 250 PK Trophies, 3 Boxes, 1 Radiant Amber Crystal.";
+                    dc_win_15.TaskCount = 15;
+                    dc_win_15.Rewards = new List<string>() { "LUM,250000", "XP%,100", "DBKEY,5", "HERA,5", "PKTROPHY,250", "PHIAL,15", "BOX,3", "AMBER,1" };
+                    _pkQuestList.Add(dc_win_15);
+
+                    var dc_win_100 = new PKQuest();
+                    dc_win_100.QuestCode = "DC_WIN_100";
+                    dc_win_100.Description = "Win ownership of 100 dungeons in Dungeon Control events.";
+                    dc_win_100.RewardDescription = "10m luminance, 750% XP to next level, 15 Darkbeat Keys, 15 Hera Keys, 50 Phials of Bloody Tears, 1000 PK Trophies, 15 Boxes, 5 Radiant Amber Crystals.";
+                    dc_win_100.TaskCount = 100;
+                    dc_win_100.Rewards = new List<string>() { "LUM,10000000", "XP%,750", "DBKEY,15", "HERA,15", "PKTROPHY,1000", "PHIAL,50", "BOX,15", "AMBER,5" };
+                    _pkQuestList.Add(dc_win_100);
                 }
 
                 return _pkQuestList;

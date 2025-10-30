@@ -50,9 +50,10 @@ namespace ACE.Server.Factories.Tables
                 return null;
 
             if(profile.DisableSets)
-            {
                 return null;
-            }
+
+            if ((wo.ClothingPriority == null || (wo.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0) && profile.Tier < 9)
+                return null;
 
             if ((wo.ClothingPriority == null || (wo.ClothingPriority & (CoverageMask)CoverageMaskHelper.Outerwear) == 0) && wo.ItemType != ItemType.Jewelry && !(wo.ValidLocations?.HasFlag(EquipMask.TrinketOne) ?? false) && wo.WeenieType != WeenieType.Clothing)
                 return null;

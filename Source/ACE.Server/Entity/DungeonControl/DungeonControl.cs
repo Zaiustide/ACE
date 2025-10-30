@@ -606,7 +606,18 @@ namespace ACE.Server.Entity.DungeonControl
 
         public int OwnershipExpirationHours { get; set; }
 
-        public int CaptureScore { get; set; }
+        private int _captureScore = 0;
+        public int CaptureScore
+        {
+            get
+            {
+                return Convert.ToInt32(Math.Round(PropertyManager.GetDouble("dungeoncontrol_capturescore_mod").Item * _captureScore));
+            }
+            set
+            {
+                _captureScore = value;
+            }
+        }
 
         public DateTime? CaptureTime { get; set; }
 

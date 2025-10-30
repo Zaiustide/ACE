@@ -168,21 +168,21 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
         OverpowerResist = Random(1, 10)
 
     - Chance: 10%:
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         Overpower = Random(1, 10)
 
     - Chance: 10%:
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         OverpowerResist = Random(1, 10)
 
     - Chance: 10%:
         GearDamage = Random(1, 10)
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         Overpower = Random(1, 10)
 
     - Chance: 10%:
         GearDamage = Random(1, 10)
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         OverpowerResist = Random(1, 10)
 
     - Chance: 10%:
@@ -191,25 +191,25 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
         OverpowerResist = Random(1, 10)
 
     - Chance: 10%:
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         Overpower = Random(1, 10)
         OverpowerResist = Random(1, 10)
 
     - Chance: 15%:
         GearDamage = Random(1, 10)
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         Overpower = Random(1, 10)
         OverpowerResist = Random(1, 10)
 
     - Chance: 4%:
         GearDamage = Random(4, 10)
-        GearCritDamageResist = Random(1, 10)
+        GearCritDamage = Random(1, 10)
         Overpower = Random(1, 10)
         OverpowerResist = Random(1, 10)    
 
     - Chance: 1%:
         GearDamage = Random(4, 10)
-        GearCritDamageResist = Random(4, 10)
+        GearCritDamage = Random(4, 10)
         Overpower = Random(4, 10)
         OverpowerResist = Random(4, 10)
 
