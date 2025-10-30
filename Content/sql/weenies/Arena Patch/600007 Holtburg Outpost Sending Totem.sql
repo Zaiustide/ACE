@@ -41,4 +41,5 @@ VALUES (600007,   1, 0x02000956) /* Setup */
      , (600007,   7, 0x10000252) /* ClothingBase */
      , (600007,   8, 0x06001E2E) /* Icon */
      , (600007,  22, 0x3400002B) /* PhysicsEffectTable */
+	 , (600007,  27, 0x10000057) /* UseUserAnimation - Sanctuary */
 	 , (600007,  52, 0x060065FB) /* IconUnderlay */;
