@@ -68,7 +68,7 @@ VALUES (600001,   1,       5) /* HeartbeatInterval */
      , (600001, 125,       1) /* ResistHealthDrain */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (600001,   1, '+Spacemonkey') /* Name */
+VALUES (600001,   1, '+The Consultant') /* Name */
      , (600001,   3, 'Unknown') /* Sex */
      , (600001,   4, 'Ape') /* HeritageGroup */;
 
