@@ -632,6 +632,8 @@ namespace ACE.Server.Entity
             MorphGemRareReduction,
             MorphGemCD,
             MorphGemCDR,
+            MorphGemBurden,
+            MorphGemValue,
             MorphGemJewelersSawblade,
             MorphGemDotResist,
             MorphGemVitality,
@@ -639,8 +641,6 @@ namespace ACE.Server.Entity
             MorphGemImpen,
             MorphGemRandomSet,
             MorphGemRandomSetDurable,
-            MorphGemCloakUpgrade,
-            MorphGemDmgRating
         };
 
         public static HashSet<uint> WorldBossJewelry = new HashSet<uint>()
@@ -661,7 +661,9 @@ namespace ACE.Server.Entity
             try
             {
                 //Only allow loot gen items to be morphed, except for gems that are allowed to be applied to quest / rare items
-                if ((target.ItemWorkmanship == null || target.IsAttunedOrContainsAttuned || target.ResistMagic == 9999)
+                if ((target.ItemWorkmanship == null ||
+                    target.IsAttunedOrContainsAttuned ||
+                    (target.ResistMagic == 9999 && !target.IsShield && !(target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false)))
                     && !morphGemsAllowedNonLootGen.Contains(source.WeenieClassId))
                 {
                     player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
@@ -1635,7 +1637,7 @@ namespace ACE.Server.Entity
                         //Apply to any armor piece(loot gen, quest and rare armor and add +2 CDR
                         //rating, if piece of armor already has ratings then it replaces but does
                         //not stack.Cap of 2 rating/piece of armor
-                        if (!target.ArmorLevel.HasValue || target.ArmorLevel.Value < 1)
+                        if (!target.ArmorLevel.HasValue || target.ArmorLevel.Value < 1 || target.IsShield)
                         {
                             playerMsg = "This gem can only be used on armor";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
