@@ -503,7 +503,7 @@ namespace ACE.Server.Entity.DungeonControl
                 treasureWorldObj.CurrentLandblock = landblock;
                 treasureWorldObj.TimeToRot = -1;
                 treasureWorldObj.Lifespan = 900;
-                treasureWorldObj.Name = $"{dungeon.OwningAllegianceName}''s Treasure";
+                treasureWorldObj.Name = $"{dungeon.OwningAllegianceName}'s Treasure";
                 treasureWorldObj.EnterWorld();
 
                 dungeon.LastTreasureSpawnTime  = DateTime.UtcNow;
