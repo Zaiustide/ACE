@@ -499,8 +499,8 @@ namespace ACE.Server.Entity
                 {
                     var allegId = playersInControlPointByAlleg.Keys.First();
 
-                    var dungeon = DC.DungeonControl.GetOwnableDungeonByLandblockId(this.Id.Raw);
-                    if (!dungeon.OwningAllegianceId.HasValue || dungeon.OwningAllegianceId != allegId)
+                    var dungeon = DC.DungeonControl.GetOwnableDungeonByLandblockId(this.Id.Landblock);
+                    if (!dungeon?.OwningAllegianceId.HasValue ?? false || dungeon?.OwningAllegianceId != allegId)
                     {
                         DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);
 
