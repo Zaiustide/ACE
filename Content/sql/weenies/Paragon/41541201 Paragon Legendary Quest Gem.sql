@@ -1,4 +1,4 @@
-DELETE FROM `weenie` WHERE `class_Id` = 41541202;
+5DELETE FROM `weenie` WHERE `class_Id` = 41541202;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
 VALUES (41541202, 'ace41541202-paragonlegquestgem', 44, '2022-10-19 15:43:32') /* CraftTool */;
@@ -9,7 +9,7 @@ VALUES (41541202,   1,        128) /* ItemType - Misc */
      , (41541202,  11,          1) /* MaxStackSize */
      , (41541202,  12,          1) /* StackSize */
      , (41541202,  13,         50) /* StackUnitEncumbrance */
-     , (41541202,  15,         25) /* StackUnitValue */
+     , (41541202,  15,         5) /* StackUnitValue */
      , (41541202,  16,          8) /* ItemUseable - Contained */
      , (41541202,  19,          5) /* Value */
      , (41541202,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
