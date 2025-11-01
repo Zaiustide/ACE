@@ -1,4 +1,4 @@
-5DELETE FROM `weenie` WHERE `class_Id` = 41541202;
+DELETE FROM `weenie` WHERE `class_Id` = 41541202;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
 VALUES (41541202, 'ace41541202-paragonlegquestgem', 44, '2022-10-19 15:43:32') /* CraftTool */;
