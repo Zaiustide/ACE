@@ -22,7 +22,7 @@ VALUES (600033,  22, True ) /* Inscribable */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (600033,   1, 'Gem of Damage Enhancement') /* Name */
-     , (600033,  16, 'An odd looking gem that seems to give off a powerful aura. This gem can be applied to weapons, casters, shields and clothing to add a additional damage rating. If there is damage reduction rating on the item, this will be removed. Gems can be applied more then once for a chance to reroll the rating currently on the item.') /* LongDesc */;
+     , (600033,  16, 'An odd looking gem that seems to give off a powerful aura. This gem can be applied to weapons, casters, shields and clothing to add additional Damage Rating. If there is damage reduction rating on the item, this will be removed. Gems can be applied more then once for a chance to reroll the rating currently on the item.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (600033,   1, 0x020009A7) /* Setup */
