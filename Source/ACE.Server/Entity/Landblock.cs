@@ -498,18 +498,22 @@ namespace ACE.Server.Entity
                 if(shouldAwardPoints)
                 {
                     var allegId = playersInControlPointByAlleg.Keys.First();
-                    DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);
 
-                    foreach (var player in playersInControlPointByAlleg[allegId])
+                    var dungeon = DC.DungeonControl.GetOwnableDungeonByLandblockId(this.Id.Raw);
+                    if (!dungeon.OwningAllegianceId.HasValue || dungeon.OwningAllegianceId != allegId)
                     {
-                        DC.DungeonControl.PKQuest_Score(allegId, this);
+                        DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);
+
+                        foreach (var player in playersInControlPointByAlleg[allegId])
+                        {
+                            DC.DungeonControl.PKQuest_Score(allegId, this);
+                        }
                     }
                 }
 
                 DC.DungeonControl.SpawnTreasure(this.Id.Landblock);
 
-                DC.DungeonControl.ExpireOwnership(this.Id.Landblock);
-                
+                DC.DungeonControl.ExpireOwnership(this.Id.Landblock);                
             }
             catch (Exception ex)
             {
