@@ -1679,16 +1679,24 @@ namespace ACE.Server.Entity
                             !target.IsShield &&
                             ((target.ArmorLevel ?? 0) < 1))
                         {
-                            playerMsg = "This gem can only be used on armor, casters, weapons and shields";
+                            playerMsg = "This gem can only be used on armor, casters, 2 hand weapons, missile weapons and shields";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
-                        }
+                        }                        
 
                         int newCDRating = 0;
                         int oldCDRating = target.GearCritDamage ?? 0;
                         int oldCDRRating = target.GearCritDamageResist ?? 0;
                         var targetMeleeWeaponCD = target as MeleeWeapon;
+
+                        if(targetMeleeWeaponCD != null && targetMeleeWeaponCD.WeaponSkill != Skill.TwoHandedCombat)
+                        {
+                            playerMsg = "This gem can only be used on armor, casters, 2 hand weapons, missile weapons and shields";
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
 
                         //Handle armor
                         if ((target.ArmorLevel ?? 0) > 0 && !target.IsShield)
