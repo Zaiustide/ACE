@@ -447,12 +447,17 @@ namespace ACE.Server.Entity
                     if (player.Location.GetCell() == this.DungeonControlPointCell)
                     {
                         //Track by alleg - points are only awarded if two or more members of a whitelisted allegiance are in the control point and no enemies are in the control point
+                        var sessionIP = player.Session?.EndPointC2S?.Address?.ToString();
                         var allegId = player.Allegiance?.MonarchId;
                         if (allegId.HasValue)
                         {
                             if(playersInControlPointByAlleg.ContainsKey(allegId.Value))
                             {
-                                playersInControlPointByAlleg[allegId.Value].Add(player);
+                                //Only allow one player per IP to count towards points - borrowing the arena allow same IP flag to be able to bypass this for testing
+                                if (PropertyManager.GetBool("arena_allow_same_ip_match").Item || playersInControlPointByAlleg[allegId.Value].FirstOrDefault(x => (x.Session?.EndPointC2S?.Address?.ToString() ?? string.Empty).Equals(sessionIP)) == null)
+                                {
+                                    playersInControlPointByAlleg[allegId.Value].Add(player);
+                                }
                             }
                             else
                             {
@@ -465,10 +470,19 @@ namespace ACE.Server.Entity
                         }
 
                         //Drain Health, Stamina and Mana while standing in the control point
-                        player.UpdateVitalDelta(player.Health, -100);
-                        player.UpdateVitalDelta(player.Stamina, -100);
-                        player.UpdateVitalDelta(player.Mana, -100);
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The hungry whispers of the slain scratch at the edges of your mind as your life force slowly seeps from your very being.", ChatMessageType.Broadcast));
+                        if (player.Health.Current <= 100)
+                        {
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The tortured souls of the slain scream in triumph as your life is rabidly consumed.", ChatMessageType.Broadcast));
+                            player.Die();                            
+                        }
+                        else
+                        {
+                            player.UpdateVitalDelta(player.Health, -100);
+                            player.UpdateVitalDelta(player.Stamina, -100);
+                            player.UpdateVitalDelta(player.Mana, -100);
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The hungry whispers of the slain scratch at the edges of your mind as your life force slowly seeps from your very being.", ChatMessageType.Broadcast));
+                        }
+                        
                     }
                 }
 
