@@ -55,7 +55,7 @@ VALUES (514108532, -1, 10004, 1, 1, 1, 1, 72, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) 
 	 , (514108532, 0.24, 38726, 1, 1, 5, 1, 8, 5, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Black Market Gem of Dispelling (38726) (x1 up to max of 5) - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (514108532, 0.25, 510000, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate A box (510000) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (514108532, 0.3, 52968, 1, 1, 100, 1, 8, 100, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Infused Amber Shard - Regenerate upon PickUp - Location to (re)Generate: Contain */
-	 , (514108532, 0.325, 52969, 1, 1, 20, 1, 8, 20, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Corrupted Amber Shard (52969) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
+	 , (514108532, 0.325, 52969, 1, 1, 100, 1, 8, 100, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Corrupted Amber Shard (52969) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
      , (514108532, 0.375, 20630, 1, 1, 25, 1, 8, 25, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Trade Note (250,000) (20630) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
      , (514108532, 0.40, 490321, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Luminance Exchange Token (490321) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (514108532, 0.425, 480634, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Duped Gem of Greater Luminance (480634) (x1 up to max of 4) - Regenerate upon PickUp - Location to (re)Generate: Contain */
@@ -66,6 +66,6 @@ VALUES (514108532, -1, 10004, 1, 1, 1, 1, 72, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) 
 	 , (514108532, 0.90, 480611, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Experience Certificate (480611) (x1 up to max of 1) - Regenerate upon PickUp - Location to (re)Generate: Contain */
 	 , (514108532, 0.94, 490070, 1, 1, 2, 1, 8, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Water of Enlightenment (490070) (x1 up to max of 1) - Regenerate upon PickUp - Location to (re)Generate: Contain */
      , (514108532, 0.95, 480612, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Darkbeat's Golem Drawing (480612) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
-	 , (514108532, 0.97, 600030, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Morph Gem (600030) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
-	 , (514108532, 0.99, 600031, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Resist Morph Gem (600031) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
+	 , (514108532, 0.975, 600030, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Morph Gem (600030) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
+	 , (514108532, 0.999, 600031, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Resist Morph Gem (600031) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
 	 , (514108532, 1, 30258, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Shimmering Skeleton Key (30258) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */;

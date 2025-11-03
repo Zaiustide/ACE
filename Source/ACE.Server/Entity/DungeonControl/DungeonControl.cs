@@ -38,7 +38,7 @@ namespace ACE.Server.Entity.DungeonControl
                     shrethCaverns.XpAndLumBonus = 2.0f;
                     shrethCaverns.OwnershipExpirationHours = 8;
                     shrethCaverns.TreasureWeenieId = 514108532;
-                    shrethCaverns.TreasureSpawnRateMins = 15;
+                    shrethCaverns.TreasureSpawnRateMins = 5;
 
                     shrethCaverns.GuardianSpawnLocs = new List<Position>();
                     //drop
@@ -137,7 +137,7 @@ namespace ACE.Server.Entity.DungeonControl
                     ancientTemple.XpAndLumBonus = 2.0f;
                     ancientTemple.OwnershipExpirationHours = 8;
                     ancientTemple.TreasureWeenieId = 514108532;
-                    ancientTemple.TreasureSpawnRateMins = 15;
+                    ancientTemple.TreasureSpawnRateMins = 5;
                     ancientTemple.GuardianSpawnLocs = new List<Position>();
                     //0x0174015C [67.659897 -110.523407 0.005000] 0.719811 0.000000 0.000000 0.694170
                     ancientTemple.GuardianSpawnLocs.Add(new Position(0x0174015C, 67.659897f, -110.523407f, 0.005000f, 0f, 0f, 0.694170f, 0.719811f));
@@ -234,7 +234,7 @@ namespace ACE.Server.Entity.DungeonControl
                     miteHole.XpAndLumBonus = 2.0f;
                     miteHole.OwnershipExpirationHours = 8;
                     miteHole.TreasureWeenieId = 514108532;
-                    miteHole.TreasureSpawnRateMins = 15;
+                    miteHole.TreasureSpawnRateMins = 5;
                     miteHole.GuardianSpawnLocs = new List<Position>();                    
                     //0x00E1034A [51.393631 -248.015274 0.005000] 0.887417 0.000000 0.000000 -0.460967
                     miteHole.GuardianSpawnLocs.Add(new Position(0x00E1034A, 51.393631f, -248.015274f, 0.005000f, 0f, 0f, -0.460967f, 0.887417f));
