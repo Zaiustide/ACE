@@ -67,4 +67,5 @@ VALUES (514108532, -1, 10004, 1, 1, 1, 1, 72, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) 
 	 , (514108532, 0.94, 490070, 1, 1, 2, 1, 8, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Water of Enlightenment (490070) (x1 up to max of 1) - Regenerate upon PickUp - Location to (re)Generate: Contain */
      , (514108532, 0.95, 480612, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Darkbeat's Golem Drawing (480612) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
 	 , (514108532, 0.97, 600030, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Morph Gem (600030) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
-	 , (514108532, 1, 600031, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Resist Morph Gem (600031) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */;
+	 , (514108532, 0.99, 600031, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Overpower Resist Morph Gem (600031) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */
+	 , (514108532, 1, 30258, 1, 1, 1, 1, 8, -1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0) /* Generate Shimmering Skeleton Key (30258) (x1 up to max of 1) - Regenerate upon Destruction - Location to (re)Generate: Contain */;
