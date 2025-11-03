@@ -1,8 +1,9 @@
+using ACE.Server.Physics.Common;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using ACE.Server.Physics.Common;
 
 namespace ACE.Server.Physics.Combat
 {
@@ -12,7 +13,7 @@ namespace ACE.Server.Physics.Combat
         public TargetInfo TargetInfo;
         public Dictionary<uint, TargettedVoyeurInfo> VoyeurTable;
         public double LastUpdateTime;
-
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public TargetManager() { }
 
         public TargetManager(PhysicsObj physObj)
@@ -55,27 +56,34 @@ namespace ACE.Server.Physics.Combat
 
         public void HandleTargetting()
         {
-            if (PhysicsObj == null) return;
-
-            if (PhysicsTimer.CurrentTime - LastUpdateTime < 0.5f) return;
-
-            if (TargetInfo != null && TargetInfo.TargetPosition == null)
+            try
             {
-                //Console.WriteLine("TargetManager.HandleTargetting - null position");
-                return;
-            }
+                if (PhysicsObj == null) return;
 
-            if (TargetInfo != null && TargetInfo.Status == TargetStatus.Undefined && TargetInfo.LastUpdateTime + 10.0f < PhysicsTimer.CurrentTime)
+                if (PhysicsTimer.CurrentTime - LastUpdateTime < 0.5f) return;
+
+                if (TargetInfo != null && TargetInfo.TargetPosition == null)
+                {
+                    //Console.WriteLine("TargetManager.HandleTargetting - null position");
+                    return;
+                }
+
+                if (TargetInfo != null && TargetInfo.Status == TargetStatus.Undefined && TargetInfo.LastUpdateTime + 10.0f < PhysicsTimer.CurrentTime)
+                {
+                    TargetInfo.Status = TargetStatus.TimedOut;
+                    PhysicsObj.HandleUpdateTarget(new TargetInfo(TargetInfo));  // ref?
+                }
+
+                if (VoyeurTable != null)
+                    foreach (var voyeur in VoyeurTable.Values.ToList())
+                        CheckAndUpdateVoyeur(voyeur);
+
+                LastUpdateTime = PhysicsTimer.CurrentTime;
+            }
+            catch(Exception ex)
             {
-                TargetInfo.Status = TargetStatus.TimedOut;
-                PhysicsObj.HandleUpdateTarget(new TargetInfo(TargetInfo));  // ref?
+                log.ErrorFormat("Exception in TargetManager.HandleTargetting. ex: {0}", ex);
             }
-
-            if (VoyeurTable != null)
-                foreach (var voyeur in VoyeurTable.Values.ToList())
-                    CheckAndUpdateVoyeur(voyeur);
-
-            LastUpdateTime = PhysicsTimer.CurrentTime;
         }
 
         public void CheckAndUpdateVoyeur(TargettedVoyeurInfo voyeur)
