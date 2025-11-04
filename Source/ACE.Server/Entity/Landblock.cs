@@ -503,12 +503,7 @@ namespace ACE.Server.Entity
                     if (dungeon != null &&
                         (dungeon.OwningAllegianceId == null || dungeon.OwningAllegianceId != allegId))                    
                     {
-                        DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);
-
-                        foreach (var player in playersInControlPointByAlleg[allegId])
-                        {
-                            DC.DungeonControl.PKQuest_Score(allegId, this);
-                        }
+                        DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);                        
                     }
                 }
 
