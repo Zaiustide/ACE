@@ -3717,12 +3717,13 @@ namespace ACE.Server.Entity
 
                     #region MorphGemOverpower
                     case MorphGemOverpower:
-                        //Applies Overpower rating to weapons and casters
+                        //Applies Overpower rating to weapons, casters and shields
                         if (target as MeleeWeapon == null &&
                             !target.IsCaster &&
-                            !target.IsRanged)
+                            !target.IsRanged &&
+                            !target.IsShield)
                         {
-                            playerMsg = "This gem can only be used on weapons or magic casters";
+                            playerMsg = "This gem can only be used on weapons, magic casters or shields";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
@@ -3736,10 +3737,72 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        //Roll for an Overpower rating
-                        int opRating = ThreadSafeRandom.Next(1, 10);                        
-                        playerMsg = $"You have successfully used the {source.Name} to add +{opRating} Overpower Rating to your {target.NameWithMaterial}!";
-                        target.Overpower = opRating;
+                        int newOverpower = 0;
+                        var oldOverpower = target.Overpower;
+                        var targetMeleeWeaponOP = target as MeleeWeapon;
+                        if (targetMeleeWeaponOP != null && targetMeleeWeaponOP.W_WeaponType != WeaponType.TwoHanded)
+                        {
+                            if (oldOverpower >= 5)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has an Overpower rating of {oldOverpower} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (opBracketRoll > 0.99f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(3, 5);
+                            }
+                            else if (opBracketRoll > 0.9f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(1, 5);
+                            }
+                            else if (opBracketRoll > 0.8f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(2, 4);
+                            }
+                            else
+                            {
+                                newOverpower = ThreadSafeRandom.Next(1, 4);
+                            }
+                        }
+                        else
+                        {
+                            if (oldOverpower >= 10)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Rating of {oldOverpower} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (opBracketRoll > 0.99f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(6, 10);
+                            }
+                            else if (opBracketRoll > 0.9f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(1, 10);
+                            }
+                            else if (opBracketRoll > 0.8f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(4, 9);
+                            }
+                            else if (opBracketRoll > 0.5f)
+                            {
+                                newOverpower = ThreadSafeRandom.Next(4, 8);
+                            }
+                            else
+                            {
+                                newOverpower = ThreadSafeRandom.Next(1, 8);
+                            }
+                        }
+                                               
+                        playerMsg = $"You have successfully used the {source.Name} to add +{newOverpower} Overpower Rating to your {target.NameWithMaterial}!";
+                        target.Overpower = newOverpower;
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemOverpower);
                         break;
@@ -3750,9 +3813,10 @@ namespace ACE.Server.Entity
                         //Applies Overpower rating to weapons and casters
                         if (target as MeleeWeapon == null &&
                             !target.IsCaster &&
-                            !target.IsRanged)
+                            !target.IsRanged &&
+                            !target.IsShield)
                         {
-                            playerMsg = "This gem can only be used on weapons or magic casters";
+                            playerMsg = "This gem can only be used on weapons, magic casters or shields";
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
@@ -3766,10 +3830,72 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        //Roll for an Overpower rating
-                        int oprRating = ThreadSafeRandom.Next(1, 10);
-                        playerMsg = $"You have successfully used the {source.Name} to add +{oprRating} Overpower Resist Rating to your {target.NameWithMaterial}!";
-                        target.OverpowerResist = oprRating;
+                        int newOverpowerResist = 0;
+                        var oldOverpowerResist = target.OverpowerResist;
+                        var targetMeleeWeaponOPR = target as MeleeWeapon;
+                        if (targetMeleeWeaponOPR != null && targetMeleeWeaponOPR.W_WeaponType != WeaponType.TwoHanded)
+                        {
+                            if (oldOverpowerResist >= 5)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Resist rating of {oldOverpowerResist} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (opBracketRoll > 0.99f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(3, 5);
+                            }
+                            else if (opBracketRoll > 0.9f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(1, 5);
+                            }
+                            else if (opBracketRoll > 0.8f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(2, 4);
+                            }
+                            else
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(1, 4);
+                            }
+                        }
+                        else
+                        {
+                            if (oldOverpowerResist >= 10)
+                            {
+                                playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Resist Rating of {oldOverpowerResist} and cannot be further upgraded."; player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                                player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                return;
+                            }
+
+                            var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+
+                            if (opBracketRoll > 0.99f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(6, 10);
+                            }
+                            else if (opBracketRoll > 0.9f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(1, 10);
+                            }
+                            else if (opBracketRoll > 0.8f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(4, 9);
+                            }
+                            else if (opBracketRoll > 0.5f)
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(4, 8);
+                            }
+                            else
+                            {
+                                newOverpowerResist = ThreadSafeRandom.Next(1, 8);
+                            }
+                        }
+
+                        playerMsg = $"You have successfully used the {source.Name} to add +{newOverpowerResist} Overpower Resist Rating to your {target.NameWithMaterial}!";
+                        target.OverpowerResist = newOverpowerResist;
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemOverpowerResist);
                         break;
