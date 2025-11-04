@@ -392,6 +392,8 @@ namespace ACE.Server.Entity.DungeonControl
                     dungeon.AllegianceScoreBoard[allegianceId].Score += 5;
                 }
 
+                DungeonControl.PKQuest_Score(allegianceId, landblock);
+
                 foreach (var alleg in dungeon.AllegianceScoreBoard)
                 {
                     //Remove 2 points from all other allegiances
