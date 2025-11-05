@@ -1726,11 +1726,11 @@ namespace ACE.Server.Entity
 
                             var bracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (bracketRoll > 0.99f)
+                            if (bracketRoll > 0.995f)
                             {
                                 newCDRating = ThreadSafeRandom.Next(6, 10);
                             }
-                            else if (bracketRoll > 0.9f)
+                            else if (bracketRoll > 0.95f)
                             {
                                 newCDRating = ThreadSafeRandom.Next(1, 10);
                             }
@@ -1758,17 +1758,17 @@ namespace ACE.Server.Entity
 
                             var bracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (bracketRoll > 0.99f)
+                            if (bracketRoll > 0.995f)
                             {
                                 newCDRating = ThreadSafeRandom.Next(6, 15);
                             }
-                            else if (bracketRoll > 0.9f)
+                            else if (bracketRoll > 0.95f)
                             {
                                 newCDRating = ThreadSafeRandom.Next(1, 15);
                             }
                             else if (bracketRoll > 0.8f)
                             {
-                                newCDRating = ThreadSafeRandom.Next(6, 12);
+                                newCDRating = ThreadSafeRandom.Next(6, 14);
                             }
                             else if (bracketRoll > 0.5f)
                             {
@@ -1790,11 +1790,11 @@ namespace ACE.Server.Entity
 
                             var bracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (bracketRoll > 0.99f)
+                            if (bracketRoll > 0.995f)
                             {
                                 newCDRating = ThreadSafeRandom.Next(6, 10);
                             }
-                            else if (bracketRoll > 0.9f)
+                            else if (bracketRoll > 0.95f)
                             {
                                 newCDRating = ThreadSafeRandom.Next(1, 10);
                             }
@@ -3751,11 +3751,11 @@ namespace ACE.Server.Entity
 
                             var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (opBracketRoll > 0.99f)
+                            if (opBracketRoll > 0.995f)
                             {
                                 newOverpower = ThreadSafeRandom.Next(3, 5);
                             }
-                            else if (opBracketRoll > 0.9f)
+                            else if (opBracketRoll > 0.95f)
                             {
                                 newOverpower = ThreadSafeRandom.Next(1, 5);
                             }
@@ -3779,11 +3779,11 @@ namespace ACE.Server.Entity
 
                             var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (opBracketRoll > 0.99f)
+                            if (opBracketRoll > 0.995f)
                             {
                                 newOverpower = ThreadSafeRandom.Next(6, 10);
                             }
-                            else if (opBracketRoll > 0.9f)
+                            else if (opBracketRoll > 0.95f)
                             {
                                 newOverpower = ThreadSafeRandom.Next(1, 10);
                             }
@@ -3820,15 +3820,7 @@ namespace ACE.Server.Entity
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
-                        }
-
-                        if (target.OverpowerResist > 0)
-                        {
-                            playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Resist Rating of +{target.OverpowerResist} and cannot be further enhanced";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
+                        }                        
 
                         int newOverpowerResist = 0;
                         var oldOverpowerResist = target.OverpowerResist;
@@ -3844,11 +3836,11 @@ namespace ACE.Server.Entity
 
                             var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (opBracketRoll > 0.99f)
+                            if (opBracketRoll > 0.995f)
                             {
                                 newOverpowerResist = ThreadSafeRandom.Next(3, 5);
                             }
-                            else if (opBracketRoll > 0.9f)
+                            else if (opBracketRoll > 0.95f)
                             {
                                 newOverpowerResist = ThreadSafeRandom.Next(1, 5);
                             }
@@ -3872,11 +3864,11 @@ namespace ACE.Server.Entity
 
                             var opBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (opBracketRoll > 0.99f)
+                            if (opBracketRoll > 0.995f)
                             {
                                 newOverpowerResist = ThreadSafeRandom.Next(6, 10);
                             }
-                            else if (opBracketRoll > 0.9f)
+                            else if (opBracketRoll > 0.95f)
                             {
                                 newOverpowerResist = ThreadSafeRandom.Next(1, 10);
                             }
@@ -4011,11 +4003,11 @@ namespace ACE.Server.Entity
 
                             var dmgBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if(dmgBracketRoll > 0.99f)
+                            if(dmgBracketRoll > 0.995f)
                             {
                                 newDmgRating = ThreadSafeRandom.Next(3, 5);
                             }
-                            else if (dmgBracketRoll > 0.9f)
+                            else if (dmgBracketRoll > 0.95f)
                             {
                                 newDmgRating = ThreadSafeRandom.Next(1, 5);
                             }
@@ -4039,11 +4031,11 @@ namespace ACE.Server.Entity
 
                             var dmgBracketRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
 
-                            if (dmgBracketRoll > 0.99f)
+                            if (dmgBracketRoll > 0.995f)
                             {
                                 newDmgRating = ThreadSafeRandom.Next(6, 10);
                             }
-                            else if (dmgBracketRoll > 0.9f)
+                            else if (dmgBracketRoll > 0.95f)
                             {
                                 newDmgRating = ThreadSafeRandom.Next(1, 10);
                             }
