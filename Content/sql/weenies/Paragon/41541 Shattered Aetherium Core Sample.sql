@@ -9,10 +9,10 @@ VALUES (41541,   1,        128) /* ItemType - Misc */
      , (41541,  11,          1) /* MaxStackSize */
      , (41541,  12,          1) /* StackSize */
      , (41541,  13,        100) /* StackUnitEncumbrance */
-     , (41541,  15,          0) /* StackUnitValue */
+     , (41541,  15,          5) /* StackUnitValue */
      , (41541,  16,          1) /* ItemUseable - No */
      , (41541,  18,         64) /* UiEffects - Lightning */
-     , (41541,  19,         25) /* Value */
+     , (41541,  19,          5) /* Value */
      , (41541,  33,          1) /* Bonded - Bonded */
      , (41541,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (41541, 114,          1) /* Attuned - Attuned */;

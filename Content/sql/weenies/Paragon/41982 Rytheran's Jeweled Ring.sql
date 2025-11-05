@@ -11,7 +11,7 @@ VALUES (41982,   1,        128) /* ItemType - Misc */
      , (41982,  13,          2) /* StackUnitEncumbrance */
      , (41982,  15,          0) /* StackUnitValue */
      , (41982,  16,          1) /* ItemUseable - No */
-     , (41982,  19,         25) /* Value */
+     , (41982,  19,          5) /* Value */
      , (41982,  33,          1) /* Bonded - Bonded */
      , (41982,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (41982, 114,          1) /* Attuned - Attuned */;

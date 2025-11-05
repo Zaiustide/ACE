@@ -7,7 +7,7 @@ INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (48876,   1,        128) /* ItemType - Misc */
      , (48876,   5,        100) /* EncumbranceVal */
      , (48876,  16,          1) /* ItemUseable - No */
-     , (48876,  19,         25) /* Value */
+     , (48876,  19,          5) /* Value */
      , (48876,  33,          1) /* Bonded - Bonded */
      , (48876,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (48876, 114,          1) /* Attuned - Attuned */;

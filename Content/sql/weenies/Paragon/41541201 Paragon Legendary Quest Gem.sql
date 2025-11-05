@@ -9,7 +9,7 @@ VALUES (41541202,   1,        128) /* ItemType - Misc */
      , (41541202,  11,          1) /* MaxStackSize */
      , (41541202,  12,          1) /* StackSize */
      , (41541202,  13,         50) /* StackUnitEncumbrance */
-     , (41541202,  15,         5) /* StackUnitValue */
+     , (41541202,  15,          5) /* StackUnitValue */
      , (41541202,  16,          8) /* ItemUseable - Contained */
      , (41541202,  19,          5) /* Value */
      , (41541202,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */

@@ -8,7 +8,7 @@ VALUES (37058,   1,        128) /* ItemType - Misc */
      , (37058,   5,          1) /* EncumbranceVal */
      , (37058,  16,          1) /* ItemUseable - No */
      , (37058,  18,         64) /* UiEffects - Lightning */
-     , (37058,  19,         25) /* Value */
+     , (37058,  19,          5) /* Value */
      , (37058,  33,          1) /* Bonded - Bonded */
      , (37058,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (37058, 114,          1) /* Attuned - Attuned */;

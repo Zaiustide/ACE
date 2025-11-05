@@ -8,7 +8,7 @@ VALUES (35910,   1,        128) /* ItemType - Misc */
      , (35910,   3,         13) /* PaletteTemplate - Purple */
      , (35910,   5,        150) /* EncumbranceVal */
      , (35910,  16,          1) /* ItemUseable - No */
-     , (35910,  19,         25) /* Value */
+     , (35910,  19,          5) /* Value */
      , (35910,  33,          1) /* Bonded - Bonded */
      , (35910,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (35910, 114,          1) /* Attuned - Attuned */;

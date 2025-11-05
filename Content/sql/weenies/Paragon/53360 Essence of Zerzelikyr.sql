@@ -9,9 +9,9 @@ VALUES (53360,   1,        128) /* ItemType - Misc */
      , (53360,  11,          1) /* MaxStackSize */
      , (53360,  12,          1) /* StackSize */
      , (53360,  13,          1) /* StackUnitEncumbrance */
-     , (53360,  15,          0) /* StackUnitValue */
+     , (53360,  15,          5) /* StackUnitValue */
      , (53360,  16,          1) /* ItemUseable - No */
-     , (53360,  19,         25) /* Value */
+     , (53360,  19,          5) /* Value */
      , (53360,  33,          1) /* Bonded - Bonded */
      , (53360,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (53360, 114,          1) /* Attuned - Attuned */;

@@ -9,9 +9,9 @@ VALUES (41541200,   1,        128) /* ItemType - Misc */
      , (41541200,  11,          1) /* MaxStackSize */
      , (41541200,  12,          1) /* StackSize */
      , (41541200,  13,         50) /* StackUnitEncumbrance */
-     , (41541200,  15,         25) /* StackUnitValue */
+     , (41541200,  15,          5) /* StackUnitValue */
      , (41541200,  16,          8) /* ItemUseable - Contained */
-     , (41541200,  19,         25) /* Value */
+     , (41541200,  19,          5) /* Value */
      , (41541200,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
      , (41541200,  94,         16) /* TargetType - Creature */
      , (41541200, 151,          1) /* HookType - Floor */;
