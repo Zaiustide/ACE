@@ -3729,14 +3729,6 @@ namespace ACE.Server.Entity
                             return;
                         }
 
-                        if (target.Overpower > 0)
-                        {
-                            playerMsg = $"Your {target.NameWithMaterial} already has an Overpower Rating of +{target.Overpower} and cannot be further enhanced";
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
-                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            return;
-                        }
-
                         int newOverpower = 0;
                         var oldOverpower = target.Overpower;
                         var targetMeleeWeaponOP = target as MeleeWeapon;
@@ -3810,7 +3802,7 @@ namespace ACE.Server.Entity
 
                     #region MorphGemOverpowerResist
                     case MorphGemOverpowerResist:
-                        //Applies Overpower rating to weapons and casters
+                        //Applies Overpower Resist rating to weapons and casters
                         if (target as MeleeWeapon == null &&
                             !target.IsCaster &&
                             !target.IsRanged &&
