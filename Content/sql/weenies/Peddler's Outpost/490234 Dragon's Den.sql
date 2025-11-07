@@ -24,7 +24,7 @@ VALUES (490234,  54,       -0.1) /* UseRadius */;
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490234,   1, 'Dragon''s Den') /* Name */
      , (490234,  16, 'Entrance to Dragon''s Den.') /* LongDesc */
-     , (490234,  37, 'PeddlersDungeonEntryDragons');
+     ;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490234,   1, 0x02001945) /* Setup */

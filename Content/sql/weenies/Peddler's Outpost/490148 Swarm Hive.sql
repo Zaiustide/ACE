@@ -22,7 +22,7 @@ VALUES (490148,  54,    -0.1) /* UseRadius */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490148,   1, 'Swarm Hive') /* Name */
-     , (490148,  37, 'PeddlersDungeonEntrySwarmHive');
+     ;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490148,   1, 0x02001945) /* Setup */

@@ -22,7 +22,7 @@ VALUES (490288,  54,    -0.1) /* UseRadius */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490288,   1, 'Ancient Temple') /* Name */
-     , (490288,  37, 'PeddlersDungeonEntryGolems');
+     ;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (490288,   1, 0x02001945) /* Setup */
