@@ -24,6 +24,9 @@ namespace ACE.Database.Models.Log
                     case "ffa":
                         return "Free for All";
 
+                    case "tugak":
+                        return "Tugak War";
+
                     default:
                         return EventType;
                 }
@@ -125,9 +128,10 @@ namespace ACE.Database.Models.Log
                     {
                         case "1v1":
                         case "2v2":
+                        case "tugak":
                             return new TimeSpan(0, 15, 0);
                         case "ffa":
-                            return new TimeSpan(0, 25, 0);
+                            return new TimeSpan(0, 25, 0);                        
                         case "group":
                             return new TimeSpan(0, 30, 0);
                         default:
@@ -144,6 +148,7 @@ namespace ACE.Database.Models.Log
                     {
                         case "1v1":
                         case "2v2":
+                        case "tugak":
                             return this.StartDateTime.Value.AddMinutes(15) - DateTime.Now;
                         case "ffa":
                             return this.StartDateTime.Value.AddMinutes(25) - DateTime.Now;
@@ -177,6 +182,7 @@ namespace ACE.Database.Models.Log
                 {
                     case "1v1":
                     case "2v2":
+                    case "tugak":
                         return this.StartDateTime.Value.AddMinutes(20) - DateTime.Now;
                     case "ffa":
                         return this.StartDateTime.Value.AddMinutes(30) - DateTime.Now;

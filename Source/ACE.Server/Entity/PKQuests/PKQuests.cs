@@ -144,6 +144,24 @@ namespace ACE.Server.Entity.PKQuests
                     arena_ffa_2.TaskCount = 2;
                     _pkQuestList.Add(arena_ffa_2);
 
+                    //- Participate in 2 Tugak arena match
+                    var arena_tugak_2 = new PKQuest();
+                    arena_tugak_2.QuestCode = "ARENA_TUGAK_2";
+                    arena_tugak_2.Description = "Participate in 2 Arena Tugak War matches";
+                    arena_tugak_2.RewardDescription = "40k luminance, 25% XP to next level, 1 Darkbeat Key, 1 Phial of Bloody Tears, 5 PK Trophies";
+                    arena_tugak_2.Rewards = new List<string>() { "LUM,40000", "XP%,25", "DBKEY,1", "PKTROPHY,5", "PHIAL,1" };
+                    arena_tugak_2.TaskCount = 2;
+                    _pkQuestList.Add(arena_tugak_2);
+
+                    //- Participate in 25 Tugak arena match
+                    var arena_tugak_25 = new PKQuest();
+                    arena_tugak_25.QuestCode = "ARENA_TUGAK_25";
+                    arena_tugak_25.Description = "Participate in 25 Arena Tugak War matches";
+                    arena_tugak_25.RewardDescription = "120k luminance, 100% XP to next level, 4 Darkbeat Keys, 15 Phials of Bloody Tears, 250 PK Trophies, 2 Boxes, 2 Hera Keys";
+                    arena_tugak_25.Rewards = new List<string>() { "LUM,120000", "XP%,100", "DBKEY,4", "PKTROPHY,250", "PHIAL,15", "BOX,2", "HERA,2" };
+                    arena_tugak_25.TaskCount = 25;
+                    _pkQuestList.Add(arena_tugak_25);
+
                     //- Participate in 1 group arena match
                     var arena_group_1 = new PKQuest();
                     arena_group_1.QuestCode = "ARENA_GROUP_1";
@@ -215,6 +233,33 @@ namespace ACE.Server.Entity.PKQuests
                     arena_ffa_top3.Rewards = new List<string>() { "LUM,20000", "XP%,35", "DBKEY,1", "PKTROPHY,5", "PHIAL,1" };
                     arena_ffa_top3.TaskCount = 1;
                     _pkQuestList.Add(arena_ffa_top3);
+
+                    //-Place 1st in a Tugak War arena match
+                    var ARENA_TUGAK_WIN_1 = new PKQuest();
+                    ARENA_TUGAK_WIN_1.QuestCode = "ARENA_TUGAK_WIN_1";
+                    ARENA_TUGAK_WIN_1.Description = "Win 1 Arena FFA match";
+                    ARENA_TUGAK_WIN_1.RewardDescription = "80k luminance, 75% XP to next level, 2 Darkbeat Keys, 1 Phial of Bloody Tears, 25 PK Trophies, 3 Phials of Bloody Tears, 1 Box.";
+                    ARENA_TUGAK_WIN_1.Rewards = new List<string>() { "LUM,80000", "XP%,75", "DBKEY,2", "PKTROPHY,25", "PHIAL,3", "Box,1" };
+                    ARENA_TUGAK_WIN_1.TaskCount = 1;
+                    _pkQuestList.Add(ARENA_TUGAK_WIN_1);
+
+                    //-Place 1st in 20 Tugak War arena matches
+                    var ARENA_TUGAK_WIN_20 = new PKQuest();
+                    ARENA_TUGAK_WIN_20.QuestCode = "ARENA_TUGAK_WIN_20";
+                    ARENA_TUGAK_WIN_20.Description = "Win 1 Arena Tugak War matches";
+                    ARENA_TUGAK_WIN_20.RewardDescription = "250k luminance, 200% XP to next level, 6 Darkbeat Keys, 25 Phial of Bloody Tears, 250 PK Trophies, 3 Boxes, 1 Radiant Amber Crystal.";
+                    ARENA_TUGAK_WIN_20.Rewards = new List<string>() { "LUM,250000", "XP%,200", "DBKEY,6", "PKTROPHY,250", "PHIAL,25", "BOX,3", "AMBER,1" };
+                    ARENA_TUGAK_WIN_20.TaskCount = 20;
+                    _pkQuestList.Add(ARENA_TUGAK_WIN_20);
+
+                    //- Place in the top 3 in a Tugak War arena match
+                    var arena_tugak_top3 = new PKQuest();
+                    arena_tugak_top3.QuestCode = "ARENA_TUGAK_TOP3";
+                    arena_tugak_top3.Description = "Place in the top 3 in an Arena Tugak War match";
+                    arena_tugak_top3.RewardDescription = "20k luminance, 35% XP to next level, 1 Darkbeat Key, 1 Phial of Bloody Tears, 5 PK Trophies";
+                    arena_tugak_top3.Rewards = new List<string>() { "LUM,20000", "XP%,35", "DBKEY,1", "PKTROPHY,5", "PHIAL,1" };
+                    arena_tugak_top3.TaskCount = 1;
+                    _pkQuestList.Add(arena_tugak_top3);
 
                     //- Win 1 group arena match
                     var arena_group_win_1 = new PKQuest();
@@ -469,7 +514,11 @@ namespace ACE.Server.Entity.PKQuests
 
         public static string[] PKQuests_Participate2v2Arena = { "ARENA_2v2_3", "ARENA_2v2_10" };
 
-        public static string[] PKQuests_Win2v2Arena = { "ARENA_2v2_WIN_2" };       
+        public static string[] PKQuests_Win2v2Arena = { "ARENA_2v2_WIN_2" };
+
+        public static string[] PKQuests_ParticipateTugakArena = { "ARENA_TUGAK_2", "ARENA_TUGAK_25" };
+
+        public static string[] PKQuests_WinTugakArena = { "ARENA_TUGAK_WIN_1", "ARENA_TUGAK_WIN_20" };
 
         public static string[] PKQuests_ParticipateGroupArena = { "ARENA_GROUP_1", "ARENA_GROUP_3", "ARENA_GROUP_10" };
 

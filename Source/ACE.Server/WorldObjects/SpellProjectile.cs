@@ -474,6 +474,9 @@ namespace ACE.Server.WorldObjects
 
                 if (sourcePlayer != null && sourcePlayer.IsArenaObserver)
                     return 0.0f;
+
+                if (arenaEvent.EventType.Equals("tugak") && Spell.IsHarmful && Spell.Id != (uint)SpellId.CurseRavenFury)
+                    return 0.0f;
             }
 
             //TODO if this is gauntlet, dont allow pvp dmg

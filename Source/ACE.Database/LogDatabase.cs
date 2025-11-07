@@ -349,6 +349,23 @@ namespace ACE.Database
                     returnMsg.Append($"  Damage Dealt: {ffaStats.TotalDmgDealt.ToString("n0")}\n");
                     returnMsg.Append($"  Damage Received: {ffaStats.TotalDmgReceived.ToString("n0")}\n\n");
 
+                    var tugakStats = stats.FirstOrDefault(x => x.EventType.Equals("tugak"));
+                    if (tugakStats == null)
+                        tugakStats = new ArenaCharacterStats();
+
+                    returnMsg.Append($"Tugak\n");
+                    returnMsg.Append($"  Rank: {DatabaseManager.Log.GetArenaRank("tugak", tugakStats.RankPoints).ToString("n0")}\n");
+                    returnMsg.Append($"  Rank Points: {tugakStats.RankPoints.ToString("n0")}\n");
+                    returnMsg.Append($"  Matches: {tugakStats.TotalMatches.ToString("n0")}\n");
+                    returnMsg.Append($"  Wins: {tugakStats.TotalWins.ToString("n0")}\n");
+                    returnMsg.Append($"  Draws: {tugakStats.TotalDraws.ToString("n0")}\n");
+                    returnMsg.Append($"  Losses: {tugakStats.TotalLosses.ToString("n0")}\n");
+                    returnMsg.Append($"  Disqualified: {tugakStats.TotalDisqualified.ToString("n0")}\n");
+                    returnMsg.Append($"  Kills: {tugakStats.TotalKills.ToString("n0")}\n");
+                    returnMsg.Append($"  Deaths: {tugakStats.TotalDeaths.ToString("n0")}\n");
+                    returnMsg.Append($"  Damage Dealt: {tugakStats.TotalDmgDealt.ToString("n0")}\n");
+                    returnMsg.Append($"  Damage Received: {tugakStats.TotalDmgReceived.ToString("n0")}\n\n");
+
                     var groupStats = stats.FirstOrDefault(x => x.EventType.Equals("group"));
                     if (groupStats == null)
                         groupStats = new ArenaCharacterStats();

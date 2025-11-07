@@ -1299,13 +1299,19 @@ namespace ACE.Server.WorldObjects
                         return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
                     }
 
+                    var arenaEvent = ArenaManager.GetArenaEventByLandblock(this.Location.Landblock);
+
                     if (spell.School == MagicSchool.VoidMagic)
-                    {
-                        var arenaEvent = ArenaManager.GetArenaEventByLandblock(this.Location.Landblock);
+                    {                        
                         if (arenaEvent == null || arenaEvent.Status != 4)
                         {
                             return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
                         }
+                    }
+
+                    if(arenaEvent != null && arenaEvent.EventType.Equals("tugak") && spell.Id != (uint)SpellId.CurseRavenFury)
+                    {
+                        return new List<WeenieErrorWithString>() { WeenieErrorWithString.YouFailToAffect_YouCannotAffectAnyone, WeenieErrorWithString._FailsToAffectYou_TheyCannotAffectAnyone };
                     }
                 }
             }
