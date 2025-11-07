@@ -154,6 +154,7 @@ namespace ACE.Server.Managers
                     maxOpposingTeamSize = 2;
                     break;
                 case "ffa":
+                case "tugak":
                     maxOpposingTeamSize = 1;
                     break;
                 case "group":
@@ -520,6 +521,42 @@ namespace ACE.Server.Managers
                             }
 
                             break;
+                        case "tugak":
+
+                            if (otherPlayers.Count() >= 9 ||
+                                (otherPlayers.Count() >= 8 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-1)) ||
+                                (otherPlayers.Count() >= 7 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-2)) ||
+                                (otherPlayers.Count() >= 6 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-3)) ||
+                                (otherPlayers.Count() >= 5 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-4)) ||
+                                (otherPlayers.Count() >= 4 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-5)))
+                            {
+                                finalPlayerList.Add(firstArenaPlayer);
+
+                                //if we have 10+ total players, start the match
+                                //each minute that goes by since the first person queued drop the player requirement by 1 until lower limit of 5                                                                
+                                foreach (var player in otherPlayers)
+                                {                                    
+                                    finalPlayerList.Add(player);                                    
+                                    if (finalPlayerList.Count() >= 15)
+                                        break;
+                                }
+
+                                if (finalPlayerList.Count() >= 10 ||
+                                    (finalPlayerList.Count() >= 9 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-1)) ||
+                                    (finalPlayerList.Count() >= 8 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-2)) ||
+                                    (finalPlayerList.Count() >= 7 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-3)) ||
+                                    (finalPlayerList.Count() >= 6 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-4)) ||
+                                    (finalPlayerList.Count() >= 5 && firstArenaPlayer.CreateDateTime < DateTime.Now.AddMinutes(-5)))
+                                {
+                                    weHaveEnoughPlayers = true;
+                                    foreach (var player in finalPlayerList)
+                                    {
+                                        player.TeamGuid = Guid.NewGuid();
+                                    }
+                                }
+                            }
+
+                            break;
                         case "group":
 
                             var firstPlayerTeamMembers = queueCopy.Where(x => x.TeamGuid == firstArenaPlayer.TeamGuid);
@@ -820,6 +857,7 @@ namespace ACE.Server.Managers
                 case "2v2":
                 case "ffa":
                 case "group":
+                case "tugak":
                     return true;
                 default:
                     return false;

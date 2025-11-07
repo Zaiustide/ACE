@@ -227,14 +227,15 @@ namespace ACE.Server.Entity
             }
 
             //Arenas - If this is an arena landblock
-            //don't allow any dmg except while the event is in a started status and between non-eliminated players            
+            //don't allow any dmg except while the event is in a started status and between non-eliminated players
+            //also disallow any dmg except from Tugak in a Tugak War event
             if (playerDefender != null && ArenaLocation.IsArenaLandblock(playerDefender.Location.Landblock))
             {
                 if (playerAttacker != null && playerAttacker.IsArenaObserver)
                     return 0.0f;
 
                 var arenaEvent = ArenaManager.GetArenaEventByLandblock(playerDefender.Location.Landblock);
-                if (arenaEvent == null || arenaEvent.Status != 4)
+                if (arenaEvent == null || arenaEvent.Status != 4 || arenaEvent.EventType.Equals("tugak"))
                 {
                     return 0.0f;
                 }                

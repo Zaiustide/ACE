@@ -12,7 +12,7 @@ VALUES (514108531,   1,         16) /* ItemType - Creature */
      , (514108531,  25,        999) /* Level */
      , (514108531,  27,          0) /* ArmorType - None */
      , (514108531,  40,          2) /* CombatMode - Melee */
-     , (514108531,  68,          2) /* TargetingTactic - Focused */
+     , (514108531,  68,          3) /* TargetingTactic - Random | Focused */
      , (514108531,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (514108531, 101,        129) /* AiAllowedCombatStyle - Unarmed, ThrownWeapon */
      , (514108531, 133,          2) /* ShowableOnRadar - ShowMovement */

@@ -1355,7 +1355,7 @@ namespace ACE.Server.WorldObjects.Managers
             if (targetPlayer != null && ArenaLocation.IsArenaLandblock(targetPlayer.Location.Landblock))
             {
                 var arenaEvent = ArenaManager.GetArenaEventByLandblock(targetPlayer.Location.Landblock);
-                if (arenaEvent == null || arenaEvent.Status != 4)
+                if (arenaEvent == null || arenaEvent.Status != 4 || arenaEvent.EventType.Equals("tugak"))
                 {
                     return;
                 }

@@ -28,6 +28,9 @@ namespace ACE.Database.Models.Log
                     case "ffa":
                         return "Free for All";
 
+                    case "tugak":
+                        return "Tugak War";
+
                     default:
                         return EventType;
                 }

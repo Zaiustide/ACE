@@ -607,7 +607,7 @@ namespace ACE.Server.Entity
 
             //Check to see if there's only one team still alive and in the arena
             //This approach is valid for XvX and FFA type events
-            //In the future if we add things like kind of the hill, capture the flag, etc, there will be different logic to check for a winner
+            //In the future if we add things like king of the hill, capture the flag, etc, there will be different logic to check for a winner
 
             //Get a distinct list of teams
             List<Guid> teamsStillAlive = new List<Guid>();
@@ -625,7 +625,7 @@ namespace ACE.Server.Entity
 
             if (teamsStillAlive.Count == 1)
             {
-                if (ActiveEvent.EventType.Equals("ffa"))
+                if (ActiveEvent.EventType.Equals("ffa") || ActiveEvent.EventType.Equals("tugak"))
                 {
                     var winner = ActiveEvent.Players.FirstOrDefault(x => x.TeamGuid == teamsStillAlive[0]);
                     if (winner != null)
@@ -884,6 +884,7 @@ namespace ACE.Server.Entity
                                 break;
 
                             case "ffa":
+                            case "tugak":
 
                                 //This is the first place player only
 
@@ -1033,6 +1034,11 @@ namespace ACE.Server.Entity
                                 player.CompletePkQuestTask("ARENA_FFA_WIN_1");
                                 player.CompletePkQuestTask("ARENA_FFA_TOP3");
                                 break;
+                            case "tugak":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateTugakArena);
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_WinTugakArena);
+                                player.CompletePkQuestTask("ARENA_TUGAK_TOP3");
+                                break;
                             case "group":
                                 player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
                                 player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_WinGroupArena);
@@ -1049,7 +1055,7 @@ namespace ACE.Server.Entity
             //Process losers
             foreach (var loser in losers)
             {
-                bool isFFA = loser.EventType.Equals("ffa");                
+                bool isFFA = loser.EventType.Equals("ffa") || loser.EventType.Equals("tugak");                
                 bool isOvertime = this.ActiveEvent.IsOvertime;
                 bool isDraw = (!isFFA && isOvertime) || (isFFA && loser.FinishPlace <= 3 && loser.FinishPlace > 0);
 
@@ -1080,9 +1086,9 @@ namespace ACE.Server.Entity
                 {
                     player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Tough luck, you've lost the {ActiveEvent.EventTypeDisplay} arena event to {winnerList}\nIf you're still in the {ArenaName} arena you have a short period before you're teleported to your lifestone.", ChatMessageType.System));
 
-                    if (loser.EventType.Equals("ffa"))
+                    if (loser.EventType.Equals("ffa") || loser.EventType.Equals("tugak"))
                     {
-                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The Free for All arena match in {ArenaName} has finished and you placed {loser.FinishPlaceDisplay}\nIf you're still in the {ArenaName} arena you have a short period before you're teleported to your lifestone.", ChatMessageType.System));
+                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The {loser.EventTypeDisplay} arena match in {ArenaName} has finished and you placed {loser.FinishPlaceDisplay}\nIf you're still in the {ArenaName} arena you have a short period before you're teleported to your lifestone.", ChatMessageType.System));
                     }
 
                     var shouldReward = IsPlayerRewardEligible(player, loser, ActiveEvent.Players) && !underageViolation;
@@ -1132,6 +1138,7 @@ namespace ACE.Server.Entity
                                 break;
 
                             case "ffa":
+                            case "tugak":
 
                                 if (loser.FinishPlace == 2)
                                 {
@@ -1364,6 +1371,11 @@ namespace ACE.Server.Entity
                                 if (loser.FinishPlace > 0 && loser.FinishPlace <= 3)
                                     player.CompletePkQuestTask("ARENA_FFA_TOP3");
                                 break;
+                            case "tugak":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateTugakArena);
+                                if (loser.FinishPlace > 0 && loser.FinishPlace <= 3)
+                                    player.CompletePkQuestTask("ARENA_TUGAK_TOP3");
+                                break;
                             case "group":
                                 player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
                                 break;
@@ -1533,7 +1545,7 @@ namespace ACE.Server.Entity
             {
                 underageViolation = true;
             }
-            else if (underageCount > 2 && ActiveEvent.EventType.Equals("ffa"))
+            else if (underageCount > 2 && (ActiveEvent.EventType.Equals("ffa") || ActiveEvent.EventType.Equals("tugak")))
             {
                 underageViolation = true;
             }
@@ -1617,6 +1629,11 @@ namespace ACE.Server.Entity
                                 player.CompletePkQuestTask("ARENA_FFA_2");
                                 if (!isLoss)
                                     player.CompletePkQuestTask("ARENA_FFA_TOP3");
+                                break;
+                            case "tugak":
+                                player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateTugakArena);
+                                if (!isLoss)
+                                    player.CompletePkQuestTask("ARENA_TUGAK_TOP3");
                                 break;
                             case "group":
                                 player.CompletePkQuestTasks(PKQuests.PKQuests.PKQuests_ParticipateGroupArena);
@@ -1705,46 +1722,35 @@ namespace ACE.Server.Entity
             //PKL Arena
             var pklArena = new ArenaLocation();
             pklArena.LandblockId = 0x0067;
-            pklArena.SupportedEventTypes = new List<string>();
-            pklArena.SupportedEventTypes.Add("2v2");
-            pklArena.SupportedEventTypes.Add("ffa");
-            pklArena.SupportedEventTypes.Add("group");
+            pklArena.SupportedEventTypes = new List<string>() { "2v2", "ffa", "group", "tugak" };
             pklArena.ArenaName = "PKL Arena";
             locList.Add(pklArena.LandblockId, pklArena);
 
             //Binding Realm
             var bindRealm = new ArenaLocation();
             bindRealm.LandblockId = 0x007F;
-            bindRealm.SupportedEventTypes = new List<string>();
-            bindRealm.SupportedEventTypes.Add("1v1");
-            bindRealm.SupportedEventTypes.Add("2v2");
+            bindRealm.SupportedEventTypes = new List<string>() { "1v1", "2v2", "tugak" };
             bindRealm.ArenaName = "Binding Realm";
             locList.Add(bindRealm.LandblockId, bindRealm);
 
             //0x0145, //Bone Lair            
             var boneLair = new ArenaLocation();
             boneLair.LandblockId = 0x0145;
-            boneLair.SupportedEventTypes = new List<string>();
-            boneLair.SupportedEventTypes.Add("ffa");
-            boneLair.SupportedEventTypes.Add("group");
+            boneLair.SupportedEventTypes = new List<string>() { "ffa", "group" };
             boneLair.ArenaName = "Bone Lair";
             locList.Add(boneLair.LandblockId, boneLair);
 
             //0x01AD, //Dungeon Galley Tower            
             var galleyTower = new ArenaLocation();
             galleyTower.LandblockId = 0x01AD;
-            galleyTower.SupportedEventTypes = new List<string>();
-            galleyTower.SupportedEventTypes.Add("ffa");
-            galleyTower.SupportedEventTypes.Add("group");
+            galleyTower.SupportedEventTypes = new List<string>() { "ffa", "group" };
             galleyTower.ArenaName = "Galley Tower";
             locList.Add(galleyTower.LandblockId, galleyTower);
 
             //0x02E3, //Yaraq PK Arena
             var ypk = new ArenaLocation();
             ypk.LandblockId = 0x02E3;
-            ypk.SupportedEventTypes = new List<string>();
-            ypk.SupportedEventTypes.Add("ffa");
-            ypk.SupportedEventTypes.Add("group");
+            ypk.SupportedEventTypes = new List<string>() { "ffa", "group" };            
             ypk.ArenaName = "Yaraq PK Arena";
             locList.Add(ypk.LandblockId, ypk);
 
@@ -1769,11 +1775,7 @@ namespace ACE.Server.Entity
             //Fowl Basement
             var fowl = new ArenaLocation();
             fowl.LandblockId = 0x596A;
-            fowl.SupportedEventTypes = new List<string>();
-            fowl.SupportedEventTypes.Add("1v1");
-            fowl.SupportedEventTypes.Add("2v2");
-            fowl.SupportedEventTypes.Add("ffa");
-            fowl.SupportedEventTypes.Add("group");
+            fowl.SupportedEventTypes = new List<string>() { "1v1", "2v2", "ffa", "group", "tugak" };
             fowl.ArenaName = "Fowl Basement";
             locList.Add(fowl.LandblockId, fowl);
 
@@ -1798,8 +1800,7 @@ namespace ACE.Server.Entity
             //oneTen
             var oneTen = new ArenaLocation();
             oneTen.LandblockId = 0x039D;
-            oneTen.SupportedEventTypes = new List<string>();
-            oneTen.SupportedEventTypes.Add("1v1");
+            oneTen.SupportedEventTypes = new List<string>() { "1v1", "tugak" };
             oneTen.ArenaName = "One Ten";
             locList.Add(oneTen.LandblockId, oneTen);
 

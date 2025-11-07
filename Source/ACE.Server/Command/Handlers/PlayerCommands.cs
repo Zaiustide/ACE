@@ -602,7 +602,7 @@ namespace ACE.Server.Command.Handlers
 
                         if(!ArenaManager.IsValidEventType(eventType))
                         {
-                            CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  The Join command does not support the event type {eventType}. Proper syntax is as follows...\n  To join a 1v1 arena match: /arena join\n  To join a specific type of arena match, replace eventType with the string code for the type of match you want to join, such as 1v1, 2v2, ffa. : /arena join eventType\n  To get your current character's stats: /arena stats\n  To get a named character's stats, replace characterName with the target character's name: /arena stats characterName");
+                            CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameters.  The Join command does not support the event type {eventType}. Proper syntax is as follows...\n  To join a 1v1 arena match: /arena join\n  To join a specific type of arena match, replace eventType with the string code for the type of match you want to join, such as 1v1, 2v2, ffa or tugak. : /arena join eventType\n  To get your current character's stats: /arena stats\n  To get a named character's stats, replace characterName with the target character's name: /arena stats characterName");
                             return;
                         }
 
@@ -759,11 +759,13 @@ namespace ACE.Server.Command.Handlers
                     var queuedTwos = queuedPlayers.Where(x => x.EventType.ToLower().Equals("2v2"));
                     var queuedFFA = queuedPlayers.Where(x => x.EventType.ToLower().Equals("ffa"));
                     var queuedGroup = queuedPlayers.Where(x => x.EventType.ToLower().Equals("group"));
+                    var queuedTugak = queuedPlayers.Where(x => x.EventType.ToLower().Equals("tugak"));
                     var longestOnesWait = queuedOnes.Count() > 0 ? (DateTime.Now - queuedOnes.Min(x => x.CreateDateTime)) : new TimeSpan(0);
                     var longestTwosWait = queuedTwos.Count() > 0 ? (DateTime.Now - queuedTwos.Min(x => x.CreateDateTime)) : new TimeSpan(0);
-                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);                    
+                    var longestFFAWait = queuedFFA.Count() > 0 ? (DateTime.Now - queuedFFA.Min(x => x.CreateDateTime)) : new TimeSpan(0);
+                    var longestTugakWait = queuedTugak.Count() > 0 ? (DateTime.Now - queuedTugak.Min(x => x.CreateDateTime)) : new TimeSpan(0);
 
-                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}\n  Group:";
+                    string queueInfo = $"Current Arena Queues\n  1v1: {queuedOnes.Count()} players queued with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestOnesWait)}\n  2v2: {queuedTwos.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTwosWait)}\n  FFA: {queuedFFA.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestFFAWait)}\n  Tugak: {queuedTugak.Count()} players queued, with longest wait at {string.Format("{0:%h}h {0:%m}m {0:%s}s", longestTugakWait)}\n  Group:";
 
                     var queuedGroupTeams = queuedGroup.Select(x => x.TeamGuid).Distinct();
                     foreach (var queuedTeam in queuedGroupTeams)
@@ -778,6 +780,7 @@ namespace ACE.Server.Command.Handlers
                     var eventsTwos = activeEvents.Where(x => x.EventType.ToLower().Equals("2v2"));
                     var eventsFFA = activeEvents.Where(x => x.EventType.ToLower().Equals("ffa"));
                     var eventsGroup = activeEvents.Where(x => x.EventType.ToLower().Equals("group"));
+                    var eventsTugak = activeEvents.Where(x => x.EventType.ToLower().Equals("tugak"));
 
                     string onesEventInfo = eventsOnes.Count() == 0 ? "No active events" : "";
                     foreach (var ev in eventsOnes)
@@ -806,6 +809,15 @@ namespace ACE.Server.Command.Handlers
                                          $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
                     }
 
+                    string tugakEventInfo = eventsTugak.Count() == 0 ? "No active events" : "";
+                    foreach (var ev in eventsTugak)
+                    {
+                        tugakEventInfo += $"\n    EventID: {(ev.Id < 1 ? "Pending" : ev.Id.ToString())}\n" +
+                                         $"    Arena: {ArenaManager.GetArenaNameByLandblock(ev.Location)}\n" +
+                                         $"    Players:\n    {ev.PlayersDisplay}\n" +
+                                         $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
+                    }
+
                     string groupEventInfo = eventsGroup.Count() == 0 ? "No active events" : "";
                     foreach (var ev in eventsGroup)
                     {
@@ -815,7 +827,7 @@ namespace ACE.Server.Command.Handlers
                                          $"    Time Remaining: {ev.TimeRemainingDisplay}\n";
                     }
 
-                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n  Group: {groupEventInfo}\n";
+                    string eventInfo = $"Active Arena Matches:\n  1v1: {onesEventInfo}\n  2v2: {twosEventInfo}\n  FFA: {ffaEventInfo}\n  Tugak: {tugakEventInfo}\n  Group: {groupEventInfo}\n";
 
                     CommandHandlerHelper.WriteOutputInfo(session, $"*********\n{queueInfo}\n\n{eventInfo}\n*********\n");
                     break;
@@ -864,7 +876,8 @@ namespace ACE.Server.Command.Handlers
                     bool validParam = false;
                     if(eventTypeParam.ToLower().Equals("1v1") ||
                         eventTypeParam.ToLower().Equals("2v2") ||
-                        eventTypeParam.ToLower().Equals("ffa"))
+                        eventTypeParam.ToLower().Equals("ffa") ||
+                        eventTypeParam.ToLower().Equals("tugak"))
                     {
                         validParam = true;
                     }
@@ -890,7 +903,7 @@ namespace ACE.Server.Command.Handlers
                     break;
 
                 default:
-                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2, FFA or Group)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2 or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Arena Commands...\n\n  To join a 1v1 arena match: /arena join\n\n  To join a specific type of arena match: /arena join eventType\n  (replace eventType with the string code for the type of match you want to join; 1v1, 2v2, FFA, Tugak or Group)\n\n  To leave an arena queue or stop observing a match: /arena cancel\n\n  To get info about players in an arena queue and active arena matches: /arena info\n\n  To get your current character's stats: /arena stats\n\n  To get a named character's stats: /arena stats characterName\n  (replace characterName with the target character's name)\n\n  To get rank leaderboard by event type: /arena rank eventType\n  (replace eventType with the string code for the type of match you want ranking for; 1v1, 2v2, Tugak or FFA)\n\n  To watch a match as a silent observer: /arena watch EventID\n  (use /arena info to get the EventID of an active arena match and use that value in the command)\n\n    To get this help file: /arena help\n");
                     return;
             }
         }
