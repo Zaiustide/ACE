@@ -1722,7 +1722,7 @@ namespace ACE.Server.Entity
             //PKL Arena
             var pklArena = new ArenaLocation();
             pklArena.LandblockId = 0x0067;
-            pklArena.SupportedEventTypes = new List<string>() { "2v2", "ffa", "group", "tugak" };
+            pklArena.SupportedEventTypes = new List<string>() { "ffa", "group", "tugak" };
             pklArena.ArenaName = "PKL Arena";
             locList.Add(pklArena.LandblockId, pklArena);
 
