@@ -6,7 +6,7 @@ VALUES (45491, 'ace45491-questweaponcoin', 51, '2022-06-06 04:05:48') /* Stackab
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (45491,   1,        128) /* ItemType - Misc */
      , (45491,   5,          1) /* EncumbranceVal */
-     , (45491,  11,        100) /* MaxStackSize */
+     , (45491,  11,        1000) /* MaxStackSize */
      , (45491,  12,          1) /* StackSize */
      , (45491,  13,          1) /* StackUnitEncumbrance */
      , (45491,  15,          1) /* StackUnitValue */

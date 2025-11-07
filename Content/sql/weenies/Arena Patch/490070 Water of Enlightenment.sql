@@ -8,7 +8,7 @@ VALUES (490070,   1,       2048) /* ItemType - Gem */
      , (490070,   5,          5) /* EncumbranceVal */
      , (490070,  16,          8) /* ItemUseable - Contained */
      , (490070,  18,          1) /* UiEffects - Magical */
-	 , (490070,  11,        100) /* MaxStackSize */
+	 , (490070,  11,        1000) /* MaxStackSize */
      , (490070,  12,          1) /* StackSize */
      , (490070,  13,         10) /* StackUnitEncumbrance */
      , (490070,  15,      10000) /* StackUnitValue */

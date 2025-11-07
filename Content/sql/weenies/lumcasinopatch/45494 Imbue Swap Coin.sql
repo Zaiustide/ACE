@@ -6,7 +6,7 @@ VALUES (45494, 'ace45494-imbueswapcoin', 51, '2021-11-01 00:00:00') /* Stackable
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (45494,   1,        128) /* ItemType - Misc */
      , (45494,   5,          1) /* EncumbranceVal */
-     , (45494,  11,        100) /* MaxStackSize */
+     , (45494,  11,        1000) /* MaxStackSize */
      , (45494,  12,          1) /* StackSize */
      , (45494,  13,          1) /* StackUnitEncumbrance */
      , (45494,  15,          1) /* StackUnitValue */

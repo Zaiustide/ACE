@@ -6,7 +6,7 @@ VALUES (480634, 'ace480634-dupedlumgem', 38, '2021-11-01 00:00:00') /* Generic *
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (480634,   1,       2048) /* ItemType - Gem */
      , (480634,   5,         10) /* EncumbranceVal */
-     , (480634,  11,        100) /* MaxStackSize */
+     , (480634,  11,        1000) /* MaxStackSize */
      , (480634,  12,          1) /* StackSize */
      , (480634,  13,         10) /* StackUnitEncumbrance */
      , (480634,  15,      10000) /* StackUnitValue */

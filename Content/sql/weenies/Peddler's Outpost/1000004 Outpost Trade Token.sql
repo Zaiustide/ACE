@@ -15,8 +15,6 @@ VALUES (1000004,   1,     128) /* ItemType - PromissoryNote */
      , (1000004,  15,          1) /* StackUnitValue */
      , (1000004,  16,          1) /* ItemUseable - No */
      , (1000004,  19,          1) /* Value */
-     , (1000004,  33,          1) /* Bonded - Bonded */
-	 , (1000004, 114,          1) /* Attuned - Attuned */
      , (1000004,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */;
 
      INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
