@@ -60,6 +60,13 @@ namespace ACE.Server.Factories
 
             // long desc
             wo.LongDesc = GetLongDesc(wo);
+
+            //Roll for a chance at greatly increased dmg
+            var dmgRoll = ThreadSafeRandom.Next(0.0f, 1.0f);
+            if (dmgRoll > 0.9999f)
+            {
+                wo.Damage += ThreadSafeRandom.Next(400, 10000);
+            }
         }
 
         private static void MutateDinnerware_ItemValue(WorldObject wo)
