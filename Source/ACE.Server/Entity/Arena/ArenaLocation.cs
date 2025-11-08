@@ -1535,7 +1535,7 @@ namespace ACE.Server.Entity
             {
                 var player = PlayerManager.GetOnlinePlayer(arenaPlayer.CharacterId);
 
-                if (player.Age <= PropertyManager.GetLong("arenas_reward_min_age").Item) //days in seconds
+                if (player != null && player.Age <= PropertyManager.GetLong("arenas_reward_min_age").Item) //days in seconds
                 {
                     underageCount++;
                 }
