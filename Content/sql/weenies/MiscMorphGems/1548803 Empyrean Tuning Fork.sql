@@ -24,7 +24,7 @@ VALUES (1548803,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (1548803,   1, 'Empyrean Tuning Fork') /* Name */
-     , (1548803,  14, 'This tuning fork appears to have been used by the ancient Empyrean blacksmiths to alter spell cantrips on armor. It appears to resonate at a unique frequency that can alter the current legendary cantrips on a piece of armor. There is a small chance to add or remove one cantrip.') /* Use */;
+     , (1548803,  14, 'This tuning fork appears to have been used by the ancient Empyrean blacksmiths to alter spell cantrips on armor, jewelry, underclothes and shields. It appears to resonate at a unique frequency that can alter the current legendary cantrips on a piece of gear. There is a small chance to add or remove one cantrip.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (1548803,   1, 0x02000179) /* Setup */

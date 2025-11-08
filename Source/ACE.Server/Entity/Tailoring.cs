@@ -2356,10 +2356,13 @@ namespace ACE.Server.Entity
                             var counter = 0;
                             while (counter < 20)
                             {
-                                //For now this morph gem can only be applied to armor.
-                                //In the future if we expand to include non-armor (like jewelry),
-                                //will need to have logic to use different Roll methods (like JewelryCantrips.Roll())
                                 SpellId newCantrip = ArmorCantrips.Roll();
+
+                                if(target.ItemType == ItemType.Jewelry)
+                                {
+                                    newCantrip = JewelryCantrips.Roll();
+                                }
+
                                 List<SpellId> progression = SpellLevelProgression.GetSpellLevels(newCantrip);
 
                                 if (progression != null && progression.Count >= 4)
@@ -2410,22 +2413,25 @@ namespace ACE.Server.Entity
                             }
                         }
 
-                        //Give a small chance to add Leg Impen
-                        var impenRandom = new Random();
+                        //Give a small chance to add Leg Impen                                                    
                         bool impenSuccess = false;
-                        var impenRoll = impenRandom.Next(0, int.MaxValue);
-                        if (impenRoll % 7 == 0 && !newLegendaryList.Contains(6095))
+                        if (target.ItemType == ItemType.Jewelry)
                         {
-                            if (newLegendaryList.Count < 4)
+                            var impenRandom = new Random();
+                            var impenRoll = impenRandom.Next(0, int.MaxValue);
+                            if (impenRoll % 7 == 0 && !newLegendaryList.Contains(6095))
                             {
-                                newLegendaryList.Add(6095);
-                            }
-                            else
-                            {
-                                newLegendaryList[0] = 6095;
-                            }
+                                if (newLegendaryList.Count < 4)
+                                {
+                                    newLegendaryList.Add(6095);
+                                }
+                                else
+                                {
+                                    newLegendaryList[0] = 6095;
+                                }
 
-                            impenSuccess = true;
+                                impenSuccess = true;
+                            }
                         }
 
                         //Remove all existing legendaries
