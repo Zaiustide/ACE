@@ -210,4 +210,6 @@ VALUES (600000, 4, 53016,  0, 0, 0, False) /* Create Corrupted Amber_ Bracers of
 	 , (600000, 4, 53440,  0, 0, 0, False) /* Create Empowered Amber: Shield of Reinforcement (53440) for Shop */
 	 , (600000, 4, 53441,  0, 0, 0, False) /* Create Luminous Amber: Shield of Fortication (53441) for Shop */
 	 , (600000, 4, 53452,  0, 0, 0, False) /* Create Corrupted Amber: Weapon of the Corrupted Heart (53452) for Shop */
-	 , (600000, 4, 53453,  0, 0, 0, False) /* Create Corrupted Amber: (53453) for Shop */;
+	 , (600000, 4, 53453,  0, 0, 0, False) /* Create Corrupted Amber: (53453) for Shop */
+	 , (600000, 4, 53305,  0, 0, 0, False) /* Create Gem of Verdant Force (53453) for Shop */;
+	 
