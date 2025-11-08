@@ -2320,10 +2320,14 @@ namespace ACE.Server.Entity
                     case MorphGemRandomCantrip:
 
                         //Check if the target is armor or undies
-                        if (!(target.ArmorLevel > 0 || EquipMask.Clothing.HasFlag(target.ValidLocations)))
+                        if ((target.ItemType != ItemType.Jewelry &&
+                            target.ItemType != ItemType.Armor &&
+                            target.ItemType != ItemType.Clothing &&
+                            !target.IsShield)
+                            || (target.ValidLocations?.HasFlag(EquipMask.Cloak) ?? false))
                         {
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The {source.Name} can only be applied to armor", ChatMessageType.Broadcast));
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"The {source.Name} can only be applied to armor, jewelry or underclothes", ChatMessageType.Broadcast));
                             return;
                         }
 
