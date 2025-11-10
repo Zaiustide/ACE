@@ -2415,7 +2415,7 @@ namespace ACE.Server.Entity
 
                         //Give a small chance to add Leg Impen                                                    
                         bool impenSuccess = false;
-                        if (target.ItemType == ItemType.Jewelry)
+                        if (target.ItemType != ItemType.Jewelry)
                         {
                             var impenRandom = new Random();
                             var impenRoll = impenRandom.Next(0, int.MaxValue);
