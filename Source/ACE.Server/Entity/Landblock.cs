@@ -394,7 +394,7 @@ namespace ACE.Server.Entity
                         if (clanPlayers.Count > area.MaxPlayersPerAllegiance)
                         {
                             var overageCount = clanPlayers.Count - (int)area.MaxPlayersPerAllegiance;
-                            var playersToKick = clanPlayers.OrderBy(x => x.LastTeleportTime).Take(overageCount);
+                            var playersToKick = clanPlayers.OrderByDescending(x => x.LastTeleportTime).Take(overageCount);
 
                             foreach (var playerToKick in playersToKick)
                             {

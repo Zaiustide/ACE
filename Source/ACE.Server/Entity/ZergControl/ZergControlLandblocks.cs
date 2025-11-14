@@ -57,9 +57,19 @@ namespace ACE.Server.Entity
                     _zergControlLandblocksMap.Add(0x003F, dragonCave);
 
                     var ancientTemple = new ZergControlArea();
-                    ancientTemple.MaxPlayersPerAllegiance = 9;
+                    ancientTemple.MaxPlayersPerAllegiance = 14;
                     ancientTemple.AreaLandblockIds = new uint[] { 0x0174 };
                     _zergControlLandblocksMap.Add(0x0174, ancientTemple);
+
+                    var mites = new ZergControlArea();
+                    mites.MaxPlayersPerAllegiance = 14;
+                    mites.AreaLandblockIds = new uint[] { 0x0174 };
+                    _zergControlLandblocksMap.Add(0x0174, mites);
+
+                    var shreths = new ZergControlArea();
+                    shreths.MaxPlayersPerAllegiance = 14;
+                    shreths.AreaLandblockIds = new uint[] { 0x00E1 };
+                    _zergControlLandblocksMap.Add(0x00E1, shreths);
 
                     //Aerbax World Boss
                     var aerbax = new ZergControlArea();
