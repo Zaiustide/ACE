@@ -81,7 +81,15 @@ namespace ACE.Server.Entity.DungeonControl
                     shrethCaverns.GuardianSpawnLocs.Add(new Position(0x00C8012F, 73.314804f, -134.970505f, -59.994999f, 0f, 0f, -0.697358f, 0.716723f));
                     //0x00C80105[23.040258 - 122.933289 - 59.994999] - 0.537699 0.000000 0.000000 0.843137
                     shrethCaverns.GuardianSpawnLocs.Add(new Position(0x00C80105, 23.040258f, -122.933289f, -59.994999f, 0f, 0f, 0.843137f, -0.537699f));
-                    
+                    //0x00C80269[330.013977 -60.401958 -23.995001] 0.999426 0.000000 0.000000 -0.033876
+                    shrethCaverns.GuardianSpawnLocs.Add(new Position(0x00C80269, 330.013977f, -60.401958f, -23.995001f, 0f, 0f, -0.033876f, 0.999426f));
+                    //0x00C8027D[295.271362 -3.492693 -17.995001] 0.766156 0.000000 0.000000 0.642655
+                    shrethCaverns.GuardianSpawnLocs.Add(new Position(0x00C8027D, 295.271362f, -3.492693f, -17.995001f, 0f, 0f, 0.642655f, 0.766156f));
+                    //0x00C8019B [170.320572 -140.250839 -53.994999] -0.707225 0.000000 0.000000 -0.706988
+                    shrethCaverns.GuardianSpawnLocs.Add(new Position(0x00C8019B, 170.320572f, -140.250839f, -53.994999f, 0f, 0f, -0.706988f, -0.707225f));
+                    //0x00C801D2[195.110458 -170.930405 -45.473469] -0.999451 0.000000 0.000000 -0.033131
+                    shrethCaverns.GuardianSpawnLocs.Add(new Position(0x00C801D2, 195.110458f, -170.930405f, -45.473469f, 0f, 0f, -0.033131f, -0.999451f));
+
                     shrethCaverns.TreasureSpawnLocs = new List<Position>();
                     //0x00C801FB [219.930649 -132.701904 -23.995001] 0.039612 0.000000 0.000000 0.999215
                     shrethCaverns.TreasureSpawnLocs.Add(new Position(0x00C801FB, 219.930649f, -132.701904f, -23.995001f, 0f, 0f, 0.999215f, 0.039612f));
@@ -121,7 +129,7 @@ namespace ACE.Server.Entity.DungeonControl
                     shrethCaverns.TreasureSpawnLocs.Add(new Position(0x00C80354, 459.317688f, -119.239388f, -5.995000f, 0f, 0f, 0.999122f, -0.041888f));
                     //0x00C80334 [517.922791 -87.388618 -11.995001] 0.928022 0.000000 0.000000 0.372524
                     shrethCaverns.TreasureSpawnLocs.Add(new Position(0x00C80334, 517.922791f, -87.388618f, -11.995001f, 0f, 0f, 0.372524f, 0.928022f));
-
+                    
                     _dungeons.Add(shrethCaverns.LandblockId, shrethCaverns);
 
                     #endregion Shreth Caverns
