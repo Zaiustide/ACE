@@ -90,7 +90,7 @@ namespace ACE.Server.WorldObjects
             }
 
             var proj = WorldObjectFactory.CreateNewWorldObject(ammo.WeenieClassId);
-
+            proj.Damage = ammo.Damage;
             proj.ProjectileSource = this;
             proj.ProjectileTarget = target;
 
