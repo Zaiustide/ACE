@@ -68,8 +68,8 @@ namespace ACE.Server.Entity
 
                     var shreths = new ZergControlArea();
                     shreths.MaxPlayersPerAllegiance = 14;
-                    shreths.AreaLandblockIds = new uint[] { 0x00E1 };
-                    _zergControlLandblocksMap.Add(0x00E1, shreths);
+                    shreths.AreaLandblockIds = new uint[] { 0x00C8 };
+                    _zergControlLandblocksMap.Add(0x00C8, shreths);
 
                     //Aerbax World Boss
                     var aerbax = new ZergControlArea();
