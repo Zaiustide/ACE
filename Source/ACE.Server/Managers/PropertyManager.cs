@@ -629,6 +629,7 @@ namespace ACE.Server.Managers
                 ("disable_world_bosses", new Property<bool>(true, "disables spawning of world bosses")),
                 ("jump_cancels_melee", new Property<bool>(false, "cancels melee attacks when the target is jumping")),
                 ("vendor_disable_resell", new Property<bool>(false, "disables all vendor reselling of items bought from players; i.e. all items a players sells to a vendor are destroyed")),
+                ("turnto_use_heading_stealth", new Property<bool>(false, "If TRUE, uses TurnToHeading (0x09) instead of TurnToObject (0x08) to prevent war detect plugins from detecting target ID (preserves visual, hides target info)")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
 

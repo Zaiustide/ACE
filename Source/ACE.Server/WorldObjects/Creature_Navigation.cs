@@ -1,13 +1,14 @@
-using System;
-using System.Numerics;
 using ACE.Entity;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Managers;
+using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Physics.Animation;
 using ACE.Server.Physics.Extensions;
-using ACE.Server.Network.GameMessages.Messages;
+using System;
+using System.Numerics;
 
 namespace ACE.Server.WorldObjects
 {
@@ -126,7 +127,32 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void TurnToObject(WorldObject target, bool stopCompletely = true)
         {
+            //Retail method uses MovementType.TurnToObject, which is exploitable in pvp with War Detect plugin features
             var turnToMotion = new Motion(this, target, MovementType.TurnToObject);
+
+            try
+            {
+                //Prevent War Detect - Check if stealth mode is enabled AND both players are PK
+                if (PropertyManager.GetBool("turnto_use_heading_stealth").Item &&
+                    this is Player caster &&
+                    target is Player targetPlayer &&
+                    caster.PlayerKillerStatus == PlayerKillerStatus.PK &&
+                    targetPlayer.PlayerKillerStatus == PlayerKillerStatus.PK)
+                {
+                    //Prevent War Detect - STEALTH MODE: Use TurnToHeading (0x09) with absolute heading calculation
+                    //This sends heading angle instead of target ID, hiding target from war detect plugins
+
+                    //Calculate ABSOLUTE heading to target (0-360 degrees compass direction)
+                    var absoluteHeading = PhysicsObj.Position.heading(target.PhysicsObj.Position);
+
+                    //Create TurnToHeading motion (0x09) with absolute heading (NO TARGET ID)
+                    turnToMotion = new Motion(this, Location, absoluteHeading);
+                }
+            }
+            catch(Exception ex)
+            {
+                log.ErrorFormat("Error in Creature_Navigation.TurnToObject when applying turnto_use_heading_stealth logic. Ex: {0}", ex);
+            }
 
             if (!stopCompletely)
                 turnToMotion.MoveToParameters.MovementParameters &= ~MovementParams.StopCompletely;
