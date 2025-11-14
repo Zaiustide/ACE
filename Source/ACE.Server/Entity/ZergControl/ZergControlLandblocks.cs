@@ -63,8 +63,8 @@ namespace ACE.Server.Entity
 
                     var mites = new ZergControlArea();
                     mites.MaxPlayersPerAllegiance = 14;
-                    mites.AreaLandblockIds = new uint[] { 0x0174 };
-                    _zergControlLandblocksMap.Add(0x0174, mites);
+                    mites.AreaLandblockIds = new uint[] { 0x00E1 };
+                    _zergControlLandblocksMap.Add(0x00E1, mites);
 
                     var shreths = new ZergControlArea();
                     shreths.MaxPlayersPerAllegiance = 14;
