@@ -324,6 +324,164 @@ namespace ACE.Server.Entity.DungeonControl
                     _dungeons.Add(miteHole.LandblockId, miteHole);
 
                     #endregion Mite Hole
+
+                    #region Metos
+                    var metos = new OwnableDungeon();
+                    metos.DungeonName = "Halls of Metos";
+                    metos.LandblockId = 0x02F5;
+                    metos.GuardianWeenieId = 514108531;
+                    metos.ControlPointCellId = 49611366;
+                    metos.CaptureScore = 600;
+                    metos.XpAndLumBonus = 2.0f;
+                    metos.OwnershipExpirationHours = 6;
+                    metos.TreasureWeenieId = 514108532;
+                    metos.TreasureSpawnRateMins = 5;
+
+                    metos.GuardianSpawnLocs = new List<Position>();
+                    // /teleloc 0x02F50283 [88.871605 -299.631134 0.005000] -0.724229 0.000000 0.000000 0.689560
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50283, 88.871605f, -299.631134f, 0.005000f, 0f, 0f, 0.689560f, -0.724229f));
+                    // /teleloc 0x02F5027E [89.080597 -288.928162 0.005000] -0.352766 0.000000 0.000000 0.935711
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5027E, 89.080597f, -288.928162f, 0.005000f, 0f, 0f, 0.935711f, -0.352766f));
+                    // /teleloc 0x02F502AA [111.829552 -289.814331 0.005000] 0.430692 0.000000 0.000000 0.902499
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502AA, 111.829552f, -289.814331f, 0.005000f, 0f, 0f, 0.902499f, 0.430692f));
+                    // /teleloc 0x02F502AF [111.249413 -302.347900 0.005000] 0.889691 0.000000 0.000000 0.456563
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502AF, 111.249413f, -302.347900f, 0.005000f, 0f, 0f, 0.456563f, 0.889691f));
+                    // /teleloc 0x02F502AF [110.328972 -297.683533 0.005000] 0.561120 0.000000 0.000000 0.827735
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502AF, 110.328972f, -297.683533f, 0.005000f, 0f, 0f, 0.827735f, 0.561120f));
+                    // /teleloc 0x02F50289 [99.825638 -271.048340 0.005000] 0.020504 0.000000 0.000000 -0.999790
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50289, 99.825638f, -271.048340f, 0.005000f, 0f, 0f, -0.999790f, 0.020504f));
+                    // /teleloc 0x02F502A5 [110.184502 -260.391907 0.005000] 0.754066 0.000000 0.000000 0.656799
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502A5, 110.184502f, -260.391907f, 0.005000f, 0f, 0f, 0.656799f, 0.754066f));
+                    // /teleloc 0x02F50278 [79.312088 -259.800568 0.005000] 0.653183 0.000000 0.000000 -0.757200
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50278, 79.312088f, -259.800568f, 0.005000f, 0f, 0f, -0.757200f, 0.653183f));
+                    // /teleloc 0x02F5026A [62.412987 -279.926270 0.005000] 0.727112 0.000000 0.000000 -0.686519
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5026A, 62.412987f, -279.926270f, 0.005000f, 0f, 0f, -0.686519f, 0.727112f));
+                    // /teleloc 0x02F50268 [47.849041 -277.700409 0.005000] -0.522054 0.000000 0.000000 0.852912
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50268, 47.849041f, -277.700409f, 0.005000f, 0f, 0f, 0.852912f, -0.522054f));
+                    // /teleloc 0x02F50269 [51.605713 -293.113403 0.005000] -0.945295 0.000000 0.000000 -0.326217
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50269, 51.605713f, -293.113403f, 0.005000f, 0f, 0f, -0.326217f, -0.945295f));
+                    // /teleloc 0x02F50266 [35.611382 -283.742279 0.005000] -0.694398 0.000000 0.000000 0.719591
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50266, 35.611382f, -283.742279f, 0.005000f, 0f, 0f, 0.719591f, -0.694398f));
+                    // /teleloc 0x02F502BA [132.745361 -269.445648 0.005000] -0.933641 0.000000 0.000000 -0.358210
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502BA, 132.745361f, -269.445648f, 0.005000f, 0f, 0f, -0.358210f, -0.933641f));
+                    // /teleloc 0x02F502C7 [149.453506 -278.655884 0.005000] -0.949778 0.000000 0.000000 0.312925
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502C7, 149.453506f, -278.655884f, 0.005000f, 0f, 0f, 0.312925f, -0.949778f));
+                    // /teleloc 0x02F502C5 [149.063568 -261.658203 0.005000] -0.373696 0.000000 0.000000 0.927551
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502C5, 149.063568f, -261.658203f, 0.005000f, 0f, 0f, 0.927551f, -0.373696f));
+                    // /teleloc 0x02F502D5 [165.450821 -259.452576 0.005000] 0.205791 0.000000 0.000000 0.978596
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502D5, 165.450821f, -259.452576f, 0.005000f, 0f, 0f, 0.978596f, 0.205791f));
+                    // /teleloc 0x02F502D7 [166.609497 -279.800476 0.005000] 0.855684 0.000000 0.000000 0.517498
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502D7, 166.609497f, -279.800476f, 0.005000f, 0f, 0f, 0.517498f, 0.855684f));
+                    // /teleloc 0x02F502C7 [148.681061 -279.465210 0.005000] -0.970162 0.000000 0.000000 0.242459
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502C7, 148.681061f, -279.465210f, 0.005000f, 0f, 0f, 0.242459f, -0.970162f));
+                    // /teleloc 0x02F502D2 [160.518509 -327.323181 0.005000] 0.015382 0.000000 0.000000 0.999882
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502D2, 160.518509f, -327.323181f, 0.005000f, 0f, 0f, 0.999882f, 0.015382f));
+                    // /teleloc 0x02F502DA [165.167542 -345.284454 0.005000] -0.999877 0.000000 0.000000 0.015655
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502DA, 165.167542f, -345.284454f, 0.005000f, 0f, 0f, 0.015655f, -0.999877f));
+                    // /teleloc 0x02F502DD [179.664215 -345.162689 0.005000] -0.911644 0.000000 0.000000 -0.410982
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502DD, 179.664215f, -345.162689f, 0.005000f, 0f, 0f, -0.410982f, -0.911644f));
+                    // /teleloc 0x02F502DB [180.622253 -329.921997 0.005000] -0.674351 0.000000 0.000000 -0.738411
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502DB, 180.622253f, -329.921997f, 0.005000f, 0f, 0f, -0.738411f, -0.674351f));
+                    // /teleloc 0x02F502C8 [149.956131 -310.395111 0.005000] -0.768025 0.000000 0.000000 0.640420
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502C8, 149.956131f, -310.395111f, 0.005000f, 0f, 0f, 0.640420f, -0.768025f));
+                    // /teleloc 0x02F502A3 [107.533630 -240.129013 0.005000] 0.284874 0.000000 0.000000 -0.958565
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502A3, 107.533630f, -240.129013f, 0.005000f, 0f, 0f, -0.958565f, 0.284874f));
+                    // /teleloc 0x02F502A3 [113.364037 -239.360901 0.005000] -0.166606 0.000000 0.000000 -0.986024
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502A3, 113.364037f, -239.360901f, 0.005000f, 0f, 0f, -0.986024f, -0.166606f));
+                    // /teleloc 0x02F502A1 [106.941818 -219.497696 0.005000] -0.071268 0.000000 0.000000 0.997457
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502A1, 106.941818f, -219.497696f, 0.005000f, 0f, 0f, 0.997457f, -0.071268f));
+                    // /teleloc 0x02F502A1 [113.074860 -220.379333 0.005000] 0.404262 0.000000 0.000000 0.914643
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F502A1, 113.074860f, -220.379333f, 0.005000f, 0f, 0f, 0.914643f, 0.404262f));
+                    // /teleloc 0x02F50259 [108.969589 -189.285172 -8.995001] 0.202584 0.000000 0.000000 -0.979265
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50259, 108.969589f, -189.285172f, -8.995001f, 0f, 0f, -0.979265f, 0.202584f));
+                    // /teleloc 0x02F5023D [117.033951 -171.230743 -11.995001] 0.844963 0.000000 0.000000 -0.534824
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5023D, 117.033951f, -171.230743f, -11.995001f, 0f, 0f, -0.534824f, 0.844963f));
+                    // /teleloc 0x02F50247 [142.439209 -172.052078 -11.995001] 0.941780 0.000000 0.000000 0.336229
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50247, 142.439209f, -172.052078f, -11.995001f, 0f, 0f, 0.336229f, 0.941780f));
+                    // /teleloc 0x02F50246 [142.852112 -155.895721 -11.995001] 0.606720 0.000000 0.000000 0.794916
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50246, 142.852112f, -155.895721f, -11.995001f, 0f, 0f, 0.794916f, 0.606720f));
+                    // /teleloc 0x02F50245 [141.213303 -147.178268 -11.995001] 0.418517 0.000000 0.000000 0.908209
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50245, 141.213303f, -147.178268f, -11.995001f, 0f, 0f, 0.908209f, 0.418517f));
+                    // /teleloc 0x02F5023C [124.655754 -157.782272 -11.995001] 0.066240 0.000000 0.000000 0.997804
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5023C, 124.655754f, -157.782272f, -11.995001f, 0f, 0f, 0.997804f, 0.066240f));
+                    // /teleloc 0x02F50236 [121.163284 -118.956100 -14.995001] -0.366140 0.000000 0.000000 -0.930560
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50236, 121.163284f, -118.956100f, -14.995001f, 0f, 0f, -0.930560f, -0.366140f));
+                    // /teleloc 0x02F50208 [91.137833 -143.370941 -17.995001] -0.926731 0.000000 0.000000 0.375725
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50208, 91.137833f, -143.370941f, -17.995001f, 0f, 0f, 0.375725f, -0.926731f));
+                    // /teleloc 0x02F501FC [77.349106 -140.204239 -17.995001] 0.740407 0.000000 0.000000 -0.672159
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501FC, 77.349106f, -140.204239f, -17.995001f, 0f, 0f, -0.672159f, 0.740407f));
+                    // /teleloc 0x02F501CA [38.152515 -99.986732 -23.995001] -0.304766 0.000000 0.000000 0.952427
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501CA, 38.152515f, -99.986732f, -23.995001f, 0f, 0f, 0.952427f, -0.304766f));
+                    // /teleloc 0x02F501D7 [45.199051 -93.537361 -23.995001] 0.162751 0.000000 0.000000 0.986667
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501D7, 45.199051f, -93.537361f, -23.995001f, 0f, 0f, 0.986667f, 0.162751f));
+                    // /teleloc 0x02F501C8 [36.789211 -84.999344 -23.995001] -0.221728 0.000000 0.000000 0.975109
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501C8, 36.789211f, -84.999344f, -23.995001f, 0f, 0f, 0.975109f, -0.221728f));
+                    // /teleloc 0x02F501C8 [40.227158 -75.478302 -23.995001] 0.052530 0.000000 0.000000 0.998619
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501C8, 40.227158f, -75.478302f, -23.995001f, 0f, 0f, 0.998619f, 0.052530f));
+                    // /teleloc 0x02F501B3 [51.637569 -52.882942 -29.995001] -0.861418 0.000000 0.000000 -0.507896
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501B3, 51.637569f, -52.882942f, -29.995001f, 0f, 0f, -0.507896f, -0.861418f));
+                    // /teleloc 0x02F501AB [28.043808 -52.877502 -29.995001] 0.872496 0.000000 0.000000 -0.488621
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501AB, 28.043808f, -52.877502f, -29.995001f, 0f, 0f, -0.488621f, 0.872496f));
+                    // /teleloc 0x02F501AA [25.778904 -40.322563 -29.995001] 0.733381 0.000000 0.000000 -0.679818
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501AA, 25.778904f, -40.322563f, -29.995001f, 0f, 0f, -0.679818f, 0.733381f));
+                    // /teleloc 0x02F501AE [38.627209 -28.491230 -29.995001] 0.477738 0.000000 0.000000 -0.878502
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501AE, 38.627209f, -28.491230f, -29.995001f, 0f, 0f, -0.878502f, 0.477738f));
+                    // /teleloc 0x02F501B1 [52.812222 -33.808918 -29.995001] -0.387282 0.000000 0.000000 -0.921961
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F501B1, 52.812222f, -33.808918f, -29.995001f, 0f, 0f, -0.921961f, -0.387282f));
+                    // /teleloc 0x02F5019B [40.946705 0.482816 -38.994999] -0.306170 0.000000 0.000000 -0.951977
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5019B, 40.946705f, 0.482816f, -38.994999f, 0f, 0f, -0.951977f, -0.306170f));
+                    // /teleloc 0x02F50171 [29.215998 -60.726604 -41.994999] 0.909805 0.000000 0.000000 -0.415035
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50171, 29.215998f, -60.726604f, -41.994999f, 0f, 0f, -0.415035f, 0.909805f));
+                    // /teleloc 0x02F50110 [55.708839 -78.901169 -53.994999] 0.955164 0.000000 0.000000 -0.296078
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50110, 55.708839f, -78.901169f, -53.994999f, 0f, 0f, -0.296078f, 0.955164f));
+                    // /teleloc 0x02F50113 [65.186844 -80.246071 -53.994999] 0.960637 0.000000 0.000000 0.277806
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50113, 65.186844f, -80.246071f, -53.994999f, 0f, 0f, 0.277806f, 0.960637f));
+                    // /teleloc 0x02F50114 [74.707268 -90.009445 -53.994999] 0.891832 0.000000 0.000000 0.452366
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50114, 74.707268f, -90.009445f, -53.994999f, 0f, 0f, 0.452366f, 0.891832f));
+                    // /teleloc 0x02F5010C [52.709599 -96.832268 -53.994999] -0.969493 0.000000 0.000000 0.245118
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5010C, 52.709599f, -96.832268f, -53.994999f, 0f, 0f, 0.245118f, -0.969493f));
+                    // /teleloc 0x02F5010B [49.778099 -85.651184 -53.994999] -0.956534 0.000000 0.000000 0.291620
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F5010B, 49.778099f, -85.651184f, -53.994999f, 0f, 0f, 0.291620f, -0.956534f));
+                    // /teleloc 0x02F50105 [61.607750 -102.851524 -65.994995] -0.957309 0.000000 0.000000 -0.289067
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50105, 61.607750f, -102.851524f, -65.994995f, 0f, 0f, -0.289067f, -0.957309f));
+                    // /teleloc 0x02F50105 [56.795921 -97.312859 -65.994995] -0.587004 0.000000 0.000000 0.809584
+                    metos.GuardianSpawnLocs.Add(new Position(0x02F50105, 56.795921f, -97.312859f, -65.994995f, 0f, 0f, 0.809584f, -0.587004f));
+
+                    metos.TreasureSpawnLocs = new List<Position>();
+                    // /teleloc 0x02F502A7 [113.269676 -276.884796 0.005000] -0.326314 0.000000 0.000000 -0.945261
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F502A7, 113.269676f, -276.884796f, 0.005000f, 0f, 0f, -0.945261f, -0.326314f));
+                    // /teleloc 0x02F50215 [110.001007 -221.584106 -17.995001] 0.002134 0.000000 0.000000 -0.999998
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50215, 110.001007f, -221.584106f, -17.995001f, 0f, 0f, -0.999998f, 0.002134f));
+                    // /teleloc 0x02F5014E [95.379074 -269.686279 -47.994999] 0.620298 0.000000 0.000000 0.784366
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F5014E, 95.379074f, -269.686279f, -47.994999f, 0f, 0f, 0.784366f, 0.620298f));
+                    // /teleloc 0x02F50163 [120.396919 -325.372681 -47.994999] -0.379828 0.000000 0.000000 -0.925057
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50163, 120.396919f, -325.372681f, -47.994999f, 0f, 0f, -0.925057f, -0.379828f));
+                    // /teleloc 0x02F50206 [79.822899 -218.752838 -17.995001] -0.039414 0.000000 0.000000 0.999223
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50206, 79.822899f, -218.752838f, -17.995001f, 0f, 0f, 0.999223f, -0.039414f));
+                    // /teleloc 0x02F50267 [35.038383 -288.046478 0.005000] -0.852026 0.000000 0.000000 0.523500
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50267, 35.038383f, -288.046478f, 0.005000f, 0f, 0f, 0.523500f, -0.852026f));
+                    // /teleloc 0x02F5021D [22.442234 -188.124298 -11.995001] 0.144878 0.000000 0.000000 0.989450
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F5021D, 22.442234f, -188.124298f, -11.995001f, 0f, 0f, 0.989450f, 0.144878f));
+                    // /teleloc 0x02F50219 [1.184928 -208.252151 -11.995001] 0.847656 0.000000 0.000000 -0.530546
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50219, 1.184928f, -208.252151f, -11.995001f, 0f, 0f, -0.530546f, 0.847656f));
+                    // /teleloc 0x02F50245 [143.145035 -146.749054 -11.995001] 0.284208 0.000000 0.000000 0.958763
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50245, 143.145035f, -146.749054f, -11.995001f, 0f, 0f, 0.958763f, 0.284208f));
+                    // /teleloc 0x02F50202 [82.597397 -147.257996 -17.995001] 0.402429 0.000000 0.000000 0.915451
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50202, 82.597397f, -147.257996f, -17.995001f, 0f, 0f, 0.915451f, 0.402429f));
+                    // /teleloc 0x02F501D8 [54.424690 -97.043083 -23.995001] -0.705120 0.000000 0.000000 -0.709088
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F501D8, 54.424690f, -97.043083f, -23.995001f, 0f, 0f, -0.709088f, -0.705120f));
+                    // /teleloc 0x02F501A8 [17.149738 -38.537998 -29.995001] 0.709756 0.000000 0.000000 -0.704447
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F501A8, 17.149738f, -38.537998f, -29.995001f, 0f, 0f, -0.704447f, 0.709756f));
+                    // /teleloc 0x02F50187 [59.439247 -29.056589 -44.994999] 0.316752 0.000000 0.000000 -0.948508
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50187, 59.439247f, -29.056589f, -44.994999f, 0f, 0f, -0.948508f, 0.316752f));
+                    // /teleloc 0x02F50116 [77.659271 -83.549133 -53.994999] -0.259966 0.000000 0.000000 -0.965618
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50116, 77.659271f, -83.549133f, -53.994999f, 0f, 0f, -0.965618f, -0.259966f));
+                    // /teleloc 0x02F50105 [63.208141 -104.100807 -65.994995] -0.957700 0.000000 0.000000 -0.287768
+                    metos.TreasureSpawnLocs.Add(new Position(0x02F50105, 63.208141f, -104.100807f, -65.994995f, 0f, 0f, -0.287768f, -0.957700f));
+
+                    _dungeons.Add(metos.LandblockId, metos);
+
+                    #endregion Metos
                 }
 
                 return _dungeons;
@@ -354,8 +512,6 @@ namespace ACE.Server.Entity.DungeonControl
                 {
                     _guardianList = new List<uint>();
                     _guardianList.Add(514108531); //Peddler's Outpost - Shreth Caverns
-                    _guardianList.Add(514108541); //Peddler's Outpost - Ancient Temple
-                    _guardianList.Add(514108551); //Peddler's Outpost - Mite Hole
                 }
 
                 return _guardianList;

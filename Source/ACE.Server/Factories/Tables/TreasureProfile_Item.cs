@@ -90,6 +90,12 @@ namespace ACE.Server.Factories.Tables
             ( TreasureItemType_Orig.ArtObject, 0.25f ),
         };
 
+        private static ChanceTable<TreasureItemType_Orig> itemProfile12 = new ChanceTable<TreasureItemType_Orig>()
+        {
+            ( TreasureItemType_Orig.PetDevice,  0.5f ),            
+            ( TreasureItemType_Orig.ArtObject, 0.5f ),
+        };
+
         /// <summary>
         /// TreasureDeath.ItemTreasureTypeSelectionChances indexes into these profiles
         /// </summary>
@@ -106,6 +112,7 @@ namespace ACE.Server.Factories.Tables
             itemProfile9,
             itemProfile10,
             itemProfile11,
+            itemProfile12,
         };
 
         /// <summary>

@@ -62,6 +62,13 @@ namespace ACE.Server.Factories.Tables
             ( TreasureItemType_Orig.ManaStone,      0.33f ),
         };
 
+        private static ChanceTable<TreasureItemType_Orig> mundaneProfile9 = new ChanceTable<TreasureItemType_Orig>()
+        {
+            ( TreasureItemType_Orig.Consumable,     0.2f ),
+            ( TreasureItemType_Orig.HealKit,        0.2f ),
+            ( TreasureItemType_Orig.ManaStone,      0.6f ),
+        };
+
         /// <summary>
         /// TreasureDeath.MundaneItemTypeSelectionChances indexes into these profiles
         /// </summary>
@@ -75,6 +82,7 @@ namespace ACE.Server.Factories.Tables
             mundaneProfile6,
             mundaneProfile7,
             mundaneProfile8,
+            mundaneProfile9,
         };
 
         /// <summary>
