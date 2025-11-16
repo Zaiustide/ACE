@@ -82,6 +82,22 @@ namespace ACE.Server.Entity
                     tq.MaxPlayersPerAllegiance = 5;
                     tq.AreaLandblockIds = new uint[] { 0x02C8 };
                     _zergControlLandblocksMap.Add(0x02C8, tq);
+
+                    //T9 dungeons
+                    var citadel = new ZergControlArea();
+                    citadel.MaxPlayersPerAllegiance = 14;
+                    citadel.AreaLandblockIds = new uint[] { 0x6147 };
+                    _zergControlLandblocksMap.Add(0x6147, citadel);
+
+                    var metos = new ZergControlArea();
+                    metos.MaxPlayersPerAllegiance = 9;
+                    metos.AreaLandblockIds = new uint[] { 0x02F5 };
+                    _zergControlLandblocksMap.Add(0x02F5, metos);
+
+                    var bsd = new ZergControlArea();
+                    bsd.MaxPlayersPerAllegiance = 9;
+                    bsd.AreaLandblockIds = new uint[] { 0x0105 };
+                    _zergControlLandblocksMap.Add(0x0105, bsd);
                 }
 
                 return _zergControlLandblocksMap;
