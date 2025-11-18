@@ -409,12 +409,12 @@ namespace ACE.Server.WorldObjects
                 targetPlayer.HandleLifestoneProtection();
                 return null;
             }
-
-            //If defender is town control boss and attacker is not a player in PK state, dmg is zero
+            
             if (targetPlayer == null)
             {
                 if (target.IsTownControlBoss)
                 {
+                    //If defender is town control boss and attacker is not a player in PK state, dmg is zero
                     if (sourcePlayer == null || !sourcePlayer.IsPK)
                     {
                         //Don't allow summons or NPKs to damage the town control bosses
@@ -459,6 +459,11 @@ namespace ACE.Server.WorldObjects
                         //Don't allow summons or NPKs to damage a world boss
                         return 0.0f;
                     }
+                }
+                else if (target.IsDungeonControlGuardian && (sourcePlayer == null || !sourcePlayer.IsPK))
+                {
+                    //Don't allow summons or NPKs to damage a Dungeon Control Guardian
+                    return 0.0f;
                 }
             }
 

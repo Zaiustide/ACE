@@ -111,6 +111,18 @@ VALUES (514108531,  0,  4,  280,    0,  425,  276,  319,  319,  425,  425,  425,
      , (514108531,  7,  4,  0,    0,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg */
      , (514108531,  8,  4, 200, 0.35,  425,  276,  319,  319,  425,  425,  425,  425,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
 
+INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
+VALUES (514108531,  4451,  2.033)  /* Lightning Bolt 8 */
+     , (514108531,  4443,  2.033)  /* Force Bolt 8 */
+     , (514108531,  4422,  2.033)  /* Whirling Blade arc 8 */
+     , (514108531,  4633,   2.01)  /* Vulnerability Other 8 */
+     , (514108531,  4543,   2.01)  /* Defenselessness Other 8 */
+     , (514108531,  4597,  2.015)  /* Magic Yield 8 */
+     , (514108531,  4294,  2.015)  /* Incantation of Clumsiness Other */
+     , (514108531,  4292,   2.01)  /* Incantation of Bafflement Other */
+     , (514108531,  4302,  2.015)  /* Incantation of Feeblemind Other */
+     , (514108531,  4326,   2.01)  /* Incantation of Weakness Other */;
+
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (514108531,  3 /* Death */,   0.05, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 

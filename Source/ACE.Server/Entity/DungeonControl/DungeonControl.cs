@@ -676,14 +676,14 @@ namespace ACE.Server.Entity.DungeonControl
             return null;
         }        
 
-        private static List<uint> _guardianList;
-        public static List<uint> GuardianList
+        private static HashSet<uint> _guardianList;
+        public static HashSet<uint> GuardianList
         {
             get
             {
                 if (_guardianList == null)
                 {
-                    _guardianList = new List<uint>();
+                    _guardianList = new HashSet<uint>();
                     _guardianList.Add(514108531); //Empyrean Guardian
                 }
 

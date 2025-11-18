@@ -223,6 +223,11 @@ namespace ACE.Server.Entity
                         //Don't allow summons or NPKs to damage a world boss
                         return 0.0f;
                     }
+                }                
+                else if(defender.IsDungeonControlGuardian && (playerAttacker == null || !playerAttacker.IsPK))
+                {
+                    //Don't allow summons or NPKs to damage a Dungeon Control Guardian
+                    return 0.0f;
                 }
             }
 
