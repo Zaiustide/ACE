@@ -1,6 +1,6 @@
 Mace (HeavyWeapons) Mutation #0:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 1
 
     - Chance: 100%:
 	    Damage = 9
@@ -513,9 +513,9 @@ Tier chances: 0, 0, 0, 0, 0, 0, 1, 0
         WieldSkillType = WeaponSkill
         WieldDifficulty = 420
 
-Mace (HeavyWeapons) Mutation #8 (660 samples):
+Mace (HeavyWeapons) Mutation #8 (660 samples) - Tier 8 Dmg:
 
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 1, 0
 
     - Chance: 0.5%:
         Damage += 46
@@ -625,9 +625,9 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
         WieldSkillType = WeaponSkill
         WieldDifficulty = 430
 
-Mace (HeavyWeapons) Mutation #9:
+Mace (HeavyWeapons) Mutation #9 - Tier 1 to 8 Variance:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 0
 
     - Chance: 10%:
         DamageVariance = 0.46
@@ -642,4 +642,51 @@ Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
         DamageVariance = 0.33
 
     - Chance: 10%:
+        DamageVariance = 0.3
+
+Mace (HeavyWeapons) Mutation #10 - Tier 9 Dmg:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 10%:
+        Damage += 56
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 57
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 58
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 25%:
+        Damage += 59
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 5%:
+        Damage += 60
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+Mace (HeavyWeapons) Mutation #11 - Tier 9 Variance:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 30%:
+        DamageVariance = 0.37
+
+    - Chance: 55%:
+        DamageVariance = 0.33
+
+    - Chance: 15%:
         DamageVariance = 0.3

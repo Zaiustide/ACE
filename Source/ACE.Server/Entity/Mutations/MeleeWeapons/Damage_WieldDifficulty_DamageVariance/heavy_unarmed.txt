@@ -479,7 +479,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 1, 0
 
 Unarmed (HeavyWeapons) Mutation #8 (540 samples):
 
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 1, 0
 
     - Chance: 0.5%:
         Damage += 39
@@ -579,7 +579,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
 
 Unarmed (HeavyWeapons) Mutation #9:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 0
 
     - Chance: 10%:
         DamageVariance = 0.6
@@ -594,4 +594,51 @@ Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
         DamageVariance = 0.48
 
     - Chance: 10%:
+        DamageVariance = 0.44
+
+Unarmed (HeavyWeapons) Mutation #10 - Tier 9 Dmg:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 10%:
+        Damage += 47
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 420
+
+    - Chance: 30%:
+        Damage += 48
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 49
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 25%:
+        Damage += 50
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 5%:
+        Damage += 51
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+Unarmed (HeavyWeapons) Mutation #11 - Tier 9 Variance:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 30%:
+        DamageVariance = 0.53
+
+    - Chance: 55%:
+        DamageVariance = 0.48
+
+    - Chance: 15%:
         DamageVariance = 0.44

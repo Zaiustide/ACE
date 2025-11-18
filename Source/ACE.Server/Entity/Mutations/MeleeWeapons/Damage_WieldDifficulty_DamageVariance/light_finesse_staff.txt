@@ -1,6 +1,6 @@
 Staff (LightWeapons, FinesseWeapons) Mutation #0:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 1
 
     - Chance: 100%:
 	    Damage = 7
@@ -455,7 +455,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 1, 0
 
 Staff (LightWeapons, FinesseWeapons) Mutation #8 (1,187 samples):
 
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 1, 0
 
     - Chance: 1%:
         Damage += 38
@@ -555,7 +555,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
 
 Staff (LightWeapons, FinesseWeapons) Mutation #9:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 0
 
     - Chance: 10%:
         DamageVariance = 0.5
@@ -570,4 +570,51 @@ Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
         DamageVariance = 0.35
 
     - Chance: 10%:
+        DamageVariance = 0.325
+
+Staff (LightWeapons, FinesseWeapons) Mutation #10 - T9 Dmg:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 10%:
+        Damage += 46
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 47
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 48
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 25%:
+        Damage += 49
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 5%:
+        Damage += 50
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+Staff (LightWeapons, FinesseWeapons) Mutation #11 - T9 Variance:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 30%:
+        DamageVariance = 0.4
+
+    - Chance: 55%:
+        DamageVariance = 0.35
+
+    - Chance: 15%:
         DamageVariance = 0.325

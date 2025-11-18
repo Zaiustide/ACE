@@ -1,6 +1,6 @@
 Spear (LightWeapons, FinesseWeapons) Mutation #0:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 1
 
     - Chance: 100%:
 	    Damage = 7
@@ -467,7 +467,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 1, 0
 
 Spear (LightWeapons, FinesseWeapons) Mutation #8 (892 samples):
 
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 1, 0
 
     - Chance: 1%:
         Damage += 41
@@ -561,7 +561,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
 
 Spear (LightWeapons, FinesseWeapons) Mutation #9:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 0
 
     - Chance: 10%:
         DamageVariance = 0.8
@@ -576,4 +576,51 @@ Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
         DamageVariance = 0.68
 
     - Chance: 10%:
+        DamageVariance = 0.65
+
+Spear (LightWeapons, FinesseWeapons) Mutation #10 - T9 Dmg:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 10%:
+        Damage += 48
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 49
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 50
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 25%:
+        Damage += 51
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 5%:
+        Damage += 53
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+Spear (LightWeapons, FinesseWeapons) Mutation #11 - T9 Variance:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 30%:
+        DamageVariance = 0.71
+
+    - Chance: 55%:
+        DamageVariance = 0.68
+
+    - Chance: 15%:
         DamageVariance = 0.65

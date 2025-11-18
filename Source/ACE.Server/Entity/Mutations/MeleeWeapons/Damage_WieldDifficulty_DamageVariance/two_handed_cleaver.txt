@@ -1,6 +1,6 @@
 Axe, Mace, Sword (TwoHandedCombat) Mutation #0:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 1
 
     - Chance: 100%:
 	    Damage = 4
@@ -401,7 +401,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 1, 0
 
 Axe, Mace, Sword (TwoHandedCombat) Mutation #8 (1,591 samples):
 
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 1, 0
 
     - Chance: 1%:
         Damage += 30
@@ -495,7 +495,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 1
 
 Axe, Mace, Sword (TwoHandedCombat) Mutation #9:
 
-Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
+Tier chances: 1, 1, 1, 1, 1, 1, 1, 1, 0
 
     - Chance: 5%:
         DamageVariance = 0.55
@@ -513,4 +513,51 @@ Tier chances: 1, 1, 1, 1, 1, 1, 1, 1
         DamageVariance = 0.35
 
     - Chance: 5%:
+        DamageVariance = 0.3
+
+Axe, Mace, Sword (TwoHandedCombat) Mutation #10 - T9 Dmg:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 10%:
+        Damage += 37
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 38
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 30%:
+        Damage += 39
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 25%:
+        Damage += 40
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+    - Chance: 5%:
+        Damage += 41
+        WieldRequirements = RawSkill
+        WieldSkillType = WeaponSkill
+        WieldDifficulty = 430
+
+Axe, Mace, Sword (TwoHandedCombat) Mutation #11 - T9 Variance:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 30%:
+        DamageVariance = 0.4
+
+    - Chance: 55%:
+        DamageVariance = 0.35
+
+    - Chance: 15%:
         DamageVariance = 0.3
