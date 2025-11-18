@@ -6,6 +6,7 @@ using ACE.Database;
 using ACE.Database.Models.TownControl;
 using ACE.Entity.Enum;
 using ACE.Server.Entity;
+using ACE.Server.Entity.DungeonControl;
 using ACE.Server.Entity.TownControl;
 using ACE.Server.Entity.WorldBoss;
 using ACE.Server.Managers;
@@ -287,11 +288,12 @@ namespace ACE.Server.WorldObjects
                 }
             }
 
-            else if(this.IsDungeonControlGuardian)
+            else if(this.IsDungeonControlGuardian && DungeonControl.IsOwnableDungeon(this.Location.Landblock))
             {
                 //Decay guardian's health and ratings based on time since creation
+                var dungeon = DungeonControl.GetOwnableDungeonByLandblockId(this.Location.Landblock);
                 var ageSeconds = Time.GetUnixTime() - this.CreationTimestamp;
-                var percentLifespanRemaining = Math.Max(1.0f - ((float)ageSeconds / 28800f), 0); //Assumes an 8 hour lifespan
+                var percentLifespanRemaining = Math.Max(1.0f - ((float)ageSeconds / (dungeon.OwnershipExpirationHours * 3600)), 0); //Assumes an 8 hour lifespan
 
                 if (percentLifespanRemaining > 0)
                 {
@@ -301,7 +303,7 @@ namespace ACE.Server.WorldObjects
                         UpdateVital(Health, Convert.ToInt32(Math.Round(Health.MaxValue * percentLifespanRemaining)));
                     }
 
-                    this.DamageRating = this.DamageResistRating = Convert.ToInt32(Math.Round(Math.Pow(percentLifespanRemaining, 7) * 2000)); 
+                    this.DamageRating = this.DamageResistRating = Convert.ToInt32(Math.Round(Math.Pow(percentLifespanRemaining, 4) * 2000)); 
                 }
             }
 
