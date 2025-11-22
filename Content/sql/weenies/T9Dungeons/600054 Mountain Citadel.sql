@@ -29,9 +29,8 @@ VALUES (600054,   1, 'Mountain Citadel') /* Name */
      , (600054,  16, 'This portal cannot be recalled, linked nor summoned.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
-VALUES (600054,   1, 0x020018C0) /* Setup */
-     , (600054,   2, 0x09000172) /* MotionTable */
-     , (600054,   3, 0x20000014) /* SoundTable */
+VALUES (600054,   1, 0x020005D3) /* Setup */
+     , (600054,   2, 0x09000003) /* MotionTable */
      , (600054,   8, 0x0600106B) /* Icon */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
