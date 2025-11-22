@@ -10,7 +10,7 @@ VALUES (600025,   1,          2) /* ItemType - Armor */
      , (600025,   5,        666) /* EncumbranceVal */
      , (600025,   9,          1) /* ValidLocations - HeadWear */
      , (600025,  16,          1) /* ItemUseable - No */
-     , (600025,  19,       100) /* Value */
+     , (600025,  19,       25) /* Value */
      , (600025,  28,        0) /* ArmorLevel */
      , (600025,  33,          -1) /* Bonded - Slipper */
      , (600025,  36,       9999) /* ResistMagic */

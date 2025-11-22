@@ -10,7 +10,7 @@ VALUES (600024,   1,          2) /* ItemType - Armor */
      , (600024,   5,        540) /* EncumbranceVal */
      , (600024,   9,        256) /* ValidLocations - FootWear */
      , (600024,  16,          1) /* ItemUseable - No */
-     , (600024,  19,       100) /* Value */
+     , (600024,  19,       50) /* Value */
      , (600024,  28,        0) /* ArmorLevel */
      , (600024,  33,          -1) /* Bonded - Slipper */
      , (600024,  36,       9999) /* ResistMagic */

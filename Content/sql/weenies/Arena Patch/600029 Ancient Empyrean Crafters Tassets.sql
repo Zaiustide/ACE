@@ -10,7 +10,7 @@ VALUES (600029,   1,          2) /* ItemType - Armor */
      , (600029,   5,        919) /* EncumbranceVal */
      , (600029,   9,       8192) /* ValidLocations - UpperLegArmor */
      , (600029,  16,          1) /* ItemUseable - No */
-     , (600029,  19,       100) /* Value */
+     , (600029,  19,       25) /* Value */
      , (600029,  28,        0) /* ArmorLevel */
      , (600029,  33,          -1) /* Bonded - Slippery */
      , (600029,  36,       9999) /* ResistMagic */

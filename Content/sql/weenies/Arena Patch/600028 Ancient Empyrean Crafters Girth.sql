@@ -10,7 +10,7 @@ VALUES (600028,   1,          2) /* ItemType - Armor */
      , (600028,   5,       1099) /* EncumbranceVal */
      , (600028,   9,       1024) /* ValidLocations - AbdomenArmor */
      , (600028,  16,          1) /* ItemUseable - No */
-     , (600028,  19,       100) /* Value */
+     , (600028,  19,       25) /* Value */
      , (600028,  28,        0) /* ArmorLevel */
      , (600028,  33,          -1) /* Bonded - Slippery */
      , (600028,  36,       9999) /* ResistMagic */

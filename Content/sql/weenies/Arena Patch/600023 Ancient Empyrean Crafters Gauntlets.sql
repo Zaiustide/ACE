@@ -10,7 +10,7 @@ VALUES (600023,   1,          2) /* ItemType - Armor */
      , (600023,   5,        919) /* EncumbranceVal */
      , (600023,   9,         32) /* ValidLocations - HandWear */
      , (600023,  16,          1) /* ItemUseable - No */
-     , (600023,  19,       100) /* Value */
+     , (600023,  19,       50) /* Value */
      , (600023,  28,        0) /* ArmorLevel */
      , (600023,  33,          -1) /* Bonded - Slippery */
      , (600023,  36,       9999) /* ResistMagic */

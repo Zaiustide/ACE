@@ -9,7 +9,7 @@ VALUES (600026,   1,          2) /* ItemType - Armor */
      , (600026,   4,        512) /* ClothingPriority - OuterwearLowerLegs */
      , (600026,   5,        919) /* EncumbranceVal */
      , (600026,   9,      16384) /* ValidLocations - LowerLegArmor */
-     , (600026,  19,       100) /* Value */
+     , (600026,  19,       50) /* Value */
      , (600026,  28,        0) /* ArmorLevel */
      , (600026,  33,          -1) /* Bonded - Slipper */
      , (600026,  36,       9999) /* ResistMagic */

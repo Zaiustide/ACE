@@ -21,14 +21,6 @@ VALUES (0x77ACA004,  1380, 0x7ACA013C, 54.4577, 12.2643, 200.005, -0.741899, 0, 
 /* @teleloc 0x7ACA013C [54.457699 12.264300 200.005005] -0.741899 0.000000 0.000000 -0.670512 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x77ACA008,  1902, 0x7ACA0000, 75.1481, 16.3678, 200.005, 0, 0, 0, -1, False, '2021-11-01 00:00:00'); /* Hilltop */
-/* @teleloc 0x7ACA0000 [75.148102 16.367800 200.005005] 0.000000 0.000000 0.000000 -1.000000 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x77ACA009,   153, 0x7ACA0000, 75.388, 29.914, 200.005, 1, 0, 0, 0, False, '2021-11-01 00:00:00'); /* Fountain */
-/* @teleloc 0x7ACA0000 [75.388000 29.914000 200.005005] 1.000000 0.000000 0.000000 0.000000 */
-
-INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x77ACA00A,  3917, 0x7ACA0135, 67.0824, 15.544, 200.005, -0.151709, 0, 0, 0.988425,  True, '2021-11-01 00:00:00'); /* Collector */
 /* @teleloc 0x7ACA0135 [67.082397 15.544000 200.005005] -0.151709 0.000000 0.000000 0.988425 */
 
@@ -45,13 +37,21 @@ VALUES (0x77ACA00C,  8377, 0x7ACA0110, 33.25, 38.75, 201.075, 1, 0, 0, 0, False,
 /* @teleloc 0x7ACA0110 [33.250000 38.750000 201.074997] 1.000000 0.000000 0.000000 0.000000 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x77ACA011, 25281, 0x7ACA0011, 54.4952, 4.02247, 210.793, 0.042829, 0, 0, -0.999082, False, '2025-11-15 21:16:42'); /* Mountain Citadel Portal */
-/* @teleloc 0x7ACA0011 [54.495201 4.022470 210.792999] 0.042829 0.000000 0.000000 -0.999082 */
+VALUES (0x77ACA014, 4200139, 0x7ACA0019, 75.1214, 5.71943, 199.937, -1, 0, 0, -0.000846, False, '2025-11-22 14:49:42'); /* Abandoned Mine */
+/* @teleloc 0x7ACA0019 [75.121399 5.719430 199.936996] -1.000000 0.000000 0.000000 -0.000846 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x77ACA012,  7295, 0x7ACA0019, 87.8009, 13.7662, 211.76, -0.719888, 0, 0, 0.69409, False, '2025-11-15 21:19:09'); /* Halls of Metos */
-/* @teleloc 0x7ACA0019 [87.800903 13.766200 211.759995] -0.719888 0.000000 0.000000 0.694090 */
+VALUES (0x77ACA015, 490085, 0x7ACA0009, 28.6176, 21.4333, 200, 0.944699, 0, 0, -0.32794, False, '2025-11-22 15:16:11'); /* Gate */
+/* @teleloc 0x7ACA0009 [28.617599 21.433300 200.000000] 0.944699 0.000000 0.000000 -0.327940 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x77ACA013,  7242, 0x7ACA0011, 60.1377, 11.8698, 219.837, 0.999705, 0, 0, -0.024274, False, '2025-11-15 21:23:24'); /* Black Spawn Den */
-/* @teleloc 0x7ACA0011 [60.137699 11.869800 219.837006] 0.999705 0.000000 0.000000 -0.024274 */
+VALUES (0x77ACA016, 42852, 0x7ACA0009, 28.6176, 21.4333, 199.937, 0.707107, 0, 0, -0.707107, False, '2025-11-22 15:16:41'); /* Portal to Town Network */
+/* @teleloc 0x7ACA0009 [28.617599 21.433300 199.936996] 0.707107 0.000000 0.000000 -0.707107 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x77ACA017, 600057, 0x7ACA0135, 68.8029, 13.9339, 200.005, -0.712168, 0, 0, -0.702009, False, '2025-11-22 16:37:57');
+/* @teleloc 0x7ACA0135 [68.802902 13.933900 200.005005] -0.712168 0.000000 0.000000 -0.702009 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x77ACA018, 600055, 0x7ACA0135, 67.68677, 12.47681, 200.005, -0.976977, 0, 0, -0.213345, False, '2025-11-22 16:38:31');
+/* @teleloc 0x7ACA0135 [67.686768 12.476810 200.005005] -0.976977 0.000000 0.000000 -0.213345 */

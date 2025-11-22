@@ -20,7 +20,9 @@ VALUES (451624495,   1,         16) /* ItemType - Creature */
      , (451624495, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */
      , (451624495, 133,          4) /* ShowableOnRadar - ShowAlways */
      , (451624495, 140,          1) /* AiOptions - CanOpenDoors */
-     , (451624495, 146,   25000000) /* XpOverride */;
+     , (451624495, 146,   45000000) /* XpOverride */
+	  ,(451624495, 332,        6000) /* LuminanceAward */
+	  ,(451624495, 307,          70) /* DamageRating */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (451624495,   1, True ) /* Stuck */
@@ -79,27 +81,27 @@ VALUES (451624495,   1, 0x02000A0B) /* Setup */
      , (451624495,  35,      10020) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451624495,   1, 360, 0, 0) /* Strength */
-     , (451624495,   2, 325, 0, 0) /* Endurance */
-     , (451624495,   3, 210, 0, 0) /* Quickness */
-     , (451624495,   4, 280, 0, 0) /* Coordination */
-     , (451624495,   5, 180, 0, 0) /* Focus */
-     , (451624495,   6, 220, 0, 0) /* Self */;
+VALUES (451624495,   1, 450, 0, 0) /* Strength */
+     , (451624495,   2, 340, 0, 0) /* Endurance */
+     , (451624495,   3, 305, 0, 0) /* Quickness */
+     , (451624495,   4, 310, 0, 0) /* Coordination */
+     , (451624495,   5, 200, 0, 0) /* Focus */
+     , (451624495,   6, 240, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (451624495,   1,   350, 0, 0, 360) /* MaxHealth */
-     , (451624495,   3,   200, 0, 0, 220) /* MaxStamina */
-     , (451624495,   5,     0, 0, 0, 20) /* MaxMana */;
+VALUES (451624495,   1, 16590, 0, 0, 16760) /* MaxHealth */
+     , (451624495,   3,  8670, 0, 0, 9010) /* MaxStamina */
+     , (451624495,   5,     0, 0, 0, 240) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451624495,  6, 0, 3, 0, 345, 0, 0) /* MeleeDefense        Specialized */
-     , (451624495,  7, 0, 3, 0, 430, 0, 0) /* MissileDefense      Specialized */
-     , (451624495, 15, 0, 3, 0, 325, 0, 0) /* MagicDefense        Specialized */
-     , (451624495, 20, 0, 2, 0,  80, 0, 0) /* Deception           Trained */
-     , (451624495, 22, 0, 2, 0,  80, 0, 0) /* Jump                Trained */
+VALUES (451624495,  6, 0, 2, 0, 450, 0, 0) /* MeleeDefense        Trained */
+     , (451624495,  7, 0, 2, 0, 500, 0, 0) /* MissileDefense      Trained */
+     , (451624495, 15, 0, 2, 0, 300, 0, 0) /* MagicDefense        Trained */
+     , (451624495, 20, 0, 2, 0, 100, 0, 0) /* Deception           Trained */
      , (451624495, 24, 0, 2, 0,  45, 0, 0) /* Run                 Trained */
-     , (451624495, 45, 0, 3, 0, 340, 0, 0) /* LightWeapons        Specialized */
-     , (451624495, 47, 0, 3, 0, 180, 0, 0) /* MissileWeapons      Specialized */;
+     , (451624495, 44, 0, 2, 0, 650, 0, 0) /* HeavyWeapons        Trained */
+     , (451624495, 45, 0, 2, 0, 650, 0, 0) /* LightWeapons        Trained */
+     , (451624495, 47, 0, 2, 0, 450, 0, 0) /* MissileWeapons      Trained */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
 VALUES (451624495,  0,  4,  2,  0.1,  450,  338,  257,  297,  225,  113,  387,  225,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head */
