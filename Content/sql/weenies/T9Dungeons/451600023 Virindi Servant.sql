@@ -12,10 +12,16 @@ VALUES (451600023,   1,         16) /* ItemType - Creature */
      , (451600023,  25,        666) /* Level */
      , (451600023,  27,          0) /* ArmorType - None */
      , (451600023,  68,          3) /* TargetingTactic - Random, Focused */
+	 , (451600023,  81,          1) /* MaxGeneratedObjects */
+     , (451600023,  82,          1) /* InitGeneratedObjects */	 
      , (451600023,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451600023, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600023, 140,          1) /* AiOptions - CanOpenDoors */
-     , (451600023, 146,       7000) /* XpOverride */;
+     , (451600023, 146,    5700000) /* XpOverride */
+	 , (451600023, 307,       1420) /* DamageRating */
+	 , (451600023, 308,         28) /* DamageResistRating */
+	 , (451600023, 332,       6250) /* LuminanceAward */     
+	 , (451600023, 386,         15) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (451600023,   1, True ) /* Stuck */
@@ -43,6 +49,7 @@ VALUES (451600023,   1,       5) /* HeartbeatInterval */
      , (451600023,  31,      16) /* VisualAwarenessRange */
      , (451600023,  34,       1) /* PowerupTime */
      , (451600023,  36,       1) /* ChargeSpeed */
+	 , (451600023,  43,       3) /* GeneratorRadius */
      , (451600023,  64,       1) /* ResistSlash */
      , (451600023,  65,       1) /* ResistPierce */
      , (451600023,  66,       1) /* ResistBludgeon */
@@ -73,30 +80,30 @@ VALUES (451600023,   1, 0x02000041) /* Setup */
      , (451600023,  35,      10022) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451600023,   1,  30, 0, 0) /* Strength */
-     , (451600023,   2, 150, 0, 0) /* Endurance */
-     , (451600023,   3, 150, 0, 0) /* Quickness */
-     , (451600023,   4, 100, 0, 0) /* Coordination */
-     , (451600023,   5, 250, 0, 0) /* Focus */
-     , (451600023,   6, 250, 0, 0) /* Self */;
+VALUES (451600023,   1, 3230, 0, 0) /* Strength */
+     , (451600023,   2, 2150, 0, 0) /* Endurance */
+     , (451600023,   3, 850, 0, 0) /* Quickness */
+     , (451600023,   4, 1000, 0, 0) /* Coordination */
+     , (451600023,   5, 1250, 0, 0) /* Focus */
+     , (451600023,   6, 650, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (451600023,   1,    50, 0, 0, 125) /* MaxHealth */
-     , (451600023,   3,     0, 0, 0, 150) /* MaxStamina */
-     , (451600023,   5,   300, 0, 0, 550) /* MaxMana */;
+VALUES (451600023,   1,    15000, 0, 0, 15000) /* MaxHealth */
+     , (451600023,   3,    15000, 0, 0, 15000) /* MaxStamina */
+     , (451600023,   5,    15000, 0, 0, 15000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451600023,  6, 0, 3, 0, 100, 0, 0) /* MeleeDefense        Specialized */
-     , (451600023,  7, 0, 3, 0, 200, 0, 0) /* MissileDefense      Specialized */
+VALUES (451600023,  6, 0, 3, 0, 0, 0, 0) /* MeleeDefense        Specialized */
+     , (451600023,  7, 0, 3, 0, 0, 0, 0) /* MissileDefense      Specialized */
      , (451600023, 14, 0, 2, 0, 190, 0, 0) /* ArcaneLore          Trained */
-     , (451600023, 15, 0, 3, 0, 100, 0, 0) /* MagicDefense        Specialized */
+     , (451600023, 15, 0, 3, 0, 0, 0, 0) /* MagicDefense        Specialized */
      , (451600023, 20, 0, 2, 0, 250, 0, 0) /* Deception           Trained */
-     , (451600023, 24, 0, 2, 0,  80, 0, 0) /* Run                 Trained */
-     , (451600023, 31, 0, 3, 0,  35, 0, 0) /* CreatureEnchantment Specialized */
-     , (451600023, 33, 0, 3, 0,  35, 0, 0) /* LifeMagic           Specialized */
-     , (451600023, 34, 0, 3, 0,  35, 0, 0) /* WarMagic            Specialized */
-     , (451600023, 45, 0, 3, 0, 150, 0, 0) /* LightWeapons        Specialized */
-     , (451600023, 46, 0, 3, 0,   0, 0, 0) /* FinesseWeapons      Specialized */;
+     , (451600023, 24, 0, 2, 0,  980, 0, 0) /* Run                 Trained */
+     , (451600023, 31, 0, 3, 0,  935, 0, 0) /* CreatureEnchantment Specialized */
+     , (451600023, 33, 0, 3, 0,  935, 0, 0) /* LifeMagic           Specialized */
+     , (451600023, 34, 0, 3, 0,  1835, 0, 0) /* WarMagic            Specialized */
+     , (451600023, 45, 0, 3, 0, 4850, 0, 0) /* LightWeapons        Specialized */
+     , (451600023, 46, 0, 3, 0,  4850, 0, 0) /* FinesseWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
 VALUES (451600023,  0,  1,  0,    0,  120,  120,  120,  120,   86,  120,  120,   86,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head */
@@ -131,6 +138,17 @@ VALUES (451600023,    60,   2.02)  /* Acid Stream III */
      , (451600023,  1417,   2.02)  /* Slowness Other III */
      , (451600023,  1666,  2.023)  /* Stamina to Health Self III */
      , (451600023,  1678,  2.023)  /* Stamina to Mana Self III */;
+
+INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
+VALUES (451600023,  3 /* Death */,  0.0125, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+SET @parent_id = LAST_INSERT_ID();
+
+INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `delay`, `extent`, `motion`, `message`, `test_String`, `min`, `max`, `min_64`, `max_64`, `min_Dbl`, `max_Dbl`, `stat`, `display`, `amount`, `amount_64`, `hero_X_P_64`, `percent`, `spell_Id`, `wealth_Rating`, `treasure_Class`, `treasure_Type`, `p_Script`, `sound`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
+VALUES (@parent_id,  0,  72 /* Generate */, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
+VALUES (451600023, 1, 451610938, 0, 1, 1, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) /* Generate Li Fanli (451610938) */;
 
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
 VALUES (451600023,  94)
