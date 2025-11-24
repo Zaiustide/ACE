@@ -14,14 +14,16 @@ VALUES (451601609,   1,         16) /* ItemType - Creature */
      , (451601609,  27,          0) /* ArmorType - None */
      , (451601609,  40,          2) /* CombatMode - Melee */
      , (451601609,  68,          3) /* TargetingTactic - Random, Focused */
+	 , (451601609,  81,          1) /* MaxGeneratedObjects */
+     , (451601609,  82,          1) /* InitGeneratedObjects */  	 
      , (451601609,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451601609, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */
      , (451601609, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451601609, 140,          1) /* AiOptions - CanOpenDoors */
      , (451601609, 146,      7000000) /* XpOverride */
 	 , (451601609, 386,         30) /* Overpower */
-	 , (451601609, 332,   2000) /* LuminanceAward */
-	 ,(451601609, 307,          50) /* DamageRating */;
+	 , (451601609, 332,        2000) /* LuminanceAward */
+	 ,(451601609, 307,          250) /* DamageRating */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (451601609,   1, True ) /* Stuck */
@@ -51,6 +53,7 @@ VALUES (451601609,   1,       5) /* HeartbeatInterval */
      , (451601609,  34,     1.1) /* PowerupTime */
      , (451601609,  36,       1) /* ChargeSpeed */
      , (451601609,  39,     1.3) /* DefaultScale */
+	 , (451601609,  43,       3) /* GeneratorRadius */
      , (451601609,  64,     0.9) /* ResistSlash */
      , (451601609,  65,    0.61) /* ResistPierce */
      , (451601609,  66,       1) /* ResistBludgeon */
@@ -84,10 +87,10 @@ VALUES (451601609,   1, 0x020007DD) /* Setup */
      , (451601609,  35,      10022) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451601609,   1, 300, 0, 0) /* Strength */
+VALUES (451601609,   1, 6300, 0, 0) /* Strength */
      , (451601609,   2, 290, 0, 0) /* Endurance */
      , (451601609,   3, 325, 0, 0) /* Quickness */
-     , (451601609,   4, 300, 0, 0) /* Coordination */
+     , (451601609,   4, 1600, 0, 0) /* Coordination */
      , (451601609,   5, 310, 0, 0) /* Focus */
      , (451601609,   6, 310, 0, 0) /* Self */;
 
@@ -104,12 +107,12 @@ VALUES (451601609,  6, 0, 3, 0, 365, 0, 0) /* MeleeDefense        Specialized */
      , (451601609, 20, 0, 2, 0, 120, 0, 0) /* Deception           Trained */
      , (451601609, 24, 0, 2, 0,  55, 0, 0) /* Run                 Trained */
      , (451601609, 31, 0, 3, 0,  395, 0, 0) /* CreatureEnchantment Specialized */
-     , (451601609, 33, 0, 3, 0, 600, 0, 0) /* LifeMagic           Specialized */
-     , (451601609, 34, 0, 3, 0, 600, 0, 0) /* WarMagic            Specialized */
-     , (451601609, 45, 0, 3, 0, 600, 0, 0) /* LightWeapons        Specialized */
-	 , (451601609, 44, 0, 2, 0, 600, 0, 0) /* HeavyWeapons        Trained */
-     , (451601609, 46, 0, 2, 0, 600, 0, 0) /* FinesseWeapons      Trained */
-     , (451601609, 47, 0, 3, 0, 500, 0, 0) /* MissileWeapons      Specialized */;
+     , (451601609, 33, 0, 3, 0, 900, 0, 0) /* LifeMagic           Specialized */
+     , (451601609, 34, 0, 3, 0, 900, 0, 0) /* WarMagic            Specialized */
+     , (451601609, 45, 0, 3, 0, 4900, 0, 0) /* LightWeapons        Specialized */
+	 , (451601609, 44, 0, 2, 0, 4900, 0, 0) /* HeavyWeapons        Trained */
+     , (451601609, 46, 0, 2, 0, 4900, 0, 0) /* FinesseWeapons      Trained */
+     , (451601609, 47, 0, 3, 0, 900, 0, 0) /* MissileWeapons      Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
 VALUES (451601609,  0,  4,  0,    0,  230,  189,  101,  191,  166,  191,  166,  207,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head */
@@ -131,6 +134,17 @@ VALUES (451601609,  6199,  2.085)  /* Incantation of Lightning Arc */
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
 VALUES (451601609,  94)
      , (451601609, 414);
+
+INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
+VALUES (451601609,  3 /* Death */,  0.0125, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+SET @parent_id = LAST_INSERT_ID();
+
+INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `delay`, `extent`, `motion`, `message`, `test_String`, `min`, `max`, `min_64`, `max_64`, `min_Dbl`, `max_Dbl`, `stat`, `display`, `amount`, `amount_64`, `hero_X_P_64`, `percent`, `spell_Id`, `wealth_Rating`, `treasure_Class`, `treasure_Type`, `p_Script`, `sound`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
+VALUES (@parent_id,  0,  72 /* Generate */, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
+VALUES (451601609, 1, 451610938, 0, 1, 1, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) /* Generate Li Fanli (451610938) */;
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (451601609,  5 /* HeartBeat */,  0.025, NULL, 0x8000003C /* HandCombat */, 0x41000003 /* Ready */, NULL, NULL, NULL, NULL);

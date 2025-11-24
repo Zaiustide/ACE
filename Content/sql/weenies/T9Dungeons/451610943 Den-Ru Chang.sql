@@ -14,12 +14,12 @@ VALUES (451610943,   1,         16) /* ItemType - Creature */
      , (451610943,  27,          0) /* ArmorType - None */
      , (451610943,  68,         13) /* TargetingTactic - Random, LastDamager, TopDamager */
      , (451610943,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
-     , (451610943, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */
+     , (451610943, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */	 
      , (451610943, 133,          2) /* ShowableOnRadar - ShowMovement */
+	 , (451610943, 146,  250000000) /* XpOverride */
 	 , (451610943, 307,        525) /* DamageRating */
 	 , (451610943, 308,        138) /* DamageResistRating */
-	 , (451610943, 332,     100000) /* LuminanceAward */
-     , (451610943, 146,  250000000) /* XpOverride */
+	 , (451610943, 332,     100000) /* LuminanceAward */     
 	 , (451610943, 386,         15) /* Overpower */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
