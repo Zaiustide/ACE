@@ -24,7 +24,7 @@ INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (25281,   1, 'Mountain Citadel Portal') /* Name */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
-VALUES (25281,   1, 0x020005D4) /* Setup */
+VALUES (25281,   1, 0x020001B3) /* Setup */
      , (25281,   2, 0x09000003) /* MotionTable */
      , (25281,   8, 0x0600106B) /* Icon */;
 
