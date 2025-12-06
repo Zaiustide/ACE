@@ -73,7 +73,7 @@ VALUES (451610942,   1, 0x02000001) /* Setup */
      , (451610942,   4, 0x30000000) /* CombatTable */
      , (451610942,   8, 0x06001036) /* Icon */
      , (451610942,  22, 0x34000004) /* PhysicsEffectTable */
-     , (451610942,  32,        434) /* WieldedTreasureType */
+     , (451610942,  32,        30002) /* WieldedTreasureType */
      , (451610942,  35,        10023) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)

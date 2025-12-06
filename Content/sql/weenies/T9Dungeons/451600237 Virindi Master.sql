@@ -144,7 +144,7 @@ VALUES (451600237,    60,  2.011)  /* Acid Stream III */
      , (451600237,  1678,  2.032)  /* Stamina to Mana Self III */;
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
-VALUES (451600237,  3 /* Death */,  0.0125, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+VALUES (451600237,  3 /* Death */,  0.0025, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 SET @parent_id = LAST_INSERT_ID();
 
