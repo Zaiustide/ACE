@@ -14,6 +14,7 @@ using ACE.Server.Network.Enum;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using System.Numerics;
+using ACE.Server.Factories;
 
 namespace ACE.Server.WorldObjects
 {
@@ -146,9 +147,13 @@ namespace ACE.Server.WorldObjects
 
                 if (targetPlayer != null)
                 {
+                    //Dinnerware isnt subject to pvp dmg cap
+                    bool isDinnerware = LootTables.DinnerwareLootMatrix.Contains((int)damageSource.WeenieClassId);
+
                     var damageCap = PropertyManager.GetLong("pvp_damage_cap").Item;
-                    if (damageEvent.Damage > damageCap)
+                    if (damageEvent.Damage > damageCap && !isDinnerware)
                         damageEvent.Damage = damageCap;
+
                     targetPlayer.TakeDamage(this, damageEvent);
                 }
                 else
