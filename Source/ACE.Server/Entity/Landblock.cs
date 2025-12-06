@@ -495,15 +495,18 @@ namespace ACE.Server.Entity
                     shouldAwardPoints = false;
                 }
 
-                if(shouldAwardPoints)
+                if (shouldAwardPoints)
                 {
                     var allegId = playersInControlPointByAlleg.Keys.First();
 
+                    var isWhitelisted = TownControlAllegiances.IsAllowedAllegiance((int)allegId);
+
                     var dungeon = DC.DungeonControl.GetOwnableDungeonByLandblockId(this.Id.Landblock);
                     if (dungeon != null &&
-                        (dungeon.OwningAllegianceId == null || dungeon.OwningAllegianceId != allegId))                    
+                        (dungeon.OwningAllegianceId == null || dungeon.OwningAllegianceId != allegId) &&
+                        isWhitelisted)
                     {
-                        DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);                        
+                        DC.DungeonControl.EarnAllegiancePoints(allegId, this.Id.Landblock);
                     }
                 }
 
