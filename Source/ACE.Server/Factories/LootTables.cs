@@ -235,7 +235,7 @@ namespace ACE.Server.Factories
             new int[] { 338, 22164, 22165, 22166, 22167 },   // 11 - Quarter Staff
             new int[] { 350, 3877, 3878, 3879, 3880 },       // 12 - Broad Sword
             new int[] { 31759, 31760, 31761, 31762, 31758 }, // 13 - Dericost Blade
-            new int[] { 45099, 45099, 45099, 45099, 45099 }, // 14 - Epee (MS)
+            new int[] { 45099, 45100, 45101, 45102, 45103 }, // 14 - Epee (MS)
             new int[] { 324, 3810, 3811, 3812, 3813 },       // 15 - Kaskara
             new int[] { 30571, 30572, 30573, 30574, 30575 }, // 16 - Spada
             new int[] { 340, 3853, 3854, 3855, 3856 },       // 17 - Shamshir
