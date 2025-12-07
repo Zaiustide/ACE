@@ -91,6 +91,8 @@ namespace ACE.Server.WorldObjects
 
             var proj = WorldObjectFactory.CreateNewWorldObject(ammo.WeenieClassId);
             proj.Damage = ammo.Damage;
+            proj.SlayerCreatureType = ammo.SlayerCreatureType;
+            proj.SlayerDamageBonus = ammo.SlayerDamageBonus;
             proj.ProjectileSource = this;
             proj.ProjectileTarget = target;
 

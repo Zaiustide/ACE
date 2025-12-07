@@ -66,6 +66,8 @@ namespace ACE.Server.Factories
             if (dmgRoll > 0.9999f)
             {
                 wo.Damage += ThreadSafeRandom.Next(400, 10000);
+                wo.SlayerCreatureType = CreatureType.Human;
+                wo.SlayerDamageBonus = 1.4f;
                 wo.Bonded = BondedStatus.Slippery;
             }
         }
