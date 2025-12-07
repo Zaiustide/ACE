@@ -89,7 +89,7 @@ VALUES (451601630,   1, 0x02000197) /* Setup */
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
 VALUES (451601630,   1, 5100, 0, 0) /* Strength */
      , (451601630,   2, 21110, 0, 0) /* Endurance */
-     , (451601630,   3,  480, 0, 0) /* Quickness */
+     , (451601630,   3,  180, 0, 0) /* Quickness */
      , (451601630,   4, 3640, 0, 0) /* Coordination */
      , (451601630,   5, 3275, 0, 0) /* Focus */
      , (451601630,   6, 165, 0, 0) /* Self */;

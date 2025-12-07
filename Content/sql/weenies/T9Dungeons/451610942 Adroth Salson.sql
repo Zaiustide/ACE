@@ -90,8 +90,8 @@ VALUES (451610942,   1,   48000, 0, 0, 48000) /* MaxHealth */
      , (451610942,   5,     0, 0, 0, 80) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451610942,  6, 0, 3, 0, 200, 0, 705.7668485297244) /* MeleeDefense        Specialized */
-     , (451610942,  7, 0, 3, 0, 200, 0, 705.7668485297244) /* MissileDefense      Specialized */
+VALUES (451610942,  6, 0, 3, 0, 0, 0, 705.7668485297244) /* MeleeDefense        Specialized */
+     , (451610942,  7, 0, 3, 0, 0, 0, 705.7668485297244) /* MissileDefense      Specialized */
      , (451610942, 11, 0, 3, 0, 1870, 0, 705.7668485297244) /* Sword               Specialized */
      , (451610942, 14, 0, 3, 0, 250, 0, 705.7668485297244) /* ArcaneLore          Specialized */
      , (451610942, 15, 0, 3, 0, 420, 0, 705.7668485297244) /* MagicDefense        Specialized */
@@ -117,7 +117,7 @@ VALUES (451610942,  94)
      , (451610942, 414);
 	 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (451610942, 9, 1548801,  1, 0,  0.02, False) /* 1548801 Potion of Resistance */
+VALUES (451610942, 9, 1548801,  3, 0,  0.02, False) /* 1548801 Potion of Resistance */
      , (451610942, 9,      0,  0, 0,   0.98, False)    /* Create nothing for ContainTreasure */
 	 , (451610942, 9, 490248,  0, 0,   0.15, False) /* 4200028 Set Randomizer Morph Gem */
 	 , (451610942, 9,      0,  0, 0,   0.85, False)    /* Create nothing for ContainTreasure */
