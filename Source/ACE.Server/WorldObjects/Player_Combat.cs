@@ -147,13 +147,19 @@ namespace ACE.Server.WorldObjects
 
                 if (targetPlayer != null)
                 {
-                    //Dinnerware isnt subject to pvp dmg cap
-                    bool isDinnerware = LootTables.DinnerwareLootMatrix.Contains((int)damageSource.WeenieClassId);
+                    try
+                    {
+                        //Dinnerware isnt subject to pvp dmg cap
+                        bool isDinnerware = LootTables.DinnerwareLootMatrix.Contains((int)((damageSource?.WeenieClassId) ?? 0));
 
-                    var damageCap = PropertyManager.GetLong("pvp_damage_cap").Item;
-                    if (damageEvent.Damage > damageCap && !isDinnerware)
-                        damageEvent.Damage = damageCap;
-
+                        var damageCap = PropertyManager.GetLong("pvp_damage_cap").Item;
+                        if (damageEvent.Damage > damageCap && !isDinnerware)
+                            damageEvent.Damage = damageCap;
+                    }
+                    catch(Exception ex)
+                    {
+                        log.ErrorFormat("Exception in Player_Combat.DamageTarget while applying pvp_dmg_cap logic. Ex: {0}", ex);
+                    }
                     targetPlayer.TakeDamage(this, damageEvent);
                 }
                 else
