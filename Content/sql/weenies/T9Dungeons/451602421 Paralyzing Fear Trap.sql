@@ -34,4 +34,4 @@ VALUES (451602421,   1, 0x020000ED) /* Setup */
      , (451602421,   3, 0x20000014) /* SoundTable */
      , (451602421,   8, 0x06001066) /* Icon */
      , (451602421,  22, 0x3400002B) /* PhysicsEffectTable */
-     , (451602421,  28,       2421) /* Spell - Avalanche */;
+     , (451602421,  28,       2421) /* Spell - Paralyzing Fear */;
