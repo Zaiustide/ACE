@@ -12,8 +12,7 @@ VALUES (8939, True, 0, 0, 0, False, 0, 0, 0);
 SET @parent_id = LAST_INSERT_ID();
 
 INSERT INTO `recipe_mods_int` (`recipe_Mod_Id`, `index`, `stat`, `value`, `enum`, `source`)
-VALUES (@parent_id, 0, 384, 1, 2, 1) /* On Source.SuccessTarget Add GearPKDamageResistRating 1 to Target */
-     , (@parent_id, 0, 311, 8, 8, 1) /* On Source.SuccessTarget SetBitsOn ImbueStackingBits 8 to Target */;
+VALUES (@parent_id, 0, 384, 1, 2, 1) /* On Source.SuccessTarget Add GearPKDamageResistRating 1 to Target */;
 
 DELETE FROM `cook_book` WHERE `recipe_Id` = 8939;
 
@@ -547,8 +546,50 @@ VALUES (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   141 
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72004 /* Stormwood Atlatl */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72005 /* Stormwood Staff */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 72006 /* Stormwood Dagger */, '2022-05-10 03:49:02')
-	, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24207 /* Weeping Wand */, '2022-05-10 03:49:02')
+	 , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24207 /* Weeping Wand */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   322 /* Jo */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   333 /* Nabut */, '2022-05-10 03:49:02')
      , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */,   338 /* Quarter Staff */, '2022-05-10 03:49:02')
-     , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 46605 /* Magari Yari */, '2022-05-10 03:49:02');
+     , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 46605 /* Magari Yari */, '2022-05-10 03:49:02')
+	 	, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24197 /* Weeping Atlatl */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24198 /* Weeping Axe */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24199 /* Weeping Bow */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24200 /* Weeping Claw */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24201 /* Weeping Crossbow */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24202 /* Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24203 /* Weeping Mace */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24204 /* Weeping Spear */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24205 /* Weeping Staff */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 24206 /* Weeping Sword */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25607 /* Acidic Weeping Axe */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25608 /* Electric Weeping Axe */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25609 /* Flaming Weeping Axe */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25610 /* Frozen Weeping Axe */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25611 /* Acidic Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25612 /* Electric Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25613 /* Flaming Weeping Dagger */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25614 /* Frozen Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25615 /* Acidic Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25616 /* Electric Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25617 /* Flaming Weeping Dagger */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25618 /* Frozen Weeping Dagger */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25619 /* Acidic Weeping Mace */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25620 /* Electric Weeping Mace */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25621 /* Flaming Weeping Mace */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25622 /* Frozen Weeping Mace */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25623 /* Acidic Weeping Spear */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25624 /* Electric Weeping Spear */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25625 /* Flaming Weeping Spear */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25626 /* Frozen Weeping Spear */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25627 /* Acidic Weeping Staff */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25628 /* Electric Weeping Staff */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25629 /* Flaming Weeping Staff */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25630 /* Frozen Weeping Staff */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25631 /* Acidic Weeping Sword */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25632 /* Electric Weeping Sword */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25633 /* Flaming Weeping Sword */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 25634 /* Frozen Weeping Sword */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41638 /* Acidic Weeping Two Handed Spear */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41639 /* Electric Weeping Two Handed Spear */, '2022-05-10 03:49:02')
+		, (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41640 /* Flaming Weeping Two Handed Spear */, '2022-05-10 03:49:02')
+	    , (8939, 53453 /* Corrupted Amber: Weapon of the Corrupted Soul. */, 41641 /* Frozen Weeping Two Handed Spear */, '2022-05-10 03:49:02');
