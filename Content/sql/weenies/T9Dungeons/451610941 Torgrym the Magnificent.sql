@@ -139,7 +139,7 @@ VALUES (451610941,  94)
      , (451610941, 414);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (451610941, 9, 1548801,  3, 0,  0.02, False) /* 1548801 Potion of Resistance */
+VALUES (451610941, 9, 1548801,  1, 0,  0.02, False) /* 1548801 Potion of Resistance */
      , (451610941, 9,      0,  0, 0,   0.98, False)    /* Create nothing for ContainTreasure */
 	 , (451610941, 9, 490248,  0, 0,   0.15, False) /* 4200028 Set Randomizer Morph Gem */
 	 , (451610941, 9,      0,  0, 0,   0.85, False)    /* Create nothing for ContainTreasure */

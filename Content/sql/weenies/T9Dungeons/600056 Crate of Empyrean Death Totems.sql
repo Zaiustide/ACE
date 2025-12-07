@@ -6,10 +6,6 @@ VALUES (600056, 'ace600056-Crate of Black Market Gems of Dispelling', 38, '2021-
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (600056,   1,        128) /* ItemType - Misc */
      , (600056,   5,         50) /* EncumbranceVal */
-     , (600056,  11,          1) /* MaxStackSize */
-     , (600056,  12,          1) /* StackSize */
-     , (600056,  13,         50) /* StackUnitEncumbrance */
-     , (600056,  15,          2) /* StackUnitValue */
      , (600056,  16,          8) /* ItemUseable - Contained */
      , (600056,  19,          50) /* Value */
      , (600056,  33,          1) /* Bonded - Bonded */
