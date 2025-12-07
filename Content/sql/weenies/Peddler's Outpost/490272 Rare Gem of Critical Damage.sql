@@ -27,7 +27,7 @@ VALUES (490272,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490272,   1, 'Rare Gem of Critical Damage') /* Name */
-    , (490272,  14, 'An absolutely flawless gem. Applying this to a piece of armor will grant it two Critical Damage rating. This gem can also be applied to shields, casters, missile weapons and 2-handed weapons. Shields can reach a max of 15 rating, while casters, missile weapons and 2-handed melee weapons can reach a max of 10. Gems can be applied more then once for a chance to reroll the current rating on the shield. If there is already Critical Damage Reduction rating on the item it will be removed.') /* Use */
+    , (490272,  14, 'An absolutely flawless gem. Applying this to a piece of armor will grant it two Critical Damage rating. This gem can also be applied to shields, casters, missile weapons and 2-handed weapons. Shields can reach a max of 15 rating, while casters, missile weapons and 2-handed melee weapons can reach a max of 10. Gems can be applied more then once for a chance to reroll the current rating on the shield. If there is already Critical Damage Reduction rating on the item it will be removed. If the item has been imbued with the magics of the Luminous Amber, this imbue will be removed but can be applied again.') /* Use */
      , (490272,  16, 'There is room for only one gem, will not stack with existing rating.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)

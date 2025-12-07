@@ -18,7 +18,7 @@ VALUES (451610938,   1,         16) /* ItemType - Creature */
      , (451610938,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451610938, 101,        131) /* AiAllowedCombatStyle - Unarmed, OneHanded, ThrownWeapon */
      , (451610938, 133,          2) /* ShowableOnRadar - ShowMovement */
-	 , (451610938, 307,        600) /* DamageRating */
+	 , (451610938, 307,      3000) /* DamageRating */
 	 , (451610938, 308,          6) /* DamageResistRating */
 	 , (451610938, 332,     100000) /* LuminanceAward */
      , (451610938, 146,  250000000) /* XpOverride */
@@ -73,14 +73,14 @@ VALUES (451610938,   1, 0x02000001) /* Setup */
      , (451610938,   4, 0x30000000) /* CombatTable */
      , (451610938,   8, 0x06001036) /* Icon */
      , (451610938,  22, 0x34000004) /* PhysicsEffectTable */
-     , (451610938,  32,        427) /* WieldedTreasureType */
+     , (451610938,  32,      30000) /* WieldedTreasureType */
      , (451610938,  35,      10023) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451610938,   1, 62200, 0, 0) /* Strength */
+VALUES (451610938,   1, 20000, 0, 0) /* Strength */
      , (451610938,   2, 850, 0, 0) /* Endurance */
      , (451610938,   3, 850, 0, 0) /* Quickness */
-     , (451610938,   4, 4200, 0, 0) /* Coordination */
+     , (451610938,   4, 1200, 0, 0) /* Coordination */
      , (451610938,   5, 650, 0, 0) /* Focus */
      , (451610938,   6, 650, 0, 0) /* Self */;
 
@@ -90,10 +90,10 @@ VALUES (451610938,   1,  22000, 0, 0, 22000) /* MaxHealth */
      , (451610938,   5,   4000, 0, 0, 4000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451610938,  2, 0, 3, 0, 2850, 0, 705.4965943564291) /* Bow                 Specialized */
+VALUES (451610938,  2, 0, 3, 0, 980, 0, 705.4965943564291) /* Bow                 Specialized */
      , (451610938,  6, 0, 3, 0, 200, 0, 705.4965943564291) /* MeleeDefense        Specialized */
      , (451610938,  7, 0, 3, 0, 200, 0, 705.4965943564291) /* MissileDefense      Specialized */
-     , (451610938, 13, 0, 3, 0, 12500, 0, 705.4965943564291) /* UnarmedCombat       Specialized */
+     , (451610938, 13, 0, 3, 0, 980, 0, 705.4965943564291) /* UnarmedCombat       Specialized */
      , (451610938, 14, 0, 3, 0, 250, 0, 705.4965943564291) /* ArcaneLore          Specialized */
      , (451610938, 15, 0, 3, 0, 200, 0, 705.4965943564291) /* MagicDefense        Specialized */
      , (451610938, 20, 0, 3, 0, 150, 0, 705.4965943564291) /* Deception           Specialized */
@@ -127,9 +127,9 @@ VALUES (451610938, 9, 1548801,  1, 0,  0.08, False) /* 1548801 Potion of Resista
 	 , (451610938, 9, 1548806,  1, 0,  0.05, False) /* 1548806 Rare Damage Reduction Morph Gem */
 	 , (451610938, 9, 1548805,  1, 0,  0.05, False) /* 1548805 Rare Damage Boost Morph Gem */ 
 	 , (451610938, 9,      0,  0, 0,    0.9, False)    /* Create nothing for ContainTreasure */
-	 , (451610938, 9, 490273,  1, 0,   0.25, False) /* 490273 Rare Gem of Critical Damage Reduction */
-	 , (451610938, 9, 490272,  1, 0,   0.25, False) /* 490272 Rare Gem of Critical Damage */ 
-	 , (451610938, 9,      0,  0, 0,    0.5, False)    /* Create nothing for ContainTreasure */
+	 , (451610938, 9, 490273,  1, 0,   0.15, False) /* 490273 Rare Gem of Critical Damage Reduction */
+	 , (451610938, 9, 490272,  1, 0,   0.15, False) /* 490272 Rare Gem of Critical Damage */ 
+	 , (451610938, 9,      0,  0, 0,    0.7, False)    /* Create nothing for ContainTreasure */
 	 , (451610938, 9, 41541201,  1, 0, 0.75, False) /* 41541201 Paragon Legendary Quest Gem */ 
 	 , (451610938, 9,      0,  0, 0,   0.25, False)    /* Create nothing for ContainTreasure */;
 

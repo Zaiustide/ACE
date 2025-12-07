@@ -161,6 +161,8 @@ namespace ACE.Server.Entity
         public const uint MorphGemHieroglyphofVoidMagicMastery = 70001;
         public const uint MorphGemHieroglyphofTwoHandedWeaponsMastery = 70002;
         public const uint MorphGemHieroglyphofSummoningMastery = 70003;
+        public const uint MorphGemRandomizeWeaponElement = 600058;
+
         #endregion Rare/Cantrip Morph Gem IDs
 
         public static readonly List<int> HeroicMasterSpells =
@@ -656,6 +658,71 @@ namespace ACE.Server.Entity
             490052,
         };
 
+        private static readonly Dictionary<DamageType, ImbuedEffectType> DamageToImbueMap = new()
+        {
+            { DamageType.Slash, ImbuedEffectType.SlashRending },
+            { DamageType.Pierce, ImbuedEffectType.PierceRending },
+            { DamageType.Bludgeon, ImbuedEffectType.BludgeonRending },
+            { DamageType.Cold, ImbuedEffectType.ColdRending },
+            { DamageType.Fire, ImbuedEffectType.FireRending },
+            { DamageType.Acid, ImbuedEffectType.AcidRending },
+            { DamageType.Electric, ImbuedEffectType.ElectricRending }
+        };
+
+        private static readonly ImbuedEffectType AllRendingFlags =
+            ImbuedEffectType.SlashRending |
+            ImbuedEffectType.PierceRending |
+            ImbuedEffectType.BludgeonRending |
+            ImbuedEffectType.AcidRending |
+            ImbuedEffectType.ColdRending |
+            ImbuedEffectType.ElectricRending |
+            ImbuedEffectType.FireRending;
+
+        private static void UpdateWeaponElementSwap(Player player, WorldObject source, WorldObject target)
+        {
+            player.Session.Network.EnqueueSend(new GameMessageDeleteObject(target));
+
+            UpdateWeaponProps(player, source, target);
+            //player.UpdateProperty(target, PropertyInt.UiEffects, (int?)source.UiEffects);
+            player.UpdateProperty(target, PropertyInt.DamageType, (int)source.W_DamageType);
+            player.UpdateProperty(target, PropertyDataId.TsysMutationFilter, source.TsysMutationFilter);
+            player.UpdateProperty(target, PropertyDataId.MutateFilter, source.MutateFilter);
+            player.UpdateProperty(target, PropertyDataId.PhysicsEffectTable, source.PhysicsTableId);
+            player.UpdateProperty(target, PropertyDataId.SoundTable, source.SoundTableId);
+            player.UpdateProperty(target, PropertyInt.ResistanceModifierType, (int?)source.W_DamageType);
+
+            if ((target.ImbuedEffect & AllRendingFlags) != 0)
+            {
+                target.ImbuedEffect &= ~AllRendingFlags;
+
+                foreach (var mapping in DamageToImbueMap)
+                {
+                    if ((target.W_DamageType & mapping.Key) != 0)
+                    {
+                        target.ImbuedEffect |= mapping.Value;
+                        break;
+                    }
+                }
+            }
+
+            if (target.ImbuedEffect != ImbuedEffectType.Undef)
+                target.IconUnderlayId = RecipeManager.IconUnderlay[target.ImbuedEffect];
+
+            var actionChain = new ActionChain();
+            actionChain.AddDelaySeconds(0.1);
+            actionChain.AddAction(player, () =>
+            {
+                //player.Session.Network.EnqueueSend(new GameMessageUpdateObject(target));
+                player.Session.Network.EnqueueSend(new GameMessageCreateObject(target));
+            });
+            actionChain.EnqueueChain();
+        }
+        public static bool ContainsOnlyPhysicalOrElemental(DamageType damageType)
+        {
+            const DamageType allowedTypes = DamageType.Physical | DamageType.Elemental;
+            return damageType != DamageType.Undef && (damageType & allowedTypes) == damageType;
+        }
+
         public static void ApplyMorphGem(Player player, WorldObject source, WorldObject target)
         {
             try
@@ -795,6 +862,13 @@ namespace ACE.Server.Entity
                         if (currentItemValue.Value <= 20000)
                         {
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat("Morph gems do not allow an item's Value to be reduced below 20k", ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        if(target.GetProperty(PropertyInt.RareId).HasValue)
+                        {
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat("This gem cannot be used on Rare armor or weapons.", ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
@@ -1659,6 +1733,16 @@ namespace ACE.Server.Entity
                         target.GearCritDamage = 0;
                         target.GearCritDamageResist = 2;
 
+                        //If this already has a Luminous Amber CD/CDR imbue, it'll get overwritten
+                        var currImbueStackingBits = target.GetProperty(PropertyInt.ImbueStackingBits);                        
+                        if(currImbueStackingBits.HasValue && ((currImbueStackingBits ?? 0) & 1) == 1)
+                        {
+                            var newImbueStackingBits = (currImbueStackingBits ?? 0) & ~1;
+                            target.SetProperty(PropertyInt.ImbueStackingBits, newImbueStackingBits);
+
+                            playerMsg += "  It's Luminous Amber imbue has also been removed in the process.";
+                        }
+                        
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemCDR);
                         break;
@@ -1698,6 +1782,8 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        bool imbueStackingBitsCleared = false;
+
                         //Handle armor
                         if ((target.ArmorLevel ?? 0) > 0 && !target.IsShield)
                         {
@@ -1714,6 +1800,15 @@ namespace ACE.Server.Entity
                             playerMsg = $"You have successfully used the {source.Name} to add +2 Critical Damage Rating to your {target.NameWithMaterial}!{cdrRemovalMsg}";
                             target.GearCritDamageResist = null;
                             newCDRating = 2;
+
+                            //If this already has a Luminous Amber CD/CDR imbue, it'll get overwritten
+                            var currCdrImbueStackingBits = target.GetProperty(PropertyInt.ImbueStackingBits);
+                            if (currCdrImbueStackingBits.HasValue && ((currCdrImbueStackingBits ?? 0) & 1) == 1)
+                            {
+                                var newImbueStackingBits = (currCdrImbueStackingBits ?? 0) & ~1;
+                                target.SetProperty(PropertyInt.ImbueStackingBits, newImbueStackingBits);
+                                imbueStackingBitsCleared = true;
+                            }
                         }
                         else if(targetMeleeWeaponCD != null && targetMeleeWeaponCD.W_WeaponType != WeaponType.TwoHanded)
                         {
@@ -1828,6 +1923,9 @@ namespace ACE.Server.Entity
                         {
                             playerMsg = $"The {source.Name} has failed and has damaged your {target.NameWithMaterial} resulting in a new Critical Damage Rating of {newCDRating}.{(oldCDRRating > 0 ? $" As a result the previous Critical Damage Resist Rating of {oldCDRRating} has been removed." : "")}";
                         }
+
+                        if(imbueStackingBitsCleared)
+                            playerMsg += "  It's Luminous Amber imbue has also been removed in the process.";
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemCD);
@@ -4119,6 +4217,75 @@ namespace ACE.Server.Entity
                         break;
                     #endregion MorphGemDmgResistRating
 
+                    #region MorphGemRandomizeWeaponElement
+                    case MorphGemRandomizeWeaponElement:
+                        Skill[] validSkills = [
+                            Skill.FinesseWeapons,
+                            Skill.HeavyWeapons,
+                            Skill.LightWeapons,
+                            Skill.MissileWeapons,
+                            Skill.TwoHandedCombat,
+                            Skill.WarMagic,
+                        ];
+
+                        if (target.WieldSkillType != null && !validSkills.Contains((Skill)target.WieldSkillType) || !ContainsOnlyPhysicalOrElemental(target.W_DamageType))
+                        {
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{target.NameWithMaterial} must be a valid elemental weapon", ChatMessageType.Broadcast));
+                            player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                            return;
+                        }
+
+                        var skillMatrixMap = new Dictionary<Skill, (int[][] Matrix, int RandomMax, bool SkipFirst)>
+                        {
+                            { Skill.MissileWeapons, (LootTables.ElementalMissileWeaponsMatrix, 6, false) },
+                            { Skill.WarMagic, (LootTables.CasterWeaponsMatrix, 6, true) },
+                            { Skill.HeavyWeapons, (LootTables.HeavyWeaponsMatrix, 4, false) },
+                            { Skill.FinesseWeapons, (LootTables.FinesseWeaponsMatrix, 4, false) },
+                            { Skill.LightWeapons, (LootTables.LightWeaponsMatrix, 4, false) },
+                            { Skill.TwoHandedCombat, (LootTables.TwoHandedWeaponsMatrix, 4, false) }
+                        };
+
+                        if (skillMatrixMap.TryGetValue((Skill)target.WieldSkillType, out var config))
+                        {
+                            var (matrices, randomMax, skipFirst) = config;
+                            var startIndex = skipFirst ? 1 : 0;
+
+                            for (int i = startIndex; i < matrices.Length; i++)
+                            {
+                                var matrix = matrices[i];
+                                if (matrix.Contains((int)target.WeenieClassId))
+                                {
+                                    int element = ThreadSafeRandom.Next(0, randomMax);
+                                    var wcid = matrix[element];
+                                    var wo = WorldObjectFactory.CreateNewWorldObject((uint)wcid);
+
+                                    if (wo == null)
+                                    {
+                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Failed to find a valid weapon element for {target.NameWithMaterial}", ChatMessageType.Broadcast));
+                                        player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                        return;
+                                    }
+
+                                    UpdateWeaponElementSwap(player, wo, target);
+                                    wo.DeleteObject(player);
+                                    break;
+                                }
+                            }
+
+                            var isMultiDamage = target.W_DamageType.IsMultiDamage();
+                            var damageName = isMultiDamage
+                                ? "Slashing/Piercing"
+                                : target.W_DamageType.GetName();
+
+                            playerMsg = $"You apply the Morph Gem skillfully and have altered your item so that its element has changed to {damageName}";
+                            AddMorphGemLog(target, MorphGemRandomizeWeaponElement);
+
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
+                        }
+
+                        break;
+                    #endregion
+
                     default:
                         player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                         return;
@@ -4544,7 +4711,8 @@ namespace ACE.Server.Entity
             MorphGemHieroglyphofSneakAttackMastery,
             MorphGemHieroglyphofVoidMagicMastery,
             MorphGemHieroglyphofTwoHandedWeaponsMastery,
-            MorphGemHieroglyphofSummoningMastery
+            MorphGemHieroglyphofSummoningMastery,
+            MorphGemRandomizeWeaponElement
         };
 
         /// <summary>

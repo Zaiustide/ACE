@@ -21,7 +21,7 @@ VALUES (451600204,   1,         16) /* ItemType - Creature */
      , (451600204, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600204, 140,          1) /* AiOptions - CanOpenDoors */
 	 , (451600204, 146,    9000000) /* XpOverride */
-	 , (451600204, 307,         48) /* DamageRating */
+	 , (451600204, 307,         148) /* DamageRating */
 	 , (451600204, 308,          1) /* DamageResistRating */
 	 , (451600204, 332,       4000) /* LuminanceAward */     
 	 , (451600204, 386,         15) /* Overpower */;
@@ -145,7 +145,7 @@ VALUES (451600204,    4421,  2.029)  /* Incantation of Acid Arc */
      , (451600204,  4454,  2.009)  /* Incantation of Shock Blast */;
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
-VALUES (451600204,  3 /* Death */,  0.0125, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+VALUES (451600204,  3 /* Death */,  0.0025, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 SET @parent_id = LAST_INSERT_ID();
 

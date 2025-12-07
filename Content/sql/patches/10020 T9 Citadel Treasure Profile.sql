@@ -4,7 +4,7 @@ INSERT INTO ace_world.treasure_death
 SET
   treasure_Type = 10020,
   tier = 9,
-  loot_Quality_Mod = 0.68,
+  loot_Quality_Mod = 0.3,
   unknown_Chances = 19,
   item_Chance = 50,
   item_Min_Amount = 0,
