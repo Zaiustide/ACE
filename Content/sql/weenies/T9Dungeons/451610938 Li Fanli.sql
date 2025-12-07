@@ -131,7 +131,9 @@ VALUES (451610938, 9, 1548801,  1, 0,  0.08, False) /* 1548801 Potion of Resista
 	 , (451610938, 9, 490272,  1, 0,   0.15, False) /* 490272 Rare Gem of Critical Damage */ 
 	 , (451610938, 9,      0,  0, 0,    0.7, False)    /* Create nothing for ContainTreasure */
 	 , (451610938, 9, 41541201,  1, 0, 0.75, False) /* 41541201 Paragon Legendary Quest Gem */ 
-	 , (451610938, 9,      0,  0, 0,   0.25, False)    /* Create nothing for ContainTreasure */;
+	 , (451610938, 9,      0,  0, 0,   0.25, False)    /* Create nothing for ContainTreasure */
+	 , (451610938, 9,   600058,  1, 0, 0.2, False) /* 600058 Oil of the Elements Gem */ 
+	 , (451610938, 9,      0,  0, 0,   0.8, False)    /* Create nothing for ContainTreasure */;
 
 INSERT INTO `weenie_properties_generator` (`object_Id`, `probability`, `weenie_Class_Id`, `delay`, `init_Create`, `max_Create`, `when_Create`, `where_Create`, `stack_Size`, `palette_Id`, `shade`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`)
 VALUES (451610938, -1, 451610940, 0, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) /* Itala the Knife (451610940) */;
