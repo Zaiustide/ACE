@@ -1733,6 +1733,16 @@ namespace ACE.Server.Entity
                         target.GearCritDamage = 0;
                         target.GearCritDamageResist = 2;
 
+                        //If this already has a Luminous Amber CD/CDR imbue, it'll get overwritten
+                        var currImbueStackingBits = target.GetProperty(PropertyInt.ImbueStackingBits);                        
+                        if(currImbueStackingBits.HasValue && ((currImbueStackingBits ?? 0) & 1) == 1)
+                        {
+                            var newImbueStackingBits = (currImbueStackingBits ?? 0) & ~1;
+                            target.SetProperty(PropertyInt.ImbueStackingBits, newImbueStackingBits);
+
+                            playerMsg += "  It's Luminous Amber imbue has also been removed in the process.";
+                        }
+                        
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemCDR);
                         break;
@@ -1772,6 +1782,8 @@ namespace ACE.Server.Entity
                             return;
                         }
 
+                        bool imbueStackingBitsCleared = false;
+
                         //Handle armor
                         if ((target.ArmorLevel ?? 0) > 0 && !target.IsShield)
                         {
@@ -1788,6 +1800,15 @@ namespace ACE.Server.Entity
                             playerMsg = $"You have successfully used the {source.Name} to add +2 Critical Damage Rating to your {target.NameWithMaterial}!{cdrRemovalMsg}";
                             target.GearCritDamageResist = null;
                             newCDRating = 2;
+
+                            //If this already has a Luminous Amber CD/CDR imbue, it'll get overwritten
+                            var currCdrImbueStackingBits = target.GetProperty(PropertyInt.ImbueStackingBits);
+                            if (currCdrImbueStackingBits.HasValue && ((currCdrImbueStackingBits ?? 0) & 1) == 1)
+                            {
+                                var newImbueStackingBits = (currCdrImbueStackingBits ?? 0) & ~1;
+                                target.SetProperty(PropertyInt.ImbueStackingBits, newImbueStackingBits);
+                                imbueStackingBitsCleared = true;
+                            }
                         }
                         else if(targetMeleeWeaponCD != null && targetMeleeWeaponCD.W_WeaponType != WeaponType.TwoHanded)
                         {
@@ -1902,6 +1923,9 @@ namespace ACE.Server.Entity
                         {
                             playerMsg = $"The {source.Name} has failed and has damaged your {target.NameWithMaterial} resulting in a new Critical Damage Rating of {newCDRating}.{(oldCDRRating > 0 ? $" As a result the previous Critical Damage Resist Rating of {oldCDRRating} has been removed." : "")}";
                         }
+
+                        if(imbueStackingBitsCleared)
+                            playerMsg += "  It's Luminous Amber imbue has also been removed in the process.";
 
                         player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
                         AddMorphGemLog(target, MorphGemCD);
