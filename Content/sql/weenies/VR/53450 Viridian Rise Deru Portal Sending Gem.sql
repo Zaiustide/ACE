@@ -6,7 +6,7 @@ VALUES (53450, 'ace53450-viridianrisederuportalsendinggem', 38, '2021-11-01 00:0
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (53450,   1,       2048) /* ItemType - Gem */
      , (53450,   5,          5) /* EncumbranceVal */
-     , (53450,  11,         25) /* MaxStackSize */
+     , (53450,  11,         1000) /* MaxStackSize */
      , (53450,  12,          1) /* StackSize */
      , (53450,  13,          5) /* StackUnitEncumbrance */
      , (53450,  15,          5) /* StackUnitValue */

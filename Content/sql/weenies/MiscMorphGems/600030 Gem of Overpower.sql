@@ -6,6 +6,10 @@ VALUES (600030, 'gemgemofoverpower', 38, '2021-11-17 16:56:08') /* Gem */;
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (600030,   1,       2048) /* ItemType - Gem */
      , (600030,   3,         39) /* PaletteTemplate - Black */
+	 , (600030,  11,        100) /* MaxStackSize */
+     , (600030,  12,          1) /* StackSize */
+     , (600030,  13,         5) /* StackUnitEncumbrance */
+     , (600030,  15,          25) /* StackUnitValue */
      , (600030,   5,          5) /* EncumbranceVal */
      , (600030,   8,          5) /* Mass */
      , (600030,  16,          524296) /* ItemUseable - SourceContainedTargetContained */
@@ -13,9 +17,7 @@ VALUES (600030,   1,       2048) /* ItemType - Gem */
      , (600030,  19,         25) /* Value */
      , (600030,  33,          1) /* Bonded - Slippery */
      , (600030,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-     , (600030,  94,         35215) /* TargetType - Vestements */
-     , (600030, 150,        103) /* HookPlacement - Hook */
-     , (600030, 151,         11) /* HookType - Floor, Wall, Yard */;
+     , (600030,  94,         35215) /* TargetType - Vestements */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (600030,  22, True ) /* Inscribable */;
