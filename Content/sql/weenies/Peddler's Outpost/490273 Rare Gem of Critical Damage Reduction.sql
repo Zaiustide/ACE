@@ -27,7 +27,7 @@ VALUES (490273,   1, False) /* Stuck */
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (490273,   1, 'Rare Gem of Critical Damage Reduction') /* Name */
-     , (490273,  14, 'An absolutely flawless gem. Applying this to a piece of armor will grant it two Critical Damage Reduction rating. If there is already Critical Damage rating on the item, this will be removed.') /* Use */
+     , (490273,  14, 'An absolutely flawless gem. Applying this to a piece of armor will grant it two Critical Damage Reduction rating. If there is already Critical Damage rating on the item, this will be removed. If the item has been imbued with the magics of the Luminous Amber, this imbue will be removed but can be applied again.') /* Use */
      , (490273,  16, 'There is room for only one gem, will not stack with existing rating.') /* LongDesc */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
