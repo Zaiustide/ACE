@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 600058;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (600058, 'ace600058-Slayerrandomizermorphgem', 38, '2022-01-29 01:15:03') /* Gem */;
+VALUES (600058, 'ace600058-oiloftheelementsmorphgem', 38, '2022-01-29 01:15:03') /* Gem */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (600058,   1,       2048) /* ItemType - Gem */
@@ -35,8 +35,7 @@ VALUES (600058,   1, 0x02000179) /* Setup */
      , (600058,   6, 0x04000BEF) /* PaletteBase */
      , (600058,   7, 0x1000010B) /* ClothingBase */
      , (600058,  22, 0x3400002B) /* PhysicsEffectTable */
-	 , (600058,   8, 0x06002971) /* Icon */
-     , (600058,  50, 0x06007551) /* IconOverlay */
+	 , (600058,   8, 0x060066B6) /* Icon */
      , (600058,  52, 0x060065FB) /* IconUnderlay */;
 
 /* Lifestoned Changelog:
