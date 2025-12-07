@@ -22,7 +22,7 @@ VALUES (53453,  69, False) /* IsSellable */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (53453,   1, 'Corrupted Amber: Weapon of the Corrupted Soul.') /* Name */
-     , (53453,  14, 'Give a weapon or caster a PK Damage Resistance of 1. Melee or missile weapons use Weapon Tinkering to determine success. Casters use Magic Item Tinkering to determine success. **This item has a chance of failure and potential weapon destruction**, and stacks with other tinkering effects.') /* Use */
+     , (53453,  14, 'Give a weapon or caster a PK Damage Resistance of 1. Melee or missile weapons use Weapon Tinkering to determine success. **This item has a chance of failure and potential weapon destruction**, and stacks with other tinkering effects.') /* Use */
      , (53453,  16, 'A chunk of corrupted amber imbued with the corrupted energies of the Hopeslayer. An angry red core can be seen swirling within.') /* LongDesc */
      , (53453,  20, 'Corrupted Ambers: Weapon of the Corrupted Soul.') /* PluralName */;
 
