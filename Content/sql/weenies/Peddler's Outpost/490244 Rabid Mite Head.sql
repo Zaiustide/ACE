@@ -6,7 +6,7 @@ VALUES (490244, 'ace490244-Rabid Mite Head', 51, '2021-11-01 00:00:00') /* Stack
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (490244,   1,        128) /* ItemType - Misc */
      , (490244,   5,        10) /* EncumbranceVal */
-     , (490244,  11,        100) /* MaxStackSize */
+     , (490244,  11,        1000) /* MaxStackSize */
      , (490244,  12,          1) /* StackSize */
      , (490244,  13,        10) /* StackUnitEncumbrance */
      , (490244,  15,      10000) /* StackUnitValue */

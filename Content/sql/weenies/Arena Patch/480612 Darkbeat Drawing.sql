@@ -6,7 +6,7 @@ VALUES (480612, 'ace480612-drawingcertificate', 38, '2021-11-01 00:00:00') /* Ge
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (480612,   1,       2048) /* ItemType - Gem */
      , (480612,   5,         10) /* EncumbranceVal */
-     , (480612,  11,        100) /* MaxStackSize */
+     , (480612,  11,        1000) /* MaxStackSize */
      , (480612,  12,          1) /* StackSize */
      , (480612,  13,         10) /* StackUnitEncumbrance */
      , (480612,  15,      10000) /* StackUnitValue */
