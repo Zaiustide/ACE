@@ -145,7 +145,7 @@ VALUES (451610943, 9, 1548801,  1, 0,  0.02, False) /* 1548801 Potion of Resista
 	 , (451610943, 9, 490273,  1, 0,   0.05, False) /* 490273 Rare Gem of Critical Damage Reduction */
 	 , (451610943, 9, 490272,  1, 0,   0.05, False) /* 490272 Rare Gem of Critical Damage */ 
 	 , (451610943, 9,      0,  0, 0,    0.9, False)    /* Create nothing for ContainTreasure */
-	 , (451610943, 9, 41541201,  1, 0, 0.15, False) /* 41541201 Paragon Legendary Quest Gem */ 
+	 , (451610943, 9, 41541202,  1, 0, 0.15, False) /* 41541202 Paragon Legendary Quest Gem */ 
 	 , (451610943, 9,      0,  0, 0,   0.85, False)    /* Create nothing for ContainTreasure */
 	 , (451610943, 9,   600058,  1, 0, 0.2, False) /* 600058 Oil of the Elements Gem */ 
 	 , (451610943, 9,      0,  0, 0,   0.8, False)    /* Create nothing for ContainTreasure */;
