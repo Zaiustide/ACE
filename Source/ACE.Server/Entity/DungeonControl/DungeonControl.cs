@@ -804,7 +804,7 @@ namespace ACE.Server.Entity.DungeonControl
             {                
                 //Create statue in world
                 var guardianWorldObj = WorldObjectFactory.CreateNewWorldObject(guardianWeenie);
-                guardianWorldObj.Location = loc;
+                guardianWorldObj.Location = new Position(loc);
                 guardianWorldObj.CurrentLandblock = guardianLandblock;
                 guardianWorldObj.TimeToRot = -1;
                 guardianWorldObj.Lifespan = 28800;
