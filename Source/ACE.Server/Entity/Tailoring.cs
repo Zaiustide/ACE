@@ -4228,7 +4228,7 @@ namespace ACE.Server.Entity
                             Skill.WarMagic,
                         ];
 
-                        if (target.WieldSkillType != null && !validSkills.Contains((Skill)target.WieldSkillType) || !ContainsOnlyPhysicalOrElemental(target.W_DamageType))
+                        if (target.WieldSkillType == null || !validSkills.Contains((Skill)target.WieldSkillType) || !ContainsOnlyPhysicalOrElemental(target.W_DamageType))
                         {
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{target.NameWithMaterial} must be a valid elemental weapon", ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
@@ -4245,7 +4245,7 @@ namespace ACE.Server.Entity
                             { Skill.TwoHandedCombat, (LootTables.TwoHandedWeaponsMatrix, 4, false) }
                         };
 
-                        if (skillMatrixMap.TryGetValue((Skill)target.WieldSkillType, out var config))
+                        if ( skillMatrixMap.TryGetValue((Skill)target.WieldSkillType, out var config))
                         {
                             var (matrices, randomMax, skipFirst) = config;
                             var startIndex = skipFirst ? 1 : 0;
