@@ -3393,5 +3393,11 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyInt.OverpowerResist);
             set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.OverpowerResist); else SetProperty(PropertyInt.OverpowerResist, value.Value); }
         }
+
+        public int? WeenieSwapClassId
+        {
+            get => GetProperty(PropertyInt.WeenieSwapClassId);
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.WeenieSwapClassId); else SetProperty(PropertyInt.WeenieSwapClassId, value.Value); }
+        }
     }
 }

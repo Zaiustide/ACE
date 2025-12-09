@@ -639,7 +639,10 @@ namespace ACE.Entity.Enum.Properties
 
         //The number of times a character has been renamed
         CharacterRenameCount = 9016,
-        GuardianAllegianceId = 19000
+        GuardianAllegianceId = 19000,
+
+        //Used when swapping weapon elements
+        WeenieSwapClassId = 19001
     }
 
     public static class PropertyIntExtensions

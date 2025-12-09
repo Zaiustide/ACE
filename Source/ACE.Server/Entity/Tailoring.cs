@@ -678,12 +678,12 @@ namespace ACE.Server.Entity
             ImbuedEffectType.ElectricRending |
             ImbuedEffectType.FireRending;
 
-        private static void UpdateWeaponElementSwap(Player player, WorldObject source, WorldObject target)
+        private static void UpdateWeaponElementSwap(Player player, WorldObject source, WorldObject target, int wcid)
         {
             player.Session.Network.EnqueueSend(new GameMessageDeleteObject(target));
 
             UpdateWeaponProps(player, source, target);
-            //player.UpdateProperty(target, PropertyInt.UiEffects, (int?)source.UiEffects);
+            player.UpdateProperty(target, PropertyInt.WeenieSwapClassId, wcid);
             player.UpdateProperty(target, PropertyInt.DamageType, (int)source.W_DamageType);
             player.UpdateProperty(target, PropertyDataId.TsysMutationFilter, source.TsysMutationFilter);
             player.UpdateProperty(target, PropertyDataId.MutateFilter, source.MutateFilter);
@@ -718,11 +718,11 @@ namespace ACE.Server.Entity
             actionChain.AddDelaySeconds(0.1);
             actionChain.AddAction(player, () =>
             {
-                //player.Session.Network.EnqueueSend(new GameMessageUpdateObject(target));
                 player.Session.Network.EnqueueSend(new GameMessageCreateObject(target));
             });
             actionChain.EnqueueChain();
         }
+
         public static bool ContainsOnlyPhysicalOrElemental(DamageType damageType)
         {
             const DamageType allowedTypes = DamageType.Physical | DamageType.Elemental;
@@ -4236,7 +4236,7 @@ namespace ACE.Server.Entity
 
                         if (target.WieldSkillType == null || !validSkills.Contains((Skill)target.WieldSkillType) || !ContainsOnlyPhysicalOrElemental(target.W_DamageType))
                         {
-                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{target.NameWithMaterial} must be a valid elemental weapon", ChatMessageType.Broadcast));
+                            player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{target.NameWithMaterial} must be a valid elemental weapon.", ChatMessageType.Broadcast));
                             player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
                             return;
                         }
@@ -4251,7 +4251,7 @@ namespace ACE.Server.Entity
                             { Skill.TwoHandedCombat, (LootTables.TwoHandedWeaponsMatrix, 4, false) }
                         };
 
-                        if ( skillMatrixMap.TryGetValue((Skill)target.WieldSkillType, out var config))
+                        if (skillMatrixMap.TryGetValue((Skill)target.WieldSkillType, out var config))
                         {
                             var (matrices, randomMax, skipFirst) = config;
                             var startIndex = skipFirst ? 1 : 0;
@@ -4259,23 +4259,43 @@ namespace ACE.Server.Entity
                             for (int i = startIndex; i < matrices.Length; i++)
                             {
                                 var matrix = matrices[i];
-                                if (matrix.Contains((int)target.WeenieClassId))
+
+                                if (!matrix.Contains((int)target.WeenieClassId))
+                                    continue;
+
+                                uint currentWcid = target.WeenieSwapClassId.HasValue ? (uint)target.WeenieSwapClassId : target.WeenieClassId;
+
+                                const int maxAttempts = 1000;
+
+                                int element = -1;
+                                int wcid = -1;
+
+                                WorldObject wo = null;
+
+                                // retry until we get a different element than current element
+                                for (int attempt = 0; attempt < maxAttempts; ++attempt)
                                 {
-                                    int element = ThreadSafeRandom.Next(0, randomMax);
-                                    var wcid = matrix[element];
-                                    var wo = WorldObjectFactory.CreateNewWorldObject((uint)wcid);
+                                    element = ThreadSafeRandom.Next(0, randomMax);
+                                    wcid = matrix[element];
 
-                                    if (wo == null)
-                                    {
-                                        player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Failed to find a valid weapon element for {target.NameWithMaterial}", ChatMessageType.Broadcast));
-                                        player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
-                                        return;
-                                    }
+                                    if (wcid == currentWcid)
+                                        continue;
 
-                                    UpdateWeaponElementSwap(player, wo, target);
-                                    wo.DeleteObject(player);
-                                    break;
+                                    wo = WorldObjectFactory.CreateNewWorldObject((uint)wcid);
+                                    if (wo != null)
+                                        break;
                                 }
+
+                                if (wo == null)
+                                {
+                                    player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Failed to find a valid weapon element for {target.NameWithMaterial}.", ChatMessageType.Broadcast));
+                                    player.SendUseDoneEvent(WeenieError.YouDoNotPassCraftingRequirements);
+                                    return;
+                                }
+
+                                UpdateWeaponElementSwap(player, wo, target, wcid);
+                                wo.DeleteObject(player);
+                                break;
                             }
 
                             var isMultiDamage = target.W_DamageType.IsMultiDamage();
@@ -4283,7 +4303,7 @@ namespace ACE.Server.Entity
                                 ? "Slashing/Piercing"
                                 : target.W_DamageType.GetName();
 
-                            playerMsg = $"You apply the Morph Gem skillfully and have altered your item so that its element has changed to {damageName}";
+                            playerMsg = $"You apply the Morph Gem skillfully and have altered your item so that its element has changed to {damageName}.";
                             AddMorphGemLog(target, MorphGemRandomizeWeaponElement);
 
                             player.Session.Network.EnqueueSend(new GameMessageSystemChat(playerMsg, ChatMessageType.Broadcast));
