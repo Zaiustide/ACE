@@ -498,6 +498,34 @@ namespace ACE.Server.Entity.PKQuests
                     dc_win_100.TaskCount = 100;
                     dc_win_100.Rewards = new List<string>() { "LUM,10000000", "XP%,750", "DBKEY,15", "HERA,15", "PKTROPHY,1000", "PHIAL,50", "BOX,15", "AMBER,5" };
                     _pkQuestList.Add(dc_win_100);
+
+                    //Kill tasks for new T9 dungeons
+                    //- Kill 3 players from a whitelisted clan that isn’t your clan in any of the new T9 dungeons
+                    var pkkill_T9_3 = new PKQuest();
+                    pkkill_T9_3.QuestCode = "PKKILL_T9_3";
+                    pkkill_T9_3.Description = "Kill 3 members of an opposing whitelisted allegiance in any of the Tier 9 Halls of Metos, Black Spawn Den or Mountain Citadel dungeons.";
+                    pkkill_T9_3.RewardDescription = "50k luminance, 50% XP to next level, 5 Darkbeat Keys, 3 Phials of Bloody Tears, 100 PK Trophies, 2 Hera Keys, 2 Boxes";
+                    pkkill_T9_3.TaskCount = 3;
+                    pkkill_T9_3.Rewards = new List<string>() { "LUM,50000", "XP%,50", "DBKEY,5", "PKTROPHY,100", "HERA,2", "PHIAL,3", "BOX,2" };
+                    _pkQuestList.Add(pkkill_T9_3);
+
+                    //- Kill 15 players from a whitelisted clan that isn’t your clan in any of the new T9 dungeons
+                    var pkkill_T9_15 = new PKQuest();
+                    pkkill_T9_15.QuestCode = "PKKILL_T9_15";
+                    pkkill_T9_15.Description = "Kill 15 members of an opposing whitelisted allegiance in any of the Tier 9 Halls of Metos, Black Spawn Den or Mountain Citadel dungeons.";
+                    pkkill_T9_15.RewardDescription = "150k luminance, 75% XP to next level, 5 Darkbeat Keys, 15 Phial of Bloody Tears, 250 PK Trophies, 3 Hera Keys, 5 Boxes";
+                    pkkill_T9_15.TaskCount = 15;
+                    pkkill_T9_15.Rewards = new List<string>() { "LUM,150000", "XP%,75", "DBKEY,5", "PKTROPHY,250", "PHIAL,15", "HERA,3", "BOX,5" };
+                    _pkQuestList.Add(pkkill_T9_15);
+
+                    //- Kill 100 players from a whitelisted clan that isn’t your clan in any of the new T9 dungeons
+                    var pkkill_T9_100 = new PKQuest();
+                    pkkill_T9_100.QuestCode = "PKKILL_T9_100";
+                    pkkill_T9_100.Description = "Kill 100 members of an opposing whitelisted allegiance in any of the Tier 9 Halls of Metos, Black Spawn Den or Mountain Citadel dungeons.";
+                    pkkill_T9_100.RewardDescription = "1M luminance, 250% XP to next level, 5 Darkbeat Keys, 50 Phial of Bloody Tears, 500 PK Trophies, 8 Hera Keys, 10 Boxes, 3 Radiant Amber Crystals";
+                    pkkill_T9_100.TaskCount = 100;
+                    pkkill_T9_100.Rewards = new List<string>() { "LUM,1000000", "XP%,250", "DBKEY,5", "PKTROPHY,500", "PHIAL,50", "HERA,8", "BOX,10", "AMBER,3" };
+                    _pkQuestList.Add(pkkill_T9_100);
                 }
 
                 return _pkQuestList;
@@ -531,6 +559,8 @@ namespace ACE.Server.Entity.PKQuests
         public static string[] PKQuests_DungeonControl_ScorePoints = { "DC_SCORE_100","DC_SCORE_1000","DC_SCORE_5000" };
 
         public static string[] PKQuests_DungeonControl_Win = { "DC_WIN_1", "DC_WIN_15", "DC_WIN_100" };
+
+        public static string[] PKQuests_KillT9 = { "PKKILL_T9_3", "PKKILL_T9_15", "PKKILL_T9_100" };
 
 
         public static PKQuest GetPkQuestByCode(string questCode)

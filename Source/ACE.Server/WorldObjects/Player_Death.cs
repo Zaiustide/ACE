@@ -187,7 +187,11 @@ namespace ACE.Server.WorldObjects
                             //Island Dragons
                             pkPlayer.CompletePkQuestTask("PKKILL_ISLANDDRAGONS_3");
                             break;
-
+                        case 0x02F5:  //T9 Metos
+                        case 0x0105:  //T9 BSD
+                        case 0x7258:  //T9 Mountain Citadel
+                            pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillT9);
+                            break;
                         default:
                             
                             break;
