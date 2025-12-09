@@ -693,6 +693,9 @@ namespace ACE.Server.Entity
 
             if ((target.ImbuedEffect & AllRendingFlags) != 0)
             {
+                var hasFetish = target.HasImbuedEffect(ImbuedEffectType.IgnoreSomeMagicProjectileDamage);
+
+                target.ImbuedEffect &= ~ImbuedEffectType.IgnoreSomeMagicProjectileDamage;
                 target.ImbuedEffect &= ~AllRendingFlags;
 
                 foreach (var mapping in DamageToImbueMap)
@@ -703,10 +706,13 @@ namespace ACE.Server.Entity
                         break;
                     }
                 }
-            }
 
-            if (target.ImbuedEffect != ImbuedEffectType.Undef)
-                target.IconUnderlayId = RecipeManager.IconUnderlay[target.ImbuedEffect];
+                if (target.ImbuedEffect != ImbuedEffectType.Undef)
+                    target.IconUnderlayId = RecipeManager.IconUnderlay[target.ImbuedEffect];
+
+                if (hasFetish)
+                    target.ImbuedEffect |= ImbuedEffectType.IgnoreSomeMagicProjectileDamage;
+            }
 
             var actionChain = new ActionChain();
             actionChain.AddDelaySeconds(0.1);
