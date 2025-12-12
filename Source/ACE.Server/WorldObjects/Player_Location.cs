@@ -965,7 +965,8 @@ namespace ACE.Server.WorldObjects
             0xE8F1,     //Town Control Conflict Area - Shoushi - Hidden Forest
             0x0026,     //Drudge Dungeon
             0x003F,     //Dragon Cave
-            0x6543      //Aerbax - Lesser Battle Dungeon
+            0x6543,     //Aerbax - Lesser Battle Dungeon
+            0x6147      //T9 Mountain Citadel
         };
 
         /// <summary>
