@@ -17,6 +17,7 @@ using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.Managers;
 using ACE.Server.Entity.TownControl;
+using ACE.Server.Network;
 
 namespace ACE.Server.WorldObjects
 {
@@ -59,6 +60,12 @@ namespace ACE.Server.WorldObjects
 
         public void HandleActionTeleToHouse()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             if (IsOlthoiPlayer)
             {
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.OlthoiCanOnlyRecallToLifestone));
@@ -132,6 +139,12 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void HandleActionTeleToLifestone()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             if (PKTimerActive)
             {
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouHaveBeenInPKBattleTooRecently));
@@ -199,6 +212,12 @@ namespace ACE.Server.WorldObjects
 
         public void HandleActionTeleToMarketPlace()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             if (PKTimerActive)
             {
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouHaveBeenInPKBattleTooRecently));
@@ -260,6 +279,12 @@ namespace ACE.Server.WorldObjects
 
         public void HandleActionRecallAllegianceHometown()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             //Console.WriteLine($"{Name}.HandleActionRecallAllegianceHometown()");
 
             if (PKTimerActive)
@@ -347,6 +372,12 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void HandleActionTeleToMansion()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             //Console.WriteLine($"{Name}.HandleActionTeleToMansion()");
 
             if (PKTimerActive)
@@ -462,6 +493,12 @@ namespace ACE.Server.WorldObjects
 
         public void HandleActionTeleToPkArena()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             //Console.WriteLine($"{Name}.HandleActionTeleToPkArena()");
 
             if (PlayerKillerStatus != PlayerKillerStatus.PK)
@@ -540,6 +577,12 @@ namespace ACE.Server.WorldObjects
 
         public void HandleActionTeleToPklArena()
         {
+            if (Teleporting)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             //Console.WriteLine($"{Name}.HandleActionTeleToPkLiteArena()");
 
             if (PlayerKillerStatus != PlayerKillerStatus.PKLite)
@@ -625,14 +668,52 @@ namespace ACE.Server.WorldObjects
 
         public DateTime LastTeleportTime;
 
+        public bool ForceTeleportMaterialization => PropertyManager.GetBool("force_teleport_materialization").Item;
+
+        public double TeleportMaterializedDuration => PropertyManager.GetDouble("force_teleport_materialization_duration").Item;
+
+        public bool BlockTeleportFromThreshold {
+            get
+            {
+                var secondsSinceMaterializing = Time.GetUnixTime() - LastTeleportEndTimestamp;
+                var RECENT_TELEPORT_THRESHOLD = PropertyManager.GetDouble("recent_teleport_threshold").Item;
+                return secondsSinceMaterializing < RECENT_TELEPORT_THRESHOLD;
+            }
+        }
+
         /// <summary>
         /// This is not thread-safe. Consider using WorldManager.ThreadSafeTeleport() instead if you're calling this from a multi-threaded subsection.
         /// </summary>
         public void Teleport(Position _newPosition, bool fromPortal = false)
         {
+            var fixLoc = Sanctuary ?? new Position(0xA9B40019, 84, 7.1f, 94, 0, 0, -0.0784591f, 0.996917f);
+
+            // prevent teleporting if already teleporting, unless the new location is to your sanctuary (death while in portal space)
+            if (Teleporting && !_newPosition.Equals(fixLoc))
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
+            // prevent teleporting after exiting portal space if it's within the recent teleport threshold
+            if (BlockTeleportFromThreshold)
+            {
+                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
+                return;
+            }
+
             var newPosition = new Position(_newPosition);
             //newPosition.PositionZ += 0.005f;
             newPosition.PositionZ += 0.005f * (ObjScale ?? 1.0f);
+
+            // Force a materialization when teleporting
+            if (ForceTeleportMaterialization)
+            {
+                var actionChain = new ActionChain();
+                actionChain.AddDelaySeconds(TeleportMaterializedDuration);
+                actionChain.AddAction(this, OnTeleportComplete);
+                actionChain.EnqueueChain();
+            }
 
             //Console.WriteLine($"{Name}.Teleport() - Sending to {newPosition.ToLOCString()}");
 
@@ -804,7 +885,7 @@ namespace ACE.Server.WorldObjects
 
         public void DoPreTeleportHide()
         {
-            if (Teleporting) return;
+            if (Teleporting || BlockTeleportFromThreshold) return;
             PlayParticleEffect(PlayScript.Hide, Guid);
         }
 
@@ -834,6 +915,9 @@ namespace ACE.Server.WorldObjects
 
         public void OnTeleportComplete()
         {
+            if (!Teleporting)
+                return;
+
             if (CurrentLandblock != null && !CurrentLandblock.CreateWorldObjectsCompleted)
             {
                 // If the critical landblock resources haven't been loaded yet, we keep the player in the pink bubble state
@@ -881,6 +965,9 @@ namespace ACE.Server.WorldObjects
             // hijacking this for both start/end on portal teleport
             if (LastTeleportStartTimestamp == LastPortalTeleportTimestamp)
                 LastPortalTeleportTimestamp = Time.GetUnixTime();
+
+            // update the teleport end timestamp to keep track of post materialization
+            LastTeleportEndTimestamp = Time.GetUnixTime();
         }
 
         public void SendTeleportedViaMagicMessage(WorldObject itemCaster, Spell spell)
