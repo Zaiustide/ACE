@@ -174,6 +174,9 @@ namespace ACE.Server.Entity
         {
             get
             {
+                //Disabling dungeon control for now, short circuiting here
+                return false;
+
                 if(_isOwnableDungeon == null )
                 {
                     _isOwnableDungeon = DungeonControl.DungeonControl.IsOwnableDungeon(this.Id.Landblock);

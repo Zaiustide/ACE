@@ -5,6 +5,7 @@ using ACE.Entity.Enum;
 using ACE.Server.Entity;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
+using ACE.Server.Network.GameAction.Actions;
 using ACE.Server.Network.GameMessages.Messages;
 using ACE.Server.WorldObjects;
 using log4net;
@@ -27,6 +28,9 @@ namespace ACE.Server.Entity.DungeonControl
                 if (_dungeons == null)
                 {
                     _dungeons = new Dictionary<uint, OwnableDungeon>();
+
+                    //Removing Dungeon Control for now; short circuiting here
+                    return _dungeons;
 
                     #region Shreth Caverns
                     var shrethCaverns = new OwnableDungeon();
