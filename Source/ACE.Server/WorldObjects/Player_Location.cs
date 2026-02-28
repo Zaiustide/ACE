@@ -865,7 +865,14 @@ namespace ACE.Server.WorldObjects
             IgnoreCollisions = false;
             Hidden = false;
             Teleporting = false;
-            
+            Location = PhysicsObj.Position.ACEPosition(); // Update our location to wherever the physics says we ended up. This takes care of slightly invalid destination locations that both the server and client physics will autocorrect.
+            SnapPos = Location;
+            PrevMovementUpdateMaxSpeed = 0.0f;
+            LastPlayerInitiatedActionTime = DateTime.UtcNow;
+
+            LastPlayerMovementCheckTime = DateTime.UtcNow;
+            HasPerformedActionsSinceLastMovementUpdate = false;
+
             CheckMonsters();
             CheckHouse();
 

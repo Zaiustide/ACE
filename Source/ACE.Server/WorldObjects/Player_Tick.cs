@@ -154,6 +154,15 @@ namespace ACE.Server.WorldObjects
                     LogOut();
             }
 
+            if (PropertyManager.GetBool("enforce_player_movement").Item && !Teleporting)
+            {
+                if ((DateTime.UtcNow - LastPlayerMovementCheckTime).TotalSeconds >= 5 && !HasAnyMovement())
+                {
+                    LastPlayerMovementCheckTime = DateTime.UtcNow;
+                    PrevMovementUpdateMaxSpeed = 0.0f;
+                }
+            }
+
             base.Heartbeat(currentUnixTime);
         }
 
@@ -189,6 +198,8 @@ namespace ACE.Server.WorldObjects
 
         public void OnMoveToState(MoveToState moveToState)
         {
+            HasPerformedActionsSinceLastMovementUpdate = true;
+
             if (!FastTick)
                 return;
 
@@ -471,7 +482,7 @@ namespace ACE.Server.WorldObjects
 
                             // verify z-pos
                             if (blockDist == 0 && LastGroundPos != null && newPosition.PositionZ - LastGroundPos.PositionZ > 10 && DateTime.UtcNow - LastJumpTime > TimeSpan.FromSeconds(1) && GetCreatureSkill(Skill.Jump).Current < 1000)
-                                verifyContact = true;
+                                verifyContact = true;                            
                         }
 
                         var curCell = LScape.get_landcell(newPosition.Cell);
@@ -510,8 +521,116 @@ namespace ACE.Server.WorldObjects
                     }
                     else
                         PhysicsObj.Position.Frame.Orientation = newPosition.Rotation;
-                }
 
+                    if (PropertyManager.GetBool("enforce_player_movement").Item && !Teleporting && !IsAdmin)
+                    {
+                        if ((DateTime.UtcNow - MovementEnforcementTimer).TotalSeconds > 60)
+                            MovementEnforcementTimer = DateTime.UtcNow;
+
+                        // Check for illegal player movements.
+                        var loggingHasPerformedActionsSinceLastMovementUpdate = HasPerformedActionsSinceLastMovementUpdate;
+                        var loggingPrevMaxMovementSpeed = PrevMovementUpdateMaxSpeed;
+                        var loggingInertia = false;
+
+                        float deltaTime = (float)(DateTime.UtcNow - LastPlayerMovementCheckTime).TotalSeconds;
+                        LastPlayerMovementCheckTime = DateTime.UtcNow;
+
+                        var dist = Location.DistanceTo(newPosition);
+                        float velocity = PhysicsObj.CachedVelocity.Length();
+                        float currentMaxSpeed;
+                        float timeSinceLastAction;
+                        bool isMovingOrAnimating;
+
+                        if (HasAnyMovement())
+                            LastPlayerInitiatedActionTime = DateTime.UtcNow;
+
+                        timeSinceLastAction = (float)(DateTime.UtcNow - LastPlayerInitiatedActionTime).TotalSeconds;
+                        if (timeSinceLastAction > 3.0f) // Give it a few seconds to resolve any inertia.
+                            isMovingOrAnimating = false;
+                        else
+                            isMovingOrAnimating = true;
+
+                        if (dist > PhysicsGlobals.EPSILON)
+                        {
+                            if (FastTick)
+                            {
+                                var runRate = GetRunRate();
+                                currentMaxSpeed = (1.8f * runRate * deltaTime * (1.0f + velocity / 8.0f)) + 5.0f;
+                                if (runRate < 1.9f && PhysicsObj.CachedVelocity.Z < -20.0f) // Very slow characters can still fall pretty quickly.
+                                    currentMaxSpeed *= 2.5f;
+                            }
+                            else
+                            {
+                                currentMaxSpeed = (5.5f * GetRunRate() * deltaTime * (1.0f + velocity / 5.0f)) + 2.0f;
+
+                                if (HasPerformedActionsSinceLastMovementUpdate)
+                                    currentMaxSpeed *= 1.8f;
+                            }
+
+                            if (!isMovingOrAnimating)
+                                currentMaxSpeed = 0.0f;
+                            else if (currentMaxSpeed < PrevMovementUpdateMaxSpeed && PrevMovementUpdateMaxSpeed > 25.0f)
+                            {
+                                // We were going really fast and now we are slowing down but we might still have some inertia.
+                                loggingInertia = true;
+                                currentMaxSpeed = PrevMovementUpdateMaxSpeed * 0.5f;
+                            }
+                            PrevMovementUpdateMaxSpeed = currentMaxSpeed;
+
+                            if (dist > currentMaxSpeed)
+                            {
+                                if (MovementEnforcementCounter < 11)
+                                {
+                                    if (MovementEnforcementCounter == 0 && currentMaxSpeed != 0 && dist < currentMaxSpeed * 1.5)
+                                    {
+                                        // Slight invalid movement detected but the player has otherwise been behaving, assume it was just a lag spike or client stutter.
+                                        MovementEnforcementCounter++;
+                                    }
+                                    else
+                                    {
+                                        MovementEnforcementCounter++;
+                                        if (MovementEnforcementCounter < 5)
+                                        {
+                                            Location = new ACE.Entity.Position(SnapPos);
+
+                                            Session.Network.EnqueueSend(new GameMessageSystemChat("Invalid movement detected. Rolling back to last known good location.", ChatMessageType.Help));
+                                            log.Warn($"{Name} - INVALID MOVEMENT DETECTED - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}");
+                                        }
+                                        else
+                                        {
+                                            Location = PhysicsObj.Position.ACEPosition(); // If we're over 5 strikes assume the SnapPos is compromised, force current physics location instead.
+
+                                            Session.Network.EnqueueSend(new GameMessageSystemChat("Invalid movement detected. Force moving to server location.", ChatMessageType.Help));
+                                            log.Warn($"{Name} - INVALID MOVEMENT DETECTED - ATTEMPTING PHYSICS LOCATION - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}");
+                                        }
+                                        //Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}", ChatMessageType.Help));
+
+                                        Sequences.GetNextSequence(SequenceType.ObjectForcePosition);
+                                        SendUpdatePosition();
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    // Kick players when they get to 10 enforcements in a minute.
+                                    Session.Terminate(SessionTerminationReason.AbnormalSequenceReceived, new GameMessageBootAccount(" because the server and the client do not agree on your current location."));
+                                    return false;
+                                }
+                            }
+                            //else
+                            //    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}", ChatMessageType.Broadcast));
+                        }
+                        //else
+                        //    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/0.00 PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}", ChatMessageType.Broadcast));
+
+                        if (HasPerformedActionsSinceLastMovementUpdate && !IsJumping)
+                            HasPerformedActionsSinceLastMovementUpdate = false; // Delay disabling this until we're done with the jump.
+
+                        if (!IsJumping && PhysicsObj.TransientState.HasFlag(TransientStateFlags.OnWalkable))
+                            SnapPos = Location;
+                    }
+                }
+            
                 // double update path: landblock physics update -> updateplayerphysics() -> update_object_server() -> Teleport() -> updateplayerphysics() -> return to end of original branch
                 if (Teleporting && !forceUpdate) return true;
 
@@ -547,6 +666,25 @@ namespace ACE.Server.WorldObjects
                 }
             }
         }
+
+        public bool HasAnyMovement()
+        {
+            if (FastTick)
+            {
+                if (PhysicsObj.IsMovingOrAnimating || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2)
+                    return true;
+            }
+            else
+            {
+                var isWaitingForNextUseTime = DateTime.UtcNow < NextUseTime;
+                var isPlayerInitiatedMovement = (CurrentMoveToState.RawMotionState.Flags & (RawMotionFlags.ForwardCommand | RawMotionFlags.SideStepCommand | RawMotionFlags.TurnCommand)) != 0;
+
+                if (isPlayerInitiatedMovement || HasPerformedActionsSinceLastMovementUpdate || IsJumping || PhysicsObj.IsMovingOrAnimating || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2 || isWaitingForNextUseTime)
+                    return true;
+            }
+            return false;
+        }
+
 
         private static HashSet<uint> buggedCells = new HashSet<uint>()
         {
