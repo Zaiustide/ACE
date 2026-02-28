@@ -624,7 +624,8 @@ namespace ACE.Server.Managers
                 ("arena_allow_same_ip_match", new Property<bool>(false, "enable this allow two characters connected from the same IP to be matched in an arena event")),
                 ("arena_allow_observers", new Property<bool>(true, "enable this to allow players to watch arena matches as invisible observers")),
                 ("tinker_lotto_enabled", new Property<bool>(false, "enables the tinkering lotto feature")),
-                ("force_materialization", new Property<bool>(true, "forces players to materialize on login")),
+                ("force_logout_materialization", new Property<bool>(true, "forces players to materialize on logut")),
+                ("force_teleport_materialization", new Property<bool>(true, "forces players to materialize on teleport")),
                 ("disable_pvp_cleave", new Property<bool>(false, "disables melee cleave attacks from targeting players")),
                 ("disable_world_bosses", new Property<bool>(true, "disables spawning of world bosses")),
                 ("jump_cancels_melee", new Property<bool>(false, "cancels melee attacks when the target is jumping")),
@@ -665,7 +666,6 @@ namespace ACE.Server.Managers
                 ("arenas_reward_min_level", new Property<long>(25, "the minimum level required to get arena rewards")),
                 ("arenas_reward_min_age", new Property<long>(864000, "the minimum in-game age in seconds required to get arena rewards")),
                 ("pvp_chug_timer", new Property<long>(0, "the minimum time in milliseconds between chugs. if a chug is used within X milliseconds of a previous one, it will heal for 0. if value is set to 0 the feature is disabled.")),
-                ("force_materialization_duration", new Property<long>(1, "the number of seconds a player should materialize for before logging out")),
                 ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting")),
                 ("vendor_max_items_per_sale", new Property<long>(24, "the maximum number of items a player can sell to a vendor in a single transaction")),
                 ("vendor_sale_rate_limit_seconds", new Property<long>(60, "the minimum number of seconds that must pass after a player sells to a vendor before a player can sell to a vendor again"))
@@ -792,7 +792,10 @@ namespace ACE.Server.Managers
                 ("arena_pk_respite_timer", new Property<double>(120, "the number of seconds that a player killer is set to non-player killer status after dying to another player killer in an arena match.  Should be a value less than pk_respite_timer, or else pk_respite_timer will override.")),
                 ("arena_1v1_healkit_skill_bonus_cap", new Property<double>(150, "the maximum effective skill bonus applied from a healing kit during arena 1v1 events.")),
                 ("arena_1v1_healkit_restoration_bonus_cap", new Property<double>(1.5, "the maximum effective restoration bonus applied from a healing kit during arena 1v1 events.")),
-                ("dungeoncontrol_capturescore_mod", new Property<double>(1.0, "modifies the score needed to capture a dungeon in dungeon control, generally used for testing"))
+                ("dungeoncontrol_capturescore_mod", new Property<double>(1.0, "modifies the score needed to capture a dungeon in dungeon control, generally used for testing")),
+                ("force_logout_materialization_duration", new Property<double>(1, "the number of seconds a player should materialize for before logging out")),
+                ("force_teleport_materialization_duration", new Property<double>(10.0, "the number of seconds after teleporting that a player should force materialize")),
+                ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again"))
                 
                 );
 

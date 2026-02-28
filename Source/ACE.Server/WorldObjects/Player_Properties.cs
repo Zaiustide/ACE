@@ -1585,5 +1585,14 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyString.PKQuestInfo) ?? String.Empty;
             set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.PKQuestInfo); else SetProperty(PropertyString.PKQuestInfo, value); }
         }
+
+        /// <summary>
+        /// The timestamp when the last teleport ended
+        /// </summary>
+        public double? LastTeleportEndTimestamp
+        {
+            get => GetProperty(PropertyFloat.LastTeleportEndTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastTeleportEndTimestamp); else SetProperty(PropertyFloat.LastTeleportEndTimestamp, value.Value); }
+        }
     }
 }

@@ -440,6 +440,15 @@ namespace ACE.Server.Managers
                 session.Network.EnqueueSend(new GameMessageSystemChat("You have returned to the Olthoi Queen to serve the hive.", ChatMessageType.Broadcast));
             else if (playerLoggedInOnNoLogLandblock) // see http://acpedia.org/wiki/Mount_Elyrii_Hive
                 session.Network.EnqueueSend(new GameMessageSystemChat("The currents of portal space cannot return you from whence you came. Your previous location forbids login.", ChatMessageType.Broadcast));            
+
+            // Force a materialization when logging in
+            if (session.Player.ForceTeleportMaterialization)
+            {
+                var actionChain = new ActionChain();
+                actionChain.AddDelaySeconds(session.Player.TeleportMaterializedDuration);
+                actionChain.AddAction(session.Player, session.Player.OnTeleportComplete);
+                actionChain.EnqueueChain();
+            }
         }
 
         private static string AppendLines(params string[] lines)

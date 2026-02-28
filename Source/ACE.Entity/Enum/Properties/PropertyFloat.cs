@@ -239,6 +239,8 @@ namespace ACE.Entity.Enum.Properties
         LastPlayerVendorSaleTimestamp = 9070,
 
         /***** FOREDAWN CUSTOMS *****/
-        ForedawnPvpDamageMulti = 52000
+        ForedawnPvpDamageMulti = 52000,
+
+        LastTeleportEndTimestamp = 52001
     }
 }
