@@ -1315,6 +1315,8 @@ namespace ACE.Server.WorldObjects.Managers
             var creature = WorldObject as Creature;
             if (creature == null || creature.IsDead) return;
 
+            var targetPlayer = WorldObject as Player;
+
             // get the total tick amount
             var tickAmountTotal = 0.0f;
             foreach (var enchantment in enchantments)
@@ -1328,6 +1330,14 @@ namespace ACE.Server.WorldObjects.Managers
 
             // apply healing ratings?
             tickAmountTotal *= creature.GetHealingRatingMod();
+
+            //Arena overtime reduces heal amounts
+            if (targetPlayer != null && ArenaLocation.IsArenaLandblock(targetPlayer.Location.Landblock))
+            {
+                var arenaEvent = ArenaManager.GetArenaEventByLandblock(targetPlayer.Location.Landblock);
+                if (arenaEvent != null && arenaEvent.IsOvertime)
+                    tickAmountTotal = tickAmountTotal * arenaEvent.OvertimeHealingModifier * 0.25f;
+            }
 
             // do healing
             var healAmount = creature.UpdateVitalDelta(creature.Health, (int)Math.Round(tickAmountTotal));
