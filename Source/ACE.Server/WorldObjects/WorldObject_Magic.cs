@@ -729,6 +729,18 @@ namespace ACE.Server.WorldObjects
 
             var targetPlayer = targetCreature as Player;
 
+            bool isArenaOvertime = false;
+            var arenaOvertimeDrainMod = 1.0f;
+            if (targetPlayer != null && ArenaLocation.IsArenaLandblock(targetPlayer.Location.Landblock))
+            {
+                var arenaEvent = ArenaManager.GetArenaEventByLandblock(targetPlayer.Location.Landblock);
+                if (arenaEvent != null && arenaEvent.IsOvertime)
+                {
+                    isArenaOvertime = true;
+                    arenaOvertimeDrainMod = arenaEvent.OvertimeHealingModifier * 0.25f;
+                }
+            }
+
             // prevent double deaths from indirect casts
             // caster is already checked in player/monster, and re-checking caster here would break death emotes such as bunny smite
             if (targetCreature != null && targetCreature.IsDead)
@@ -753,6 +765,12 @@ namespace ACE.Server.WorldObjects
 
             if (spell.TransferCap != 0 && srcVitalChange > spell.TransferCap)
                 srcVitalChange = (uint)spell.TransferCap;
+
+            //Nerf drains in arena overtime
+            if (isArenaOvertime)
+            {
+                srcVitalChange = (uint)Math.Round(srcVitalChange * arenaOvertimeDrainMod);
+            }
 
             // should healing resistances be applied here?
             var boostMod = isDrain ? (float)destination.GetResistanceMod(GetBoostResistanceType(spell.Destination)) : 1.0f;
@@ -790,6 +808,12 @@ namespace ACE.Server.WorldObjects
                     srcVitalChange = reduced;
                     destVitalChange = (uint)Math.Round(srcVitalChange * (1.0f - spell.LossPercent) * boostMod);
                 }
+            }
+
+            //Nerf drains in arena overtime
+            if (isArenaOvertime)
+            {
+                destVitalChange = (uint)Math.Round(destVitalChange * arenaOvertimeDrainMod);
             }
 
             string srcVital, destVital;
@@ -836,18 +860,7 @@ namespace ACE.Server.WorldObjects
                     break;
                 default:   // Health
                     destVital = "health";
-
-                    if (targetPlayer != null && ArenaLocation.IsArenaLandblock(targetPlayer.Location.Landblock))
-                    {
-                        var arenaEvent = ArenaManager.GetArenaEventByLandblock(targetPlayer.Location.Landblock);
-                        if (arenaEvent != null && arenaEvent.IsOvertime)
-                        {
-                            destVitalChange = Convert.ToUInt32(Math.Round(destVitalChange * arenaEvent.OvertimeHealingModifier));
-                        }
-                    }
-
                     destVitalChange = (uint)destination.UpdateVitalDelta(destination.Health, destVitalChange);
-
                     destination.DamageHistory.OnHeal(destVitalChange);
                     break;
             }
@@ -1697,6 +1710,12 @@ namespace ACE.Server.WorldObjects
 
                         origins.Add(origin);
                         //Make Tugak Great Again
+                        //if(spell.Id == 3818)
+                        //{
+                        //    var tugakMe = new Vector3(origin.X, origin.Y, origin.Z);
+                        //    origins.Add(tugakMe);
+                        //}
+
                         i++;
                     }
 
