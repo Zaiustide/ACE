@@ -120,6 +120,9 @@ namespace ACE.Server.WorldObjects
 
             var boostValue = (int)Math.Round(BoostValue * ratingMod);
 
+            if (player.IsJumping)
+                boostValue = 0;
+
             if (ArenaLocation.IsArenaLandblock(player.Location.Landblock))
             {
                 var arenaEvent = ArenaManager.GetArenaEventByLandblock(player.Location.Landblock);
