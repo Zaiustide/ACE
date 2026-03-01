@@ -127,7 +127,7 @@ namespace ACE.Server.WorldObjects
             var enchantmentMod = EnchantmentManager.GetRegenerationMod(vital);
 
             var augMod = 1.0f;            
-            if (this is Player player && player.AugmentationFasterRegen > 0 && ForwardCommand == MotionCommand.Sleeping))
+            if (this is Player player && player.AugmentationFasterRegen > 0 && ForwardCommand == MotionCommand.Sleeping)
                 augMod += player.AugmentationFasterRegen;
 
             // cap rate?
