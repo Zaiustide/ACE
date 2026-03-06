@@ -310,6 +310,15 @@ namespace ACE.Server.Entity
 
             // ratings
             DamageRatingBaseMod = Creature.GetPositiveRatingMod(attacker.GetDamageRating());
+
+            //Apply custom PvP Dmg rating scaling
+            var pvpDmgRatingMod = PropertyManager.GetDouble("pvp_ratings_mod_dmg").Item;
+            if (pkBattle)
+            {
+                int dmgRatingBase = Creature.ModToRating(DamageRatingBaseMod);
+                DamageRatingBaseMod = Creature.GetPositiveRatingMod((int)Math.Round(dmgRatingBase * pvpDmgRatingMod));
+            }
+
             RecklessAttackerDmgRatingBonus = attacker.GetRecklessAttackerDmgRatingBonus();
             SneakAttackMod = attacker.GetSneakAttackMod(defender);
             HeritageMod = attacker.GetHeritageBonus(Weapon) ? 1.05f : 1.0f;
@@ -356,6 +365,14 @@ namespace ACE.Server.Entity
                     CriticalDamageMod = 1.0f + WorldObject.GetWeaponCritDamageMod(Weapon, attacker, attackSkill, defender);
 
                     CriticalDamageRatingMod = Creature.GetPositiveRatingMod(attacker.GetCritDamageRating());
+
+                    //Apply custom PvP CD rating scaling
+                    var pvpCdRatingMod = PropertyManager.GetDouble("pvp_ratings_mod_critdmg").Item;
+                    if (pkBattle)
+                    {
+                        int cdRatingBase = Creature.ModToRating(CriticalDamageRatingMod);
+                        CriticalDamageRatingMod = Creature.GetPositiveRatingMod((int)Math.Round(cdRatingBase * pvpCdRatingMod));
+                    }
 
                     // recklessness excluded from crits
                     RecklessAttackerDmgRatingBonus = 0;
@@ -429,11 +446,26 @@ namespace ACE.Server.Entity
             }
 
             // damage resistance rating
-            DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);            
+            DamageResistanceRatingMod = DamageResistanceRatingBaseMod = defender.GetDamageResistRatingMod(CombatType);
+
+            //Apply custom PvP DRR rating scaling
+            if (pkBattle)
+            {
+                int drrRatingBase = Math.Abs(Creature.ModToRating(DamageResistanceRatingBaseMod));
+                DamageResistanceRatingMod = DamageResistanceRatingBaseMod = Creature.GetNegativeRatingMod((int)Math.Round(drrRatingBase * pvpDmgRatingMod));
+            }
 
             if (IsCritical)
             {
                 CriticalDamageResistanceRatingMod = Creature.GetNegativeRatingMod(defender.GetCritDamageResistRating());
+
+                //Apply custom PvP CDR rating scaling
+                var pvpCdrRatingMod = PropertyManager.GetDouble("pvp_ratings_mod_critdmg").Item;
+                if (pkBattle)
+                {
+                    int cdrRatingBase = Math.Abs(Creature.ModToRating(CriticalDamageResistanceRatingMod));
+                    CriticalDamageResistanceRatingMod = Creature.GetNegativeRatingMod((int)Math.Round(cdrRatingBase * pvpCdrRatingMod));
+                }
 
                 DamageResistanceRatingMod = Creature.AdditiveCombine(DamageResistanceRatingBaseMod, CriticalDamageResistanceRatingMod);
             }

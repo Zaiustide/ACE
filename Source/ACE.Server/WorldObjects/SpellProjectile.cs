@@ -939,14 +939,39 @@ namespace ACE.Server.WorldObjects
                 }
 
                 var damageRating = sourceCreature?.GetDamageRating() ?? 0;
+
+                //Apply custom PvP Dmg rating scaling
+                var pvpDmgRatingModifierConfig = PropertyManager.GetDouble("pvp_ratings_mod_dmg").Item;
+                if (pkBattle)
+                {
+                    damageRating = (int)Math.Round(damageRating * pvpDmgRatingModifierConfig);
+                }
+
                 damageRatingMod = Creature.AdditiveCombine(Creature.GetPositiveRatingMod(damageRating), heritageMod, sneakAttackMod);
 
                 damageResistRatingMod = target.GetDamageResistRatingMod(CombatType.Magic);
+
+                //Apply custom PvP DRR rating scaling
+                if (pkBattle)
+                {
+                    int drrRatingBase = Math.Abs(Creature.ModToRating(damageResistRatingMod));
+                    damageResistRatingMod = Creature.GetNegativeRatingMod((int)Math.Round(drrRatingBase * pvpDmgRatingModifierConfig));
+                }
 
                 if (critical)
                 {
                     critDamageRatingMod = Creature.GetPositiveRatingMod(sourceCreature?.GetCritDamageRating() ?? 0);
                     critDamageResistRatingMod = Creature.GetNegativeRatingMod(target.GetCritDamageResistRating());
+
+                    if(pkBattle)
+                    {
+                        var pvpCritRatingModifierConfig = PropertyManager.GetDouble("pvp_ratings_mod_critdmg").Item;
+                        int cdRatingBase = Math.Abs(Creature.ModToRating(critDamageRatingMod));
+                        critDamageRatingMod = Creature.GetPositiveRatingMod((int)Math.Round(cdRatingBase * pvpCritRatingModifierConfig));
+
+                        int cdrRatingBase = Math.Abs(Creature.ModToRating(critDamageResistRatingMod));
+                        critDamageResistRatingMod = Creature.GetNegativeRatingMod((int)Math.Round(cdrRatingBase * pvpCritRatingModifierConfig));
+                    }
 
                     damageRatingMod = Creature.AdditiveCombine(damageRatingMod, critDamageRatingMod);
                     damageResistRatingMod = Creature.AdditiveCombine(damageResistRatingMod, critDamageResistRatingMod);
