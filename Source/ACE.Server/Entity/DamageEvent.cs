@@ -234,6 +234,7 @@ namespace ACE.Server.Entity
             //Arenas - If this is an arena landblock
             //don't allow any dmg except while the event is in a started status and between non-eliminated players
             //also disallow any dmg except from Tugak in a Tugak War event
+            bool isArena1v1 = false;
             if (playerDefender != null && ArenaLocation.IsArenaLandblock(playerDefender.Location.Landblock))
             {
                 if (playerAttacker != null && playerAttacker.IsArenaObserver)
@@ -243,7 +244,9 @@ namespace ACE.Server.Entity
                 if (arenaEvent == null || arenaEvent.Status != 4 || arenaEvent.EventType.Equals("tugak"))
                 {
                     return 0.0f;
-                }                
+                }
+                
+                isArena1v1 = arenaEvent.EventType.Equals("1v1");
             }
 
             Attacker = attacker;
@@ -755,6 +758,12 @@ namespace ACE.Server.Entity
                                     }
                                     break;
                             }
+                        }
+
+                        //Apply Arena 1v1 Dmg Mod
+                        if (isArena1v1)
+                        {
+                            config_mod *= (float)PropertyManager.GetDouble("arena_1v1_global_dmg_mod").Item;
                         }
 
                         Damage = Damage * config_mod;

@@ -468,7 +468,8 @@ namespace ACE.Server.WorldObjects
             }
 
             //Arenas - If this is an arena landblock
-            //don't allow any dmg except while the event is in a started status and between non-eliminated players            
+            //don't allow any dmg except while the event is in a started status and between non-eliminated players
+            bool isArena1v1 = false;
             if (targetPlayer != null && ArenaLocation.IsArenaLandblock(targetPlayer.Location.Landblock))
             {
                 var arenaEvent = ArenaManager.GetArenaEventByLandblock(targetPlayer.Location.Landblock);
@@ -482,6 +483,8 @@ namespace ACE.Server.WorldObjects
 
                 if (arenaEvent.EventType.Equals("tugak") && Spell.IsHarmful && Spell.Id != (uint)SpellId.CurseRavenFury)
                     return 0.0f;
+
+                isArena1v1 = arenaEvent.EventType.Equals("1v1");                    
             }
 
             //TODO if this is gauntlet, dont allow pvp dmg
@@ -732,6 +735,13 @@ namespace ACE.Server.WorldObjects
                         }
                     }
 
+                    finalDamage = finalDamage * dmgMod;
+                }
+
+                //Apply Arena 1v1 Dmg Mod
+                if (isArena1v1)
+                {
+                    dmgMod = (float)PropertyManager.GetDouble("arena_1v1_global_dmg_mod").Item;
                     finalDamage = finalDamage * dmgMod;
                 }
             }
