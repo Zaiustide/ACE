@@ -40,7 +40,8 @@
     <None Remove="Entity\Mutations\ArmorLevel\olthoi_armor.txt" />
     <None Remove="Entity\Mutations\ArmorLevel\olthoi_shield.txt" />
     <None Remove="Entity\Mutations\ArmorLevel\shield_level.txt" />
-    <None Remove="Entity\Mutations\ArmorLevel\shield_ratings.txt" />
+    <None Remove="Entity\Mutations\CustomRatings\shield_ratings.txt" />
+      <None Remove="Entity\Mutations\CustomRatings\armor_ratings.txt" />
     <None Remove="Entity\Mutations\Casters\caster.txt" />
     <None Remove="Entity\Mutations\Casters\caster_elemental.txt" />
     <None Remove="Entity\Mutations\Casters\caster_non_elemental.txt" />
@@ -146,7 +147,10 @@
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\covenant_shield.txt" />
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\olthoi_armor.txt" />
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\olthoi_shield.txt" />
-    <EmbeddedResource Include="Entity\Mutations\ArmorLevel\shield_ratings.txt" />
+    <EmbeddedResource Include="Entity\Mutations\CustomRatings\clothing_cloak_ratings.txt" />
+    <EmbeddedResource Include="Entity\Mutations\CustomRatings\jewelry_ratings.txt" />
+    <EmbeddedResource Include="Entity\Mutations\CustomRatings\armor_ratings.txt" />
+    <EmbeddedResource Include="Entity\Mutations\CustomRatings\shield_ratings.txt" />
     <EmbeddedResource Include="Entity\Mutations\ArmorLevel\shield_level.txt" />
     <EmbeddedResource Include="Entity\Mutations\Casters\caster.txt" />
     <EmbeddedResource Include="Entity\Mutations\Casters\caster_elemental.txt" />
