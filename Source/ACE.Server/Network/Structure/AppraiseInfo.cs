@@ -119,6 +119,11 @@ namespace ACE.Server.Network.Structure
                 BuildWeapon(wo);                
             }
 
+            if(wo.ItemType == ItemType.Jewelry)
+            {
+                BuildJewelry(wo);
+            }
+
             // TODO: Resolve this issue a better way?
             // Because of the way ACE handles default base values in recipe system (or rather the lack thereof)
             // we need to check the following weapon properties to see if they're below expected minimum and adjust accordingly
@@ -561,6 +566,14 @@ namespace ACE.Server.Network.Structure
             AddGearLongDescProperties(wo);
         }
 
+        private void BuildJewelry(WorldObject wo)
+        {
+            if (!Success)
+                return;            
+
+            AddGearLongDescProperties(wo);
+        }
+
         private void BuildCreature(Creature creature)
         {
             CreatureProfile = new CreatureProfile(creature, Success);
@@ -621,7 +634,7 @@ namespace ACE.Server.Network.Structure
             var gearMaxHealth = creature.GetGearMaxHealth();
 
             var pkDamageRating = creature.GetPKDamageRating();
-            var pkDamageResistRating = creature.GetPKDamageResistRating();
+            var pkDamageResistRating = creature.GetPKDamageResistRating();            
 
             var overpowerRating = creature.GetOverpowerRating();
             var overpowerResistRating = creature.GetOverpowerResistRating();
@@ -749,7 +762,12 @@ namespace ACE.Server.Network.Structure
             //  Removes the AppraisalLongDescDecoration flags which prepend/append flavor text
             //  Adds the Overpower / Overpower Resist ratings into the LongDesc
             //  and then manually builds the flavor text back onto the end of LongDesc
-            if (wo.Overpower.HasValue || wo.OverpowerResist.HasValue || wo.IgnoreShield.HasValue || wo.SlayerDamageBonus.HasValue)
+            if (wo.Overpower.HasValue ||
+                wo.OverpowerResist.HasValue ||
+                wo.IgnoreShield.HasValue ||
+                wo.SlayerDamageBonus.HasValue ||
+                (wo.GearCreatureResistType != CreatureType.Invalid && wo.GearCreatureResistRating > 0) ||
+                (wo.GearCreatureSlayerType != CreatureType.Invalid && wo.GearCreatureSlayerRating > 0))
             {
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
                 var currentLongDesc = PropertiesString.ContainsKey(PropertyString.LongDesc) ? PropertiesString[PropertyString.LongDesc] : "";
@@ -766,7 +784,14 @@ namespace ACE.Server.Network.Structure
                 if (wo.SlayerDamageBonus.HasValue && wo.SlayerDamageBonus.Value > 0)
                     newLongDesc += $"Slayer Bonus: {(wo.SlayerDamageBonus.Value * 100)}%\n";
 
+                if(wo.GearCreatureResistType != CreatureType.Invalid && wo.GearCreatureResistRating > 0)
+                    newLongDesc += $"{wo.GearCreatureResistType.ToDisplayString()} Resist: {(wo.GearCreatureResistRating.Value)}\n";
+
+                if (wo.GearCreatureSlayerType != CreatureType.Invalid && wo.GearCreatureSlayerRating > 0)
+                    newLongDesc += $"{wo.GearCreatureSlayerType.ToDisplayString()} Slayer: {(wo.GearCreatureSlayerRating.Value)}\n";
+
                 //Add back the flavor text to the LongDesc
+                newLongDesc += "\n";
                 if (wo.ItemWorkmanship > 0)
                 {
                     newLongDesc += $" {AppraiseInfoExtensions.GetWorkmanshipDisplayString(wo.ItemWorkmanship.Value)}";

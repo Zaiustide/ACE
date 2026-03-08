@@ -2,32 +2,32 @@ Mutation #0 Ratings:
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
 
     - Chance: 5%:
-        Overpower = Random(1, 5)
+        Overpower = Random(1, 6)
 
     - Chance: 5%:
-        OverpowerResist = Random(1, 5)
+        OverpowerResist = Random(1, 6)
 
     - Chance: 25%:
-        GearDamage = Random(1, 5)
+        GearDamage = Random(1, 6)
 
     - Chance: 20%:
-        GearDamage = Random(1, 5)
-        Overpower = Random(1, 5)
+        GearDamage = Random(1, 6)
+        Overpower = Random(1, 6)
 
     - Chance: 20%:
-        GearDamage = Random(1, 5)
-        OverpowerResist = Random(1, 5)   
+        GearDamage = Random(1, 6)
+        OverpowerResist = Random(1, 6)
 
     - Chance: 20%:
-        Overpower = Random(1, 5)
-        OverpowerResist = Random(1, 5)
+        Overpower = Random(1, 6)
+        OverpowerResist = Random(1, 6)
 
     - Chance: 4%:
-        GearDamage = Random(1, 5)
-        Overpower = Random(1, 5)
-        OverpowerResist = Random(1, 5)
+        GearDamage = Random(1, 6)
+        Overpower = Random(1, 6)
+        OverpowerResist = Random(1, 6)
 
     - Chance: 1%:
-        GearDamage = Random(2, 5)
-        Overpower = Random(2, 5)
-        OverpowerResist = Random(2, 5)
+        GearDamage = Random(2, 6)
+        Overpower = Random(2, 6)
+        OverpowerResist = Random(2, 6)

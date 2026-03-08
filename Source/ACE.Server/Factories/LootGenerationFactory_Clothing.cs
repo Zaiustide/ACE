@@ -997,7 +997,7 @@ namespace ACE.Server.Factories
 
             if(wo.IsShield && profile.Tier >= 9)
             {
-                var mutationFilter = MutationCache.GetMutation("ArmorLevel.shield_ratings.txt");
+                var mutationFilter = MutationCache.GetMutation("CustomRatings.shield_ratings.txt");
                 var success = mutationFilter.TryMutate(wo, profile.Tier);
                 return success;
             }
@@ -1018,6 +1018,25 @@ namespace ACE.Server.Factories
                     wo.GearCritDamage = gearRating;
                 else
                     wo.GearCritDamageResist = gearRating;
+
+                //Custom - Dmg, DR, Creature Slayer and Creature Resist Ratings
+                if (profile.Tier >= 9)
+                {
+                    var mutationFilter = MutationCache.GetMutation("CustomRatings.armor_ratings.txt");
+                    var success = mutationFilter.TryMutate(wo, profile.Tier);
+                    if(success)
+                    {
+                        if(wo.GearCreatureResistRating > 0)
+                        {
+                            wo.GearCreatureResistType = wo.GetRandomCreatureType();
+                        }
+
+                        if (wo.GearCreatureSlayerRating > 0)
+                        {
+                            wo.GearCreatureSlayerType = wo.GetRandomCreatureType();
+                        }
+                    }
+                }
             }
             else if (roll.IsClothing || roll.IsCloak)
             {
@@ -1025,6 +1044,25 @@ namespace ACE.Server.Factories
                     wo.GearDamage = gearRating;
                 else
                     wo.GearDamageResist = gearRating;
+
+                //Custom - CD, CDR, Creature Slayer and Creature Resist Ratings
+                if (profile.Tier >= 9)
+                {
+                    var mutationFilter = MutationCache.GetMutation("CustomRatings.clothing_cloak_ratings.txt");
+                    var success = mutationFilter.TryMutate(wo, profile.Tier);
+                    if (success)
+                    {
+                        if (wo.GearCreatureResistRating > 0)
+                        {
+                            wo.GearCreatureResistType = wo.GetRandomCreatureType();
+                        }
+
+                        if (wo.GearCreatureSlayerRating > 0)
+                        {
+                            wo.GearCreatureSlayerType = wo.GetRandomCreatureType();
+                        }
+                    }
+                }
             }
             else if (roll.IsJewelry)
             {
@@ -1032,6 +1070,25 @@ namespace ACE.Server.Factories
                     wo.GearHealingBoost = gearRating;
                 else
                     wo.GearMaxHealth = gearRating;
+
+                //Custom - Dmg, DR, CD, CDR, Creature Slayer and Creature Resist Ratings
+                if (profile.Tier >= 9)
+                {
+                    var mutationFilter = MutationCache.GetMutation("CustomRatings.jewelry_ratings.txt");
+                    var success = mutationFilter.TryMutate(wo, profile.Tier);
+                    if (success)
+                    {
+                        if (wo.GearCreatureResistRating > 0)
+                        {
+                            wo.GearCreatureResistType = wo.GetRandomCreatureType();
+                        }
+
+                        if (wo.GearCreatureSlayerRating > 0)
+                        {
+                            wo.GearCreatureSlayerType = wo.GetRandomCreatureType();
+                        }
+                    }
+                }
             }
             else
             {

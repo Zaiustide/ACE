@@ -3394,6 +3394,30 @@ namespace ACE.Server.WorldObjects
             set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.OverpowerResist); else SetProperty(PropertyInt.OverpowerResist, value.Value); }
         }
 
+        public CreatureType GearCreatureSlayerType
+        {
+            get => (CreatureType)(GetProperty(PropertyInt.GearCreatureSlayerType) ?? 0);
+            set { if (value == 0) RemoveProperty(PropertyInt.GearCreatureSlayerType); else SetProperty(PropertyInt.GearCreatureSlayerType, (int)value); }
+        }
+
+        public int? GearCreatureSlayerRating
+        {
+            get => GetProperty(PropertyInt.GearCreatureSlayerRating);
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearCreatureSlayerRating); else SetProperty(PropertyInt.GearCreatureSlayerRating, value.Value); }
+        }
+
+        public CreatureType GearCreatureResistType
+        {
+            get => (CreatureType)(GetProperty(PropertyInt.GearCreatureResistType) ?? 0);
+            set { if (value == 0) RemoveProperty(PropertyInt.GearCreatureResistType); else SetProperty(PropertyInt.GearCreatureResistType, (int)value); }
+        }
+
+        public int? GearCreatureResistRating
+        {
+            get => GetProperty(PropertyInt.GearCreatureResistRating);
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.GearCreatureResistRating); else SetProperty(PropertyInt.GearCreatureResistRating, value.Value); }
+        }
+
         public int? WeenieSwapClassId
         {
             get => GetProperty(PropertyInt.WeenieSwapClassId);

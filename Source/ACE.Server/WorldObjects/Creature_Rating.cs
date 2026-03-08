@@ -546,5 +546,29 @@ namespace ACE.Server.WorldObjects
 
             return rating;
         }
+
+        public int GetCreatureSlayerRating(CreatureType creatureType)
+        {
+            int rating = 0;
+
+            if (this is Player player)
+            {
+                rating = GetEquippedItemsCreatureSlayerRatingSum(creatureType);
+            }
+
+            return rating;
+        }
+
+        public int GetCreatureResistRating(CreatureType creatureType)
+        {
+            int rating = 0;
+
+            if (this is Player player)
+            {
+                rating = GetEquippedItemsCreatureResistRatingSum(creatureType);
+            }
+
+            return rating;
+        }
     }
 }

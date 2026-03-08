@@ -642,7 +642,12 @@ namespace ACE.Entity.Enum.Properties
         GuardianAllegianceId = 19000,
 
         //Used when swapping weapon elements
-        WeenieSwapClassId = 19001
+        WeenieSwapClassId = 19001,
+
+        GearCreatureSlayerRating = 19002,
+        GearCreatureSlayerType = 19003,
+        GearCreatureResistRating = 19004,
+        GearCreatureResistType = 19005
     }
 
     public static class PropertyIntExtensions
@@ -681,6 +686,8 @@ namespace ACE.Entity.Enum.Properties
                 case PropertyInt.SlayerCreatureType:
                 case PropertyInt.FoeType:
                 case PropertyInt.FriendType:
+                case PropertyInt.GearCreatureSlayerType:
+                case PropertyInt.GearCreatureResistType:
                     return System.Enum.GetName(typeof(CreatureType), value);
                 case PropertyInt.DamageType:
                 case PropertyInt.ResistanceModifierType:

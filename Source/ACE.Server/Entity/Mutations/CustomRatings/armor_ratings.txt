@@ -1,0 +1,61 @@
+Armor Rating Custom Mutation #0 Damage:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+    - Chance: 60%:
+        GearDamage = 0
+
+    - Chance: 15%:
+        GearDamage = 1
+
+    - Chance: 10%:
+        GearDamage = 2
+    
+    - Chance: 10%:
+        GearDamage = 3
+
+    - Chance: 4%:
+        GearDamage = Random(1, 5)
+
+    - Chance: 1%:
+        GearDamage = Random(1, 6)
+
+Armor Rating Custom Mutation #1 DamageResist:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+    - Chance: 60%:
+        GearDamageResist = 0
+
+    - Chance: 15%:
+        GearDamageResist = 1
+
+    - Chance: 10%:
+        GearDamageResist = 2
+    
+    - Chance: 10%:
+        GearDamageResist = 3
+
+    - Chance: 4%:
+        GearDamageResist = Random(1, 5)
+
+    - Chance: 1%:
+        GearDamageResist = Random(1, 6)
+
+Armor Rating Custom Mutation #2 CreatureResist:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 50%:
+        GearCreatureResistRating = 0
+
+    - Chance: 50%:
+        GearCreatureResistRating = Random(1, 4)
+
+Armor Rating Custom Mutation #3 CreatureSlayer:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 50%:
+        GearCreatureSlayerRating = 0
+
+    - Chance: 50%:
+        GearCreatureSlayerRating = Random(1, 4)

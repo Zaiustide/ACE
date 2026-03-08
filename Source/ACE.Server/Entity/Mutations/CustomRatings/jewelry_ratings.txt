@@ -1,0 +1,103 @@
+Jewelry Rating Custom Mutation #0 Damage:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+    - Chance: 60%:
+        GearDamage = 0
+
+    - Chance: 15%:
+        GearDamage = 1
+
+    - Chance: 10%:
+        GearDamage = 2
+    
+    - Chance: 10%:
+        GearDamage = 3
+
+    - Chance: 4%:
+        GearDamage = Random(1, 5)
+
+    - Chance: 1%:
+        GearDamage = Random(1, 6)
+
+Jewelry Rating Custom Mutation #1 DamageResist:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+    - Chance: 60%:
+        GearDamageResist = 0
+
+    - Chance: 15%:
+        GearDamageResist = 1
+
+    - Chance: 10%:
+        GearDamageResist = 2
+    
+    - Chance: 10%:
+        GearDamageResist = 3
+
+    - Chance: 4%:
+        GearDamageResist = Random(1, 5)
+
+    - Chance: 1%:
+        GearDamageResist = Random(1, 6)
+
+Jewelry Rating Custom Mutation #2 CritDamage:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+    - Chance: 60%:
+        GearCritDamage = 0
+
+    - Chance: 15%:
+        GearCritDamage = 1
+
+    - Chance: 10%:
+        GearCritDamage = 2
+    
+    - Chance: 10%:
+        GearCritDamage = 3
+
+    - Chance: 4%:
+        GearCritDamage = Random(1, 5)
+
+    - Chance: 1%:
+        GearCritDamage = Random(1, 6)
+
+Jewelry Rating Custom Mutation #3 CritDamageResist:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+    - Chance: 60%:
+        GearCritDamageResist = 0
+
+    - Chance: 15%:
+        GearCritDamageResist = 1
+
+    - Chance: 10%:
+        GearCritDamageResist = 2
+    
+    - Chance: 10%:
+        GearCritDamageResist = 3
+
+    - Chance: 4%:
+        GearCritDamageResist = Random(1, 5)
+
+    - Chance: 1%:
+        GearCritDamageResist = Random(1, 6)
+
+Jewelry Rating Custom Mutation #4 CreatureResist:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 50%:
+        GearCreatureResistRating = 0
+
+    - Chance: 50%:
+        GearCreatureResistRating = Random(1, 4)
+
+Jewelry Rating Custom Mutation #5 CreatureSlayer:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 50%:
+        GearCreatureSlayerRating = 0
+
+    - Chance: 50%:
+        GearCreatureSlayerRating = Random(1, 4)

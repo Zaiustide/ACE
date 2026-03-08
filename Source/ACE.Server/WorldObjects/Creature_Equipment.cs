@@ -38,6 +38,8 @@ namespace ACE.Server.WorldObjects
                 EquippedObjects[worldObject.Guid] = worldObject;
 
                 AddItemToEquippedItemsRatingCache(worldObject);
+                AddToCreatureResistRatingCache(worldObject);
+                AddToCreatureSlayerRatingCache(worldObject);
 
                 EncumbranceVal += (worldObject.EncumbranceVal ?? 0);
             }
@@ -266,7 +268,7 @@ namespace ACE.Server.WorldObjects
             equippedItemsRatingCache[PropertyInt.GearPKDamageRating] -= (wo.GearPKDamageRating ?? 0);
             equippedItemsRatingCache[PropertyInt.GearPKDamageResistRating] -= (wo.GearPKDamageResistRating ?? 0);
             equippedItemsRatingCache[PropertyInt.Overpower] -= (wo.Overpower ?? 0);
-            equippedItemsRatingCache[PropertyInt.OverpowerResist] -= (wo.OverpowerResist ?? 0);
+            equippedItemsRatingCache[PropertyInt.OverpowerResist] -= (wo.OverpowerResist ?? 0);            
         }
 
         public int GetEquippedItemsRatingSum(PropertyInt rating)
@@ -278,6 +280,128 @@ namespace ACE.Server.WorldObjects
                 return value;
 
             log.Error($"Creature_Equipment.GetEquippedItemsRatingsSum() does not support {rating}");
+            return 0;
+        }
+
+        private Dictionary<CreatureType, int> _creatureSlayerRatingsCache;
+        public Dictionary<CreatureType, int> CreatureSlayerRatings
+        {
+            get
+            {
+                if(_creatureSlayerRatingsCache == null)
+                {
+                    _creatureSlayerRatingsCache = new Dictionary<CreatureType, int>();
+                }
+
+                return _creatureSlayerRatingsCache;
+            }
+        }
+
+        private void AddToCreatureSlayerRatingCache(WorldObject wo)
+        {
+            if (!wo.GearCreatureSlayerRating.HasValue || wo.GearCreatureSlayerRating < 1 || wo.GearCreatureSlayerType == ACE.Entity.Enum.CreatureType.Invalid)
+                return;
+
+            if (_creatureSlayerRatingsCache == null)
+            {
+                _creatureSlayerRatingsCache = new Dictionary<CreatureType, int>();                
+            }
+
+            if(_creatureSlayerRatingsCache.ContainsKey(wo.GearCreatureSlayerType))
+            {
+                _creatureSlayerRatingsCache[wo.GearCreatureSlayerType] += wo.GearCreatureSlayerRating.Value;
+            }
+            else
+            {
+                _creatureSlayerRatingsCache[wo.GearCreatureSlayerType] = wo.GearCreatureSlayerRating.Value;
+            }
+        }
+
+        private void RemoveFromCreatureSlayerRatingCache(WorldObject wo)
+        {
+            if (_creatureSlayerRatingsCache == null ||
+                !wo.GearCreatureSlayerRating.HasValue ||
+                wo.GearCreatureSlayerRating < 1 ||
+                wo.GearCreatureSlayerType == ACE.Entity.Enum.CreatureType.Invalid)
+                return;            
+
+            if (_creatureSlayerRatingsCache.ContainsKey(wo.GearCreatureSlayerType))
+            {
+                _creatureSlayerRatingsCache[wo.GearCreatureSlayerType] = _creatureSlayerRatingsCache[wo.GearCreatureSlayerType] - wo.GearCreatureSlayerRating.Value;
+                if (_creatureSlayerRatingsCache[wo.GearCreatureSlayerType] < 1)
+                    _creatureSlayerRatingsCache.Remove(wo.GearCreatureSlayerType);
+            }            
+        }
+
+        public int GetEquippedItemsCreatureSlayerRatingSum(CreatureType creatureType)
+        {
+            if (_creatureSlayerRatingsCache == null)
+                return 0;
+
+            if (_creatureSlayerRatingsCache.TryGetValue(creatureType, out var value))
+                return value;
+
+            return 0;
+        }
+
+        private Dictionary<CreatureType, int> _creatureResistRatingsCache;
+        public Dictionary<CreatureType, int> CreatureResistRatings
+        {
+            get
+            {
+                if (_creatureResistRatingsCache == null)
+                {
+                    _creatureResistRatingsCache = new Dictionary<CreatureType, int>();
+                }
+
+                return _creatureResistRatingsCache;
+            }
+        }
+
+        private void AddToCreatureResistRatingCache(WorldObject wo)
+        {
+            if (!wo.GearCreatureResistRating.HasValue || wo.GearCreatureResistRating < 1 || wo.GearCreatureResistType == ACE.Entity.Enum.CreatureType.Invalid)
+                return;
+
+            if (_creatureResistRatingsCache == null)
+            {
+                _creatureResistRatingsCache = new Dictionary<CreatureType, int>();
+            }
+
+            if (_creatureResistRatingsCache.ContainsKey(wo.GearCreatureResistType))
+            {
+                _creatureResistRatingsCache[wo.GearCreatureResistType] += wo.GearCreatureResistRating.Value;
+            }
+            else
+            {
+                _creatureResistRatingsCache[wo.GearCreatureResistType] = wo.GearCreatureResistRating.Value;
+            }
+        }
+
+        private void RemoveFromCreatureResistRatingCache(WorldObject wo)
+        {
+            if (_creatureResistRatingsCache == null ||
+                !wo.GearCreatureResistRating.HasValue ||
+                wo.GearCreatureResistRating < 1 ||
+                wo.GearCreatureResistType == ACE.Entity.Enum.CreatureType.Invalid)
+                return;
+
+            if (_creatureResistRatingsCache.ContainsKey(wo.GearCreatureResistType))
+            {
+                _creatureResistRatingsCache[wo.GearCreatureResistType] = _creatureResistRatingsCache[wo.GearCreatureResistType] - wo.GearCreatureResistRating.Value;
+                if (_creatureResistRatingsCache[wo.GearCreatureResistType] < 1)
+                    _creatureResistRatingsCache.Remove(wo.GearCreatureResistType);
+            }
+        }
+
+        public int GetEquippedItemsCreatureResistRatingSum(CreatureType creatureType)
+        {
+            if (_creatureResistRatingsCache == null)
+                return 0;
+
+            if (_creatureResistRatingsCache.TryGetValue(creatureType, out var value))
+                return value;
+
             return 0;
         }
 
@@ -331,6 +455,8 @@ namespace ACE.Server.WorldObjects
             EquippedObjects[worldObject.Guid] = worldObject;
 
             AddItemToEquippedItemsRatingCache(worldObject);
+            AddToCreatureResistRatingCache(worldObject);
+            AddToCreatureSlayerRatingCache(worldObject);
 
             EncumbranceVal += (worldObject.EncumbranceVal ?? 0);
             Value += (worldObject.Value ?? 0);
@@ -390,6 +516,8 @@ namespace ACE.Server.WorldObjects
             }
 
             RemoveItemFromEquippedItemsRatingCache(worldObject);
+            RemoveFromCreatureResistRatingCache(worldObject);
+            RemoveFromCreatureSlayerRatingCache(worldObject);
 
             wieldedLocation = worldObject.CurrentWieldedLocation ?? EquipMask.None;
 

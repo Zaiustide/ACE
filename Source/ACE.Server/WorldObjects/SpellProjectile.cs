@@ -565,6 +565,13 @@ namespace ACE.Server.WorldObjects
             // Possible 2x + damage bonus for the slayer property
             var slayerMod = GetWeaponCreatureSlayerModifier(weapon, sourceCreature, target);
 
+            //Gear Creature Slayer Rating - Custom
+            int gearSlayerRating = sourceCreature.GetEquippedItemsCreatureSlayerRatingSum(target.CreatureType ?? ACE.Entity.Enum.CreatureType.Invalid);
+            if (gearSlayerRating > 0)
+            {
+                slayerMod = Creature.AdditiveCombine(slayerMod, Creature.GetPositiveRatingMod(gearSlayerRating));
+            }
+
             //Nerf human slayer dmg for ring and wall spells
             if (isPVP && slayerMod > 1f && Spell.School != MagicSchool.LifeMagic)
             {
@@ -596,7 +603,15 @@ namespace ACE.Server.WorldObjects
 
                 resistanceMod = (float)Math.Max(0.0f, target.GetResistanceMod(resistanceType, this, null, weaponResistanceMod));
 
-                finalDamage = (lifeMagicDamage + critDamageBonus) * elementalDamageMod * slayerMod * resistanceMod * absorbMod;
+                //Gear Creature Resist Rating - custom
+                int gearCreatureResistRating = target.GetEquippedItemsCreatureResistRatingSum(sourceCreature.CreatureType ?? ACE.Entity.Enum.CreatureType.Invalid);
+                float gearCreatureResistRatingMod = 1.0f;
+                if (gearCreatureResistRating > 0)
+                {
+                    gearCreatureResistRatingMod = Creature.GetNegativeRatingMod(gearCreatureResistRating);
+                }
+
+                finalDamage = (lifeMagicDamage + critDamageBonus) * elementalDamageMod * slayerMod * resistanceMod * absorbMod * gearCreatureResistRatingMod;
             }
             // war/void magic projectiles
             else
@@ -671,9 +686,17 @@ namespace ACE.Server.WorldObjects
 
                 resistanceMod = (float)Math.Max(0.0f, target.GetResistanceMod(resistanceType, this, null, weaponResistanceMod));
 
+                //Gear Creature Resist Rating - custom
+                int gearCreatureResistRating = target.GetEquippedItemsCreatureResistRatingSum(sourceCreature.CreatureType ?? ACE.Entity.Enum.CreatureType.Invalid);
+                float gearCreatureResistRatingMod = 1.0f;
+                if (gearCreatureResistRating > 0)
+                {
+                    gearCreatureResistRatingMod = Creature.GetNegativeRatingMod(gearCreatureResistRating);
+                }
+
                 finalDamage = baseDamage + critDamageBonus + skillBonus;
 
-                finalDamage *= elementalDamageMod * slayerMod * resistanceMod * absorbMod;
+                finalDamage *= elementalDamageMod * slayerMod * resistanceMod * absorbMod * gearCreatureResistRatingMod;
             }
 
             // show debug info
