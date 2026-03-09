@@ -1352,7 +1352,7 @@ namespace ACE.Server.WorldObjects.Managers
                                 var destination = new Position(emote.ObjCellId.Value, emote.OriginX.Value, emote.OriginY.Value, emote.OriginZ.Value, emote.AnglesX.Value, emote.AnglesY.Value, emote.AnglesZ.Value, emote.AnglesW.Value);
 
                                 WorldObject.AdjustDungeon(destination);
-                                WorldManager.ThreadSafeTeleport(player, destination);
+                                WorldManager.ThreadSafeTeleport(player, destination, force: true);
                             }
                             else // position is relative to WorldObject's current location
                             {
@@ -1362,7 +1362,7 @@ namespace ACE.Server.WorldObjects.Managers
                                 relativeDestination.LandblockId = new LandblockId(relativeDestination.GetCell());
 
                                 WorldObject.AdjustDungeon(relativeDestination);
-                                WorldManager.ThreadSafeTeleport(player, relativeDestination);
+                                WorldManager.ThreadSafeTeleport(player, relativeDestination, force: true);
                             }
                         }
                     }
