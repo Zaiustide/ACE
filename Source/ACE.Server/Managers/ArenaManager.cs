@@ -677,7 +677,7 @@ namespace ACE.Server.Managers
                         //If player is in an arena, teleport player to their LS
                         if (player.CurrentLandblock?.IsArenaLandblock ?? false)
                         {
-                            player.Teleport(player.Sanctuary);
+                            player.Teleport(player.Sanctuary, force: true);
                         }
                     }
                 }
@@ -974,7 +974,7 @@ namespace ACE.Server.Managers
                 if (startingPositions != null)
                 {
                     //Teleport to a random starting position
-                    player.Teleport(startingPositions[new Random().Next(startingPositions.Count)]);                    
+                    player.Teleport(startingPositions[new Random().Next(startingPositions.Count)], force: true);                    
                 }
             });
             actionChain.AddAction(player, () =>
@@ -1004,7 +1004,7 @@ namespace ACE.Server.Managers
             actionChain.AddDelaySeconds(3);
             actionChain.AddAction(player, () =>
             {
-                player.Teleport(player.Sanctuary);
+                player.Teleport(player.Sanctuary, force: true);
                 player.Session.Network.EnqueueSend(new GameMessageSystemChat($"You've exited observer mode for an arena match and are being teleported to your lifestone.", ChatMessageType.System));                
             });
             actionChain.AddDelaySeconds(0.5);

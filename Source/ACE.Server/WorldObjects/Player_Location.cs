@@ -684,19 +684,9 @@ namespace ACE.Server.WorldObjects
         /// <summary>
         /// This is not thread-safe. Consider using WorldManager.ThreadSafeTeleport() instead if you're calling this from a multi-threaded subsection.
         /// </summary>
-        public void Teleport(Position _newPosition, bool fromPortal = false)
+        public void Teleport(Position _newPosition, bool fromPortal = false, bool force = false)
         {
-            var fixLoc = Sanctuary ?? new Position(0xA9B40019, 84, 7.1f, 94, 0, 0, -0.0784591f, 0.996917f);
-
-            // prevent teleporting if already teleporting, unless the new location is to your sanctuary (death while in portal space)
-            if (Teleporting && !_newPosition.Equals(fixLoc))
-            {
-                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
-                return;
-            }
-
-            // prevent teleporting after exiting portal space if it's within the recent teleport threshold
-            if (BlockTeleportFromThreshold)
+            if(!ValidateTeleport(_newPosition, force))
             {
                 Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YoureTooBusy));
                 return;
@@ -727,7 +717,7 @@ namespace ACE.Server.WorldObjects
                 var delayTelport = new ActionChain();
                 delayTelport.AddAction(this, () => ClearFogColor());
                 delayTelport.AddDelaySeconds(1);
-                delayTelport.AddAction(this, () => WorldManager.ThreadSafeTeleport(this, _newPosition));
+                delayTelport.AddAction(this, () => WorldManager.ThreadSafeTeleport(this, _newPosition, force: true));
 
                 delayTelport.EnqueueChain();
 
@@ -809,7 +799,7 @@ namespace ACE.Server.WorldObjects
                                 QuestManager.Erase("EnterBattleDungeon");
                             }
 
-                            Teleport(Sanctuary);
+                            Teleport(Sanctuary, force: true);
                             return;
                         }
 
@@ -818,7 +808,7 @@ namespace ACE.Server.WorldObjects
                         {
                             this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  This area is currently only open to clans who are whitelisted for town control to prevent players from breaking allegiance in order to exceed clan capacity restrictions.  Please contact an admin to get your clan whitelisted for entry.", ChatMessageType.Broadcast));
 
-                            Teleport(Sanctuary);
+                            Teleport(Sanctuary, force: true);
                             return;
                         }
 
@@ -832,7 +822,7 @@ namespace ACE.Server.WorldObjects
                             {
                                 this.Session.Network.EnqueueSend(new GameMessageSystemChat($"Your allegiance has already reached it's maximum number of entrants to this World Boss event. ", ChatMessageType.Broadcast));
 
-                                Teleport(Sanctuary);
+                                Teleport(Sanctuary, force: true);
                                 return;
                             }
                             else
@@ -853,7 +843,7 @@ namespace ACE.Server.WorldObjects
                         //The player has no allegiance, disallow entry
                         this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  Unfortunately you are not a member of an allegiance and are unable to enter this area to prevent abuse by players who break allegiance to exceed the clan capacity limitations.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
 
-                        Teleport(Sanctuary);
+                        Teleport(Sanctuary, force: true);
                         return;
                     }
                 }
@@ -881,6 +871,22 @@ namespace ACE.Server.WorldObjects
             {
                 ArenaManager.ExitArenaObserverMode(this);
             }            
+        }
+
+        private bool ValidateTeleport(Position newPosition, bool force)
+        {
+            if (force)
+                return true;
+
+            // prevent teleporting if already teleporting 
+            if (Teleporting)
+                return false;
+
+            // prevent teleporting after exiting portal space if it's within the recent teleport 
+            if (BlockTeleportFromThreshold)
+                return false;
+
+            return true;
         }
 
         public void DoPreTeleportHide()
