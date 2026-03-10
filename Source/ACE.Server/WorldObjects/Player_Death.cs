@@ -121,7 +121,8 @@ namespace ACE.Server.WorldObjects
                 globalPKDe += "\n[PKDe]";
 
                 PlayerManager.BroadcastToAll(new GameMessageSystemChat(globalPKDe, ChatMessageType.Broadcast));
-                _ = TurbineChatHandler.SendWebhookedChat("God of PK", webhookMsg, null, "General");
+                string pkKillsWebhookUrl = PropertyManager.GetString("pk_kills_webhook").Item;
+                _ = TurbineChatHandler.SendWebhookedChat("God of PK", webhookMsg, pkKillsWebhookUrl, "General"); 
 
                 //Handle PK Quests
                 bool isPkQuestEligible =

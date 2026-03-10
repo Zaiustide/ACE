@@ -820,7 +820,8 @@ namespace ACE.Server.Managers
                 ("arena_globals_webhook", new Property<string>("", "Webhook to be send Arena global messages.")),
                 ("rare_audit_webhook", new Property<string>("", "Webhook to be send rare audit messages.")),
                 ("world_boss_webhook", new Property<string>("", "Webhook to be send world boss messages.")),
-                ("globalchatgag_ip_list", new Property<string>("", "List of IPs that are global chat gagged"))
+                ("globalchatgag_ip_list", new Property<string>("", "List of IPs that are global chat gagged")),
+                ("pk_kills_webhook", new Property<string>("", "Webhook used for sending PK Kill messages."))
                 );
     }
 }
