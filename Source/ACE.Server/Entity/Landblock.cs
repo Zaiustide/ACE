@@ -1741,5 +1741,35 @@ namespace ACE.Server.Entity
                 return _isArenaLandblock.Value;
             }
         }
+
+        public static string GetLocString(Position pos)
+        {
+            string locationString = "";
+
+            if (!pos.Indoors)
+            {
+                locationString = pos.GetMapCoordStr();
+            } else
+            {
+                var dungeon = DatabaseManager.World.GetDungeonInformationByLandblock(pos.GetLandblockHex());
+
+                if (dungeon == null)
+                {
+                    locationString = "Unknown Location";
+                } else
+                {
+                    var coords = dungeon.Coords;
+                    if (coords != "")
+                    {
+                        locationString = $"{dungeon.Name} - from {coords}";
+                    } else
+                    {
+                        locationString = dungeon.Name;
+                    }
+                }
+            }
+
+            return locationString;
+        }
     }
 }

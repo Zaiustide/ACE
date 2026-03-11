@@ -374,5 +374,12 @@ namespace ACE.Server.Entity
 
             return success;
         }
+
+        public static string GetLandblockHex(this Position pos)  
+        {
+            var currentLbRaw = pos.LandblockId.Raw;
+            var currentLb = $"{currentLbRaw:X8}".Substring(0, 4);
+            return currentLb;
+        }
     }
 }

@@ -5424,5 +5424,14 @@ namespace ACE.Server.Command.Handlers
                 log.Error($"Error in call to AdminCommands.HandleRemoveArenaBlacklist. ex: {ex}");
             }
         }
+
+        [CommandHandler("getloc", AccessLevel.Admin, CommandHandlerFlag.None, 0,
+            "Show current world location",
+            "")]
+        public static void HandleGetLoc(Session session, params string[] parameters)
+        {
+            var locationString = Landblock.GetLocString(session.Player.Location);
+            CommandHandlerHelper.WriteOutputInfo(session, $"{locationString}", ChatMessageType.Broadcast);
+        }
     }
 }
