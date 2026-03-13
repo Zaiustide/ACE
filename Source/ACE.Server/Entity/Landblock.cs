@@ -1772,7 +1772,35 @@ namespace ACE.Server.Entity
             }
         }
 
-        public static string GetLocString(Position pos)
+        private static readonly FrozenSet<ushort> _mountainRetreatDungeons = FrozenSet.ToFrozenSet(new ushort[]
+        {
+            0x02F5,
+            0x0105,
+            0x6147
+        });
+
+        public bool IsMountainRetreatDungeon => _mountainRetreatDungeons.Contains(this.Id.Landblock);
+
+        public bool IsMountainRetreatLandblock
+        {
+            get
+            {
+                if (IsDungeon)
+                {
+                    return IsMountainRetreatDungeon;
+                }
+                else
+                {
+                    var x = Id.LandblockX;
+                    var y = Id.LandblockY;
+                    return x >= 119 && x <= 124 && y >= 199 && y <= 205;
+                }
+            }
+        }
+
+        public bool IsBountyLocation => IsMountainRetreatLandblock || IsIslandLandblock;
+
+        public static string GetLocString(Position pos, bool withEntrance = false)
         {
             string locationString = "";
 
@@ -1789,7 +1817,7 @@ namespace ACE.Server.Entity
                 } else
                 {
                     var coords = dungeon.Coords;
-                    if (coords != "")
+                    if (coords != "" && withEntrance)
                     {
                         locationString = $"{dungeon.Name} - from {coords}";
                     } else

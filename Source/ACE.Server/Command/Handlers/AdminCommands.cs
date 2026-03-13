@@ -5433,5 +5433,25 @@ namespace ACE.Server.Command.Handlers
             var locationString = Landblock.GetLocString(session.Player.Location);
             CommandHandlerHelper.WriteOutputInfo(session, $"{locationString}", ChatMessageType.Broadcast);
         }
+
+        [CommandHandler("getBountyLoc", AccessLevel.Admin, CommandHandlerFlag.None, 0,
+            "Show current world location",
+            "")]
+        public static void HandleGetBountyLoc(Session session, params string[] parameters)
+        {
+            var lb = session.Player.CurrentLandblock;
+            if (lb != null)
+            {
+                if (lb.IsBountyLocation)
+                {
+                    var locationString = Landblock.GetLocString(session.Player.Location);
+                    CommandHandlerHelper.WriteOutputInfo(session, $"{locationString}", ChatMessageType.Broadcast);
+                } else
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Player is not current in a bounty landblock", ChatMessageType.Broadcast);
+                }
+            }
+
+        }
     }
 }
