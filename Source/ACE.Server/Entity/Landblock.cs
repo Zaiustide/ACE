@@ -33,6 +33,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Position = ACE.Entity.Position;
+using System.Collections.Frozen;
 
 namespace ACE.Server.Entity
 {
@@ -1739,6 +1740,35 @@ namespace ACE.Server.Entity
                 }
 
                 return _isArenaLandblock.Value;
+            }
+        }
+
+        private static readonly FrozenSet<ushort> _islandDungeons = FrozenSet.ToFrozenSet(new ushort[]
+        {
+            0x00E1,
+            0x00C8,
+            0x0174,
+            0x003F,
+            0x0026,
+            0x7E04,
+        });
+
+        public bool IsIslandDungeon => _islandDungeons.Contains(this.Id.Landblock);
+
+        public bool IsIslandLandblock
+        {
+            get
+            {
+                if (IsDungeon)
+                {
+                    return IsIslandDungeon;
+                }
+                else
+                {
+                    var x = Id.LandblockX;
+                    var y = Id.LandblockY;
+                    return x >= 244 && x <= 250 && y >= 97 && y <= 108;
+                }
             }
         }
 
