@@ -5,10 +5,10 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
     - Chance: 35%:
         GearDamage = 1
 
-    - Chance: 15%:
+    - Chance: 35%:
         GearDamage = 2
     
-    - Chance: 0.05%:
+    - Chance: 15%:
         GearDamage = 3    
 
 Mutation #1 DamageResist:
@@ -18,10 +18,10 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
     - Chance: 35%:
         GearDamageResist = 1
 
-    - Chance: 15%:
+    - Chance: 35%:
         GearDamageResist = 2
     
-    - Chance: 0.05%:
+    - Chance: 15%:
         GearDamageResist = 3
 
 Mutation #2 GearCritDamage:
@@ -31,7 +31,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
     - Chance: 35%:
         GearCritDamage = 1
 
-    - Chance: 35%:
+    - Chance: 15%:
         GearCritDamage = 2
     
     - Chance: 0.05%:
@@ -44,7 +44,7 @@ Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
     - Chance: 35%:
         GearCritDamageResist = 1
 
-    - Chance: 35%:
+    - Chance: 15%:
         GearCritDamageResist = 2
     
     - Chance: 0.05%:

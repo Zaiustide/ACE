@@ -14,7 +14,7 @@ VALUES (490273,   1,       2048) /* ItemType - Gem */
      , (490273,  19,          2) /* Value */
      , (490273,  65,        101) /* Placement - Resting */
      , (490273,  93,       1044) /* PhysicsState - Ethereal, IgnoreCollisions, Gravity */
-     , (490273,  94,          6) /* TargetType - Vestements */;
+     , (490273,  94,      35215) /* TargetType - Vestements */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (490273,   1, False) /* Stuck */

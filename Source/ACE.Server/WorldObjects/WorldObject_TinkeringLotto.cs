@@ -13,7 +13,7 @@ namespace ACE.Server.WorldObjects
 {
     partial class WorldObject
     {
-        public string TinkeringLotto_Mutate(string salvageType, int salvageWorkmanship)
+        public string TinkeringLotto_Mutate(string salvageType, int salvageWorkmanship, float chanceMod = 1.0f)
         {
             var resultMessage = "";
 
@@ -23,48 +23,48 @@ namespace ACE.Server.WorldObjects
             switch (salvageType)
             {
                 case "Steel":
-                    resultMessage = TinkeringLotto_PlaySteelLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlaySteelLottery(salvageWorkmanship, chanceMod);
                     break;
 
                 case "Iron":
-                    resultMessage = TinkeringLotto_PlayIronLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayIronLottery(salvageWorkmanship, chanceMod);
                     break;
 
                 case "Granite":
-                    resultMessage = TinkeringLotto_PlayGraniteLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayGraniteLottery(salvageWorkmanship, chanceMod);
                     break;
 
                 case "Green Garnet":
-                    resultMessage = TinkeringLotto_PlayGreenGarnetLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayGreenGarnetLottery(salvageWorkmanship, chanceMod);
                     break;
 
                 case "Mahogany":
-                    resultMessage = TinkeringLotto_PlayMahoganyLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayMahoganyLottery(salvageWorkmanship, chanceMod);
                     break;
                 case "Velvet":
-                    resultMessage = TinkeringLotto_PlayVelvetLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayVelvetLottery(salvageWorkmanship, chanceMod);
                     break;
                 case "Brass":
-                    resultMessage = TinkeringLotto_PlayBrassLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayBrassLottery(salvageWorkmanship, chanceMod);
                     break;
                 case "Aquamarine":
                 case "Black Garnet":
-                case "Emerald":                
+                case "Emerald":
                 case "Imperial Topaz":
                 case "Jet":
                 case "Red Garnet":
                 case "White Sapphire":
-                    resultMessage = TinkeringLotto_PlayRendLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayRendLottery(salvageWorkmanship, chanceMod);
                     break;
                 case "Sunstone":
                 case "Fire Opal":
                 case "Black Opal":
-                    resultMessage = TinkeringLotto_PlayARCSCBLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayARCSCBLottery(salvageWorkmanship, chanceMod);
                     break;
                 case "Zircon":
                 case "Peridot":
                 case "Yellow Topaz":
-                    resultMessage = TinkeringLotto_PlayDefenseImbueLottery(salvageWorkmanship);
+                    resultMessage = TinkeringLotto_PlayDefenseImbueLottery(salvageWorkmanship, chanceMod);
                     break;
                 default:
                     return "";
@@ -73,10 +73,10 @@ namespace ACE.Server.WorldObjects
             return resultMessage;
         }
 
-        private string TinkeringLotto_PlaySteelLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlaySteelLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
-            
+
             Random rand = new Random();
             var roll = rand.NextDouble();
 
@@ -105,7 +105,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayIronLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayIronLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -145,7 +145,7 @@ namespace ACE.Server.WorldObjects
         }
 
 
-        private string TinkeringLotto_PlayGraniteLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayGraniteLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -184,7 +184,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayGreenGarnetLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayGreenGarnetLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -223,7 +223,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayMahoganyLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayMahoganyLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -255,14 +255,14 @@ namespace ACE.Server.WorldObjects
             if (rendRoll < 0.025)
             {
                 var rendResult = TinkeringLotto_ApplyResistanceCleaveMutation();
-                if(!string.IsNullOrEmpty(rendResult))
+                if (!string.IsNullOrEmpty(rendResult))
                     resultMsg = string.IsNullOrEmpty(resultMsg) ? rendResult : $"{resultMsg}\n{rendResult}";
             }
 
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayVelvetLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayVelvetLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -301,7 +301,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayBrassLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayBrassLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -340,7 +340,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayRendLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayRendLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -362,14 +362,14 @@ namespace ACE.Server.WorldObjects
                     resultMsg = "Improved Missile Damage Mod by 4%";
                     HandleTinkerLottoLog("MissileDmgMod4%");
                 }
-                else if(this.ItemType == ItemType.MeleeWeapon)
+                else if (this.ItemType == ItemType.MeleeWeapon)
                 {
                     //Add +1 dmg
                     this.Damage += 1;
                     resultMsg = "Improved Damage by 1";
                     HandleTinkerLottoLog("Dmg1");
                 }
-                else if(this.ItemType == ItemType.Caster)
+                else if (this.ItemType == ItemType.Caster)
                 {
                     //Add +5% elemental dmg bonus
                     this.ElementalDamageMod = (this.ElementalDamageMod ?? 0.0f) + 0.05f;
@@ -379,14 +379,14 @@ namespace ACE.Server.WorldObjects
             }
 
             //If you're using WS 10 salvage and your target item is <= WS 6
-            if(salvageWorkmanship == 10 && this.Workmanship <= 6)
+            if (salvageWorkmanship == 10 && this.Workmanship <= 6)
             {
                 //roll again for a 15% chance to add...
                 //+1 cleave target for 2H/HW/LW/FW
                 //BS or CB for magic casters
                 //Shield hollow for missile weps
                 roll = rand.NextDouble();
-                if(roll < 0.15)
+                if (roll < 0.15)
                 {
                     var currRollResultMsg = "";
 
@@ -400,7 +400,7 @@ namespace ACE.Server.WorldObjects
                     else if (this.ItemType == ItemType.MeleeWeapon)
                     {
                         //Add +1 cleave
-                        if(!this.GetProperty(PropertyInt.Cleaving).HasValue || this.GetProperty(PropertyInt.Cleaving) < 2)
+                        if (!this.GetProperty(PropertyInt.Cleaving).HasValue || this.GetProperty(PropertyInt.Cleaving) < 2)
                         {
                             this.SetProperty(PropertyInt.Cleaving, 2);
                         }
@@ -408,7 +408,7 @@ namespace ACE.Server.WorldObjects
                         {
                             this.SetProperty(PropertyInt.Cleaving, 3);
                         }
-                        
+
                         currRollResultMsg = "Added +1 Cleaving Target";
                         HandleTinkerLottoLog("Cleave1");
                     }
@@ -416,7 +416,7 @@ namespace ACE.Server.WorldObjects
                     {
                         //Add BS or CB
                         roll = rand.NextDouble();
-                        if(roll < 0.5)
+                        if (roll < 0.5)
                         {
                             //Add Biting Strike
                             this.SetProperty(PropertyFloat.CriticalFrequency, 0.25);
@@ -429,7 +429,7 @@ namespace ACE.Server.WorldObjects
                             this.SetProperty(PropertyFloat.CriticalMultiplier, 2.5);
                             currRollResultMsg = "Added Crushing Blow";
                             HandleTinkerLottoLog("CB");
-                        }                                                
+                        }
                     }
 
                     resultMsg = string.IsNullOrEmpty(resultMsg) ? currRollResultMsg : $"{resultMsg}\n{currRollResultMsg}";
@@ -461,12 +461,12 @@ namespace ACE.Server.WorldObjects
 
                     resultMsg = string.IsNullOrEmpty(resultMsg) ? currRollResultMsg : $"{resultMsg}\n{currRollResultMsg}";
                 }
-            }            
+            }
 
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayARCSCBLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayARCSCBLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -541,7 +541,7 @@ namespace ACE.Server.WorldObjects
                     else if (this.ItemType == ItemType.Caster)
                     {
                         //Add +1 magic d
-                        if(this.WeaponMagicDefense.HasValue)
+                        if (this.WeaponMagicDefense.HasValue)
                         {
                             this.SetProperty(PropertyFloat.WeaponMagicDefense, this.WeaponMagicDefense.Value + 0.01);
                         }
@@ -549,7 +549,7 @@ namespace ACE.Server.WorldObjects
                         {
                             this.SetProperty(PropertyFloat.WeaponMagicDefense, 1.01);
                         }
-                        
+
                         currRollResultMsg = "Added +1 Magic Defense";
                         HandleTinkerLottoLog("MagicD1");
                     }
@@ -588,7 +588,7 @@ namespace ACE.Server.WorldObjects
             return resultMsg;
         }
 
-        private string TinkeringLotto_PlayDefenseImbueLottery(int salvageWorkmanship)
+        private string TinkeringLotto_PlayDefenseImbueLottery(int salvageWorkmanship, float chanceMod = 1.0f)
         {
             string resultMsg = "";
 
@@ -606,14 +606,14 @@ namespace ACE.Server.WorldObjects
                 if (salvageWorkmanship == 10 && this.Workmanship <= 6)
                 {
                     roll = rand.NextDouble();
-                    if(roll < 0.15)
+                    if (roll < 0.15)
                     {
                         alBonus += rand.Next(3, 6);
                         resultMsg = $"Jackpot! Improved Armor Level by {alBonus}";
                     }
                 }
 
-                this.ArmorLevel += alBonus;                
+                this.ArmorLevel += alBonus;
                 HandleTinkerLottoLog($"AL+{alBonus}");
             }
 
@@ -707,7 +707,7 @@ namespace ACE.Server.WorldObjects
                     break;
 
                 case DamageType.Pierce | DamageType.Slash:
-                    
+
                     if (new Random().Next(2) == 0 && !this.ImbuedEffect.HasFlag(ImbuedEffectType.PierceRending))
                     {
                         this.ImbuedEffect = ImbuedEffectType.PierceRending;
@@ -742,7 +742,7 @@ namespace ACE.Server.WorldObjects
                     this.ResistanceModifierType = this.W_DamageType;
                     this.ResistanceModifier = 1.5;
                     resultMsg = $"Added Acid Cleaving";
-                    HandleTinkerLottoLog("AcidCleaving");                    
+                    HandleTinkerLottoLog("AcidCleaving");
                     break;
 
                 case DamageType.Cold: // Cold
@@ -817,10 +817,10 @@ namespace ACE.Server.WorldObjects
 
             foreach (var lottoEvent in lottoEvents)
             {
-                if(lottoEvent.StartsWith("AL+"))
+                if (lottoEvent.StartsWith("AL+"))
                 {
                     var eventAlString = lottoEvent.Substring(3);
-                    if(int.TryParse(eventAlString, out int eventAlAmount))
+                    if (int.TryParse(eventAlString, out int eventAlAmount))
                     {
                         alBonus += eventAlAmount;
                     }
@@ -848,150 +848,6 @@ namespace ACE.Server.WorldObjects
             }
 
             return dmgBonusCount;
-        }
-
-        public void ApplyRandomSlayer(double slayerDamageBonus = 1.2f)
-        {
-            var selectSlayerType = ThreadSafeRandom.Next(1, 33);
-            this.SlayerDamageBonus = slayerDamageBonus;
-
-            switch (selectSlayerType)
-            {
-                case 1:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Banderling;
-                    break;
-
-                case 2:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Drudge;
-                    break;
-
-                case 3:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Gromnie;
-                    break;
-
-                case 4:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Lugian;
-                    break;
-
-                case 5:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Grievver;
-                    break;
-
-                case 6:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mattekar;
-                    break;
-
-                case 7:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.GearKnight;
-                    break;
-
-                case 8:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mosswart;
-                    break;
-
-                case 9:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Monouga;
-                    break;
-
-                case 10:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Olthoi;
-                    break;
-
-                case 11:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.PhyntosWasp;
-                    break;
-
-                case 12:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Shadow;
-                    break;
-
-                case 13:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Shreth;
-                    break;
-
-                case 14:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Skeleton;
-                    break;
-
-                case 15:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Tumerok;
-                    break;
-
-                case 16:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Tusker;
-                    break;
-
-                case 17:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Virindi;
-                    break;
-
-                case 18:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Wisp;
-                    break;
-
-                case 19:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Zefir;
-                    break;
-
-                case 20:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Golem;
-                    break;
-
-                case 21:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Gurog;
-                    break;
-
-                case 22:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Burun;
-                    break;
-
-                case 23:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Remoran;
-                    break;
-
-                case 24:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Reedshark;
-                    break;
-
-                case 25:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Eater;
-                    break;
-
-                case 26:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Sclavus;
-                    break;
-
-                case 27:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Moarsman;
-                    break;
-
-                case 28:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.GotrokLugian;
-                    break;
-
-                case 29:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Sleech;
-                    break;
-
-                case 30:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Rat;
-                    break;
-
-                case 31:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Moar;
-                    break;
-
-                case 32:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Niffis;
-                    break;
-
-                case 33:
-                    this.SlayerCreatureType = ACE.Entity.Enum.CreatureType.Mite;
-                    break;
-
-                default:
-                    return;
-            }
-        }
+        }        
     }
 }

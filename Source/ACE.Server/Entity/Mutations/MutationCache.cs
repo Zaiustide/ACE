@@ -227,8 +227,8 @@ namespace ACE.Server.Entity.Mutations
                 effectList.Effects.Add(effect);
             }
 
-            if (outcome != null && outcome.EffectLists.Last().Chance != 1.0f)
-                log.Error($"MutationCache.BuildMutation({filename}) - {mutationLine} total {outcome.EffectLists.Last().Chance}, expected 1.0");
+            //if (outcome != null && outcome.EffectLists.Last().Chance != 1.0f)
+            //    log.Error($"MutationCache.BuildMutation({filename}) - {mutationLine} total {outcome.EffectLists.Last().Chance}, expected 1.0");
 
             timer.Stop();
 

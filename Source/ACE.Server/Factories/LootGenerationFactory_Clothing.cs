@@ -1013,12 +1013,6 @@ namespace ACE.Server.Factories
 
             if (roll.HasArmorLevel(wo))
             {
-                // clothing w/ al, and crowns would be included in this group
-                if (rng == 0)
-                    wo.GearCritDamage = gearRating;
-                else
-                    wo.GearCritDamageResist = gearRating;
-
                 //Custom - Dmg, DR, Creature Slayer and Creature Resist Ratings
                 if (profile.Tier >= 9)
                 {
@@ -1037,18 +1031,26 @@ namespace ACE.Server.Factories
                         }
                     }
                 }
+                else
+                {
+                    // clothing w/ al, and crowns would be included in this group
+                    if (rng == 0)
+                        wo.GearCritDamage = gearRating;
+                    else
+                        wo.GearCritDamageResist = gearRating;
+                }
             }
             else if (roll.IsClothing || roll.IsCloak)
             {
-                if (rng == 0)
-                    wo.GearDamage = gearRating;
-                else
-                    wo.GearDamageResist = gearRating;
-
                 //Custom - CD, CDR, Creature Slayer and Creature Resist Ratings
                 if (profile.Tier >= 9)
                 {
-                    var mutationFilter = MutationCache.GetMutation("CustomRatings.clothing_cloak_ratings.txt");
+                    var mutationFilter = MutationCache.GetMutation("CustomRatings.clothing_ratings.txt");
+                    if (roll.IsCloak)
+                    {
+                        mutationFilter = MutationCache.GetMutation("CustomRatings.cloak_ratings.txt");
+                    }
+                    
                     var success = mutationFilter.TryMutate(wo, profile.Tier);
                     if (success)
                     {
@@ -1062,6 +1064,13 @@ namespace ACE.Server.Factories
                             wo.GearCreatureSlayerType = wo.GetRandomCreatureType();
                         }
                     }
+                }
+                else
+                {
+                    if (rng == 0)
+                        wo.GearDamage = gearRating;
+                    else
+                        wo.GearDamageResist = gearRating;
                 }
             }
             else if (roll.IsJewelry)

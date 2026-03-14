@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 480610;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (480610, 'ace480610-Slayerrandomizermorphgem', 38, '2022-01-29 01:15:03') /* Gem */;
+VALUES (480610, 'ace480610-creaturerandomizermorphgem', 38, '2022-01-29 01:15:03') /* Gem */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (480610,   1,       2048) /* ItemType - Gem */
@@ -26,8 +26,8 @@ VALUES (480610,   1, False) /* Stuck */
      , (480610,  69, False) /* IsSellable */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
-VALUES (480610,   1, 'Slayer Morph Gem') /* Name */
-     , (480610,  14, 'Applying this gem to creature slaying loot generated weapons may alter the current creature slaying property of the weapon.') /* Use */;
+VALUES (480610,   1, 'Creature Morph Gem') /* Name */
+     , (480610,  14, 'Applying this gem to loot generated items with Creature Slayer or Creature Resistance properties will alter the creature type of the item.') /* Use */;
 
 INSERT INTO `weenie_properties_d_i_d` (`object_Id`, `type`, `value`)
 VALUES (480610,   1, 0x02000179) /* Setup */

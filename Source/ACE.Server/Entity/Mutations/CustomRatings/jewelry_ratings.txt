@@ -1,103 +1,77 @@
-Jewelry Rating Custom Mutation #0 Damage:
+Mutation #0 Damage:
 
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-    - Chance: 60%:
-        GearDamage = 0
 
-    - Chance: 15%:
+    - Chance: 35%:
         GearDamage = 1
 
-    - Chance: 10%:
+    - Chance: 8%:
         GearDamage = 2
     
-    - Chance: 10%:
-        GearDamage = 3
+    - Chance: 0.05%:
+        GearDamage = 3    
 
-    - Chance: 4%:
-        GearDamage = Random(1, 5)
-
-    - Chance: 1%:
-        GearDamage = Random(1, 6)
-
-Jewelry Rating Custom Mutation #1 DamageResist:
+Mutation #1 DamageResist:
 
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-    - Chance: 60%:
-        GearDamageResist = 0
 
-    - Chance: 15%:
+    - Chance: 35%:
         GearDamageResist = 1
 
-    - Chance: 10%:
+    - Chance: 8%:
         GearDamageResist = 2
     
-    - Chance: 10%:
+    - Chance: 0.05%:
         GearDamageResist = 3
 
-    - Chance: 4%:
-        GearDamageResist = Random(1, 5)
-
-    - Chance: 1%:
-        GearDamageResist = Random(1, 6)
-
-Jewelry Rating Custom Mutation #2 CritDamage:
+Mutation #2 GearCritDamage:
 
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-    - Chance: 60%:
-        GearCritDamage = 0
 
-    - Chance: 15%:
+    - Chance: 35%:
         GearCritDamage = 1
 
-    - Chance: 10%:
+    - Chance: 8%:
         GearCritDamage = 2
     
-    - Chance: 10%:
+    - Chance: 0.05%:
         GearCritDamage = 3
 
-    - Chance: 4%:
-        GearCritDamage = Random(1, 5)
-
-    - Chance: 1%:
-        GearCritDamage = Random(1, 6)
-
-Jewelry Rating Custom Mutation #3 CritDamageResist:
+Mutation #3 GearCritDamageResist:
 
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-    - Chance: 60%:
-        GearCritDamageResist = 0
 
-    - Chance: 15%:
+    - Chance: 35%:
         GearCritDamageResist = 1
 
-    - Chance: 10%:
+    - Chance: 8%:
         GearCritDamageResist = 2
     
+    - Chance: 0.05%:
+        GearCritDamageResist = 3 
+
+Mutation #4 CreatureResist:
+
+Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
+
+    - Chance: 35%:
+        GearCreatureResistRating = 1
+
     - Chance: 10%:
-        GearCritDamageResist = 3
+        GearCreatureResistRating = 2
 
-    - Chance: 4%:
-        GearCritDamageResist = Random(1, 5)
+    - Chance: 0.5%:
+        GearCreatureResistRating = 3
 
-    - Chance: 1%:
-        GearCritDamageResist = Random(1, 6)
-
-Jewelry Rating Custom Mutation #4 CreatureResist:
+Mutation #5 CreatureSlayer:
 
 Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
 
-    - Chance: 50%:
-        GearCreatureResistRating = 0
+    - Chance: 35%:
+        GearCreatureSlayerRating = 1
 
-    - Chance: 50%:
-        GearCreatureResistRating = Random(1, 4)
+    - Chance: 10%:
+        GearCreatureSlayerRating = 2
 
-Jewelry Rating Custom Mutation #5 CreatureSlayer:
-
-Tier chances: 0, 0, 0, 0, 0, 0, 0, 0, 1
-
-    - Chance: 50%:
-        GearCreatureSlayerRating = 0
-
-    - Chance: 50%:
-        GearCreatureSlayerRating = Random(1, 4)
+    - Chance: 0.5%:
+        GearCreatureSlayerRating = 3
