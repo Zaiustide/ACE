@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using ACE.DatLoader;
+using ACE.DatLoader.FileTypes;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Server.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ACE.Server.WorldObjects
 {
@@ -143,6 +143,12 @@ namespace ACE.Server.WorldObjects
             return spells;
         }
 
+        //For custom spell set bonuses
+        private static HashSet<EquipmentSet> proofSets = new HashSet<EquipmentSet>() { EquipmentSet.Acidproof, EquipmentSet.Lightningproof, EquipmentSet.Flameproof, EquipmentSet.Coldproof, EquipmentSet.Interlocking, EquipmentSet.Hardened, EquipmentSet.Reinforced };
+        private static HashSet<SpellId> proofEffectiveResistanceSpells = new HashSet<SpellId> { SpellId.SetAcidResistance3, SpellId.SetLightningResistance3, SpellId.SetFlameResistance3, SpellId.SetFrostResistance3, SpellId.SetSlashingResistance3, SpellId.SetBludgeonResistance3, SpellId.SetPierceResistance3 };
+        private static HashSet<SpellId> proofMasterResistanceSpells = new HashSet<SpellId> { SpellId.SetAcidResistance4, SpellId.SetLightningResistance4, SpellId.SetFlameResistance4, SpellId.SetFrostResistance4, SpellId.SetSlashingResistance4, SpellId.SetBludgeonResistance4, SpellId.SetPierceResistance4 };
+        private static HashSet<EquipmentSet> customBonusSets = new HashSet<EquipmentSet>() { EquipmentSet.Adepts, EquipmentSet.Wise, EquipmentSet.Defenders, EquipmentSet.Hearty, EquipmentSet.Soldiers, EquipmentSet.Archers, EquipmentSet.Swift, EquipmentSet.Dexterous };
+
         /// <summary>
         /// Returns the item set spells for a particular level
         /// </summary>
@@ -168,7 +174,62 @@ namespace ACE.Server.WorldObjects
             else
                 level = (uint)setItems.Count;
 
+            //Custom - Add new Tier to Proof Sets and Adept/Defender/Wise/etc.
+            if (level == 6 && !spellSet.SpellSetTiers.ContainsKey(6))
+            {
+                //Proof Sets
+                if (proofSets.Contains((EquipmentSet)equipmentSet))
+                {
+                    try
+                    {
+                        var currMaxTier = spellSet.SpellSetTiers[5];
+                        var currMasterProofSpells = currMaxTier.Spells.Where(x => proofMasterResistanceSpells.Contains((SpellId)x));
+
+                        var newMaxTier = new SpellSetTiers();
+
+                        if (currMasterProofSpells != null && currMasterProofSpells.Count() > 0)
+                            newMaxTier.Spells.AddRange(currMasterProofSpells);
+
+                        foreach (var spellId in proofEffectiveResistanceSpells)
+                            newMaxTier.Spells.Add((uint)spellId);
+
+                        spellSet.SpellSetTiers.Add(6, newMaxTier);
+                        spellSet.SpellSetTiersNoGaps.Add(6, newMaxTier);
+                        spellSet.HighestTier = 6;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Error in WorldObject_Set.GetSpellSet while applying custom level 6 Proof Set bonuses. Ex: {0}", ex);
+                    }
+                }
+                //Adept/Defender/Wise/etc.
+                else if (customBonusSets.Contains((EquipmentSet)equipmentSet))
+                {
+                    try
+                    {
+                        var currMaxTier = spellSet.SpellSetTiers[5];
+                        var newMaxTier = new SpellSetTiers();
+                        newMaxTier.Spells.AddRange(currMaxTier.Spells);
+                        newMaxTier.Spells.Add((uint)SpellId.SetSocietyAttributeAll2);
+
+                        spellSet.SpellSetTiers.Add(6, newMaxTier);
+                        spellSet.SpellSetTiersNoGaps.Add(6, newMaxTier);
+                        spellSet.HighestTier = 6;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Error in WorldObject_Set.GetSpellSet while applying custom level 6 Set bonuses. Ex: {0}", ex);
+                    }
+                }
+            }
+
             var highestTier = spellSet.HighestTier;
+
+            ////Custom logic to add new spells to Sets 
+            //if (proofSets.Contains((EquipmentSet)equipmentSet) || customBonusSets.Contains((EquipmentSet)equipmentSet))
+            //{
+            //    highestTier = 6;
+            //}
 
             //Console.WriteLine($"Total level: {level}");
             level = Math.Min(level, highestTier);
@@ -178,6 +239,29 @@ namespace ACE.Server.WorldObjects
 
             foreach (var spellId in spellSetTiers.Spells)
                 spells.Add(new Spell(spellId, false));
+
+            ////Custom logic to add new spells to Sets            
+            //if (level == 6)
+            //{
+            //    //For Proof Sets, if you have 6 items in one proof set, add +10 proof to all elements
+            //    if (proofSets.Contains((EquipmentSet)equipmentSet))
+            //    {
+            //        foreach (var spellId in proofEffectiveResistanceSpells)
+            //        {
+            //            var existingSpell = spells.FirstOrDefault(x => x.Id == (uint)spellId);
+            //            if (existingSpell == null)
+            //            {
+            //                spells.Add(new Spell(spellId));
+            //            }
+            //        }
+            //    }
+
+            //    //For non-proof custom bonus sets like Adept/Wise/etc. add Dedication buff to attributes
+            //    else if(customBonusSets.Contains((EquipmentSet)equipmentSet))
+            //    {
+            //        spells.Add(new Spell(SpellId.SetSocietyAttributeAll2));
+            //    }
+            //}
 
             return spells;
         }
