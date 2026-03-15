@@ -134,7 +134,10 @@ namespace ACE.Server.WorldObjects
             foreach (var level in spellSet.SpellSetTiers.Values)
             {
                 foreach (var spell in level.Spells)
-                    spellIds.Add(spell);
+                {
+                    if(!spellIds.Contains(spell))
+                        spellIds.Add(spell);
+                }
             }
 
             foreach (var spellId in spellIds)
@@ -175,27 +178,31 @@ namespace ACE.Server.WorldObjects
                 level = (uint)setItems.Count;
 
             //Custom - Add new Tier to Proof Sets and Adept/Defender/Wise/etc.
-            if (level == 6 && !spellSet.SpellSetTiers.ContainsKey(6))
+            if (level == 7 && !spellSet.SpellSetTiers.ContainsKey(7))
             {
                 //Proof Sets
                 if (proofSets.Contains((EquipmentSet)equipmentSet))
                 {
                     try
                     {
-                        var currMaxTier = spellSet.SpellSetTiers[5];
-                        var currMasterProofSpells = currMaxTier.Spells.Where(x => proofMasterResistanceSpells.Contains((SpellId)x));
+                        var currTier5 = spellSet.SpellSetTiers[5];
+                        var currMasterProofSpells = currTier5.Spells.Where(x => proofMasterResistanceSpells.Contains((SpellId)x));
 
-                        var newMaxTier = new SpellSetTiers();
+                        var newTier6 = new SpellSetTiers();
+                        newTier6.Spells.AddRange(currTier5.Spells);
+                        spellSet.SpellSetTiers.Add(6, newTier6);
+                        spellSet.SpellSetTiersNoGaps.Add(6, newTier6);
 
-                        if (currMasterProofSpells != null && currMasterProofSpells.Count() > 0)
-                            newMaxTier.Spells.AddRange(currMasterProofSpells);
-
+                        var newTier7 = new SpellSetTiers();
+                        if (currMasterProofSpells != null && currMasterProofSpells.Count() > 0)                                                    
+                            newTier7.Spells.AddRange(currMasterProofSpells);
+                        
                         foreach (var spellId in proofEffectiveResistanceSpells)
-                            newMaxTier.Spells.Add((uint)spellId);
+                            newTier7.Spells.Add((uint)spellId);
 
-                        spellSet.SpellSetTiers.Add(6, newMaxTier);
-                        spellSet.SpellSetTiersNoGaps.Add(6, newMaxTier);
-                        spellSet.HighestTier = 6;
+                        spellSet.SpellSetTiers.Add(7, newTier7);
+                        spellSet.SpellSetTiersNoGaps.Add(7, newTier7);
+                        spellSet.HighestTier = 7;
                     }
                     catch (Exception ex)
                     {
@@ -207,14 +214,18 @@ namespace ACE.Server.WorldObjects
                 {
                     try
                     {
-                        var currMaxTier = spellSet.SpellSetTiers[5];
-                        var newMaxTier = new SpellSetTiers();
-                        newMaxTier.Spells.AddRange(currMaxTier.Spells);
-                        newMaxTier.Spells.Add((uint)SpellId.SetSocietyAttributeAll2);
+                        var currTier5 = spellSet.SpellSetTiers[5];
 
-                        spellSet.SpellSetTiers.Add(6, newMaxTier);
-                        spellSet.SpellSetTiersNoGaps.Add(6, newMaxTier);
-                        spellSet.HighestTier = 6;
+                        var newTier6 = new SpellSetTiers();                        
+                        newTier6.Spells.AddRange(currTier5.Spells);
+                        spellSet.SpellSetTiersNoGaps.Add(6, newTier6);
+
+                        var newTier7 = new SpellSetTiers();
+                        newTier7.Spells.AddRange(currTier5.Spells);
+                        newTier7.Spells.Add((uint)SpellId.SetSocietyAttributeAll3);
+                        spellSet.SpellSetTiers.Add(7, newTier7);
+                        spellSet.SpellSetTiersNoGaps.Add(7, newTier7);
+                        spellSet.HighestTier = 7;
                     }
                     catch (Exception ex)
                     {
@@ -222,14 +233,37 @@ namespace ACE.Server.WorldObjects
                     }
                 }
             }
+            else if (level == 12 && equipmentSet == EquipmentSet.SocietyArmor && !spellSet.SpellSetTiers.ContainsKey(12))
+            {
+                try
+                {
+                    var currTier9 = spellSet.SpellSetTiers[9];
+
+                    var newTier10 = new SpellSetTiers();
+                    newTier10.Spells.AddRange(currTier9.Spells);
+                    spellSet.SpellSetTiersNoGaps.Add(10, newTier10);
+
+                    var newTier11 = new SpellSetTiers();
+                    newTier11.Spells.AddRange(currTier9.Spells);
+                    spellSet.SpellSetTiersNoGaps.Add(11, newTier11);
+
+                    var newTier12 = new SpellSetTiers();
+                    newTier12.Spells.AddRange(currTier9.Spells);
+
+                    foreach (var spellId in proofEffectiveResistanceSpells)
+                        newTier12.Spells.Add((uint)spellId);
+
+                    spellSet.SpellSetTiers.Add(12, newTier12);
+                    spellSet.SpellSetTiersNoGaps.Add(12, newTier12);
+                    spellSet.HighestTier = 12;
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorFormat("Error in WorldObject_Set.GetSpellSet while applying custom Level 12 Dedication Set bonuses. Ex: {0}", ex);
+                }
+            }
 
             var highestTier = spellSet.HighestTier;
-
-            ////Custom logic to add new spells to Sets 
-            //if (proofSets.Contains((EquipmentSet)equipmentSet) || customBonusSets.Contains((EquipmentSet)equipmentSet))
-            //{
-            //    highestTier = 6;
-            //}
 
             //Console.WriteLine($"Total level: {level}");
             level = Math.Min(level, highestTier);
@@ -238,30 +272,7 @@ namespace ACE.Server.WorldObjects
                 return spells;
 
             foreach (var spellId in spellSetTiers.Spells)
-                spells.Add(new Spell(spellId, false));
-
-            ////Custom logic to add new spells to Sets            
-            //if (level == 6)
-            //{
-            //    //For Proof Sets, if you have 6 items in one proof set, add +10 proof to all elements
-            //    if (proofSets.Contains((EquipmentSet)equipmentSet))
-            //    {
-            //        foreach (var spellId in proofEffectiveResistanceSpells)
-            //        {
-            //            var existingSpell = spells.FirstOrDefault(x => x.Id == (uint)spellId);
-            //            if (existingSpell == null)
-            //            {
-            //                spells.Add(new Spell(spellId));
-            //            }
-            //        }
-            //    }
-
-            //    //For non-proof custom bonus sets like Adept/Wise/etc. add Dedication buff to attributes
-            //    else if(customBonusSets.Contains((EquipmentSet)equipmentSet))
-            //    {
-            //        spells.Add(new Spell(SpellId.SetSocietyAttributeAll2));
-            //    }
-            //}
+                spells.Add(new Spell(spellId, false));           
 
             return spells;
         }
