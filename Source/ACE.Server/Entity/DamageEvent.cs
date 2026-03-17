@@ -166,6 +166,8 @@ namespace ACE.Server.Entity
             return damageEvent;
         }
 
+        private const float DefaultSplitArrowDamageMultiplier = 0.5f;
+
         private float DoCalculateDamage(Creature attacker, Creature defender, WorldObject damageSource)
         {
             var playerAttacker = attacker as Player;
@@ -802,6 +804,14 @@ namespace ACE.Server.Entity
 
                     Damage = Damage * distanceMod;
                 }
+            }
+
+            //Split Arrows
+            if (DamageSource.GetProperty(PropertyBool.IsSplitArrow) ?? false)
+            {
+                var splitMultiplier = (float)(DamageSource.ProjectileLauncher?.GetProperty(PropertyFloat.SplitArrowDamageMultiplier) ??
+                                             DefaultSplitArrowDamageMultiplier);
+                Damage *= splitMultiplier;
             }
 
             DamageMitigated = DamageBeforeMitigation - Damage;

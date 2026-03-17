@@ -238,6 +238,8 @@ namespace ACE.Entity.Enum.Properties
         LastPlayerCommandTimestamp = 9012,
         LastPlayerVendorSaleTimestamp = 9070,
 
+        SplitArrowDamageMultiplier = 19072,
+
         /***** FOREDAWN CUSTOMS *****/
         ForedawnPvpDamageMulti = 52000,
 

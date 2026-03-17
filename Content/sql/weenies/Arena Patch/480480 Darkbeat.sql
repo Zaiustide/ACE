@@ -224,8 +224,14 @@ VALUES  (480480, 2,   6046, 0, 93, 1.1, False) /* Greater Shadow Amuli Coat (660
 	 , (480480, 4, 480638,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490284,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490224,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 4902243,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 4902245,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490286,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 4902863,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 4902865,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490287,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 4902873,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
+	 , (480480, 4, 4902875,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490015,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490042,  0, 0, 0, False) /* Create Festival Robe (450011) for Shop */
 	 , (480480, 4, 490283,  0, 0, 0, False) /* Create Gelidite Robe (450009) for Shop */

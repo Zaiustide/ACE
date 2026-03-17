@@ -189,5 +189,7 @@ namespace ACE.Entity.Enum.Properties
         HasArenaRareDmgReductionBuff     = 9014,
         IsGlobalChatGagged = 9015,
         NextTinkIsFoolproof = 9016,
+        SplitArrows = 19017,
+        IsSplitArrow = 19018
     }
 }

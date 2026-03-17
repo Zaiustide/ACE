@@ -287,7 +287,7 @@ namespace ACE.Server.Entity
             new List<int>()
             {
                 4733,    //Master Duelist's Coordination
-                4737,   //Master Hero's Endurance
+                4737,    //Master Hero's Endurance
                 4741,    //Master Sage's Focus
                 4745,    //Master Rover's Quickness
                 4749,    //Master Brute's Strength

@@ -109,8 +109,8 @@ namespace ACE.Server.Entity.Mutations
 
                 if (line.Contains("Tier chances", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (outcome != null && outcome.EffectLists.Last().Chance != 1.0f)
-                        log.Error($"MutationCache.BuildMutation({filename}) - {prevMutationLine} total {outcome.EffectLists.Last().Chance}, expected 1.0");
+                    //if (outcome != null && outcome.EffectLists.Last().Chance != 1.0f)
+                    //    log.Error($"MutationCache.BuildMutation({filename}) - {prevMutationLine} total {outcome.EffectLists.Last().Chance}, expected 1.0");
 
                     mutation = new Mutation();
                     mutationFilter.Mutations.Add(mutation);

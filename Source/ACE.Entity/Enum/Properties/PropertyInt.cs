@@ -647,7 +647,8 @@ namespace ACE.Entity.Enum.Properties
         GearCreatureSlayerRating = 19002,
         GearCreatureSlayerType = 19003,
         GearCreatureResistRating = 19004,
-        GearCreatureResistType = 19005
+        GearCreatureResistType = 19005,
+        SplitArrowCount = 19006
     }
 
     public static class PropertyIntExtensions

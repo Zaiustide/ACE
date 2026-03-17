@@ -3423,5 +3423,23 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyInt.WeenieSwapClassId);
             set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.WeenieSwapClassId); else SetProperty(PropertyInt.WeenieSwapClassId, value.Value); }
         }
+
+        public bool SplitArrows
+        {
+            get => GetProperty(PropertyBool.SplitArrows) ?? false;
+            set { if (!value) RemoveProperty(PropertyBool.SplitArrows); else SetProperty(PropertyBool.SplitArrows, value); }
+        }
+
+        public int? SplitArrowCount
+        {
+            get => GetProperty(PropertyInt.SplitArrowCount);
+            set { if (!value.HasValue || value < 1) RemoveProperty(PropertyInt.SplitArrowCount); else SetProperty(PropertyInt.SplitArrowCount, value.Value); }
+        }
+
+        public double? SplitArrowDamageMultiplier
+        {
+            get => GetProperty(PropertyFloat.SplitArrowDamageMultiplier);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.SplitArrowDamageMultiplier); else SetProperty(PropertyFloat.SplitArrowDamageMultiplier, value.Value); }
+        }
     }
 }
