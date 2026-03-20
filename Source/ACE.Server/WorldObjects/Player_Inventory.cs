@@ -3466,8 +3466,12 @@ namespace ACE.Server.WorldObjects
 
                         target.EmoteManager.ExecuteEmoteSet(emoteResult, this);
 
+                        if (!CheckBountyContractTurnIns(target, itemToGive) || !CheckBountyPurchase(target, itemToGive))
+                            return;
+
                         itemToGive.Destroy();
                     }
+
                 }
                 else if (emoteResult.Category == EmoteCategory.Refuse)
                 {

@@ -858,6 +858,15 @@ namespace ACE.Server.WorldObjects
                     item.Destroy();
             }
 
+            if (this is BountyContract bountyContract)
+            {
+                if (bountyContract.BountyOwnerGuid != null)
+                {
+                    var owner = PlayerManager.GetOnlinePlayer((uint)bountyContract.BountyOwnerGuid.Value);
+                    owner?.RemoveActiveBounty((uint)bountyContract.BountyTargetGuid);
+                }
+            }
+
             if (this is Pet pet)
             {
                 if (pet.P_PetOwner?.CurrentActivePet == this)
