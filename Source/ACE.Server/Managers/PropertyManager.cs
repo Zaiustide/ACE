@@ -632,6 +632,10 @@ namespace ACE.Server.Managers
                 ("vendor_disable_resell", new Property<bool>(false, "disables all vendor reselling of items bought from players; i.e. all items a players sells to a vendor are destroyed")),
                 ("turnto_use_heading_stealth", new Property<bool>(false, "If TRUE, uses TurnToHeading (0x09) instead of TurnToObject (0x08) to prevent war detect plugins from detecting target ID (preserves visual, hides target info)")),
                 ("enforce_player_movement", new Property<bool>(false, "enable this to enforce server side verification of player movement")),
+                ("bounty_system_enabled", new Property<bool>(true, "enable this for the bounty hunter pvp feature")),
+                ("bounty_allow_all_locations", new Property<bool>(false, "enable this to allow all locations to be valid bounty locations")),
+                ("bounty_allow_logged_out", new Property<bool>(false, "enable this to allow logged out characters to be valid bounties")),
+                ("bounty_expirations_enabled", new Property<bool>(true, "enable this to allow bounties to expire")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
 
@@ -669,7 +673,11 @@ namespace ACE.Server.Managers
                 ("pvp_chug_timer", new Property<long>(0, "the minimum time in milliseconds between chugs. if a chug is used within X milliseconds of a previous one, it will heal for 0. if value is set to 0 the feature is disabled.")),
                 ("minimum_portalspace_seconds", new Property<long>(3, "the minimum number of seconds a player must be in portal space before exiting")),
                 ("vendor_max_items_per_sale", new Property<long>(24, "the maximum number of items a player can sell to a vendor in a single transaction")),
-                ("vendor_sale_rate_limit_seconds", new Property<long>(60, "the minimum number of seconds that must pass after a player sells to a vendor before a player can sell to a vendor again"))
+                ("vendor_sale_rate_limit_seconds", new Property<long>(60, "the minimum number of seconds that must pass after a player sells to a vendor before a player can sell to a vendor again")),
+                ("bounty_expiration_time", new Property<long>(60, "the amount of time in minutes a bounty expires")),
+                ("pk_bounty_timer", new Property<long>(120, "the number of seconds where a player cannot perform certain actions (ie. teleporting) after encountering a bounty hunter")),
+                ("bounty_tracking_attempts", new Property<long>(5, "the number times a player can use the track-bounty command to track a bounty player's position"))
+
                 );
 
         public static readonly ReadOnlyDictionary<string, Property<double>> DefaultDoubleProperties =

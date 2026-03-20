@@ -604,55 +604,6 @@ namespace ACE.Database
             }
         }
 
-        // =====================================
-        // DungeonInfo
-        // =====================================
-
-        public void AddOrUpdateDungeonInfo(string landblock, string name, string coords)
-        {
-            using (var context = new WorldDbContext())
-            {
-                var existingRecord = context.DungeonInfo.FirstOrDefault(i => i.Landblock == landblock);
-                if (existingRecord == null)
-                {
-                    var di = new DungeonInfo
-                    {
-                        Landblock = landblock,
-                        Name = name,
-                        Coords = coords
-                    };
-                    context.DungeonInfo.Add(di);
-                }
-                else
-                {
-                    existingRecord.Landblock = landblock;
-                    existingRecord.Name = name;
-                    existingRecord.Coords = coords;
-                }
-                context.SaveChanges();
-            }
-        }
-
-        public List<DungeonInfo> GetAllDungeonInformation()
-        {
-            using (var context = new WorldDbContext())
-            {
-                context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-                return context.DungeonInfo
-                    .ToList();
-            }
-        }
-
-        public DungeonInfo GetDungeonInformationByLandblock(string lb)
-        {
-            using (var context = new WorldDbContext())
-            {
-                context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-                return context.DungeonInfo.FirstOrDefault(i => i.Landblock == lb);
-            }
-        }
 
     }
 }

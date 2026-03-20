@@ -648,7 +648,17 @@ namespace ACE.Entity.Enum.Properties
         GearCreatureSlayerType = 19003,
         GearCreatureResistRating = 19004,
         GearCreatureResistType = 19005,
-        SplitArrowCount = 19006
+        SplitArrowCount = 19006,
+
+        //Bounty Hunter related properties
+        BountyTargetGuid = 20002,
+        BountyTrophyTargetGuid = 20003,
+        BountyCreationTimestamp = 20004,
+        PlayerBountyTrackingCount = 20005,
+        BountyEndTimestamp = 20006,
+        BountyTrophyHunterGuid = 20007,
+        BountySecret = 20008,
+        BountyContractGuid = 20009
     }
 
     public static class PropertyIntExtensions

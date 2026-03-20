@@ -1759,16 +1759,9 @@ namespace ACE.Server.Entity
         {
             get
             {
-                if (IsDungeon)
-                {
-                    return IsIslandDungeon;
-                }
-                else
-                {
-                    var x = Id.LandblockX;
-                    var y = Id.LandblockY;
-                    return x >= 244 && x <= 250 && y >= 97 && y <= 108;
-                }
+                var x = Id.LandblockX;
+                var y = Id.LandblockY;
+                return IsIslandDungeon || x >= 244 && x <= 250 && y >= 97 && y <= 108;
             }
         }
 
@@ -1785,16 +1778,9 @@ namespace ACE.Server.Entity
         {
             get
             {
-                if (IsDungeon)
-                {
-                    return IsMountainRetreatDungeon;
-                }
-                else
-                {
-                    var x = Id.LandblockX;
-                    var y = Id.LandblockY;
-                    return x >= 119 && x <= 124 && y >= 199 && y <= 205;
-                }
+                var x = Id.LandblockX;
+                var y = Id.LandblockY;
+                return IsMountainRetreatDungeon || x >= 119 && x <= 124 && y >= 199 && y <= 205;
             }
         }
 
@@ -1803,6 +1789,9 @@ namespace ACE.Server.Entity
         public static string GetLocString(Position pos, bool withEntrance = false)
         {
             string locationString = "";
+
+            if (pos == null)
+                return "Unknown Location";
 
             if (!pos.Indoors)
             {

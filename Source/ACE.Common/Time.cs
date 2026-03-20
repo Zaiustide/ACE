@@ -29,5 +29,12 @@ namespace ACE.Common
         {
             return unixEpoch.AddSeconds(timestamp);
         }
+
+        public static string GetHumanReadableTimestamp()
+        {
+            var unixTimestamp = Time.GetUnixTime();
+            var dto = DateTimeOffset.FromUnixTimeSeconds((long)unixTimestamp);
+            return dto.ToLocalTime().ToString("MMM-dd-yyyy h:mm:ss tt");
+        }
     }
 }
