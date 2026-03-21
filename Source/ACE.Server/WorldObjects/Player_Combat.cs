@@ -1096,7 +1096,7 @@ namespace ACE.Server.WorldObjects
         /// If a physical attack is evaded, or a magic spell is resisted,
         /// this function should NOT be called.
         /// </summary>
-        public static void UpdatePKTimers(Player attacker, Player defender)
+        public static void UpdatePKTimers(Player attacker, Player defender, bool bounty = false)
         {
             if (attacker == defender) return;
 
@@ -1107,7 +1107,36 @@ namespace ACE.Server.WorldObjects
             defender.UpdatePKTimer();
         }
 
-        public bool PKTimerActive => IsPKType && Time.GetUnixTime() - LastPkAttackTimestamp < PropertyManager.GetLong("pk_timer").Item;
+        public bool PKTimerActive
+        {
+            get
+            {
+                if (!IsPKType)
+                    return false;
+
+                var elapsed = Time.GetUnixTime() - LastPkAttackTimestamp;
+                var pkTimerDuration = PropertyManager.GetLong("pk_timer").Item;
+
+                if (BountyContract.IsBountySystemEnabled)
+                {
+                    var visiblePlayers = PhysicsObj.ObjMaint.GetVisibleObjectsValuesOfTypePlayer();
+
+                    if (visiblePlayers != null)
+                    {
+                        foreach (var p in visiblePlayers)
+                        {
+                            if (p != null && p.ActiveBounties?.Contains(this.Guid.Full) == true)
+                            {
+                                pkTimerDuration = PropertyManager.GetLong("pk_bounty_timer").Item;
+                                break;  
+                            }
+                        }
+                    }
+                }
+
+                return elapsed < pkTimerDuration;
+            }
+        }
 
         public bool PKDispelVulnTimerActive => IsPKType && Time.GetUnixTime() - LastPkAttackTimestamp < PropertyManager.GetLong("pvp_dispel_vuln_timer").Item;
 

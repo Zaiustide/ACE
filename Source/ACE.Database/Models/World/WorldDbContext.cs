@@ -22,6 +22,8 @@ public partial class WorldDbContext : DbContext
 
     public virtual DbSet<Event> Event { get; set; }
 
+    public virtual DbSet<DungeonInfo> DungeonInfo { get; set; }
+
     public virtual DbSet<HousePortal> HousePortal { get; set; }
 
     public virtual DbSet<LandblockInstance> LandblockInstance { get; set; }
@@ -178,6 +180,33 @@ public partial class WorldDbContext : DbContext
             entity.HasOne(d => d.Recipe).WithMany(p => p.CookBook)
                 .HasForeignKey(d => d.RecipeId)
                 .HasConstraintName("cookbook_recipe");
+        });
+
+        modelBuilder.Entity<DungeonInfo>(entity =>
+        {
+            entity.ToTable("dungeon_info");
+
+            entity.HasIndex(e => e.Landblock, "landblock_idx");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd()
+                .HasComment("Unique Id of this dungeon info instance");
+
+            entity.Property(e => e.LastModified)
+                .HasColumnType("datetime")
+                .ValueGeneratedOnAddOrUpdate()
+                .HasColumnName("last_Modified")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(e => e.Landblock)
+                .HasColumnName("landblock");
+
+            entity.Property(e => e.Name)
+                .HasColumnName("name");
+
+            entity.Property(e => e.Coords)
+                .HasColumnName("coords");
         });
 
         modelBuilder.Entity<Encounter>(entity =>

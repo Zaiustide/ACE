@@ -206,3 +206,7 @@ VALUES (0x701C9062, 600000, 0x01C901F0, 120.285, -7.99674, -5.985, 0.031867, 0, 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x701C9063, 600036, 0x01C90213, 149.803, -92.7497, -6, 0, 0, 0, 1, False, '2025-10-26 15:45:09'); /* Empyrean Storage Vault */
 /* @teleloc 0x01C90213 [149.802994 -92.749702 -6.000000] 0.000000 0.000000 0.000000 1.000000 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x701C9064, 3000381, 0x01C901F2, 115.817, -34.0159, -5.995, 0.92388, 0, 0, -0.382684, False, '2026-03-20 19:22:14'); /* Bounty Collector */
+/* @teleloc 0x01C901F2 [115.817001 -34.015900 -5.995000] 0.923880 0.000000 0.000000 -0.382684 */

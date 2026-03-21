@@ -66,6 +66,13 @@ namespace ACE.Server.WorldObjects
             // add creature equipped objects / wielded items
             if (worldObject is Creature creature)
             {
+                if (BountyContract.IsBountySystemEnabled)
+                {
+                    if (worldObject is Player player)
+                        if (ActiveBounties.Contains(player.Guid.Full))
+                            player.UpdatePKTimer();
+                }
+
                 foreach (var wieldedItem in creature.EquippedObjects.Values)
                     if (IsInChildLocation(wieldedItem))
                         TrackEquippedObject(creature, wieldedItem);

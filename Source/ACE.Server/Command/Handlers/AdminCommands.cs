@@ -5424,5 +5424,55 @@ namespace ACE.Server.Command.Handlers
                 log.Error($"Error in call to AdminCommands.HandleRemoveArenaBlacklist. ex: {ex}");
             }
         }
+
+        [CommandHandler("getloc", AccessLevel.Admin, CommandHandlerFlag.None, 0,
+            "Show current world location",
+            "")]
+        public static void HandleGetLoc(Session session, params string[] parameters)
+        {
+            var locationString = Landblock.GetLocString(session.Player.Location);
+            CommandHandlerHelper.WriteOutputInfo(session, $"{locationString}", ChatMessageType.Broadcast);
+        }
+
+        [CommandHandler("getBountyLoc", AccessLevel.Admin, CommandHandlerFlag.None, 0,
+            "Show current world location",
+            "")]
+        public static void HandleGetBountyLoc(Session session, params string[] parameters)
+        {
+            var lb = session.Player.CurrentLandblock;
+            if (lb != null)
+            {
+                if (lb.IsBountyLocation)
+                {
+                    var locationString = Landblock.GetLocString(session.Player.Location);
+                    CommandHandlerHelper.WriteOutputInfo(session, $"{locationString}", ChatMessageType.Broadcast);
+                } else
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Player is not current in a bounty landblock", ChatMessageType.Broadcast);
+                }
+            }
+        }
+
+        [CommandHandler("forcepk", AccessLevel.Admin, CommandHandlerFlag.RequiresWorld, 0, "force an npk player to be pk")]
+        public static void HandleForcePk(Session session, params string[] parameters)
+        {
+            var objectId = ObjectGuid.Invalid;
+
+            var target = session.Player.CurrentAppraisalTarget;
+
+            if (target.HasValue)
+                objectId = new ObjectGuid((uint)session.Player.CurrentAppraisalTarget);
+
+            var wo = session.Player.CurrentLandblock?.GetObject(objectId);
+
+            if (wo is null)
+            {
+                session.Network.EnqueueSend(new GameMessageSystemChat($"Unable to locate what you have selected.", ChatMessageType.Broadcast));
+            }
+            else if (wo is Player player && player.IsNPK)
+            {
+                player.MinimumTimeSincePk = PropertyManager.GetDouble("pk_respite_timer").Item;
+            }
+        }
     }
 }

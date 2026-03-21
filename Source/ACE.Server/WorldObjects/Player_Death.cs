@@ -714,6 +714,18 @@ namespace ACE.Server.WorldObjects
             //PK Trophy drop on death behavior
             if (IsPKDeath(corpse.KillerId))
             {
+                //Bounty Trophies
+                if (BountyContract.IsBountySystemEnabled)
+                {
+                    var killer = PlayerManager.GetOnlinePlayer(new ObjectGuid((uint)corpse.KillerId));
+                    if (killer != null && IsValidBountyTarget && !Player.IsSameAllegiance(killer, this))
+                    {
+                        var contract = killer.GetInventoryItemsOfWCID(BountyContract.BountyContractWcid).OfType<BountyContract>().FirstOrDefault(c => c.BountyTargetGuid == Guid.Full);
+                        if (contract != null)
+                            contract.BountyCompleted = true;
+                    }
+                }
+
                 //Don't drop trophy if low level
                 var shouldDropTrophy = true;
                 var shouldDropTcRewards = true;

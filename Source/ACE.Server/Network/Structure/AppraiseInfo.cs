@@ -332,6 +332,13 @@ namespace ACE.Server.Network.Structure
                     PropertiesInt.Remove(PropertyInt.Structure);
             }            
 
+            if (wo is BountyContract bc)
+            {
+                string longDesc = "";
+                longDesc += bc.BuildBountyContractLongDescription();
+                PropertiesString.Add(PropertyString.LongDesc, longDesc);
+            }
+
             if (!Success)
             {
                 // todo: what specifically to keep/what to clear
@@ -756,7 +763,7 @@ namespace ACE.Server.Network.Structure
                 Flags |= IdentifyResponseFlags.ArmorLevels;
         }
 
-        private void AddGearLongDescProperties(WorldObject wo)
+        private void AddGearLongDescProperties(WorldObject wo, Player examiner = null)
         {
             //Custom logic for displaying gear properties that are normally not in appraisal
             //  Removes the AppraisalLongDescDecoration flags which prepend/append flavor text

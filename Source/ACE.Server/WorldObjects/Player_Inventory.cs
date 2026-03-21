@@ -3449,9 +3449,17 @@ namespace ACE.Server.WorldObjects
             {
                 if (acceptAll || (emoteResult.Category == EmoteCategory.Give && target.AllowGive))
                 {
+                    bool give = true;
+
+                    if (CheckBountyPurchase(target, item) == BountyResult.Failure)
+                        give = false;
+
+                    if (CheckBountyContractTurnIns(target, item) == BountyResult.Failure)
+                        give = false;
+
                     // for NPCs that accept items with EmoteCategory.Give,
                     // if stacked item, only give 1, ignoring amount indicated, unless they are AiAcceptEverything in which case, take full amount indicated
-                    if (RemoveItemForGive(item, itemFoundInContainer, itemWasEquipped, itemRootOwner, acceptAll ? amount : 1, out WorldObject itemToGive))
+                    if (give && RemoveItemForGive(item, itemFoundInContainer, itemWasEquipped, itemRootOwner, acceptAll ? amount : 1, out WorldObject itemToGive))
                     {
                         if (item == itemToGive)
                             Session.Network.EnqueueSend(new GameEventItemServerSaysContainId(Session, item, target));
@@ -3466,7 +3474,12 @@ namespace ACE.Server.WorldObjects
 
                         target.EmoteManager.ExecuteEmoteSet(emoteResult, this);
 
+
                         itemToGive.Destroy();
+                    } else
+                    {
+                        Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, item.Guid.Full, WeenieError.TradeAiRefuseEmote));
+                        target.EmoteManager.ExecuteEmoteSet(emoteResult, this);
                     }
                 }
                 else if (emoteResult.Category == EmoteCategory.Refuse)
