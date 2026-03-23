@@ -33,6 +33,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Position = ACE.Entity.Position;
+using System.Collections.Frozen;
 
 namespace ACE.Server.Entity
 {
@@ -1740,6 +1741,82 @@ namespace ACE.Server.Entity
 
                 return _isArenaLandblock.Value;
             }
+        }
+
+        private static readonly FrozenSet<ushort> _islandDungeons = FrozenSet.ToFrozenSet(new ushort[]
+        {
+            0x00E1,
+            0x00C8,
+            0x0174,
+            0x003F,
+            0x0026,
+            0x7E04,
+        });
+
+        public bool IsIslandDungeon => _islandDungeons.Contains(this.Id.Landblock);
+
+        public bool IsIslandLandblock
+        {
+            get
+            {
+                var x = Id.LandblockX;
+                var y = Id.LandblockY;
+                return IsIslandDungeon || x >= 244 && x <= 250 && y >= 97 && y <= 108;
+            }
+        }
+
+        private static readonly FrozenSet<ushort> _mountainRetreatDungeons = FrozenSet.ToFrozenSet(new ushort[]
+        {
+            0x02F5,
+            0x0105,
+            0x6147
+        });
+
+        public bool IsMountainRetreatDungeon => _mountainRetreatDungeons.Contains(this.Id.Landblock);
+
+        public bool IsMountainRetreatLandblock
+        {
+            get
+            {
+                var x = Id.LandblockX;
+                var y = Id.LandblockY;
+                return IsMountainRetreatDungeon || x >= 119 && x <= 124 && y >= 199 && y <= 205;
+            }
+        }
+
+        public bool IsBountyLocation => IsMountainRetreatLandblock || IsIslandLandblock;
+
+        public static string GetLocString(Position pos, bool withEntrance = false)
+        {
+            string locationString = "";
+
+            if (pos == null)
+                return "Unknown Location";
+
+            if (!pos.Indoors)
+            {
+                locationString = pos.GetMapCoordStr();
+            } else
+            {
+                var dungeon = DatabaseManager.World.GetDungeonInformationByLandblock(pos.GetLandblockHex());
+
+                if (dungeon == null)
+                {
+                    locationString = "Unknown Location";
+                } else
+                {
+                    var coords = dungeon.Coords;
+                    if (coords != "" && withEntrance)
+                    {
+                        locationString = $"{dungeon.Name} - from {coords}";
+                    } else
+                    {
+                        locationString = dungeon.Name;
+                    }
+                }
+            }
+
+            return locationString;
         }
     }
 }

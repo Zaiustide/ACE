@@ -332,6 +332,12 @@ namespace ACE.Server.Network.Structure
                     PropertiesInt.Remove(PropertyInt.Structure);
             }            
 
+            if (wo is BountyContract bc)
+            {
+                AddGearLongDescProperties(bc);
+
+            }
+
             if (!Success)
             {
                 // todo: what specifically to keep/what to clear
@@ -768,7 +774,8 @@ namespace ACE.Server.Network.Structure
                 wo.SlayerDamageBonus.HasValue ||
                 (wo.GearCreatureResistType != CreatureType.Invalid && wo.GearCreatureResistRating > 0) ||
                 (wo.GearCreatureSlayerType != CreatureType.Invalid && wo.GearCreatureSlayerRating > 0) ||
-                wo.SplitArrows)
+                wo.SplitArrows ||
+                wo is BountyContract)
             {
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
                 var currentLongDesc = PropertiesString.ContainsKey(PropertyString.LongDesc) ? PropertiesString[PropertyString.LongDesc] : "";
@@ -793,6 +800,9 @@ namespace ACE.Server.Network.Structure
 
                 if(wo.SplitArrows)
                     newLongDesc += $"These arrows will split into a volley of {wo.SplitArrowCount ?? 3} while doing {String.Format("{0:0.##}", (wo.SplitArrowDamageMultiplier ?? 0.5f) * 100)}% of their normal damage to targets.\n";
+
+                if (wo is BountyContract bc)
+                    newLongDesc += bc.BuildBountyContractLongDescription();
 
                 //Add back the flavor text to the LongDesc
                 newLongDesc += "\n";
