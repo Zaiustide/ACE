@@ -99,5 +99,9 @@ namespace ACE.Entity.Enum.Properties
         MorphGemLog                    = 9010,
         PKQuestInfo                    = 9011,
         CurrentRareEnchantmentIds      = 52029,
+
+
+        // Bounty Contract Properties
+        BountyLastKnownLocation = 55000,
     }
 }

@@ -807,7 +807,8 @@ namespace ACE.Server.Managers
                 ("dungeoncontrol_capturescore_mod", new Property<double>(1.0, "modifies the score needed to capture a dungeon in dungeon control, generally used for testing")),
                 ("force_logout_materialization_duration", new Property<double>(1, "the number of seconds a player should materialize for before logging out")),
                 ("force_teleport_materialization_duration", new Property<double>(10.0, "the number of seconds after teleporting that a player should force materialize")),
-                ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again"))
+                ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again")),
+                ("bounty_appraisal_location_duration", new Property<double>(30.0, "the number of seconds after a bounty appraisal that the location can be updated"))
                 
                 );
 

@@ -32,5 +32,16 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyBool.BountyCompleted) ?? false;
             set { if (!value) RemoveProperty(PropertyBool.BountyCompleted); else SetProperty(PropertyBool.BountyCompleted, value); }
         }
+        public int? BountyLastAppraisedTimeStamp
+        {
+            get => GetProperty(PropertyInt.BountyLastAppraisedTimeStamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyInt.BountyLastAppraisedTimeStamp); else SetProperty(PropertyInt.BountyLastAppraisedTimeStamp, value.Value); }
+        }
+
+        public string BountyLastKnownLocation
+        {
+            get => GetProperty(PropertyString.BountyLastKnownLocation) ?? "Unknown";
+            set { if (value == null) RemoveProperty(PropertyString.BountyLastKnownLocation); else SetProperty(PropertyString.BountyLastKnownLocation, value); }
+        }
     }
 }

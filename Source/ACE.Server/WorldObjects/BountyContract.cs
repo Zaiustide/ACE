@@ -49,6 +49,21 @@ namespace ACE.Server.WorldObjects
             }
         }
 
+        public bool CanAppraiseContractLocation
+        {
+            get
+            {
+                if (!IsBountySystemEnabled)
+                    return false;
+
+                if (!BountyLastAppraisedTimeStamp.HasValue)
+                    return true;
+
+                var bountyAppraisalLocationDuration = PropertyManager.GetDouble("bounty_appraisal_location_duration").Item;
+                return DateTime.UtcNow - Time.GetDateTimeFromTimestamp((double)BountyLastAppraisedTimeStamp) > TimeSpan.FromSeconds(bountyAppraisalLocationDuration);
+            }
+        }
+
         public string BountyTimeRemainingString
         {
             get
@@ -85,6 +100,7 @@ namespace ACE.Server.WorldObjects
 
         public string BuildBountyContractLongDescription()
         {
+
             var longDesc = "";
 
             if (IsBountyExpired)
@@ -99,7 +115,7 @@ namespace ACE.Server.WorldObjects
                 return "The bounty contract has invalid target information. This likely means the target has deleted their character. Please contact an admin if you believe this is in error.";
 
             var name = bountyTarget.Name;
-            var location = "Unknown";
+            var location = BountyLastKnownLocation;
             var isOffline = false;
 
             if (BountyCompleted)
@@ -109,21 +125,28 @@ namespace ACE.Server.WorldObjects
                 return longDesc;
             }
 
-            if (bountyTarget is Player onlinePlayer)
-                location = Landblock.GetLocString(onlinePlayer.Location);
-            else if (bountyTarget is OfflinePlayer offlinePlayer)
+            if (CanAppraiseContractLocation)
             {
-                isOffline = true;
-                if(offlinePlayer.Biota.PropertiesPosition.TryGetValue(ACE.Entity.Enum.Properties.PositionType.Location, out var value))
+                if (bountyTarget is Player onlinePlayer)
+                    location = Landblock.GetLocString(onlinePlayer.Location);
+                else if (bountyTarget is OfflinePlayer offlinePlayer)
                 {
-                    var loc = new Position(value.ObjCellId, value.PositionX, value.PositionY, value.PositionZ, value.RotationX, value.RotationY, value.RotationZ, value.RotationW);
-                    location = Landblock.GetLocString(loc);
+                    isOffline = true;
+                    if(offlinePlayer.Biota.PropertiesPosition.TryGetValue(ACE.Entity.Enum.Properties.PositionType.Location, out var value))
+                    {
+                        var loc = new Position(value.ObjCellId, value.PositionX, value.PositionY, value.PositionZ, value.RotationX, value.RotationY, value.RotationZ, value.RotationW);
+                        location = Landblock.GetLocString(loc);
+                    }
                 }
+
+                BountyLastKnownLocation = location;
             }
+
+            BountyLastAppraisedTimeStamp = (int?)Time.GetUnixTime();
 
             var timeRemaining = BountyTimeRemainingString;
             longDesc += $"Bounty Target: {name}\n";
-            longDesc += $"Last Known Location: {location}\n";
+            longDesc += $"Last Known Location: {location} (updated periodically)\n";
             longDesc += $"Time Remaining: {timeRemaining}\n";
             if (isOffline)
                 longDesc += $"\n{name} is currently logged out\n";

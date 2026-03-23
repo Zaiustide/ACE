@@ -655,6 +655,7 @@ namespace ACE.Entity.Enum.Properties
         BountyCreationTimestamp = 20003,
         BountyEndTimestamp = 20004,
         BountyOwnerGuid = 20005,
+        BountyLastAppraisedTimeStamp = 20006,
     }
 
     public static class PropertyIntExtensions
