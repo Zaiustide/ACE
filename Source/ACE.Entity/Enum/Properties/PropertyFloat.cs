@@ -243,6 +243,11 @@ namespace ACE.Entity.Enum.Properties
         /***** FOREDAWN CUSTOMS *****/
         ForedawnPvpDamageMulti = 52000,
 
-        LastTeleportEndTimestamp = 52001
+        LastTeleportEndTimestamp = 52001,
+
+        //Bounty Props
+        BountyLastAppraisedTimestamp = 53002,
+        BountyCreationTimestamp = 53003,
+        BountyEndTimestamp = 53004
     }
 }

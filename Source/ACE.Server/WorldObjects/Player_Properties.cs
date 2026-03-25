@@ -1594,5 +1594,18 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyFloat.LastTeleportEndTimestamp);
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastTeleportEndTimestamp); else SetProperty(PropertyFloat.LastTeleportEndTimestamp, value.Value); }
         }
+
+        /* Bounty information */
+        public string BountyInformationsSerialized
+        {
+            get => GetProperty(PropertyString.BountyInformationsSerialized) ?? String.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyInformationsSerialized); else SetProperty(PropertyString.BountyInformationsSerialized, value); }
+        }
+
+        public double? BountyEndTimestamp
+        {
+            get => GetProperty(PropertyFloat.BountyEndTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyEndTimestamp); else SetProperty(PropertyFloat.BountyEndTimestamp, value.Value); }
+        }
     }
 }

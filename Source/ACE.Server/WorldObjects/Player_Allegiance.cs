@@ -1521,12 +1521,12 @@ namespace ACE.Server.WorldObjects
           Allegiance?.MonarchId.HasValue == true &&
           TownControlAllegiances.IsAllowedAllegiance((int)Allegiance.MonarchId!.Value);
 
-        public static bool IsSameAllegiance(Player playerA, Player playerB)
+        public bool IsSameAllegiance(Player playerB)
         {
-            var playerAMonarch = playerA.MonarchId != null ? playerA.MonarchId : playerA.Guid.Full;
+            var monarch = MonarchId != null ? MonarchId : Guid.Full;
             var playerBMonarch = playerB.MonarchId != null ? playerB.MonarchId : playerB.Guid.Full;
 
-            return playerAMonarch == playerBMonarch;
+            return monarch == playerBMonarch;
         }
     }
 }

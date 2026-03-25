@@ -965,7 +965,7 @@ namespace ACE.Server.WorldObjects
 
             CheckMonsters();
             CheckHouse();
-            CheckBounties();
+            CheckVisibleBounties();
 
             EnqueueBroadcastPhysicsState();
 

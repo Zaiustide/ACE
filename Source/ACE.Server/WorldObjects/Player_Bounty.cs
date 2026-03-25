@@ -59,6 +59,21 @@ namespace ACE.Server.WorldObjects
             }
         }
 
+        public bool TryGetBountyContract(uint targetGuid, out BountyContract contract)
+        {
+            return BountyContracts.TryGetValue(targetGuid, out contract);
+        }
+
+        public bool RemoveBountyContract(uint targetGuid)
+        {
+            return BountyContracts.Remove(targetGuid);
+        }
+
+        private bool AddBountyContract(uint targetGuid, BountyContract contract)
+        {
+            return contract != null && BountyContracts.TryAdd(targetGuid, contract);
+        }
+
         /// <summary>
         /// Called when the player tries to give a bounty contract to the bounty NPC.
         /// Returns true if the contract should be destroyed, false if it should be given back to the player.
@@ -92,6 +107,7 @@ namespace ACE.Server.WorldObjects
                 if (contract.IsBountyExpired)
                 {
                     RemoveBountyContract((uint)contract.BountyTargetGuid);
+                    SaveBountyExpiration((uint)contract.BountyTargetGuid);
                     SendDelayedNpcResponse(npc, "Your bounty contract has expired, take a phial as some compensation for your time.",
                         () => GiveFromEmote(npc, 1000003));
                     return true;
@@ -104,10 +120,11 @@ namespace ACE.Server.WorldObjects
                 }
 
                 var bountyName = bountyTarget.Name;
-                BountyEndTimeStamp = (int?)Time.GetUnixTime();
+                BountyEndTimestamp = Time.GetUnixTime();
 
-                HandleBountyRewards(npc, bountyTarget);
-                RemoveBountyContract((uint)contract.BountyTargetGuid);
+                var result = UpdateCompletedBountyInformation((uint)contract.BountyTargetGuid, contract);
+                HandleBountyQuests(result);
+                SaveBountyInformation();
 
                 SendDelayedMessage($"{npc.Name} tells you, \"You have successfully turned in your bounty for player \"{bountyName}\".\"", ChatMessageType.Tell);
 
@@ -120,6 +137,7 @@ namespace ACE.Server.WorldObjects
                 return true;        // Destroy the contract just in case
             }
         }
+
 
         /// <summary>
         /// Handles purchasing a new bounty contract using a token.
@@ -159,8 +177,8 @@ namespace ACE.Server.WorldObjects
                     p.Guid.Full != Guid.Full &&
                     p.IsValidBountyTarget &&
                     !TryGetBountyContract(p.Guid.Full, out _) &&
-                    !IsSameAllegiance(p, this) &&
-                    !HasBountyCooldown(this, p)).ToList();
+                    !IsSameAllegiance(p) &&
+                    HasCooldownPenaltyExpired(p)).ToList();
 
                 if (eligibleTargets.Count == 0)
                 {
@@ -174,7 +192,7 @@ namespace ACE.Server.WorldObjects
 
                 contract.BountyOwnerGuid = (int?)Guid.Full;
                 contract.BountyTargetGuid = (int?)bountyTarget.Guid.Full;
-                contract.BountyCreationTimeStamp = (int?)Time.GetUnixTime();
+                contract.BountyCreationTimestamp = Time.GetUnixTime();
                 contract.BountyCompleted = false;
                 contract.Name = $"Bounty Contract: {bountyTarget.Name}";
 
@@ -200,7 +218,12 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public bool TryCompleteBounty(uint bountyTargetGuid)
+        /// <summary>
+        /// Called when a player is killed to check if they are a bounty target and mark the corresponding contract as completed if so.
+        /// </summary>
+        /// <param name="bountyTargetGuid"></param>
+        /// <returns></returns>
+        public bool TryMarkBountyComplete(uint bountyTargetGuid)
         {
             if (!BountyContracts.TryGetValue(bountyTargetGuid, out var contract))
                 return false;
@@ -215,7 +238,7 @@ namespace ACE.Server.WorldObjects
             return true;
         }
 
-        public void CheckBounties()
+        public void CheckVisibleBounties()
         {
             var visiblePlayers = PhysicsObj.ObjMaint.GetVisibleObjectsValuesOfTypePlayer();
 
@@ -228,15 +251,6 @@ namespace ACE.Server.WorldObjects
                     UpdatePKTimer();
             }
         }
-        public bool TryGetBountyContract(uint targetGuid, out BountyContract contract)
-        {
-            return BountyContracts.TryGetValue(targetGuid, out contract);
-        }
-
-        public bool RemoveBountyContract(uint targetGuid) => BountyContracts.Remove(targetGuid);
-
-        private bool AddBountyContract(uint targetGuid, BountyContract contract)
-            => contract != null && BountyContracts.TryAdd(targetGuid, contract);
 
         private void SendDelayedNpcResponse(WorldObject npc, string message, Action action = null)
         {
@@ -255,16 +269,56 @@ namespace ACE.Server.WorldObjects
             actionChain.EnqueueChain();
         }
 
-        private static bool HasBountyCooldown(Player bountyHunter, Player bountyTarget)
+        private bool HasCooldownPenaltyExpiredForHunter()
         {
-            // TODO: implement cooldowns between turning in bounties on the same target, and between turning in multiple bounties in a row on different targets.
-            return false;
+            if (!BountyEndTimestamp.HasValue)
+                return true;
+
+            var bountyCooldownExpirationDuration = PropertyManager.GetLong("bounty_cooldown_expiration_time").Item;
+            return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(BountyEndTimestamp.Value) > TimeSpan.FromMinutes(bountyCooldownExpirationDuration);
         }
 
-        private void HandleBountyRewards(WorldObject npc, IPlayer bountyTarget)
+        private bool HasCooldownPenaltyExpired(Player bountyTarget)
         {
-            // TODO: implement configurable rewards for turning in bounties
-            //TryCreateInInventoryWithNetworking(rewardItem, 1);
+            // Check if the bounty hunter has a default cooldown for all bounty turn ins
+            if (!HasCooldownPenaltyExpiredForHunter())
+                return false;
+
+            var cooldown = GetBountyCooldown(bountyTarget.Guid.Full);
+
+            if (cooldown == -1)
+                return true;
+
+            var bountyCooldownTargetExpirationDuration = PropertyManager.GetLong("bounty_cooldown_target_expiration_time").Item;
+            return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(cooldown) > TimeSpan.FromMinutes(bountyCooldownTargetExpirationDuration);
+        }
+
+        private void HandleBountyQuests(BountyCompletionResult result)
+        {
+            // any bounty
+            CompletePkQuestTask("BOUNTY_ANY_1", 1);
+            CompletePkQuestTask("BOUNTY_ANY_5", 1);
+            CompletePkQuestTask("BOUNTY_ANY_10", 1);
+
+            // unique targets
+            if (result.IsNewUniqueTarget)
+            {
+                CompletePkQuestTask("BOUNTY_UNIQUE_3", 1);
+                CompletePkQuestTask("BOUNTY_UNIQUE_5", 1);
+            }
+
+            // repeat kills (same player)
+            if (result.RepeatCount == 3)
+                CompletePkQuestTask("BOUNTY_REPEAT_3", 1);
+
+            if (result.RepeatCount == 5)
+                CompletePkQuestTask("BOUNTY_REPEAT_5", 1);
+
+            // speed-based
+            if (result.CountLast30Min >= 2) CompletePkQuestTask("BOUNTY_FAST_2", 1);
+            if (result.CountLast30Min >= 3) CompletePkQuestTask("BOUNTY_FAST_3", 1);
+            if (result.CountLast60Min >= 8) CompletePkQuestTask("BOUNTY_FAST_8", 1);
+            if (result.CountLast90Min >= 12) CompletePkQuestTask("BOUNTY_FAST_12", 1);
         }
     }
 }

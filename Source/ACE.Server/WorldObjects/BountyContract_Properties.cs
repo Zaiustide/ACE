@@ -21,10 +21,10 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyInt.BountyTargetGuid); else SetProperty(PropertyInt.BountyTargetGuid, value.Value); }
         }
 
-        public int? BountyCreationTimeStamp
+        public double? BountyCreationTimestamp
         {
-            get => GetProperty(PropertyInt.BountyCreationTimestamp);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.BountyCreationTimestamp); else SetProperty(PropertyInt.BountyCreationTimestamp, value.Value); }
+            get => GetProperty(PropertyFloat.BountyCreationTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyCreationTimestamp); else SetProperty(PropertyFloat.BountyCreationTimestamp, value.Value); }
         }
 
         public bool BountyCompleted
@@ -32,10 +32,10 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyBool.BountyCompleted) ?? false;
             set { if (!value) RemoveProperty(PropertyBool.BountyCompleted); else SetProperty(PropertyBool.BountyCompleted, value); }
         }
-        public int? BountyLastAppraisedTimeStamp
+        public double? BountyLastAppraisedTimestamp
         {
-            get => GetProperty(PropertyInt.BountyLastAppraisedTimeStamp);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.BountyLastAppraisedTimeStamp); else SetProperty(PropertyInt.BountyLastAppraisedTimeStamp, value.Value); }
+            get => GetProperty(PropertyFloat.BountyLastAppraisedTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyLastAppraisedTimestamp); else SetProperty(PropertyFloat.BountyLastAppraisedTimestamp, value.Value); }
         }
 
         public string BountyLastKnownLocation

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACE.Server.Entity.PKQuests
 {
@@ -527,6 +525,107 @@ namespace ACE.Server.Entity.PKQuests
                     pkkill_T9_100.TaskCount = 100;
                     pkkill_T9_100.Rewards = new List<string>() { "LUM,1000000", "XP%,250", "DBKEY,5", "PKTROPHY,500", "PHIAL,50", "HERA,8", "BOX,10", "AMBER,3" };
                     _pkQuestList.Add(pkkill_T9_100);
+
+                    // Bounties
+                    // Participate in any bounty (kill any bounty target)
+                    // Complete 1 bounty contract
+                    var bounty_any_1 = new PKQuest();
+                    bounty_any_1.QuestCode = "BOUNTY_ANY_1";
+                    bounty_any_1.Description = "Complete 1 Bounty Contract";
+                    bounty_any_1.RewardDescription = "15k luminance, 20% XP to next level, 1 Darkbeat Key, 1 Phial of Bloody Tears, 3 PK Trophies";
+                    bounty_any_1.Rewards = new List<string>() { "LUM,15000", "XP%,20", "DBKEY,1", "PHIAL,1", "PKTROPHY,3" };
+                    bounty_any_1.TaskCount = 1;
+                    _pkQuestList.Add(bounty_any_1);
+
+                    // Complete 5 bounty contracts
+                    var bounty_any_5 = new PKQuest();
+                    bounty_any_5.QuestCode = "BOUNTY_ANY_5";
+                    bounty_any_5.Description = "Complete 5 Bounty Contracts";
+                    bounty_any_5.RewardDescription = "50k luminance, 40% XP to next level, 3 Darkbeat Keys, 2 Phials of Bloody Tears, 15 PK Trophies";
+                    bounty_any_5.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,2", "PKTROPHY,15" };
+                    bounty_any_5.TaskCount = 5;
+                    _pkQuestList.Add(bounty_any_5);
+
+                    // Complete 10 bounty contracts
+                    var bounty_any_10 = new PKQuest();
+                    bounty_any_10.QuestCode = "BOUNTY_ANY_10";
+                    bounty_any_10.Description = "Complete 10 Bounty Contracts";
+                    bounty_any_10.RewardDescription = "120k luminance, 80% XP to next level, 6 Darkbeat Keys, 4 Phials of Bloody Tears, 40 PK Trophies";
+                    bounty_any_10.Rewards = new List<string>() { "LUM,120000", "XP%,80", "DBKEY,6", "PHIAL,4", "PKTROPHY,40" };
+                    bounty_any_10.TaskCount = 10;
+                    _pkQuestList.Add(bounty_any_10);
+
+                    // === Unique Targets (Different Players) ===
+                    var bounty_unique_3 = new PKQuest();
+                    bounty_unique_3.QuestCode = "BOUNTY_UNIQUE_3";
+                    bounty_unique_3.Description = "Complete bounties on 3 different players";
+                    bounty_unique_3.RewardDescription = "40k luminance, 35% XP to next level, 2 Darkbeat Keys, 2 Phials of Bloody Tears, 12 PK Trophies";
+                    bounty_unique_3.Rewards = new List<string>() { "LUM,40000", "XP%,35", "DBKEY,2", "PHIAL,2", "PKTROPHY,12" };
+                    bounty_unique_3.TaskCount = 3;
+                    _pkQuestList.Add(bounty_unique_3);
+
+                    var bounty_unique_5 = new PKQuest();
+                    bounty_unique_5.QuestCode = "BOUNTY_UNIQUE_5";
+                    bounty_unique_5.Description = "Complete bounties on 5 different players";
+                    bounty_unique_5.RewardDescription = "80k luminance, 60% XP to next level, 4 Darkbeat Keys, 3 Phials of Bloody Tears, 25 PK Trophies";
+                    bounty_unique_5.Rewards = new List<string>() { "LUM,80000", "XP%,60", "DBKEY,4", "PHIAL,3", "PKTROPHY,25" };
+                    bounty_unique_5.TaskCount = 5;
+                    _pkQuestList.Add(bounty_unique_5);
+
+                    // === Repeat Kills (Same Player) ===
+                    var bounty_repeat_3 = new PKQuest();
+                    bounty_repeat_3.QuestCode = "BOUNTY_REPEAT_3";
+                    bounty_repeat_3.Description = "Complete bounties on the same player 3 times";
+                    bounty_repeat_3.RewardDescription = "35k luminance, 30% XP to next level, 2 Darkbeat Keys, 2 Phials of Bloody Tears, 10 PK Trophies";
+                    bounty_repeat_3.Rewards = new List<string>() { "LUM,35000", "XP%,30", "DBKEY,2", "PHIAL,2", "PKTROPHY,10" };
+                    bounty_repeat_3.TaskCount = 1;
+                    _pkQuestList.Add(bounty_repeat_3);
+
+                    // Repeat Kills (Same Player) - 5 times
+                    var bounty_repeat_5 = new PKQuest();
+                    bounty_repeat_5.QuestCode = "BOUNTY_REPEAT_5";
+                    bounty_repeat_5.Description = "Complete bounties on the same player 5 times";
+                    bounty_repeat_5.RewardDescription = "70k luminance, 60% XP to next level, 4 Darkbeat Keys, 4 Phials of Bloody Tears, 25 PK Trophies";
+                    bounty_repeat_5.Rewards = new List<string>() { "LUM,70000", "XP%,60", "DBKEY,4", "PHIAL,4", "PKTROPHY,25" };
+                    bounty_repeat_5.TaskCount = 1;
+                    _pkQuestList.Add(bounty_repeat_5);
+
+                    // === Fast Completion ===
+                    // Easy: 2 bounties in 30 minutes
+                    var bounty_fast_2 = new PKQuest();
+                    bounty_fast_2.QuestCode = "BOUNTY_FAST_2";
+                    bounty_fast_2.Description = "Complete 2 bounties within 30 minutes";
+                    bounty_fast_2.RewardDescription = "25k luminance, 25% XP to next level, 1 Darkbeat Key, 1 Phial of Bloody Tears, 8 PK Trophies";
+                    bounty_fast_2.Rewards = new List<string>() { "LUM,25000", "XP%,25", "DBKEY,1", "PHIAL,1", "PKTROPHY,8" };
+                    bounty_fast_2.TaskCount = 1;
+                    _pkQuestList.Add(bounty_fast_2);
+
+                    // Medium: 3 bounties in 30 minutes
+                    var bounty_fast_3 = new PKQuest();
+                    bounty_fast_3.QuestCode = "BOUNTY_FAST_3";
+                    bounty_fast_3.Description = "Complete 3 bounties within 30 minute period";
+                    bounty_fast_3.RewardDescription = "60k luminance, 50% XP to next level, 3 Darkbeat Keys, 3 Phials of Bloody Tears, 20 PK Trophies";
+                    bounty_fast_3.Rewards = new List<string>() { "LUM,60000", "XP%,50", "DBKEY,3", "PHIAL,3", "PKTROPHY,20" };
+                    bounty_fast_3.TaskCount = 1;        
+                    _pkQuestList.Add(bounty_fast_3);
+
+                    // Hard: 8 bounties in 60 minutes
+                    var bounty_fast_8 = new PKQuest();
+                    bounty_fast_8.QuestCode = "BOUNTY_FAST_8";
+                    bounty_fast_8.Description = "Complete 8 bounties within 60 minutes";
+                    bounty_fast_8.RewardDescription = "120k luminance, 80% XP to next level, 6 Darkbeat Keys, 5 Phials of Bloody Tears, 45 PK Trophies";
+                    bounty_fast_8.Rewards = new List<string>() { "LUM,120000", "XP%,80", "DBKEY,6", "PHIAL,5", "PKTROPHY,45" };
+                    bounty_fast_8.TaskCount = 1;
+                    _pkQuestList.Add(bounty_fast_8);
+
+                    // Very Hard: 12 bounties in 90 minutes
+                    var bounty_fast_12 = new PKQuest();
+                    bounty_fast_12.QuestCode = "BOUNTY_FAST_12";
+                    bounty_fast_12.Description = "Complete 12 bounties within 90 minutes";
+                    bounty_fast_12.RewardDescription = "200k luminance, 100% XP to next level, 10 Darkbeat Keys, 8 Phials of Bloody Tears, 80 PK Trophies";
+                    bounty_fast_12.Rewards = new List<string>() { "LUM,200000", "XP%,100", "DBKEY,10", "PHIAL,8", "PKTROPHY,80" };
+                    bounty_fast_12.TaskCount = 1;
+                    _pkQuestList.Add(bounty_fast_12);
                 }
 
                 return _pkQuestList;
@@ -563,6 +662,13 @@ namespace ACE.Server.Entity.PKQuests
 
         public static string[] PKQuests_KillT9 = { "PKKILL_T9_3", "PKKILL_T9_15", "PKKILL_T9_100" };
 
+        public static string[] PKQuests_BountyAny = { "BOUNTY_ANY_1", "BOUNTY_ANY_5", "BOUNTY_ANY_10" };
+
+        public static string[] PKQuests_BountyUnique = { "BOUNTY_UNIQUE_3", "BOUNTY_UNIQUE_5" };
+
+        public static string[] PKQuests_BountyRepeat = { "BOUNTY_REPEAT_3", "BOUNTY_REPEAT_5" };
+
+        public static string[] PKQuests_BountyFast = { "BOUNTY_FAST_2", "BOUNTY_FAST_3", "BOUNTY_FAST_8", "BOUNTY_FAST_12" };
 
         public static PKQuest GetPkQuestByCode(string questCode)
         {

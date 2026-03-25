@@ -524,7 +524,7 @@ namespace ACE.Server.WorldObjects
         public bool IsDifferentIPAddress(Player otherPlayer)
         {
             // On test servers we disable the IP check so multiple accounts from same IP can still complete quests
-            if (PropertyManager.GetBool("test_server").Item)
+            if (PropertyManager.GetBool("local_server").Item)
             {
                 return true;
             }

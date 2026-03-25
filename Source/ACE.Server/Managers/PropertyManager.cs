@@ -637,7 +637,7 @@ namespace ACE.Server.Managers
                 ("bounty_allow_logged_out", new Property<bool>(false, "enable this to allow logged out characters to be valid bounties")),
                 ("bounty_pk_timer_active_enabled", new Property<bool>(true, "enable this for custom bounty pk timer active check")),
                 ("bounty_expirations_enabled", new Property<bool>(true, "enable this to allow bounties to expire")),
-                ("test_server", new Property<bool>(false, " Do not enable on live servers! Enable this to allow for server behavior to change as necessary for testing envrionments.")),
+                ("local_server", new Property<bool>(false, "Do not enable on live servers! Enable this to allow for server behavior to change as necessary for testing envrionments.")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
 
@@ -677,6 +677,8 @@ namespace ACE.Server.Managers
                 ("vendor_max_items_per_sale", new Property<long>(24, "the maximum number of items a player can sell to a vendor in a single transaction")),
                 ("vendor_sale_rate_limit_seconds", new Property<long>(60, "the minimum number of seconds that must pass after a player sells to a vendor before a player can sell to a vendor again")),
                 ("bounty_expiration_time", new Property<long>(60, "the amount of time in minutes a bounty expires")),
+                ("bounty_cooldown_expiration_time", new Property<long>(0, "the amount of time in minutes for a bounty hunter's cooldown penalty")),
+                ("bounty_cooldown_target_expiration_time", new Property<long>(30, "the amount of time in minutes for a bounty target's cooldown penalty")),
                 ("bounty_minimum_player_level", new Property<long>(150, "the minimum player level that a bounty can be assigned to")),
                 ("pk_bounty_timer", new Property<long>(120, "the number of seconds where a player cannot perform certain actions (ie. teleporting) after encountering a bounty hunter")),
                 ("bounty_max_contracts", new Property<long>(3, "the maximum amount of contracts a player can have"))

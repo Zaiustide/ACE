@@ -3441,14 +3441,5 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyFloat.SplitArrowDamageMultiplier);
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.SplitArrowDamageMultiplier); else SetProperty(PropertyFloat.SplitArrowDamageMultiplier, value.Value); }
         }
-
-        /// <summary>
-        /// Bounty Properties
-        /// </summary>
-        public int? BountyEndTimeStamp
-        {
-            get => GetProperty(PropertyInt.BountyEndTimestamp);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.BountyEndTimestamp); else SetProperty(PropertyInt.BountyEndTimestamp, value.Value); }
-        }
     }
 }

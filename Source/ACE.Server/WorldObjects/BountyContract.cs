@@ -38,14 +38,14 @@ namespace ACE.Server.WorldObjects
         {
             get
             {
-                if (!BountyCreationTimeStamp.HasValue)
+                if (!BountyCreationTimestamp.HasValue)
                     return true;
 
                 if (!IsBountyExpirationsEnabled)
                     return false;
 
                 var bountyExpirationDuration = PropertyManager.GetLong("bounty_expiration_time").Item;
-                return DateTime.UtcNow - Time.GetDateTimeFromTimestamp((double)BountyCreationTimeStamp) > TimeSpan.FromMinutes(bountyExpirationDuration);
+                return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(BountyCreationTimestamp.Value) > TimeSpan.FromMinutes(bountyExpirationDuration);
             }
         }
 
@@ -56,11 +56,11 @@ namespace ACE.Server.WorldObjects
                 if (!IsBountySystemEnabled)
                     return false;
 
-                if (!BountyLastAppraisedTimeStamp.HasValue)
+                if (!BountyLastAppraisedTimestamp.HasValue)
                     return true;
 
                 var bountyAppraisalLocationDuration = PropertyManager.GetDouble("bounty_appraisal_location_duration").Item;
-                return DateTime.UtcNow - Time.GetDateTimeFromTimestamp((double)BountyLastAppraisedTimeStamp) > TimeSpan.FromSeconds(bountyAppraisalLocationDuration);
+                return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(BountyLastAppraisedTimestamp.Value) > TimeSpan.FromSeconds(bountyAppraisalLocationDuration);
             }
         }
 
@@ -68,10 +68,10 @@ namespace ACE.Server.WorldObjects
         {
             get
             {
-                if (!BountyCreationTimeStamp.HasValue)
+                if (!BountyCreationTimestamp.HasValue)
                     return "expired";
 
-                var creationTime = Time.GetDateTimeFromTimestamp((double)BountyCreationTimeStamp.Value);
+                var creationTime = Time.GetDateTimeFromTimestamp(BountyCreationTimestamp.Value);
                 var expirationDurationMinutes = PropertyManager.GetLong("bounty_expiration_time").Item;
                 var expirationTime = creationTime + TimeSpan.FromMinutes(expirationDurationMinutes);
 
@@ -143,9 +143,9 @@ namespace ACE.Server.WorldObjects
                 }
 
                 BountyLastKnownLocation = location;
+                BountyLastAppraisedTimestamp = Time.GetUnixTime();
             }
 
-            BountyLastAppraisedTimeStamp = (int?)Time.GetUnixTime();
 
             var timeRemaining = BountyTimeRemainingString;
             longDesc += $"Bounty Target: {name}\n";
