@@ -1300,5 +1300,10 @@ namespace ACE.Server.WorldObjects
             });
             actionChain.EnqueueChain();
         }
+
+        protected override void OnInitialInventoryLoadCompleted()
+        {
+            InitializeBounties();
+        }
     }
 }

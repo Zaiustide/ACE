@@ -637,6 +637,7 @@ namespace ACE.Server.Managers
                 ("bounty_allow_logged_out", new Property<bool>(false, "enable this to allow logged out characters to be valid bounties")),
                 ("bounty_pk_timer_active_enabled", new Property<bool>(true, "enable this for custom bounty pk timer active check")),
                 ("bounty_expirations_enabled", new Property<bool>(true, "enable this to allow bounties to expire")),
+                ("test_server", new Property<bool>(false, " Do not enable on live servers! Enable this to allow for server behavior to change as necessary for testing envrionments.")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
 

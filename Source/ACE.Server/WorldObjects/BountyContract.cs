@@ -8,7 +8,7 @@ using ACE.Server.Managers;
 
 namespace ACE.Server.WorldObjects
 {
-    partial class BountyContract : WorldObject
+    public partial class BountyContract : WorldObject
     {
         public static readonly uint BountyNPCWcid = 3000381; // Bounty NPC wcid
         public static readonly uint PKSkullWcid = 60000212; // Bounty Player Skull wcid
@@ -106,6 +106,9 @@ namespace ACE.Server.WorldObjects
             if (IsBountyExpired)
                 return "The bounty contract has expired, please turn it into the Bounty Collector to possibly exchange this contract for some phials.";
 
+            if (BountyTargetGuid == null)
+                return "The bounty contract has invalid target information. Please contact an admin if you believe this is in error.";
+
             IPlayer bountyTarget = PlayerManager.GetOnlinePlayer(new ObjectGuid((uint)BountyTargetGuid));
 
             if (bountyTarget == null)
@@ -151,6 +154,16 @@ namespace ACE.Server.WorldObjects
             if (isOffline)
                 longDesc += $"\n{name} is currently logged out\n";
             return longDesc;
+        }
+
+        public void OnDestroy()
+        {
+            if (BountyOwnerGuid.HasValue && BountyTargetGuid.HasValue)
+            {
+                var owner = PlayerManager.GetOnlinePlayer((uint)BountyOwnerGuid);
+                owner?.RemoveBountyContract((uint)BountyTargetGuid);
+            }
+
         }
     }
 }
