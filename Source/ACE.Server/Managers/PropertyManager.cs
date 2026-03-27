@@ -681,6 +681,7 @@ namespace ACE.Server.Managers
                 ("bounty_cooldown_target_expiration_time", new Property<long>(30, "the amount of time in minutes for a bounty target's cooldown penalty")),
                 ("bounty_minimum_player_level", new Property<long>(150, "the minimum player level that a bounty can be assigned to")),
                 ("pk_bounty_timer", new Property<long>(120, "the number of seconds where a player cannot perform certain actions (ie. teleporting) after encountering a bounty hunter")),
+                ("bounty_location_price_amount", new Property<long>(25, "the amount of pk trophies it costs to use the location finder of a bounty contract")),
                 ("bounty_max_contracts", new Property<long>(3, "the maximum amount of contracts a player can have"))
 
                 );
@@ -810,8 +811,8 @@ namespace ACE.Server.Managers
                 ("dungeoncontrol_capturescore_mod", new Property<double>(1.0, "modifies the score needed to capture a dungeon in dungeon control, generally used for testing")),
                 ("force_logout_materialization_duration", new Property<double>(1, "the number of seconds a player should materialize for before logging out")),
                 ("force_teleport_materialization_duration", new Property<double>(10.0, "the number of seconds after teleporting that a player should force materialize")),
-                ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again")),
-                ("bounty_appraisal_location_duration", new Property<double>(30.0, "the number of seconds after a bounty appraisal that the location can be updated"))
+                ("bounty_last_location_duration", new Property<double>(30.0, "the number of seconds before a player can use the bounty contract's location finder again")),
+                ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again"))
                 
                 );
 

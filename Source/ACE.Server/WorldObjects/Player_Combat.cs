@@ -1125,7 +1125,7 @@ namespace ACE.Server.WorldObjects
                     {
                         foreach (var p in visiblePlayers)
                         {
-                            if (p != null && p.TryGetBountyContract(Guid.Full, out var contract) && !contract.IsBountyExpired && !contract.BountyCompleted)
+                            if (p != null && p.TryGetBountyContract(Guid.Full, out var contract) && !contract.IsBountyExpired && !contract.IsBountyCompleted)
                             {
                                 pkTimerDuration = PropertyManager.GetLong("pk_bounty_timer").Item;
                                 break;  

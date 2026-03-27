@@ -246,8 +246,8 @@ namespace ACE.Entity.Enum.Properties
         LastTeleportEndTimestamp = 52001,
 
         //Bounty Props
-        BountyLastAppraisedTimestamp = 53002,
         BountyCreationTimestamp = 53003,
-        BountyEndTimestamp = 53004
+        BountyEndTimestamp = 53004,
+        BountyContractLastLocationTimestamp = 53005
     }
 }

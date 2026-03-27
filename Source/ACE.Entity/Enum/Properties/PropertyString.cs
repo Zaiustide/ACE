@@ -102,7 +102,6 @@ namespace ACE.Entity.Enum.Properties
 
 
         // Bounty Contract Properties
-        BountyLastKnownLocation = 55000,
         BountyInformationsSerialized = 55001,
     }
 }

@@ -22,7 +22,7 @@ INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (60000215,   1, 'Writ of Pursuit') /* Name */
      , (60000215,  16, 'A writ that allows a player to create their own bounty with a reward. 
 
-Inscribe this writ with the name of the player you wish to create a bounty for. Be sure to provide a reward amount (in phials) using the following format:
+Inscribe this writ with the name of the player you wish to create a bounty for. Be sure to provide a reward amount (in PK Trophies) using the following format:
 
 name:amount
  ') /* LongDesc */;

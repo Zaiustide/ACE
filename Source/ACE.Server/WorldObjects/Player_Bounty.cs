@@ -112,7 +112,7 @@ namespace ACE.Server.WorldObjects
                     return true;
                 }
 
-                if (!contract.BountyCompleted)
+                if (!contract.IsBountyCompleted)
                 {
                     SendDelayedNpcResponse(npc, "Your bounty contract is not completed yet. Keep hunting!", () => TryCreateForGive(npc, item));
                     return false;
@@ -174,7 +174,7 @@ namespace ACE.Server.WorldObjects
                 if (!TryParseBountyWrit(item.Inscription, out var targetName, out var rewardAmount))
                 {
                     SendDelayedNpcResponse(npc, "Unable to parse your Writ of Refuge, please inscribe it with the player's name and reward amount in this format <Name>:<Amount>.", () => TryCreateForGive(npc, item));
-                    SendDelayedNpcResponse(npc, "The reward amount must be between 1-1000.");
+                    SendDelayedNpcResponse(npc, "The reward amount must be between 1-1000 PK Trophies.");
                     return false;
                 }
 
@@ -192,23 +192,24 @@ namespace ACE.Server.WorldObjects
                     return false;
                 }
 
-                var phialsInventoryCount = GetNumInventoryItemsOfWCID(BountyContract.BountyCurrencyWcid);
+                var pkTrophiesInventoryCount = GetNumInventoryItemsOfWCID(BountyContract.PKTrophyWcid);
 
-                if (phialsInventoryCount < rewardAmount)
+
+                if (pkTrophiesInventoryCount < rewardAmount)
                 {
-                    SendDelayedNpcResponse(npc, $"You do not have enough phials to turn in your writ of pursuit. You have {phialsInventoryCount} but your Writ of Pursuit requires {rewardAmount}.", () => TryCreateForGive(npc, item));
+                    SendDelayedNpcResponse(npc, $"You do not have enough PK Trophies to turn in your Writ of Pursuit. You have {pkTrophiesInventoryCount} PK Trophies but your Writ of Pursuit requires {rewardAmount}.", () => TryCreateForGive(npc, item));
                     return false;
                 }
 
                 if (!TryConsumeFromInventoryWithNetworking(BountyContract.BountyCurrencyWcid, rewardAmount))
                 {
-                    throw new Exception($"Failed to remove {rewardAmount} phials for Writ of Pursuit for player {Name} with Guid: {Guid.Full} with inventory that contains {phialsInventoryCount} phialas.");
+                    throw new Exception($"Failed to remove {rewardAmount} PK Trophies for Writ of Pursuit for player {Name} with Guid: {Guid.Full} with inventory that contains {pkTrophiesInventoryCount} PK Trophies.");
                 }
 
                 player.SetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget, true);
                 player.SetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount, rewardAmount);
 
-                SendDelayedNpcResponse(npc, $"You have successfully turned in your Writ of Pursuit for player \"{player.Name}\" with a reward of {rewardAmount} phials.");
+                SendDelayedNpcResponse(npc, $"You have successfully turned in your Writ of Pursuit for player \"{player.Name}\" with a reward of {rewardAmount} PK Trophies.");
                 return true;
             }
             catch (Exception ex)
@@ -305,7 +306,7 @@ namespace ACE.Server.WorldObjects
                 contract.BountyOwnerGuid = (int?)Guid.Full;
                 contract.BountyTargetGuid = (int?)bountyTarget.Guid.Full;
                 contract.BountyCreationTimestamp = Time.GetUnixTime();
-                contract.BountyCompleted = false;
+                contract.IsBountyCompleted = false;
                 contract.Name = $"Bounty Contract: {bountyTarget.Name}";
 
                 SendDelayedNpcResponse(npc, $"A new bounty for player \"{bountyTarget.Name}\" has been assigned to you. A bounty contract has been added to your inventory.",
@@ -385,7 +386,7 @@ namespace ACE.Server.WorldObjects
 
             var name = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid))?.Name ?? "Unknown";
 
-            contract.BountyCompleted = true;
+            contract.IsBountyCompleted = true;
             SendDelayedMessage($"You have completed your bounty contract for {name}! Turn in the contract to the Bounty Collector for your rewards!");
             return true;
         }
@@ -409,7 +410,7 @@ namespace ACE.Server.WorldObjects
             SendDelayedMessage($"{npc.Name} tells you, \"{message}\"", ChatMessageType.Tell, action: action);
         }
 
-        private void SendDelayedMessage(string message, ChatMessageType type = ChatMessageType.System, double delaySeconds = 0.5, Action action = null)
+        public void SendDelayedMessage(string message, ChatMessageType type = ChatMessageType.System, double delaySeconds = 0.5, Action action = null)
         {
             var actionChain = new ActionChain();
             actionChain.AddDelaySeconds(delaySeconds);
