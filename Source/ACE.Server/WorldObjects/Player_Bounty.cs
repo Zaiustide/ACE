@@ -4,7 +4,6 @@ using System.Linq;
 using ACE.Common;
 using ACE.Entity;
 using ACE.Entity.Enum;
-using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
@@ -16,7 +15,7 @@ namespace ACE.Server.WorldObjects
     {
         private Dictionary<uint, BountyContract> BountyContracts = new Dictionary<uint, BountyContract>();
 
-        public bool IsValidBountyTarget
+        private bool IsValidBountyTarget
         {
             get
             {
@@ -40,7 +39,7 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public void InitializeBounties()
+        private void InitializeBounties()
         {
             BountyContracts.Clear();
 
@@ -59,7 +58,7 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public bool TryGetBountyContract(uint targetGuid, out BountyContract contract)
+        private bool TryGetBountyContract(uint targetGuid, out BountyContract contract)
         {
             return BountyContracts.TryGetValue(targetGuid, out contract);
         }
@@ -78,7 +77,7 @@ namespace ACE.Server.WorldObjects
         /// Called when the player tries to give a bounty contract to the bounty NPC.
         /// Returns true if the contract should be destroyed, false if it should be given back to the player.
         /// </summary>
-        public bool CheckBountyContractTurnIns(WorldObject npc, WorldObject item)
+        private bool CheckBountyContractTurnIns(WorldObject npc, WorldObject item)
         {
             if (npc.WeenieClassId != BountyContract.BountyNPCWcid || item is not BountyContract contract)
                 return true;
@@ -143,7 +142,7 @@ namespace ACE.Server.WorldObjects
         /// Handles purchasing a new bounty contract using a token.
         /// Returns true if the token should be destroyed, false if it should be given back to the player.
         /// </summary>
-        public bool CheckBountyPurchase(WorldObject npc, WorldObject item)
+        private bool CheckBountyPurchase(WorldObject npc, WorldObject item)
         {
             if (npc.WeenieClassId != BountyContract.BountyNPCWcid ||
                 item.WeenieClassId != BountyContract.BountyPurchaseTokenWcid)
@@ -223,7 +222,7 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         /// <param name="bountyTargetGuid"></param>
         /// <returns></returns>
-        public bool TryMarkBountyComplete(uint bountyTargetGuid)
+        private bool TryMarkBountyComplete(uint bountyTargetGuid)
         {
             if (!BountyContracts.TryGetValue(bountyTargetGuid, out var contract))
                 return false;
@@ -238,7 +237,7 @@ namespace ACE.Server.WorldObjects
             return true;
         }
 
-        public void CheckVisibleBounties()
+        private void CheckVisibleBounties()
         {
             var visiblePlayers = PhysicsObj.ObjMaint.GetVisibleObjectsValuesOfTypePlayer();
 
@@ -257,7 +256,7 @@ namespace ACE.Server.WorldObjects
             SendDelayedMessage($"{npc.Name} tells you, \"{message}\"", ChatMessageType.Tell, action: action);
         }
 
-        public void SendDelayedMessage(string message, ChatMessageType type = ChatMessageType.System, double delaySeconds = 0.5, Action action = null)
+        private void SendDelayedMessage(string message, ChatMessageType type = ChatMessageType.System, double delaySeconds = 0.5, Action action = null)
         {
             var actionChain = new ActionChain();
             actionChain.AddDelaySeconds(delaySeconds);

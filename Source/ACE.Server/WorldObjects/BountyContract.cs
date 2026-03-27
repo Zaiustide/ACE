@@ -49,7 +49,7 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public bool CanAppraiseContractLocation
+        private bool CanAppraiseContractLocation
         {
             get
             {
@@ -64,7 +64,7 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public string BountyTimeRemainingString
+        private string BountyTimeRemainingString
         {
             get
             {

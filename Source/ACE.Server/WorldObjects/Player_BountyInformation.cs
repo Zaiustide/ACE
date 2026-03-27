@@ -66,7 +66,7 @@ public partial class Player
             .Count(t => t >= cutoffTime);
     }
 
-    public void SaveBountyExpiration(uint targetGuid)
+    private void SaveBountyExpiration(uint targetGuid)
     {
         var info = BountyInformation;
         var target = GetBountyTarget(targetGuid);
@@ -75,7 +75,7 @@ public partial class Player
         SaveBountyInformation();
     }
 
-    public class BountyCompletionResult
+    private class BountyCompletionResult
     {
         public uint TargetGuid;
         public bool IsNewUniqueTarget;
