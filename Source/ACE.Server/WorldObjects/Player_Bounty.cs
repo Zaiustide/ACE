@@ -92,7 +92,7 @@ namespace ACE.Server.WorldObjects
 
                 if (!contract.BountyTargetGuid.HasValue)
                 {
-                    SendDelayedNpcResponse(npc, "This contract is invalid and cannot be turned in. Destroying the contract now.", () => TryCreateForGive(npc, item));
+                    SendDelayedNpcResponse(npc, "This contract is invalid and cannot be turned in. Destroying the contract now.");
                     return true;
                 }
 
@@ -108,7 +108,7 @@ namespace ACE.Server.WorldObjects
                     RemoveBountyContract((uint)contract.BountyTargetGuid);
                     SaveBountyExpiration((uint)contract.BountyTargetGuid);
                     SendDelayedNpcResponse(npc, "Your bounty contract has expired, take a phial as some compensation for your time.",
-                        () => GiveFromEmote(npc, 1000003));
+                        () => GiveFromEmote(npc, BountyContract.BountyCurrencyWcid));
                     return true;
                 }
 
@@ -125,7 +125,21 @@ namespace ACE.Server.WorldObjects
                 HandleBountyQuests(result);
                 SaveBountyInformation();
 
-                SendDelayedMessage($"{npc.Name} tells you, \"You have successfully turned in your bounty for player \"{bountyName}\".\"", ChatMessageType.Tell);
+                var highPriority = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget);
+                var rewardAmount = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount);
+
+
+
+                SendDelayedNpcResponse(npc, $"You have successfully turned in your bounty for player \"{bountyName}\".");
+
+                if (highPriority.HasValue && highPriority.Value && rewardAmount.HasValue)
+                {
+                    SendDelayedNpcResponse(npc, $"This bounty was a high priorty target, you have been rewarded {rewardAmount.Value} phials.",
+                        () => GiveFromEmote(npc, BountyContract.BountyCurrencyWcid, amount: rewardAmount.Value));
+                }
+
+                bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget);
+                bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount);
 
                 return true;
             }
@@ -137,6 +151,106 @@ namespace ACE.Server.WorldObjects
             }
         }
 
+        private bool CheckWritOfPursuit(WorldObject npc, WorldObject item)
+        {
+            if (npc.WeenieClassId != BountyContract.BountyNPCWcid ||
+                item.WeenieClassId != BountyContract.WritOfPursuitWcid)
+                return true;
+
+            try
+            {
+                if (!BountyContract.IsBountySystemEnabled)
+                {
+                    SendDelayedNpcResponse(npc, "Bounties are not enabled on this server.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!IsAllegianceWhitelisted)
+                {
+                    SendDelayedNpcResponse(npc, "You must be in a whitelisted allegiance to purchase a bounty.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!TryParseBountyWrit(item.Inscription, out var targetName, out var rewardAmount))
+                {
+                    SendDelayedNpcResponse(npc, "Unable to parse your Writ of Refuge, please inscribe it with the player's name and reward amount in this format <Name>:<Amount>.", () => TryCreateForGive(npc, item));
+                    SendDelayedNpcResponse(npc, "The reward amount must be between 1-1000.");
+                    return false;
+                }
+
+                var player = PlayerManager.FindByName(targetName);
+
+                if (player == null)
+                {
+                    SendDelayedNpcResponse(npc, $"You Writ of Pursuit does not contain a valid player name, please inscribe your Writ of Pursuit with a valid name.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (player.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget) == true)
+                {
+                    SendDelayedNpcResponse(npc, $"The player \"{targetName}\" is already a high priority target for someone else, you must wait until someone completes a bounty for them.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                var phialsInventoryCount = GetNumInventoryItemsOfWCID(BountyContract.BountyCurrencyWcid);
+
+                if (phialsInventoryCount < rewardAmount)
+                {
+                    SendDelayedNpcResponse(npc, $"You do not have enough phials to turn in your writ of pursuit. You have {phialsInventoryCount} but your Writ of Pursuit requires {rewardAmount}.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!TryConsumeFromInventoryWithNetworking(BountyContract.BountyCurrencyWcid, rewardAmount))
+                {
+                    throw new Exception($"Failed to remove {rewardAmount} phials for Writ of Pursuit for player {Name} with Guid: {Guid.Full} with inventory that contains {phialsInventoryCount} phialas.");
+                }
+
+                player.SetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget, true);
+                player.SetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount, rewardAmount);
+
+                SendDelayedNpcResponse(npc, $"You have successfully turned in your Writ of Pursuit for player \"{player.Name}\" with a reward of {rewardAmount} phials.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in CheckWritOfPursuit for player {Name} (Guid: {Guid.Full}): ", ex);
+                SendDelayedMessage("An error occurred while trying to turn in a Writ of Pursuit. Please notify an admin.", ChatMessageType.System);
+                return false;        
+            }
+        }
+
+        private bool TryParseBountyWrit(string inscription, out string playerName, out int reward)
+        {
+            playerName = null;
+            reward = 0;
+
+            if (string.IsNullOrWhiteSpace(inscription))
+                return false;
+
+            var parts = inscription.Split(':');
+
+            if (parts.Length != 2)
+                return false;
+
+            playerName = parts[0].Trim();
+
+            if (string.IsNullOrWhiteSpace(playerName))
+                return false;
+
+            if (!int.TryParse(parts[1].Trim(), out reward))
+                return false;
+
+            if (reward <= 0)
+                return false;
+
+            if (reward > 1000) // cap it
+                return false;
+
+            if (playerName.Length > 32)
+                return false;
+
+            return true;
+        }
 
         /// <summary>
         /// Handles purchasing a new bounty contract using a token.
@@ -185,8 +299,7 @@ namespace ACE.Server.WorldObjects
                     return false;
                 }
 
-                var targetIndex = ThreadSafeRandom.Next(0, eligibleTargets.Count - 1);
-                var bountyTarget = eligibleTargets[targetIndex];
+                var bountyTarget = SelectRandomWeightedTarget(eligibleTargets);
                 var contract = WorldObjectFactory.CreateNewWorldObject(BountyContract.BountyContractWcid) as BountyContract;
 
                 contract.BountyOwnerGuid = (int?)Guid.Full;
@@ -195,11 +308,11 @@ namespace ACE.Server.WorldObjects
                 contract.BountyCompleted = false;
                 contract.Name = $"Bounty Contract: {bountyTarget.Name}";
 
-                AddBountyContract(bountyTarget.Guid.Full, contract);
-
                 SendDelayedNpcResponse(npc, $"A new bounty for player \"{bountyTarget.Name}\" has been assigned to you. A bounty contract has been added to your inventory.",
                     action: () =>
                     {
+                        AddBountyContract(bountyTarget.Guid.Full, contract);
+
                         if (!TryCreateForGive(npc, contract))
                         {
                             RemoveBountyContract((uint)contract.BountyTargetGuid.Value);
@@ -215,6 +328,46 @@ namespace ACE.Server.WorldObjects
                 SendDelayedMessage("An error occurred while trying to purchase a bounty. Please notify an admin.", ChatMessageType.System);
                 return true;        // Destroy the token just in case, so no player ends up with a contract and also a free token
             }
+        }
+
+        private Player SelectRandomWeightedTarget(List<Player> players)
+        {
+            double totalWeight = 0;
+
+            foreach (var p in players)
+                totalWeight += GetBountyWeight(p);
+
+            double roll = ThreadSafeRandom.Next(0f, (float)totalWeight);
+
+            double cumulative = 0;
+
+            foreach (var player in players)
+            {
+                cumulative += GetBountyWeight(player);
+
+                if (roll <= cumulative)
+                    return player;
+            }
+
+            return players.Last(); 
+        }
+
+        private double GetBountyWeight(Player p)
+        {
+            double weight = 1;
+
+            // priority boost
+            if (p.IsBountyHighPriorityTarget)
+            {
+                weight *= 2; 
+            }
+
+            if (p.BountyTargetRewardAmount.HasValue)
+            {
+                weight += p.BountyTargetRewardAmount.Value / 100.0;
+            }
+
+            return weight;
         }
 
         /// <summary>

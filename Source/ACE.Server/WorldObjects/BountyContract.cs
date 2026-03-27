@@ -14,6 +14,8 @@ namespace ACE.Server.WorldObjects
         public static readonly uint PKSkullWcid = 60000212; // Bounty Player Skull wcid
         public static readonly uint BountyPurchaseTokenWcid = 60000213; // Bounty Purchase Token wcid
         public static readonly uint BountyContractWcid = 60000214; // Bounty Purchase Token wcid
+        public static readonly uint WritOfPursuitWcid = 60000215; // Bounty Purchase Token wcid
+        public static readonly uint BountyCurrencyWcid = 1000003; // phials
 
         public BountyContract(Weenie weenie, ObjectGuid guid) : base(weenie, guid)
         {

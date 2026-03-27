@@ -191,6 +191,7 @@ namespace ACE.Entity.Enum.Properties
         NextTinkIsFoolproof = 9016,
         BountyCompleted = 9017,
         SplitArrows = 19017,
-        IsSplitArrow = 19018
+        IsSplitArrow = 19018,
+        IsBountyHighPriorityTarget = 19019
     }
 }

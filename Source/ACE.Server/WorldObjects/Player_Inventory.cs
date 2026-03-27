@@ -3466,7 +3466,7 @@ namespace ACE.Server.WorldObjects
 
                         target.EmoteManager.ExecuteEmoteSet(emoteResult, this);
 
-                        if (!CheckBountyContractTurnIns(target, itemToGive) || !CheckBountyPurchase(target, itemToGive))
+                        if (!CheckBountyContractTurnIns(target, itemToGive) || !CheckBountyPurchase(target, itemToGive) || !CheckWritOfPursuit(target, itemToGive))
                             return;
 
                         itemToGive.Destroy();
