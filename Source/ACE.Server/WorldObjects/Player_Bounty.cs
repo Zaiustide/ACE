@@ -4,7 +4,6 @@ using System.Linq;
 using ACE.Common;
 using ACE.Entity;
 using ACE.Entity.Enum;
-using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
@@ -14,25 +13,25 @@ namespace ACE.Server.WorldObjects
 {
     partial class Player
     {
-        private Dictionary<uint, BountyContract> ActiveBounties = new Dictionary<uint, BountyContract>();
+        private Dictionary<uint, BountyContract> BountyContracts = new Dictionary<uint, BountyContract>();
 
-        public bool IsValidBountyTarget
+        private bool IsValidBountyTarget
         {
             get
             {
                 var validLocation = (CurrentLandblock?.IsBountyLocation ?? false);
-                var loggedOut = !IsLoggingOut;
+                var validLogout = !IsLoggingOut;
 
                 if (PropertyManager.GetBool("bounty_allow_all_locations").Item)
                     validLocation = true;
                 if (PropertyManager.GetBool("bounty_allow_logged_out").Item)
-                    loggedOut = true;
+                    validLogout = true;
 
                 var minimumPlayerLevel = PropertyManager.GetLong("bounty_minimum_player_level").Item;
 
                 return
                     !IsAdmin &&
-                    loggedOut &&
+                    validLogout &&
                     validLocation &&
                     Level >= minimumPlayerLevel &&
                     IsAllegianceWhitelisted &&
@@ -40,197 +39,359 @@ namespace ACE.Server.WorldObjects
             }
         }
 
-        public enum BountyResult
+        private void InitializeBounties()
         {
-            Success,
-            Failure,
-            Ignore
-        }
+            BountyContracts.Clear();
 
-        public void InitializeBounties()
-        {
-            var bountyContracts = GetInventoryItemsOfWCID(BountyContract.BountyContractWcid).OfType<BountyContract>();
-            foreach (var contract in bountyContracts)
-                if (!contract.BountyCompleted || !contract.IsBountyExpired)
-                ActiveBounties.Add((uint)contract.BountyTargetGuid.Value, contract);
-        } 
-
-        public void BountyTick()
-        {
             if (!BountyContract.IsBountySystemEnabled)
                 return;
 
-            foreach (var bounty in ActiveBounties.Values.ToList())
+            var bountyContracts = GetInventoryItemsOfWCID(BountyContract.BountyContractWcid)
+                .OfType<BountyContract>();
+
+            foreach (var contract in bountyContracts)
             {
-                if (bounty.IsBountyExpired || bounty.BountyCompleted)
+                if (contract.BountyTargetGuid.HasValue)
                 {
-                    RemoveActiveBounty((uint)bounty.BountyTargetGuid.Value);
+                    AddBountyContract((uint)contract.BountyTargetGuid.Value, contract);
                 }
             }
         }
 
-        // Return true to indicate the item should be deleted by the give action, false if not
-        public bool CheckBountyContractTurnIns(WorldObject npc, WorldObject item)
+        private bool TryGetBountyContract(uint targetGuid, out BountyContract contract)
         {
-            try
-            {
-                if (npc.WeenieClassId == BountyContract.BountyNPCWcid && item is BountyContract contract)
-                {
-                    if (!BountyContract.IsBountySystemEnabled)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"Bounties are not enabled on this server.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
-
-                    var bountyTarget = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid));
-
-                    if (bountyTarget == null || bountyTarget.IsPendingDeletion || bountyTarget.IsDeleted)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"The bounty target for this contract no longer exists.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
-
-                    if (contract.IsBountyExpired)
-                    {
-                        RemoveActiveBounty((uint)contract.BountyTargetGuid);
-                        SendDelayedMessage($"{npc.Name} tells you, \"Your bounty contract has expired, take a phial as some compensation for your time.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            GiveFromEmote(npc, 1000003);
-                        });
-                        return true;
-                    }
-
-                    if (!contract.BountyCompleted)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"Your bounty contract is not completed yet. Keep hunting!\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
-
-                    var bountyName = bountyTarget.Name;
-                    BountyEndTimeStamp = (int?)Time.GetUnixTime();
-                    HandleBountyRewards(npc, bountyTarget);
-                    RemoveActiveBounty((uint)contract.BountyTargetGuid);
-                    SendDelayedMessage($"{npc.Name} tells you, \"You have successfully turned in your bounty for player \"{bountyName}\".\"", ChatMessageType.Tell);
-
-                    return true;
-                }
-
-                return true;
-            } catch (Exception ex)
-            {
-                log.Error("Error in CheckBountyTurnIns: ", ex);
-                SendDelayedMessage($"An error occurred while trying to turn in a bounty. Please notify an admin.", ChatMessageType.System);
-                return true;
-            }
+            return BountyContracts.TryGetValue(targetGuid, out contract);
         }
 
-        // Return true to indicate the item should be deleted by the give action, false if not
-        public bool CheckBountyPurchase(WorldObject npc, WorldObject item)
+        public bool RemoveBountyContract(uint targetGuid)
         {
+            return BountyContracts.Remove(targetGuid);
+        }
+
+        private bool AddBountyContract(uint targetGuid, BountyContract contract)
+        {
+            return contract != null && BountyContracts.TryAdd(targetGuid, contract);
+        }
+
+        /// <summary>
+        /// Called when the player tries to give a bounty contract to the bounty NPC.
+        /// Returns true if the contract should be destroyed, false if it should be given back to the player.
+        /// </summary>
+        private bool CheckBountyContractTurnIns(WorldObject npc, WorldObject item)
+        {
+            if (npc.WeenieClassId != BountyContract.BountyNPCWcid || item is not BountyContract contract)
+                return true;
+
             try
             {
-                if (npc.WeenieClassId == BountyContract.BountyNPCWcid && item.WeenieClassId == BountyContract.BountyPurchaseTokenWcid)
+                if (!BountyContract.IsBountySystemEnabled)
                 {
-                    if (!BountyContract.IsBountySystemEnabled)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"Bounties are not enabled on this server.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
+                    SendDelayedNpcResponse(npc, "Bounties are not enabled on this server.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
 
-                    if (!IsAllegianceWhitelisted)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"You must be in a whitelisted allegiance to purchase a bounty.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
-
-                    var enemyPlayers = PlayerManager.GetAllOnline().Where(p =>
-                         p != null &&
-                         p.Guid.Full != Guid.Full &&
-                         p.IsValidBountyTarget &&
-                         !ActiveBounties.ContainsKey(p.Guid.Full) &&
-                         !Player.IsSameAllegiance(p, this) &&
-                         !Player.HasBountyCooldown(this, p)).ToList();
-
-                    if (enemyPlayers.Count <= 0)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"There are currently no bounty players available at this time.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
-
-                    var contracts = GetInventoryItemsOfWCID(BountyContract.BountyContractWcid).OfType<BountyContract>().ToList();
-
-                    if (contracts.Count >= BountyContract.MaxBountyContracts)
-                    {
-                        SendDelayedMessage($"{npc.Name} tells you, \"You have reached the maximum number of active bounty contracts ({BountyContract.MaxBountyContracts}). Please complete your current bounties before purchasing new ones.\"", ChatMessageType.Tell, action: () =>
-                        {
-                            TryCreateForGive(npc, item);
-                        });
-                        return false;
-                    }
-
-                    var roll = ThreadSafeRandom.Next(0, enemyPlayers.Count - 1);
-                    var bountyTarget = enemyPlayers[roll];
-                    var contract = WorldObjectFactory.CreateNewWorldObject(BountyContract.BountyContractWcid) as BountyContract;
-                    contract.BountyOwnerGuid = (int?)Guid.Full;
-                    contract.BountyTargetGuid = (int?)bountyTarget.Guid.Full;
-                    contract.BountyCreationTimeStamp = (int)Time.GetUnixTime();
-                    contract.BountyCompleted = false;
-                    contract.Name = $"Bounty Contract: {bountyTarget.Name}";
-
-                    ActiveBounties.Add((uint)bountyTarget.Guid.Full, contract);
-                    SendDelayedMessage($"{npc.Name} tells you, \"A new bounty for player \"{bountyTarget.Name}\" has been assigned to you. A bounty contract has been added to your inventory.\"", ChatMessageType.Tell, action: () =>
-                    {
-                        if (!TryCreateForGive(npc, contract))
-                        {
-                            RemoveActiveBounty((uint)contract.BountyTargetGuid.Value);
-                            contract.Destroy();
-                        }
-                    });
-
+                if (!contract.BountyTargetGuid.HasValue)
+                {
+                    SendDelayedNpcResponse(npc, "This contract is invalid and cannot be turned in. Destroying the contract now.");
                     return true;
                 }
+
+                var bountyTarget = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid));
+                if (bountyTarget == null || bountyTarget.IsPendingDeletion || bountyTarget.IsDeleted)
+                {
+                    SendDelayedNpcResponse(npc, "The bounty target for this contract no longer exists.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (contract.IsBountyExpired)
+                {
+                    RemoveBountyContract((uint)contract.BountyTargetGuid);
+                    SaveBountyExpiration((uint)contract.BountyTargetGuid);
+                    SendDelayedNpcResponse(npc, "Your bounty contract has expired, take a phial as some compensation for your time.",
+                        () => GiveFromEmote(npc, BountyContract.BountyCurrencyWcid));
+                    return true;
+                }
+
+                if (!contract.IsBountyCompleted)
+                {
+                    SendDelayedNpcResponse(npc, "Your bounty contract is not completed yet. Keep hunting!", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                var bountyName = bountyTarget.Name;
+                BountyEndTimestamp = Time.GetUnixTime();
+
+                var result = UpdateCompletedBountyInformation((uint)contract.BountyTargetGuid, contract);
+                HandleBountyQuests(result);
+                SaveBountyInformation();
+
+                var highPriority = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget);
+                var rewardAmount = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount);
+
+
+
+                SendDelayedNpcResponse(npc, $"You have successfully turned in your bounty for player \"{bountyName}\".");
+
+                if (highPriority.HasValue && highPriority.Value && rewardAmount.HasValue)
+                {
+                    SendDelayedNpcResponse(npc, $"This bounty was a high priorty target, you have been rewarded {rewardAmount.Value} phials.",
+                        () => GiveFromEmote(npc, BountyContract.BountyCurrencyWcid, amount: rewardAmount.Value));
+                }
+
+                bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget);
+                bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount);
 
                 return true;
             }
             catch (Exception ex)
             {
-                log.Error("Error in CheckBountyPurchase: ", ex);
-                SendDelayedMessage($"An error occurred while trying to assign a bounty target. Please notify an admin.", ChatMessageType.System);
+                log.Error($"Error in CheckBountyContractTurnIns for player {Name} (Guid: {Guid.Full}): ", ex);
+                SendDelayedMessage("An error occurred while processing the bounty turn-in. Please notify an admin.", ChatMessageType.System);
+                return true;        // Destroy the contract just in case
+            }
+        }
+
+        private bool CheckWritOfPursuit(WorldObject npc, WorldObject item)
+        {
+            if (npc.WeenieClassId != BountyContract.BountyNPCWcid ||
+                item.WeenieClassId != BountyContract.WritOfPursuitWcid)
+                return true;
+
+            try
+            {
+                if (!BountyContract.IsBountySystemEnabled)
+                {
+                    SendDelayedNpcResponse(npc, "Bounties are not enabled on this server.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!IsAllegianceWhitelisted)
+                {
+                    SendDelayedNpcResponse(npc, "You must be in a whitelisted allegiance to purchase a bounty.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!TryParseBountyWrit(item.Inscription, out var targetName, out var rewardAmount))
+                {
+                    SendDelayedNpcResponse(npc, "Unable to parse your Writ of Refuge, please inscribe it with the player's name and reward amount in this format <Name>:<Amount>.", () => TryCreateForGive(npc, item));
+                    SendDelayedNpcResponse(npc, "The reward amount must be between 1-1000 PK Trophies.");
+                    return false;
+                }
+
+                var player = PlayerManager.FindByName(targetName);
+
+                if (player == null)
+                {
+                    SendDelayedNpcResponse(npc, $"You Writ of Pursuit does not contain a valid player name, please inscribe your Writ of Pursuit with a valid name.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (player.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget) == true)
+                {
+                    SendDelayedNpcResponse(npc, $"The player \"{targetName}\" is already a high priority target for someone else, you must wait until someone completes a bounty for them.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                var pkTrophiesInventoryCount = GetNumInventoryItemsOfWCID(BountyContract.PKTrophyWcid);
+
+
+                if (pkTrophiesInventoryCount < rewardAmount)
+                {
+                    SendDelayedNpcResponse(npc, $"You do not have enough PK Trophies to turn in your Writ of Pursuit. You have {pkTrophiesInventoryCount} PK Trophies but your Writ of Pursuit requires {rewardAmount}.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!TryConsumeFromInventoryWithNetworking(BountyContract.BountyCurrencyWcid, rewardAmount))
+                {
+                    throw new Exception($"Failed to remove {rewardAmount} PK Trophies for Writ of Pursuit for player {Name} with Guid: {Guid.Full} with inventory that contains {pkTrophiesInventoryCount} PK Trophies.");
+                }
+
+                player.SetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget, true);
+                player.SetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyTargetRewardAmount, rewardAmount);
+
+                SendDelayedNpcResponse(npc, $"You have successfully turned in your Writ of Pursuit for player \"{player.Name}\" with a reward of {rewardAmount} PK Trophies.");
                 return true;
             }
-        }
-
-        public void CompleteBounty(uint bountyTargetGuid)
-        {
-            var contract = GetInventoryItemsOfWCID(BountyContract.BountyContractWcid).OfType<BountyContract>().FirstOrDefault(c => c.BountyTargetGuid == bountyTargetGuid);
-            if (contract != null)
+            catch (Exception ex)
             {
-                var name = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid))?.Name ?? "Unknown";
-                contract.BountyCompleted = true;
-                RemoveActiveBounty(bountyTargetGuid);
-                SendDelayedMessage($"You have completed your bounty contract for {name}!");
+                log.Error($"Error in CheckWritOfPursuit for player {Name} (Guid: {Guid.Full}): ", ex);
+                SendDelayedMessage("An error occurred while trying to turn in a Writ of Pursuit. Please notify an admin.", ChatMessageType.System);
+                return false;        
             }
         }
 
-        public void CheckBounties()
+        private bool TryParseBountyWrit(string inscription, out string playerName, out int reward)
+        {
+            playerName = null;
+            reward = 0;
+
+            if (string.IsNullOrWhiteSpace(inscription))
+                return false;
+
+            var parts = inscription.Split(':');
+
+            if (parts.Length != 2)
+                return false;
+
+            playerName = parts[0].Trim();
+
+            if (string.IsNullOrWhiteSpace(playerName))
+                return false;
+
+            if (!int.TryParse(parts[1].Trim(), out reward))
+                return false;
+
+            if (reward <= 0)
+                return false;
+
+            if (reward > 1000) // cap it
+                return false;
+
+            if (playerName.Length > 32)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Handles purchasing a new bounty contract using a token.
+        /// Returns true if the token should be destroyed, false if it should be given back to the player.
+        /// </summary>
+        private bool CheckBountyPurchase(WorldObject npc, WorldObject item)
+        {
+            if (npc.WeenieClassId != BountyContract.BountyNPCWcid ||
+                item.WeenieClassId != BountyContract.BountyPurchaseTokenWcid)
+                return true;
+
+            try
+            {
+                if (!BountyContract.IsBountySystemEnabled)
+                {
+                    SendDelayedNpcResponse(npc, "Bounties are not enabled on this server.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!IsAllegianceWhitelisted)
+                {
+                    SendDelayedNpcResponse(npc, "You must be in a whitelisted allegiance to purchase a bounty.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (BountyContracts.Count >= BountyContract.MaxBountyContracts)
+                {
+                    SendDelayedNpcResponse(npc,
+                        $"You have reached the maximum number of active bounty contracts ({BountyContract.MaxBountyContracts}). " +
+                        "Please complete your current bounties before purchasing new ones.",
+                        () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                var eligibleTargets = PlayerManager.GetAllOnline().Where(p =>
+                    p != null &&
+                    p.Guid.Full != Guid.Full &&
+                    p.IsValidBountyTarget &&
+                    !TryGetBountyContract(p.Guid.Full, out _) &&
+                    !IsSameAllegiance(p) &&
+                    HasCooldownPenaltyExpired(p)).ToList();
+
+                if (eligibleTargets.Count == 0)
+                {
+                    SendDelayedNpcResponse(npc, "There are currently no bounty players available at this time.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                var bountyTarget = SelectRandomWeightedTarget(eligibleTargets);
+                var contract = WorldObjectFactory.CreateNewWorldObject(BountyContract.BountyContractWcid) as BountyContract;
+
+                contract.BountyOwnerGuid = (int?)Guid.Full;
+                contract.BountyTargetGuid = (int?)bountyTarget.Guid.Full;
+                contract.BountyCreationTimestamp = Time.GetUnixTime();
+                contract.IsBountyCompleted = false;
+                contract.Name = $"Bounty Contract: {bountyTarget.Name}";
+
+                SendDelayedNpcResponse(npc, $"A new bounty for player \"{bountyTarget.Name}\" has been assigned to you. A bounty contract has been added to your inventory.",
+                    action: () =>
+                    {
+                        AddBountyContract(bountyTarget.Guid.Full, contract);
+
+                        if (!TryCreateForGive(npc, contract))
+                        {
+                            RemoveBountyContract((uint)contract.BountyTargetGuid.Value);
+                            contract.Destroy();
+                        }
+                    });
+
+                return true;        
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in CheckBountyPurchase for player {Name} (Guid: {Guid.Full}): ", ex);
+                SendDelayedMessage("An error occurred while trying to purchase a bounty. Please notify an admin.", ChatMessageType.System);
+                return true;        // Destroy the token just in case, so no player ends up with a contract and also a free token
+            }
+        }
+
+        private Player SelectRandomWeightedTarget(List<Player> players)
+        {
+            double totalWeight = 0;
+
+            foreach (var p in players)
+                totalWeight += GetBountyWeight(p);
+
+            double roll = ThreadSafeRandom.Next(0f, (float)totalWeight);
+
+            double cumulative = 0;
+
+            foreach (var player in players)
+            {
+                cumulative += GetBountyWeight(player);
+
+                if (roll <= cumulative)
+                    return player;
+            }
+
+            return players.Last(); 
+        }
+
+        private double GetBountyWeight(Player p)
+        {
+            double weight = 1;
+
+            // priority boost
+            if (p.IsBountyHighPriorityTarget)
+            {
+                weight *= 2; 
+            }
+
+            if (p.BountyTargetRewardAmount.HasValue)
+            {
+                weight += p.BountyTargetRewardAmount.Value / 100.0;
+            }
+
+            return weight;
+        }
+
+        /// <summary>
+        /// Called when a player is killed to check if they are a bounty target and mark the corresponding contract as completed if so.
+        /// </summary>
+        /// <param name="bountyTargetGuid"></param>
+        /// <returns></returns>
+        private bool TryMarkBountyComplete(uint bountyTargetGuid)
+        {
+            if (!BountyContracts.TryGetValue(bountyTargetGuid, out var contract))
+                return false;
+
+            if (!contract.BountyTargetGuid.HasValue)
+                return false;
+
+            var name = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid))?.Name ?? "Unknown";
+
+            contract.IsBountyCompleted = true;
+            SendDelayedMessage($"You have completed your bounty contract for {name}! Turn in the contract to the Bounty Collector for your rewards!");
+            return true;
+        }
+
+        private void CheckVisibleBounties()
         {
             var visiblePlayers = PhysicsObj.ObjMaint.GetVisibleObjectsValuesOfTypePlayer();
 
@@ -239,14 +400,14 @@ namespace ACE.Server.WorldObjects
                 if (player.Guid.Full == Guid.Full)
                     continue;
 
-                if (player.ActiveBounties.ContainsKey(Guid.Full))
+                if (player.TryGetBountyContract(Guid.Full, out _))
                     UpdatePKTimer();
             }
         }
 
-        public void RemoveActiveBounty(uint targetGuid)
+        private void SendDelayedNpcResponse(WorldObject npc, string message, Action action = null)
         {
-            ActiveBounties.Remove(targetGuid);
+            SendDelayedMessage($"{npc.Name} tells you, \"{message}\"", ChatMessageType.Tell, action: action);
         }
 
         public void SendDelayedMessage(string message, ChatMessageType type = ChatMessageType.System, double delaySeconds = 0.5, Action action = null)
@@ -261,16 +422,56 @@ namespace ACE.Server.WorldObjects
             actionChain.EnqueueChain();
         }
 
-        private static bool HasBountyCooldown(Player bountyHunter, Player bountyTarget)
+        private bool HasCooldownPenaltyExpiredForHunter()
         {
-            // TODO: implement cooldowns between turning in bounties on the same target, and between turning in multiple bounties in a row on different targets.
-            return false;
+            if (!BountyEndTimestamp.HasValue)
+                return true;
+
+            var bountyCooldownExpirationDuration = PropertyManager.GetLong("bounty_cooldown_expiration_time").Item;
+            return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(BountyEndTimestamp.Value) > TimeSpan.FromMinutes(bountyCooldownExpirationDuration);
         }
 
-        private void HandleBountyRewards(WorldObject npc, IPlayer bountyTarget)
+        private bool HasCooldownPenaltyExpired(Player bountyTarget)
         {
-            // TODO: implement configurable rewards for turning in bounties
-            //TryCreateInInventoryWithNetworking(rewardItem, 1);
+            // Check if the bounty hunter has a default cooldown for all bounty turn ins
+            if (!HasCooldownPenaltyExpiredForHunter())
+                return false;
+
+            var cooldown = GetBountyCooldown(bountyTarget.Guid.Full);
+
+            if (cooldown == -1)
+                return true;
+
+            var bountyCooldownTargetExpirationDuration = PropertyManager.GetLong("bounty_cooldown_target_expiration_time").Item;
+            return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(cooldown) > TimeSpan.FromMinutes(bountyCooldownTargetExpirationDuration);
+        }
+
+        private void HandleBountyQuests(BountyCompletionResult result)
+        {
+            // any bounty
+            CompletePkQuestTask("BOUNTY_ANY_1", 1);
+            CompletePkQuestTask("BOUNTY_ANY_5", 1);
+            CompletePkQuestTask("BOUNTY_ANY_10", 1);
+
+            // unique targets
+            if (result.IsNewUniqueTarget)
+            {
+                CompletePkQuestTask("BOUNTY_UNIQUE_3", 1);
+                CompletePkQuestTask("BOUNTY_UNIQUE_5", 1);
+            }
+
+            // repeat kills (same player)
+            if (result.RepeatCount == 3)
+                CompletePkQuestTask("BOUNTY_REPEAT_3", 1);
+
+            if (result.RepeatCount == 5)
+                CompletePkQuestTask("BOUNTY_REPEAT_5", 1);
+
+            // speed-based
+            if (result.CountLast30Min >= 2) CompletePkQuestTask("BOUNTY_FAST_2", 1);
+            if (result.CountLast30Min >= 3) CompletePkQuestTask("BOUNTY_FAST_3", 1);
+            if (result.CountLast60Min >= 8) CompletePkQuestTask("BOUNTY_FAST_8", 1);
+            if (result.CountLast90Min >= 12) CompletePkQuestTask("BOUNTY_FAST_12", 1);
         }
     }
 }

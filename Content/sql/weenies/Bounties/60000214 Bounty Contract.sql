@@ -8,7 +8,7 @@ VALUES (60000214,   1,        128) /* ItemType - Misc */
      , (60000214,   5,          5) /* EncumbranceVal */
      , (60000214,   8,          5) /* Mass */
      , (60000214,   9,   16777216) /* ValidLocations - Held */
-     , (60000214,  16,          1) /* ItemUseable - No */
+     , (60000214,  16,          8) /* ItemUseable - Contained */
      , (60000214,  18,         32) /* UiEffects - Fire */
      , (60000214,  19,          0) /* Value */
      , (60000214,  33,          1) /* Bonded - Bonded */

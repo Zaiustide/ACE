@@ -449,8 +449,6 @@ namespace ACE.Server.Managers
                 actionChain.AddAction(session.Player, session.Player.OnTeleportComplete);
                 actionChain.EnqueueChain();
             }
-
-            session.Player.InitializeBounties();
         }
 
         private static string AppendLines(params string[] lines)

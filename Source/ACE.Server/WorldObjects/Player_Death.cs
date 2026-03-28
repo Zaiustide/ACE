@@ -134,11 +134,15 @@ namespace ACE.Server.WorldObjects
                     this.Allegiance.MonarchId.HasValue &&
                     TownControlAllegiances.IsAllowedAllegiance((int)this.Allegiance.MonarchId.Value) &&
                     this.Allegiance.MonarchId != pkPlayer.Allegiance.MonarchId &&
-                    !(this.Session.EndPointC2S?.Address?.ToString().Equals(pkPlayer?.Session?.EndPointC2S?.Address?.ToString()) ?? false);
+                    IsDifferentIPAddress(pkPlayer);
 
                 if (isPkQuestEligible)
                 {
                     pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
+
+                    //Bounty Kills
+                    if (BountyContract.IsBountySystemEnabled)
+                       pkPlayer.TryMarkBountyComplete(Guid.Full);
 
                     switch (Location.Landblock)
                     {
@@ -714,14 +718,6 @@ namespace ACE.Server.WorldObjects
             //PK Trophy drop on death behavior
             if (IsPKDeath(corpse.KillerId))
             {
-                //Bounty Trophies
-                if (BountyContract.IsBountySystemEnabled)
-                {
-                    var killer = PlayerManager.GetOnlinePlayer(new ObjectGuid((uint)corpse.KillerId));
-                    if (killer != null && !IsSameAllegiance(killer, this))
-                        killer.CompleteBounty(Guid.Full);
-                }
-
                 //Don't drop trophy if low level
                 var shouldDropTrophy = true;
                 var shouldDropTcRewards = true;

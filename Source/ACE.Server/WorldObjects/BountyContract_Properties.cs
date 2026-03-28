@@ -21,16 +21,21 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyInt.BountyTargetGuid); else SetProperty(PropertyInt.BountyTargetGuid, value.Value); }
         }
 
-        public int? BountyCreationTimeStamp
+        public double? BountyCreationTimestamp
         {
-            get => GetProperty(PropertyInt.BountyCreationTimestamp);
-            set { if (!value.HasValue) RemoveProperty(PropertyInt.BountyCreationTimestamp); else SetProperty(PropertyInt.BountyCreationTimestamp, value.Value); }
+            get => GetProperty(PropertyFloat.BountyCreationTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyCreationTimestamp); else SetProperty(PropertyFloat.BountyCreationTimestamp, value.Value); }
         }
 
-        public bool BountyCompleted
+        public bool IsBountyCompleted
         {
-            get => GetProperty(PropertyBool.BountyCompleted) ?? false;
-            set { if (!value) RemoveProperty(PropertyBool.BountyCompleted); else SetProperty(PropertyBool.BountyCompleted, value); }
+            get => GetProperty(PropertyBool.IsBountyCompleted) ?? false;
+            set { if (!value) RemoveProperty(PropertyBool.IsBountyCompleted); else SetProperty(PropertyBool.IsBountyCompleted, value); }
+        }
+        public double? BountyContractLastLocationTimestamp
+        {
+            get => GetProperty(PropertyFloat.BountyContractLastLocationTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyContractLastLocationTimestamp); else SetProperty(PropertyFloat.BountyContractLastLocationTimestamp, value.Value); }
         }
     }
 }

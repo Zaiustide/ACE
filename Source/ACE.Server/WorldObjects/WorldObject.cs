@@ -860,11 +860,7 @@ namespace ACE.Server.WorldObjects
 
             if (this is BountyContract bountyContract)
             {
-                if (bountyContract.BountyOwnerGuid != null)
-                {
-                    var owner = PlayerManager.GetOnlinePlayer((uint)bountyContract.BountyOwnerGuid.Value);
-                    owner?.RemoveActiveBounty((uint)bountyContract.BountyTargetGuid);
-                }
+                bountyContract.OnDestroy();
             }
 
             if (this is Pet pet)

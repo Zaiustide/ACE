@@ -1594,5 +1594,30 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyFloat.LastTeleportEndTimestamp);
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.LastTeleportEndTimestamp); else SetProperty(PropertyFloat.LastTeleportEndTimestamp, value.Value); }
         }
+
+        /* Bounty information */
+        public string BountyInformationsSerialized
+        {
+            get => GetProperty(PropertyString.BountyInformationsSerialized) ?? String.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyInformationsSerialized); else SetProperty(PropertyString.BountyInformationsSerialized, value); }
+        }
+
+        public double? BountyEndTimestamp
+        {
+            get => GetProperty(PropertyFloat.BountyEndTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyEndTimestamp); else SetProperty(PropertyFloat.BountyEndTimestamp, value.Value); }
+        }
+
+        public bool IsBountyHighPriorityTarget
+        {
+            get => GetProperty(PropertyBool.IsBountyHighPriorityTarget) ?? false;
+            set { if (!value) RemoveProperty(PropertyBool.IsBountyHighPriorityTarget); else SetProperty(PropertyBool.IsBountyHighPriorityTarget, value); }
+        }
+
+        public int? BountyTargetRewardAmount
+        {
+            get => GetProperty(PropertyInt.BountyTargetRewardAmount);
+            set { if (value == null) RemoveProperty(PropertyInt.BountyTargetRewardAmount); else SetProperty(PropertyInt.BountyTargetRewardAmount, value.Value); }
+        }
     }
 }

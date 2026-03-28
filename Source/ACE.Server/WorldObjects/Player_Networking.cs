@@ -277,7 +277,7 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public void SendFriendStatusUpdates(bool previouslyOnline, bool isOnline)
         {
-            if(this.IsAdmin)
+            if (this.IsAdmin)
                 return;
 
             var appearOffline = GetAppearOffline();
@@ -381,7 +381,7 @@ namespace ACE.Server.WorldObjects
         public void SetFogColor(EnvironChangeType fogColor)
         {
             if (fogColor == EnvironChangeType.Clear && !currentFogColor.HasValue)
-                return;                
+                return;
 
             if (LandblockManager.GlobalFogColor.HasValue && currentFogColor != fogColor)
             {
@@ -512,6 +512,34 @@ namespace ACE.Server.WorldObjects
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns true if the two players are definitely connected from different IP addresses.
+        /// Returns false if they are on the same IP OR if we cannot determine the IPs (null sessions).
+        /// 
+        /// This is used to prevent same-household / same-IP abuse on PK quests and rewards.
+        /// On test servers, always returns true to allow testing with multiple accounts.
+        /// </summary>
+        public bool IsDifferentIPAddress(Player otherPlayer)
+        {
+            // On test servers we disable the IP check so multiple accounts from same IP can still complete quests
+            if (PropertyManager.GetBool("local_server").Item)
+            {
+                return true;
+            }
+
+            // If we can't determine a session or IP address for either player, return false just in case
+            if (otherPlayer?.Session?.EndPointC2S?.Address == null ||
+                this.Session?.EndPointC2S?.Address == null)
+            {
+                return false;
+            }
+
+            return !string.Equals(
+                this.Session.EndPointC2S.Address.ToString(),
+                otherPlayer.Session.EndPointC2S.Address.ToString(),
+                StringComparison.OrdinalIgnoreCase);
         }
     }
 }

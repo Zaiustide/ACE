@@ -69,7 +69,7 @@ namespace ACE.Server.WorldObjects
                 if (BountyContract.IsBountySystemEnabled)
                 {
                     if (worldObject is Player player)
-                        if (ActiveBounties.ContainsKey(player.Guid.Full))
+                        if (TryGetBountyContract(player.Guid.Full, out _))
                             player.UpdatePKTimer();
                 }
 
