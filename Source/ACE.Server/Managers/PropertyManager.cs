@@ -681,7 +681,11 @@ namespace ACE.Server.Managers
                 ("bounty_cooldown_target_expiration_time", new Property<long>(30, "the amount of time in minutes for a bounty target's cooldown penalty")),
                 ("bounty_minimum_player_level", new Property<long>(150, "the minimum player level that a bounty can be assigned to")),
                 ("pk_bounty_timer", new Property<long>(120, "the number of seconds where a player cannot perform certain actions (ie. teleporting) after encountering a bounty hunter")),
-                ("bounty_location_price_amount", new Property<long>(25, "the amount of pk trophies it costs to use the location finder of a bounty contract")),
+                ("bounty_currency_wcid", new Property<long>(1000003, "the WCID for the type of item used for the bounty currency (DEFAULT: is Phial Of Tears)")),
+                ("bounty_currency_return_amount", new Property<long>(1, "the amount of bounty currency to return for expired turn-ins)")),
+                ("bounty_wop_currency_wcid", new Property<long>(1000003, "the WCID for the type of item used for the bounty Writ of Pursuit currency (DEFAULT: is Phial Of Tears)")),
+                ("bounty_location_currency_wcid", new Property<long>(1000002, "the WCID for the type of item used for the bounty contract location finder (DEFAULT: is PK Trophy)")),
+                ("bounty_location_price_amount", new Property<long>(25, "the amount of bounty contract location finder currency it costs to use the location finder")),
                 ("bounty_max_contracts", new Property<long>(3, "the maximum amount of contracts a player can have"))
 
                 );
