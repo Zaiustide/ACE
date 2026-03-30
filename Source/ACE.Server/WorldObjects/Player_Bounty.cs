@@ -133,21 +133,20 @@ namespace ACE.Server.WorldObjects
                 var bountyName = bountyTarget.Name;
                 BountyEndTimestamp = Time.GetUnixTime();
 
-                var result = UpdateCompletedBountyInformation((uint)contract.BountyTargetGuid, contract);
+                var result = UpdateCompletedBountyInformation(bountyTarget, contract);
                 HandleBountyQuests(result);
                 SaveBountyInformation();
 
                 var wopCurrencyWeenie = BountyContract.BountyWopCurrencyWeenie;
-                var highPriority = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget);
                 var rewardAmount = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityTargetRewardAmount);
                 var rewardCurrency = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency);
 
                 SendDelayedNpcResponse(npc, $"You have successfully turned in your bounty for player \"{bountyName}\".");
 
-                if (highPriority.HasValue && highPriority.Value && rewardAmount.HasValue && rewardCurrency.HasValue)
+                if (result.IsHighPriorityTarget && rewardAmount.HasValue && rewardCurrency.HasValue)
                 {
                     var rewardedAmountString = wopCurrencyWeenie.BuildAmountString(rewardAmount.Value);
-                    SendDelayedNpcResponse(npc, $"This bounty was a high priorty target, you have been rewarded {rewardedAmountString}.",
+                    SendDelayedNpcResponse(npc, $"This bounty was a high priority target, you have been rewarded {rewardedAmountString}.",
                         () => GiveFromEmote(npc, (uint)rewardCurrency.Value, amount: rewardAmount.Value));
 
                     PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{Name} has completed a bounty contract for high priority target {bountyName} and received {rewardedAmountString}!", ChatMessageType.WorldBroadcast));
@@ -520,6 +519,13 @@ namespace ACE.Server.WorldObjects
             if (result.CountLast30Min >= 3) CompletePkQuestTask("BOUNTY_FAST_3", 1);
             if (result.CountLast60Min >= 8) CompletePkQuestTask("BOUNTY_FAST_8", 1);
             if (result.CountLast90Min >= 12) CompletePkQuestTask("BOUNTY_FAST_12", 1);
+
+            // high priority target
+            if (result.IsHighPriorityTarget)
+            {
+                CompletePkQuestTask("BOUNTY_PRIORITY_1", 1);
+                CompletePkQuestTask("BOUNTY_PRIORITY_3", 1);
+            }
         }
     }
 }

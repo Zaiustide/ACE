@@ -564,6 +564,7 @@ namespace ACE.Server.Entity.PKQuests
                     bounty_unique_3.TaskCount = 3;
                     _pkQuestList.Add(bounty_unique_3);
 
+                    // Complete bounties on 5 different players
                     var bounty_unique_5 = new PKQuest();
                     bounty_unique_5.QuestCode = "BOUNTY_UNIQUE_5";
                     bounty_unique_5.Description = "Complete bounties on 5 different players";
@@ -626,6 +627,24 @@ namespace ACE.Server.Entity.PKQuests
                     bounty_fast_12.Rewards = new List<string>() { "LUM,200000", "XP%,100", "DBKEY,10", "PHIAL,8", "PKTROPHY,80" };
                     bounty_fast_12.TaskCount = 1;
                     _pkQuestList.Add(bounty_fast_12);
+
+                    // High Priority Target
+                    var bounty_priority_1 = new PKQuest();
+                    bounty_priority_1.QuestCode = "BOUNTY_PRIORITY_1";
+                    bounty_priority_1.Description = "Complete 1 High Priority Bounty Contract";
+                    bounty_priority_1.RewardDescription = "15k luminance, 20% XP to next level, 1 Darkbeat Key, 1 Phial of Bloody Tears, 3 PK Trophies";
+                    bounty_priority_1.Rewards = new List<string>() { "LUM,15000", "XP%,20", "DBKEY,1", "PHIAL,1", "PKTROPHY,3" };
+                    bounty_priority_1.TaskCount = 1;
+                    _pkQuestList.Add(bounty_priority_1);
+
+                    // Complete 3 High Priority Bounty Contracts
+                    var bounty_priority_3 = new PKQuest();
+                    bounty_priority_3.QuestCode = "BOUNTY_PRIORITY_3";
+                    bounty_priority_3.Description = "Complete 3 High Priority Bounty Contracts";
+                    bounty_priority_3.RewardDescription = "50k luminance, 40% XP to next level, 3 Darkbeat Keys, 2 Phials of Bloody Tears, 15 PK Trophies";
+                    bounty_priority_3.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,2", "PKTROPHY,15" };
+                    bounty_priority_3.TaskCount = 3;
+                    _pkQuestList.Add(bounty_priority_3);
                 }
 
                 return _pkQuestList;
