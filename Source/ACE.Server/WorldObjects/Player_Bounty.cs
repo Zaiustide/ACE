@@ -130,33 +130,33 @@ namespace ACE.Server.WorldObjects
                     return false;
                 }
 
-                var bountyName = bountyTarget.Name;
-                BountyEndTimestamp = Time.GetUnixTime();
-
                 var result = UpdateCompletedBountyInformation(bountyTarget, contract);
                 HandleBountyQuests(result);
                 SaveBountyInformation();
 
-                var wopCurrencyWeenie = BountyContract.BountyWopCurrencyWeenie;
                 var rewardAmount = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityTargetRewardAmount);
-                var rewardCurrency = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency);
+                var rewardCurrencyWcid = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency);
 
-                SendDelayedNpcResponse(npc, $"You have successfully turned in your bounty for player \"{bountyName}\".");
-
-                if (result.IsHighPriorityTarget && rewardAmount.HasValue && rewardCurrency.HasValue)
-                {
-                    var rewardedAmountString = wopCurrencyWeenie.BuildAmountString(rewardAmount.Value);
-                    SendDelayedNpcResponse(npc, $"This bounty was a high priority target, you have been rewarded {rewardedAmountString}.",
-                        () => GiveFromEmote(npc, (uint)rewardCurrency.Value, amount: rewardAmount.Value));
-
-                    PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{Name} has completed a bounty contract for high priority target {bountyName} and received {rewardedAmountString}!", ChatMessageType.WorldBroadcast));
-                }
-
+                // Clear bounty target properties in case they were a high priority target, so they don't get rewarded multiple times and also so they can be selected again as a normal target in the future if they are still eligible.
                 bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget);
                 bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityTargetRewardAmount);
                 bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency);
                 bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyString.BountyPriorityOwnerName);
+
                 RemoveBountyContract((uint)contract.BountyTargetGuid);
+                BountyEndTimestamp = Time.GetUnixTime();
+
+                SendDelayedNpcResponse(npc, $"You have successfully turned in your bounty for player \"{bountyTarget.Name}\".");
+
+                if (result.IsHighPriorityTarget && rewardAmount.HasValue && rewardCurrencyWcid.HasValue)
+                {
+                    var wopCurrencyWeenie = DatabaseManager.World.GetOrThrowCachedWeenie((uint)rewardCurrencyWcid.Value);
+                    var rewardedAmountString = wopCurrencyWeenie.BuildAmountString(rewardAmount.Value);
+                    SendDelayedNpcResponse(npc, $"This bounty was a high priority target, you have been rewarded {rewardedAmountString}.",
+                        () => GiveFromEmote(npc, (uint)rewardCurrencyWcid.Value, amount: rewardAmount.Value));
+
+                    PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{Name} has completed a bounty contract for high priority target {bountyTarget.Name} and received {rewardedAmountString}!", ChatMessageType.WorldBroadcast));
+                }
 
                 return true;
             }
@@ -168,6 +168,13 @@ namespace ACE.Server.WorldObjects
             }
         }
 
+        /// <summary>
+        /// Called when the player tries to give a Writ of Pursuit to the bounty NPC.
+        /// Returns true if the writ should be destroyed, false if it should be given back to the player.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private bool CheckWritOfPursuit(WorldObject npc, WorldObject item)
         {
             if (npc.WeenieClassId != BountyContract.BountyNPCWcid ||
