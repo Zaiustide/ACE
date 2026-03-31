@@ -528,11 +528,9 @@ namespace ACE.Server.WorldObjects
 
             var durationMinutes = PropertyManager.GetLong("bounty_cooldown_target_expiration_time").Item;
 
-            var hardCooldownMinutes = durationMinutes * 0.2; // 20%
-
             var elapsed = DateTime.UtcNow - Time.GetDateTimeFromTimestamp(cooldown);
 
-            return elapsed.TotalMinutes < hardCooldownMinutes;
+            return elapsed.TotalMinutes < durationMinutes;
         }
 
         private void HandleBountyQuests(BountyCompletionResult result)
