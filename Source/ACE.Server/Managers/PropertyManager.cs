@@ -817,6 +817,8 @@ namespace ACE.Server.Managers
                 ("force_logout_materialization_duration", new Property<double>(1, "the number of seconds a player should materialize for before logging out")),
                 ("force_teleport_materialization_duration", new Property<double>(10.0, "the number of seconds after teleporting that a player should force materialize")),
                 ("bounty_last_location_duration", new Property<double>(30.0, "the number of seconds before a player can use the bounty contract's location finder again")),
+                ("bounty_weight_exponent", new Property<double>(0.75, "bounty weight tuning for selecting targets. More random selections when closer to 0.1, higher priority selections when closer to 1.0 for higher priority target selections")),
+                ("bounty_weight_multiplier", new Property<double>(20.0, "bounty weight multiplier tuning, use in conjunction with bounty_weight_exponent")),
                 ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again"))
                 
                 );

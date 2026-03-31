@@ -336,7 +336,7 @@ namespace ACE.Server.WorldObjects
                     !TryGetBountyContract(p.Guid.Full, out _) &&
                     !IsSameAllegiance(p) &&
                     IsDifferentIPAddress(p) &&
-                    HasCooldownPenaltyExpired(p)).ToList();
+                    !IsOnHardCooldown(p)).ToList();
 
                 if (eligibleTargets.Count == 0)
                 {
@@ -380,31 +380,38 @@ namespace ACE.Server.WorldObjects
 
         private Player SelectRandomWeightedTarget(List<Player> players)
         {
+            var weightedPlayers = new List<(Player player, double weight)>();
             double totalWeight = 0;
 
             foreach (var p in players)
-                totalWeight += GetBountyWeight(p);
+            {
+                var w = GetBountyWeight(p);
+                totalWeight += w;
+                weightedPlayers.Add((p, w));
+            }
+
+            if (totalWeight <= 0)
+                return players[ThreadSafeRandom.Next(0, players.Count - 1)];
 
             double roll = ThreadSafeRandom.Next(0f, (float)totalWeight);
 
             double cumulative = 0;
 
-            foreach (var player in players)
+            foreach (var entry in weightedPlayers)
             {
-                cumulative += GetBountyWeight(player);
+                cumulative += entry.weight;
 
                 if (roll <= cumulative)
-                    return player;
+                    return entry.player;
             }
 
-            return players.Last(); 
+            return weightedPlayers.Last().player;
         }
 
         private double GetBountyWeight(Player p)
         {
             double weight = 1;
 
-            // priority boost
             if (p.IsBountyHighPriorityTarget)
             {
                 weight *= 2; 
@@ -412,12 +419,23 @@ namespace ACE.Server.WorldObjects
 
             if (p.BountyPriorityTargetRewardAmount.HasValue)
             {
+                var bountyWeightExponent = PropertyManager.GetDouble("bounty_weight_exponent").Item;
+                var bountyWeightMultiplier = PropertyManager.GetDouble("bounty_weight_multiplier").Item;
+                bountyWeightMultiplier = Math.Max(0, bountyWeightMultiplier);
+
                 var wopCurrencyWeenie = BountyContract.BountyWopCurrencyWeenie;
                 var rewardAmount = p.BountyPriorityTargetRewardAmount.Value;
                 var maxStack = wopCurrencyWeenie.GetMaxStackSize();
+                if (maxStack <= 0)
+                    maxStack = 1;
                 var normalized = rewardAmount / (double)maxStack;
-                normalized = Math.Min(normalized, 1.0); 
-                weight += normalized * 100.0;
+                normalized = Math.Min(normalized, 1.0);
+
+                if (bountyWeightExponent <= 0)
+                    bountyWeightExponent = 0.75;
+
+                bountyWeightExponent = Math.Clamp(bountyWeightExponent, 0.25, 1.0);
+                weight += Math.Pow(normalized, bountyWeightExponent) * bountyWeightMultiplier;
             }
 
             return weight;
@@ -498,19 +516,23 @@ namespace ACE.Server.WorldObjects
             return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(BountyEndTimestamp.Value) > TimeSpan.FromMinutes(bountyCooldownExpirationDuration);
         }
 
-        private bool HasCooldownPenaltyExpired(Player bountyTarget)
+        private bool IsOnHardCooldown(Player p)
         {
-            // Check if the bounty hunter has a default cooldown for all bounty turn ins
             if (!HasCooldownPenaltyExpiredForHunter())
-                return false;
-
-            var cooldown = GetBountyCooldown(bountyTarget.Guid.Full);
-
-            if (cooldown == -1)
                 return true;
 
-            var bountyCooldownTargetExpirationDuration = PropertyManager.GetLong("bounty_cooldown_target_expiration_time").Item;
-            return DateTime.UtcNow - Time.GetDateTimeFromTimestamp(cooldown) > TimeSpan.FromMinutes(bountyCooldownTargetExpirationDuration);
+            var cooldown = GetBountyCooldown(p.Guid.Full);
+
+            if (cooldown == -1)
+                return false;
+
+            var durationMinutes = PropertyManager.GetLong("bounty_cooldown_target_expiration_time").Item;
+
+            var hardCooldownMinutes = durationMinutes * 0.2; // 20%
+
+            var elapsed = DateTime.UtcNow - Time.GetDateTimeFromTimestamp(cooldown);
+
+            return elapsed.TotalMinutes < hardCooldownMinutes;
         }
 
         private void HandleBountyQuests(BountyCompletionResult result)
