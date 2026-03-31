@@ -633,6 +633,7 @@ namespace ACE.Server.Managers
                 ("turnto_use_heading_stealth", new Property<bool>(false, "If TRUE, uses TurnToHeading (0x09) instead of TurnToObject (0x08) to prevent war detect plugins from detecting target ID (preserves visual, hides target info)")),
                 ("enforce_player_movement", new Property<bool>(false, "enable this to enforce server side verification of player movement")),
                 ("bounty_system_enabled", new Property<bool>(true, "enable this for the bounty hunter pvp feature")),
+                ("writ_of_pursuit_enabled", new Property<bool>(true, "enable this for the writ of pursuit bounty feature")),
                 ("bounty_allow_all_locations", new Property<bool>(false, "enable this to allow all locations to be valid bounty locations")),
                 ("bounty_allow_logged_out", new Property<bool>(false, "enable this to allow logged out characters to be valid bounties")),
                 ("bounty_pk_timer_active_enabled", new Property<bool>(true, "enable this for custom bounty pk timer active check")),

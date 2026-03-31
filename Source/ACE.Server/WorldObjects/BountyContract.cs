@@ -45,6 +45,7 @@ namespace ACE.Server.WorldObjects
         }
 
         public static bool IsBountySystemEnabled => PropertyManager.GetBool("bounty_system_enabled").Item;
+        public static bool IsWritOfPursuitEnabled => PropertyManager.GetBool("writ_of_pursuit_enabled").Item;
         public static bool IsBountyPkTimerActiveEnabled => PropertyManager.GetBool("bounty_pk_timer_active_enabled").Item;
         public static bool IsBountyExpirationsEnabled => PropertyManager.GetBool("bounty_expirations_enabled").Item;
         public static long MaxBountyContracts => PropertyManager.GetLong("bounty_max_contracts").Item;
@@ -88,38 +89,52 @@ namespace ACE.Server.WorldObjects
 
         public void UpdateUiEffects(Player owner)
         {
+            if (!BountyTargetGuid.HasValue)
+                return;
+
             if (IsBountyExpired)
             {
-                if (UiEffects == ACE.Entity.Enum.UiEffects.Undef)
-                    return;
-
-                UiEffects = ACE.Entity.Enum.UiEffects.Undef;
-                owner?.Session.Network.EnqueueSend(new GameMessagePublicUpdatePropertyInt(this, PropertyInt.UiEffects, (int)ACE.Entity.Enum.UiEffects.Undef));
-                owner?.SendBountyMessage($"{Name} has expired. Turn it in to a Bounty Collector and possibly receive some compensation.");
+                SetUiEffect(owner, ACE.Entity.Enum.UiEffects.Undef, $"{Name} has expired. Turn it in to a Bounty Collector and possibly receive some compensation.");
                 return;
             }
 
             if (IsBountyCompleted)
             {
-                if (UiEffects == ACE.Entity.Enum.UiEffects.Frost)
-                    return;
-
-                UiEffects = ACE.Entity.Enum.UiEffects.Frost;
-                owner?.Session.Network.EnqueueSend(new GameMessagePublicUpdatePropertyInt(this, PropertyInt.UiEffects, (int)ACE.Entity.Enum.UiEffects.Frost));
+                SetUiEffect(owner, ACE.Entity.Enum.UiEffects.Frost);
                 return;
             }
 
-            if (!BountyTargetGuid.HasValue)
-                return;
-
-            var target = PlayerManager.FindByGuid(new ObjectGuid((uint)BountyTargetGuid));
-            var highPriorityTarget = target?.GetProperty(PropertyBool.IsBountyHighPriorityTarget).GetValueOrDefault(false) ?? false;
-
-            if (highPriorityTarget && UiEffects != ACE.Entity.Enum.UiEffects.Magical)
+            if (IsWritOfPursuitEnabled)
             {
-                UiEffects = ACE.Entity.Enum.UiEffects.Magical;
-                owner?.Session.Network.EnqueueSend(new GameMessagePublicUpdatePropertyInt(this, PropertyInt.UiEffects, (int)ACE.Entity.Enum.UiEffects.Magical));
+                var highPriorityTarget = BountyManager.IsHighPriorityTarget((uint)BountyTargetGuid);
+
+                if (highPriorityTarget)
+                {
+
+                    SetUiEffect(owner, ACE.Entity.Enum.UiEffects.Magical);
+                    return;
+                }
             }
+
+            if (UiEffects != ACE.Entity.Enum.UiEffects.Fire)
+            {
+                SetUiEffect(owner, ACE.Entity.Enum.UiEffects.Fire);
+                return;
+            }
+        }
+
+        private void SetUiEffect(Player owner, UiEffects effect, string message = "")
+        {
+            if (UiEffects == effect)
+                return;
+
+            UiEffects = effect;
+
+            owner?.Session.Network.EnqueueSend(
+                new GameMessagePublicUpdatePropertyInt(this, PropertyInt.UiEffects, (int)effect));
+
+            if (!String.IsNullOrEmpty(message))
+                owner?.SendBountyMessage(message);
         }
 
         public override void ActOnUse(WorldObject activator)
@@ -270,26 +285,16 @@ namespace ACE.Server.WorldObjects
                 if (BountyTargetGuid == null)
                     return "The bounty contract has invalid target information. Please contact an admin if you believe this is in error.";
 
-                IPlayer bountyTarget = PlayerManager.GetOnlinePlayer(new ObjectGuid((uint)BountyTargetGuid));
-
-                if (bountyTarget == null)
-                    bountyTarget = PlayerManager.GetOfflinePlayer(new ObjectGuid((uint)BountyTargetGuid));
-
-                if (bountyTarget == null)
-                    return "The bounty contract has invalid target information. This likely means the target has deleted their character. Please contact an admin if you believe this is in error.";
-
                 var longDesc = "";
-                var name = bountyTarget.Name;
-                var highPriority = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget).GetValueOrDefault(false);
+                var name = BountyOwnerName;
 
                 var bountyLocationCurrencyWeenie = BountyLocationCurrencyWeenie;
-                var bountyLocationRewardAmount = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityTargetRewardAmount).GetValueOrDefault(0);
 
-                if (highPriority)
+                if (BountyManager.TryGetHighPriorityTarget((uint)BountyTargetGuid, out var target))
                 {
-                    var priorityOwnerName = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyString.BountyPriorityOwnerName);
-                    var priorityCurrency = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency);
-                    var priorityRewardAmount = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityTargetRewardAmount);
+                    var priorityOwnerName = target.OwnerName;
+                    var priorityCurrency = target.RewardCurrencyWcid;
+                    var priorityRewardAmount = target.RewardAmount;
                     var priortyRewardStringAmount = DatabaseManager.World.GetOrThrowCachedWeenie((uint)priorityCurrency).BuildAmountString((long)priorityRewardAmount);
                     longDesc += $"This contract is a high priority target assigned by {priorityOwnerName}. They are rewarding {priortyRewardStringAmount} for completing this contract.\n\n";
                     longDesc += $"Multiple people may be competing for a reward on this contract, only the first person to complete a contract for this target is rewarded.\n\n";

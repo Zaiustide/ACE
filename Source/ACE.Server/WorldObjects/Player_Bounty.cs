@@ -62,6 +62,9 @@ namespace ACE.Server.WorldObjects
 
         private void BountyTick()
         {
+            if (!BountyContract.IsBountySystemEnabled)
+                return;
+
             foreach (var contract in BountyContracts.Values)
             {
                 contract.UpdateUiEffects(this);
@@ -106,13 +109,6 @@ namespace ACE.Server.WorldObjects
                     return true;
                 }
 
-                var bountyTarget = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid));
-                if (bountyTarget == null || bountyTarget.IsPendingDeletion || bountyTarget.IsDeleted)
-                {
-                    SendDelayedNpcResponse(npc, "The bounty target for this contract no longer exists.", () => TryCreateForGive(npc, item));
-                    return false;
-                }
-
                 if (contract.IsBountyExpired)
                 {
                     var bountyCurrencyWeenie = BountyContract.BountyCurrencyWeenie;
@@ -130,6 +126,13 @@ namespace ACE.Server.WorldObjects
                     return false;
                 }
 
+                var bountyTarget = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid));
+                if (bountyTarget == null || bountyTarget.IsPendingDeletion || bountyTarget.IsDeleted)
+                {
+                    SendDelayedNpcResponse(npc, "The bounty target for this contract no longer exists.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
                 var result = UpdateCompletedBountyInformation(bountyTarget, contract);
                 HandleBountyQuests(result);
                 SaveBountyInformation();
@@ -144,6 +147,7 @@ namespace ACE.Server.WorldObjects
                 bountyTarget.RemoveProperty(ACE.Entity.Enum.Properties.PropertyString.BountyPriorityOwnerName);
 
                 RemoveBountyContract((uint)contract.BountyTargetGuid);
+                BountyManager.RemoveHighPriorityTarget((uint)contract.BountyTargetGuid);
                 BountyEndTimestamp = Time.GetUnixTime();
 
                 SendDelayedNpcResponse(npc, $"You have successfully turned in your bounty for player \"{bountyTarget.Name}\".");
@@ -186,6 +190,12 @@ namespace ACE.Server.WorldObjects
                 if (!BountyContract.IsBountySystemEnabled)
                 {
                     SendDelayedNpcResponse(npc, "Bounties are not enabled on this server.", () => TryCreateForGive(npc, item));
+                    return false;
+                }
+
+                if (!BountyContract.IsWritOfPursuitEnabled)
+                {
+                    SendDelayedNpcResponse(npc, "Writs of Pursuit are not enabled on this server.");
                     return false;
                 }
 
@@ -239,6 +249,7 @@ namespace ACE.Server.WorldObjects
                 player.SetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityTargetRewardAmount, rewardAmount);
                 player.SetProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency, (int)BountyContract.BountyWopCurrencyWcid);
                 player.SetProperty(ACE.Entity.Enum.Properties.PropertyString.BountyPriorityOwnerName, Name);
+                BountyManager.AddHighPriorityTarget(player.Guid.Full, rewardAmount, BountyContract.BountyWopCurrencyWcid, player.Name, Name);
 
                 SendDelayedNpcResponse(npc, $"You have successfully turned in your Writ of Pursuit for player \"{player.Name}\" with a reward amount of {wopRewardsString}.");
                 return true;
@@ -337,7 +348,9 @@ namespace ACE.Server.WorldObjects
                 var contract = WorldObjectFactory.CreateNewWorldObject(BountyContract.BountyContractWcid) as BountyContract;
 
                 contract.BountyOwnerGuid = (int?)Guid.Full;
+                contract.BountyOwnerName = Name;
                 contract.BountyTargetGuid = (int?)bountyTarget.Guid.Full;
+                contract.BountyTargetName = bountyTarget.Name;
                 contract.BountyCreationTimestamp = Time.GetUnixTime();
                 contract.IsBountyCompleted = false;
                 contract.Name = $"Bounty Contract: {bountyTarget.Name}";

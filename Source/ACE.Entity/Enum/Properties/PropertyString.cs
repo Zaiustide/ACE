@@ -104,5 +104,7 @@ namespace ACE.Entity.Enum.Properties
         // Bounty Contract Properties
         BountyInformationsSerialized = 55001,
         BountyPriorityOwnerName = 55002,
+        BountyOwnerName = 55003,
+        BountyTargetName = 55004,
     }
 }

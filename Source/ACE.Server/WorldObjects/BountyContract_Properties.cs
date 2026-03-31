@@ -10,10 +10,21 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyInt.BountyOwnerGuid); else SetProperty(PropertyInt.BountyOwnerGuid, value.Value); }
         }
 
+        public string BountyOwnerName
+        {
+            get => GetProperty(PropertyString.BountyOwnerName) ?? string.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyOwnerName); else SetProperty(PropertyString.BountyOwnerName, value); }
+        }
+
         public int? BountyTargetGuid
         {
             get => GetProperty(PropertyInt.BountyTargetGuid);
             set { if (value == null) RemoveProperty(PropertyInt.BountyTargetGuid); else SetProperty(PropertyInt.BountyTargetGuid, value.Value); }
+        }
+        public string BountyTargetName
+        {
+            get => GetProperty(PropertyString.BountyTargetName) ?? string.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyTargetName); else SetProperty(PropertyString.BountyTargetName, value); }
         }
 
         public double? BountyCreationTimestamp

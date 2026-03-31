@@ -4,6 +4,7 @@ using ACE.Common;
 using ACE.Common.Extensions;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Bounties;
+using ACE.Server.Managers;
 using Newtonsoft.Json;
 
 namespace ACE.Server.WorldObjects;
@@ -91,8 +92,9 @@ public partial class Player
 
     private BountyCompletionResult UpdateCompletedBountyInformation(IPlayer bountyTarget, BountyContract contract)
     {
+        var targetGuid = bountyTarget.Guid.Full;
         var info = BountyInformation;
-        var targetInfo = GetBountyTargetInfo(bountyTarget.Guid.Full);
+        var targetInfo = GetBountyTargetInfo(targetGuid);
 
         info.TotalBountiesCompleted++;
 
@@ -105,18 +107,18 @@ public partial class Player
             info.BountyCompletionTimestamps.RemoveAt(0);
 
         // repeat count
-        if (info.RepeatKillCounts.TryGetValue(targetInfo.TargetGuid, out var repeatCount))
+        if (info.RepeatKillCounts.TryGetValue(targetGuid, out var repeatCount))
             repeatCount++;
         else
             repeatCount = 1;
 
-        info.RepeatKillCounts[targetInfo.TargetGuid] = repeatCount;
+        info.RepeatKillCounts[targetGuid] = repeatCount;
 
         // unique
-        var isNewUnique = info.UniqueBountyTargets.Add(targetInfo.TargetGuid);
+        var isNewUnique = info.UniqueBountyTargets.Add(targetGuid);
 
         // high priority
-        var isHighPriorityTarget = bountyTarget.GetProperty(ACE.Entity.Enum.Properties.PropertyBool.IsBountyHighPriorityTarget) ?? false;
+        var isHighPriorityTarget = BountyManager.IsHighPriorityTarget(bountyTarget);
 
         if (isHighPriorityTarget)
         {
