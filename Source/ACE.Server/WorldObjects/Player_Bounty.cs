@@ -6,7 +6,9 @@ using ACE.Database;
 using ACE.Entity;
 using ACE.Entity.Enum;
 using ACE.Entity.Models;
+using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Entity.PKQuests;
 using ACE.Server.Factories;
 using ACE.Server.Managers;
 using ACE.Server.Network.GameMessages.Messages;
@@ -446,9 +448,9 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         /// <param name="bountyTargetGuid"></param>
         /// <returns></returns>
-        private bool TryMarkBountyComplete(uint bountyTargetGuid)
+        private bool TryMarkBountyComplete(Player bountyTarget, double damageDealt, double maxHealth, double currentHealth)
         {
-            if (!BountyContracts.TryGetValue(bountyTargetGuid, out var contract))
+            if (!BountyContracts.TryGetValue(bountyTarget.Guid.Full, out var contract))
                 return false;
 
             if (!contract.BountyTargetGuid.HasValue)
@@ -460,15 +462,27 @@ namespace ACE.Server.WorldObjects
             if (contract.IsBountyCompleted)
                 return false;
 
-            var player = PlayerManager.FindByGuid(new ObjectGuid((uint)contract.BountyTargetGuid));
-
-            if (player == null)
+            if (bountyTarget == null)
                 return false;
 
             contract.IsBountyCompleted = true;
+            contract.BountyTargetDamageDealt = Math.Floor(damageDealt);
+            contract.BountyOwnerRemainingHealthPercentage = GetPercentageRemaining(maxHealth, currentHealth, 1);
+            contract.BountyOwnerDamageReceived = Math.Floor(maxHealth - currentHealth);
             contract.UpdateUiEffects(this);
-            SendBountyMessage($"You have completed your bounty contract for {player.Name}! Turn in the contract to the Bounty Collector for your rewards!");
+            SendBountyMessage($"You have completed your bounty contract for {bountyTarget.Name}! Turn in the contract to the Bounty Collector for your rewards!");
             return true;
+        }
+
+        private double GetPercentageRemaining(double maxHp, double currentHp, int decimals = 1)
+        {
+            if (maxHp <= 0)
+                return 0;
+
+            var clampedCurrent = Math.Clamp(currentHp, 0f, maxHp);
+            var percentage = (clampedCurrent / maxHp) * 100.0;
+
+            return Math.Round(percentage, decimals);
         }
 
         private void CheckVisibleBounties()
@@ -536,16 +550,11 @@ namespace ACE.Server.WorldObjects
         private void HandleBountyQuests(BountyCompletionResult result)
         {
             // any bounty
-            CompletePkQuestTask("BOUNTY_ANY_1", 1);
-            CompletePkQuestTask("BOUNTY_ANY_5", 1);
-            CompletePkQuestTask("BOUNTY_ANY_10", 1);
+            CompletePkQuestTasks(PKQuests.PKQuests_BountyAny);
 
             // unique targets
             if (result.IsNewUniqueTarget)
-            {
-                CompletePkQuestTask("BOUNTY_UNIQUE_3", 1);
-                CompletePkQuestTask("BOUNTY_UNIQUE_5", 1);
-            }
+                CompletePkQuestTasks(PKQuests.PKQuests_BountyUnique);
 
             // repeat kills (same player)
             if (result.RepeatCount == 3)
@@ -562,10 +571,23 @@ namespace ACE.Server.WorldObjects
 
             // high priority target
             if (result.IsHighPriorityTarget)
-            {
-                CompletePkQuestTask("BOUNTY_PRIORITY_1", 1);
-                CompletePkQuestTask("BOUNTY_PRIORITY_3", 1);
-            }
+                CompletePkQuestTasks(PKQuests.PKQuests_BountyPriority);
+
+            // damage dealt
+            if (result.DamageDealt > 0)
+                CompletePkQuestTasks(PKQuests.PKQuests_BountyDamageTotal, (int)result.DamageDealt);
+
+            // single contract damage dealt
+            if (result.DamageDealt >= 2000)
+                CompletePkQuestTask("BOUNTY_DAMAGE_SINGLE_2K", 1);
+
+            // dealt more than twice the damage received
+            if (result.DamageReceived > 0 && result.DamageDealt >= result.DamageReceived * 2)
+                CompletePkQuestTask("BOUNTY_EFFICIENT", 1);
+
+            // damage taken 
+            if (result.DamageReceived > 0)
+                CompletePkQuestTask("BOUNTY_TANK_5K", (int)result.DamageReceived);
         }
     }
 }

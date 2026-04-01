@@ -142,7 +142,7 @@ namespace ACE.Server.WorldObjects
 
                     //Bounty Kills
                     if (BountyContract.IsBountySystemEnabled)
-                       pkPlayer.TryMarkBountyComplete(Guid.Full);
+                       pkPlayer.TryMarkBountyComplete(this, topDamager.TotalDamage, pkPlayer.Health.MaxValue, pkPlayer.Health.Current);
 
                     switch (Location.Landblock)
                     {

@@ -645,6 +645,89 @@ namespace ACE.Server.Entity.PKQuests
                     bounty_priority_3.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,2", "PKTROPHY,15" };
                     bounty_priority_3.TaskCount = 3;
                     _pkQuestList.Add(bounty_priority_3);
+
+                    // ==========================
+                    // DAMAGE DEALT (TOTAL)
+                    // ==========================
+
+                    // Deal 5,000 total damage to bounty targets
+                    var bounty_damage_5k = new PKQuest();
+                    bounty_damage_5k.QuestCode = "BOUNTY_DAMAGE_5K";
+                    bounty_damage_5k.Description = "Deal 5,000 damage to bounty targets";
+                    bounty_damage_5k.RewardDescription = "25k luminance, 25% XP to next level, 1 Darkbeat Key, 1 Phial, 8 PK Trophies";
+                    bounty_damage_5k.Rewards = new List<string>() { "LUM,25000", "XP%,25", "DBKEY,1", "PHIAL,1", "PKTROPHY,8" };
+                    bounty_damage_5k.TaskCount = 5000;
+                    _pkQuestList.Add(bounty_damage_5k);
+
+                    // Deal 25,000 total damage to bounty targets
+                    var bounty_damage_25k = new PKQuest();
+                    bounty_damage_25k.QuestCode = "BOUNTY_DAMAGE_25K";
+                    bounty_damage_25k.Description = "Deal 25,000 damage to bounty targets";
+                    bounty_damage_25k.RewardDescription = "60k luminance, 50% XP, 3 Keys, 3 Phials, 20 PK Trophies";
+                    bounty_damage_25k.Rewards = new List<string>() { "LUM,60000", "XP%,50", "DBKEY,3", "PHIAL,3", "PKTROPHY,20" };
+                    bounty_damage_25k.TaskCount = 25000;
+                    _pkQuestList.Add(bounty_damage_25k);
+
+                    // Deal 100,000 total damage to bounty targets
+                    var bounty_damage_100k = new PKQuest();
+                    bounty_damage_100k.QuestCode = "BOUNTY_DAMAGE_100K";
+                    bounty_damage_100k.Description = "Deal 100,000 damage to bounty targets";
+                    bounty_damage_100k.RewardDescription = "150k luminance, 90% XP, 8 Keys, 6 Phials, 60 PK Trophies";
+                    bounty_damage_100k.Rewards = new List<string>() { "LUM,150000", "XP%,90", "DBKEY,8", "PHIAL,6", "PKTROPHY,60" };
+                    bounty_damage_100k.TaskCount = 100000;
+                    _pkQuestList.Add(bounty_damage_100k);
+
+                    // ==========================
+                    // DAMAGE DEALT (SINGLE CONTRACT)
+                    // ==========================
+
+                    // Deal 2,000 damage in a single bounty contract
+                    var bounty_damage_single_2k = new PKQuest();
+                    bounty_damage_single_2k.QuestCode = "BOUNTY_DAMAGE_SINGLE_2K";
+                    bounty_damage_single_2k.Description = "Deal 2,000 damage in a single bounty";
+                    bounty_damage_single_2k.RewardDescription = "30k luminance, 30% XP, 2 Keys, 2 Phials, 10 PK Trophies";
+                    bounty_damage_single_2k.Rewards = new List<string>() { "LUM,30000", "XP%,30", "DBKEY,2", "PHIAL,2", "PKTROPHY,10" };
+                    bounty_damage_single_2k.TaskCount = 1;
+                    _pkQuestList.Add(bounty_damage_single_2k);
+
+                    // ==========================
+                    // DAMAGE TAKEN (SURVIVABILITY)
+                    // ==========================
+
+                    // Take 5,000 damage while completing bounty contracts
+                    var bounty_tank_5k = new PKQuest();
+                    bounty_tank_5k.QuestCode = "BOUNTY_TANK_5K";
+                    bounty_tank_5k.Description = "Take 5,000 damage while completing bounties";
+                    bounty_tank_5k.RewardDescription = "40k luminance, 35% XP, 2 Keys, 2 Phials, 12 PK Trophies";
+                    bounty_tank_5k.Rewards = new List<string>() { "LUM,40000", "XP%,35", "DBKEY,2", "PHIAL,2", "PKTROPHY,12" };
+                    bounty_tank_5k.TaskCount = 5000;
+                    _pkQuestList.Add(bounty_tank_5k);
+
+                    // ==========================
+                    // DAMAGE EFFICIENCY (SKILL-BASED)
+                    // ==========================
+
+                    // Complete a bounty while dealing at least 2x the damage you receive
+                    var bounty_efficiency = new PKQuest();
+                    bounty_efficiency.QuestCode = "BOUNTY_EFFICIENT";
+                    bounty_efficiency.Description = "Complete a bounty while dealing twice as much damage as you take";
+                    bounty_efficiency.RewardDescription = "50k luminance, 40% XP, 3 Keys, 3 Phials, 18 PK Trophies";
+                    bounty_efficiency.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,3", "PKTROPHY,18" };
+                    bounty_efficiency.TaskCount = 1;
+                    _pkQuestList.Add(bounty_efficiency);
+
+                    // ==========================
+                    // DAILY DAMAGE DEALT
+                    // ==========================
+
+                    // Deal 10,000 damage to bounty targets in a single day
+                    var bounty_daily_damage_10k = new PKQuest();
+                    bounty_daily_damage_10k.QuestCode = "BOUNTY_DAILY_DAMAGE_10K";
+                    bounty_daily_damage_10k.Description = "Deal 10,000 damage to bounty targets in a day";
+                    bounty_daily_damage_10k.RewardDescription = "50k luminance, 40% XP, 3 Keys, 2 Phials, 20 PK Trophies";
+                    bounty_daily_damage_10k.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,2", "PKTROPHY,20" };
+                    bounty_daily_damage_10k.TaskCount = 10000;
+                    _pkQuestList.Add(bounty_daily_damage_10k);
                 }
 
                 return _pkQuestList;
@@ -688,6 +771,18 @@ namespace ACE.Server.Entity.PKQuests
         public static string[] PKQuests_BountyRepeat = { "BOUNTY_REPEAT_3", "BOUNTY_REPEAT_5" };
 
         public static string[] PKQuests_BountyFast = { "BOUNTY_FAST_2", "BOUNTY_FAST_3", "BOUNTY_FAST_8", "BOUNTY_FAST_12" };
+
+        public static string[] PKQuests_BountyPriority = { "BOUNTY_PRIORITY_1", "BOUNTY_PRIORITY_3" };
+
+        public static string[] PKQuests_BountyDamageTotal = { "BOUNTY_DAMAGE_5K", "BOUNTY_DAMAGE_25K", "BOUNTY_DAMAGE_100K" };
+
+        public static string[] PKQuests_BountyDamageSingle = { "BOUNTY_DAMAGE_SINGLE_2K" };
+
+        public static string[] PKQuests_BountyDamageTaken = { "BOUNTY_TANK_5K" };
+
+        public static string[] PKQuests_BountyEfficiency = { "BOUNTY_EFFICIENT" };
+
+        public static string[] PKQuests_BountyDailyDamage = { "BOUNTY_DAILY_DAMAGE_10K" };
 
         public static PKQuest GetPkQuestByCode(string questCode)
         {

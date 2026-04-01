@@ -21,6 +21,7 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyInt.BountyTargetGuid);
             set { if (value == null) RemoveProperty(PropertyInt.BountyTargetGuid); else SetProperty(PropertyInt.BountyTargetGuid, value.Value); }
         }
+
         public string BountyTargetName
         {
             get => GetProperty(PropertyString.BountyTargetName) ?? string.Empty;
@@ -38,10 +39,29 @@ namespace ACE.Server.WorldObjects
             get => GetProperty(PropertyBool.IsBountyCompleted) ?? false;
             set { if (!value) RemoveProperty(PropertyBool.IsBountyCompleted); else SetProperty(PropertyBool.IsBountyCompleted, value); }
         }
+
         public double? BountyContractLastLocationTimestamp
         {
             get => GetProperty(PropertyFloat.BountyContractLastLocationTimestamp);
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyContractLastLocationTimestamp); else SetProperty(PropertyFloat.BountyContractLastLocationTimestamp, value.Value); }
+        }
+
+        public double? BountyTargetDamageDealt
+        {
+            get => GetProperty(PropertyFloat.BountyTargetDamageDealt);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyTargetDamageDealt); else SetProperty(PropertyFloat.BountyTargetDamageDealt, value.Value); }
+        }
+
+        public double? BountyOwnerDamageReceived
+        {
+            get => GetProperty(PropertyFloat.BountyOwnerDamageReceived);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyOwnerDamageReceived); else SetProperty(PropertyFloat.BountyOwnerDamageReceived, value.Value); }
+        }
+
+        public double? BountyOwnerRemainingHealthPercentage
+        {
+            get => GetProperty(PropertyFloat.BountyOwnerRemainingHealthPercentage);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyOwnerRemainingHealthPercentage); else SetProperty(PropertyFloat.BountyOwnerRemainingHealthPercentage, value.Value); }
         }
     }
 }

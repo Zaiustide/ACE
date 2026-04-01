@@ -61,6 +61,10 @@ public partial class Player
         public bool IsHighPriorityTarget;
         public uint RepeatCount;
         public uint DailyHighPriorityCount;
+        public uint DamageDealt { get; set; }
+        public uint TotalDamageDealt { get; set; }
+        public uint TotalDamageReceived { get; set; }
+        public uint DamageReceived { get; set; }
 
         public int CountLast30Min;
         public int CountLast60Min;
@@ -82,6 +86,22 @@ public partial class Player
         info.BountyCompletionTimestamps.Add(DateTime.UtcNow);
         if (info.BountyCompletionTimestamps.Count > 30)
             info.BountyCompletionTimestamps.RemoveAt(0);
+
+        // damage dealt
+        if (contract.BountyTargetDamageDealt.HasValue && contract.BountyOwnerDamageReceived.HasValue)
+        {
+            info.TotalDamageDealtToBountyTargets += (uint)contract.BountyTargetDamageDealt;
+            info.TotalDamageReceived += (uint)contract.BountyOwnerDamageReceived;
+            info.TotalDailyDamageDealt += (uint)contract.BountyTargetDamageDealt;
+
+            if (info.DailyTargetDamageDealt.TryGetValue(targetGuid, out var dmg))
+                info.DailyTargetDamageDealt[targetGuid] = dmg + (uint)contract.BountyTargetDamageDealt;
+            else
+                info.DailyTargetDamageDealt[targetGuid] = (uint)contract.BountyTargetDamageDealt;
+
+            targetInfo.TotalDamageReceived += (uint)contract.BountyTargetDamageDealt;
+        }
+
 
         // repeat count
         if (info.RepeatKillCounts.TryGetValue(targetGuid, out var repeatCount))
@@ -111,6 +131,8 @@ public partial class Player
             IsHighPriorityTarget = isHighPriorityTarget,
             RepeatCount = repeatCount,
             DailyHighPriorityCount = info.TotalDailyHighPriorityBountiesCompleted,
+            DamageDealt = (uint)contract.BountyTargetDamageDealt,
+            DamageReceived = (uint)contract.BountyOwnerDamageReceived,
             CountLast30Min = GetBountiesCompletedInLastMinutes(30),
             CountLast60Min = GetBountiesCompletedInLastMinutes(60),
             CountLast90Min = GetBountiesCompletedInLastMinutes(90)
@@ -136,6 +158,8 @@ public partial class Player
             BountyInformation.BountyCompletionTimestamps.Clear();
             BountyInformation.LastBountyQuestResetDate = today;
             BountyInformation.TotalDailyHighPriorityBountiesCompleted = 0;
+            BountyInformation.DailyTargetDamageDealt.Clear();
+            BountyInformation.TotalDailyDamageDealt = 0;
 
             SaveBountyInformation();
         }
