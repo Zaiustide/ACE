@@ -19,38 +19,15 @@ public partial class Player
         {
             if (_bountyInformation == null)
             {
-                _bountyInformation = LoadBountyInformation();
+                _bountyInformation = this.LoadBountyInformation();
             }
             return _bountyInformation;
         }
     }
 
-    private BountyInformation LoadBountyInformation()
-    {
-        if (string.IsNullOrEmpty(BountyInformationsSerialized))
-            return new BountyInformation();
-        try
-        {
-            return JsonConvert.DeserializeObject<BountyInformation>(BountyInformationsSerialized)
-                   ?? new BountyInformation();
-        }
-        catch (Exception ex)
-        {
-            log.Error($"Failed to deserialize BountyInformations for player {Name} (Guid: {Guid.Full}). Exception: {ex}");
-            return new BountyInformation();
-        }
-    }
-
     private void SaveBountyInformation()
     {
-        try
-        {
-            BountyInformationsSerialized = JsonConvert.SerializeObject(BountyInformation);
-        }
-        catch (Exception ex)
-        {
-            log.Error($"Failed to serialize BountyInformations for player {Name} (Guid: {Guid.Full}). Exception: {ex}");
-        }
+        this.SaveBountyInformation(BountyInformation);
     }
 
     private double GetBountyCooldown(uint targetGuid)
