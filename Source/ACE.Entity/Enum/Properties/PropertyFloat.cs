@@ -248,6 +248,10 @@ namespace ACE.Entity.Enum.Properties
         //Bounty Props
         BountyCreationTimestamp = 53003,
         BountyEndTimestamp = 53004,
-        BountyContractLastLocationTimestamp = 53005
+        BountyContractLastLocationTimestamp = 53005,
+        BountyOwnerRemainingHealthPercentage = 53006,
+        BountyOwnerDamageDealt = 53007,
+        BountyOwnerDamageReceived = 53008,
+        BountyTargetDamageDealt = 53009,
     }
 }

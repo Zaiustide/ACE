@@ -1614,10 +1614,22 @@ namespace ACE.Server.WorldObjects
             set { if (!value) RemoveProperty(PropertyBool.IsBountyHighPriorityTarget); else SetProperty(PropertyBool.IsBountyHighPriorityTarget, value); }
         }
 
-        public int? BountyTargetRewardAmount
+        public int? BountyPriorityTargetRewardAmount
         {
-            get => GetProperty(PropertyInt.BountyTargetRewardAmount);
-            set { if (value == null) RemoveProperty(PropertyInt.BountyTargetRewardAmount); else SetProperty(PropertyInt.BountyTargetRewardAmount, value.Value); }
+            get => GetProperty(PropertyInt.BountyPriorityTargetRewardAmount);
+            set { if (value == null) RemoveProperty(PropertyInt.BountyPriorityTargetRewardAmount); else SetProperty(PropertyInt.BountyPriorityTargetRewardAmount, value.Value); }
+        }
+
+        public string BountyPriorityOwnerName
+        {
+            get => GetProperty(PropertyString.BountyPriorityOwnerName) ?? string.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyPriorityOwnerName); else SetProperty(PropertyString.BountyPriorityOwnerName, value); }
+        }
+
+        public int? BountyPriorityCurrency
+        {
+            get => GetProperty(PropertyInt.BountyPriorityCurrency);
+            set { if (value == null) RemoveProperty(PropertyInt.BountyPriorityCurrency); else SetProperty(PropertyInt.BountyPriorityCurrency, value.Value); }
         }
     }
 }
