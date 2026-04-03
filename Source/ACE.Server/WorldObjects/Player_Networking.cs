@@ -1,5 +1,5 @@
 using System;
-
+using System.Threading.Tasks;
 using ACE.Common;
 using ACE.Common.Extensions;
 using ACE.Database.Models.Shard;
@@ -131,6 +131,7 @@ namespace ACE.Server.WorldObjects
             HandleDBUpdates();
 
             HandleTownControlQuestStamps();
+            HandleAccessControlOnLogin();
 
             if (ServerManager.ShutdownInitiated)
             {

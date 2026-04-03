@@ -103,5 +103,8 @@ namespace ACE.Entity.Enum.Properties
 
         // Bounty Contract Properties
         BountyInformationsSerialized = 55001,
+
+        PlayerAccessControlSerialized = 56001,
+
     }
 }

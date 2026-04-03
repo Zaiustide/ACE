@@ -756,6 +756,7 @@ namespace ACE.Server.WorldObjects
             PlayerManager.RemovePlayerFromFinalLogoffQueue(this);
             CurrentLandblock?.RemoveWorldObject(Guid, false);
             SetPropertiesAtLogOut();
+            HandleAccessControlOnLogout();
             SavePlayerToDatabase();
             PlayerManager.SwitchPlayerFromOnlineToOffline(this);
 

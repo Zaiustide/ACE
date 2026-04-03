@@ -111,7 +111,7 @@ namespace ACE.Server.Network.Handlers
                         account = DatabaseManager.Authentication.CreateAccount(loginRequest.Account.ToLower(), loginRequest.Password, accessLevel, session.EndPointC2S.Address);
                     }
                 }
-            }           
+            }
 
             try
             {
@@ -122,7 +122,7 @@ namespace ACE.Server.Network.Handlers
             {
                 log.Error("Error in HandleLoginRequest trying to find the account.", ex);
                 session.Terminate(SessionTerminationReason.AccountSelectCallbackException);
-            }         
+            }
         }
 
 
