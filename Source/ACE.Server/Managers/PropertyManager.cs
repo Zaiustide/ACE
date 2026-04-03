@@ -681,6 +681,7 @@ namespace ACE.Server.Managers
                 ("bounty_cooldown_target_expiration_time", new Property<long>(30, "the amount of time in minutes for a bounty target's cooldown penalty")),
                 ("bounty_minimum_player_level", new Property<long>(150, "the minimum player level that a bounty can be assigned to")),
                 ("pk_bounty_timer", new Property<long>(120, "the number of seconds where a player cannot perform certain actions (ie. teleporting) after encountering a bounty hunter")),
+                ("town_control_event_cooldown_minutes", new Property<long>(15, "the number of minutes a player must wait before re-entering a town control event")),
                 ("bounty_location_price_amount", new Property<long>(25, "the amount of pk trophies it costs to use the location finder of a bounty contract")),
                 ("bounty_max_contracts", new Property<long>(3, "the maximum amount of contracts a player can have"))
 

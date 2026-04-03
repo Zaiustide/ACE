@@ -750,6 +750,9 @@ namespace ACE.Server.WorldObjects
             if (UnderLifestoneProtection)
                 LifestoneProtectionDispel();
 
+            // Check if a player is leaving a town control event
+            HandleTownControlOnLeave(prevLoc);
+
             //For Zerg controlled landblocks, don't allow more than X players from the same allegiance at a time
             if (ZergControlLandblocks.IsZergControlLandblock(newPosition.Landblock)
                 && this.WeenieType != WeenieType.Sentinel
@@ -811,6 +814,10 @@ namespace ACE.Server.WorldObjects
                             Teleport(Sanctuary, force: true);
                             return;
                         }
+
+                        // Stamp IP when entering a town control landblock
+                        if (!HandleTownControlOnEnter(newPosition))
+                            return;
 
                         //If there's an active indoor WB event, and you're teleporting into that landblock,
                         //check if the max number of entries per allegiance has been exceeded

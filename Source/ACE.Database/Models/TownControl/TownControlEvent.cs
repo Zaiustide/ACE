@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ACE.Database.Models.TownControl
 {
@@ -23,5 +23,11 @@ namespace ACE.Database.Models.TownControl
         public string DefendingClanName { get; set; }
 
         public bool? IsAttackSuccess { get; set; }
+    }
+
+    public partial class TownControlEvent
+    {
+        [NotMapped]
+        public Dictionary<string, DateTime> IpAccessHistory { get; set; } = new Dictionary<string, DateTime>();
     }
 }
