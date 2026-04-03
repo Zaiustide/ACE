@@ -43,6 +43,7 @@ namespace ACE.Server.WorldObjects
 
             var accessControlData = AccessControl.AccessHistory.GetOrAdd(ip, ip => new PlayerAccessControlData { IpAddress = ip });
             accessControlData.LastLoginTime = DateTime.UtcNow;
+            accessControlData.LoginCount += 1;
 
             SavePlayerAccessControl();
         }

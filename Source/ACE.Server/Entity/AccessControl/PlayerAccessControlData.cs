@@ -11,6 +11,7 @@ namespace ACE.Server.Entity.AccessControl
         public string IpAddress { get; set; }
 
         public bool? IsVpn;
+        public ulong LoginCount { get; set; } = 0;
         public DateTime LastLoginTime { get; set; }
         public DateTime LastLogoutTime { get; set; }
 
