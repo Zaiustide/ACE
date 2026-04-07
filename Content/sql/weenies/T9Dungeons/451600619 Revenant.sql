@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451600619;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451600619, 'T9_zombierevenant', 10, '2026-03-23 12:07:35') /* Creature */;
+VALUES (451600619, 'T9_zombierevenant', 10, '2026-04-06 08:16:45') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451600619,   1,         16) /* ItemType - Creature */
@@ -21,7 +21,7 @@ VALUES (451600619,   1,         16) /* ItemType - Creature */
      , (451600619, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600619, 140,          1) /* AiOptions - CanOpenDoors */
      , (451600619, 146,   50000000) /* XpOverride */
-     , (451600619, 307,        175) /* DamageRating */
+     , (451600619, 307,         75) /* DamageRating */
      , (451600619, 308,         35) /* DamageResistRating */
      , (451600619, 332,       5200) /* LuminanceAward */
      , (451600619, 386,         25) /* Overpower */;
@@ -87,7 +87,7 @@ VALUES (451600619,   1, 0x020016A5) /* Setup */
      , (451600619,  35,      10021) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451600619,   1,1200, 0, 0) /* Strength */
+VALUES (451600619,   1, 800, 0, 0) /* Strength */
      , (451600619,   2,3000, 0, 0) /* Endurance */
      , (451600619,   3, 500, 0, 0) /* Quickness */
      , (451600619,   4,1600, 0, 0) /* Coordination */
@@ -100,7 +100,7 @@ VALUES (451600619,   1, 25735, 0, 0,31235) /* MaxHealth */
      , (451600619,   5, 31080, 0, 0,31235) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451600619,  6, 0, 3, 0, 100, 0, 0) /* MeleeDefense         Specialized */
+VALUES (451600619,  6, 0, 3, 0,  80, 0, 0) /* MeleeDefense         Specialized */
      , (451600619,  7, 0, 3, 0, 380, 0, 0) /* MissileDefense       Specialized */
      , (451600619, 14, 0, 3, 0, 230, 0, 0) /* ArcaneLore          Specialized */
      , (451600619, 15, 0, 3, 0, 239, 0, 0) /* MagicDefense         Specialized */
@@ -160,5 +160,7 @@ INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `dela
 VALUES (@parent_id, 0, 17 /* LocalBroadcast */, 0, 1, NULL, 'As it collapses into a mass of bone and rot, the ancient warrior moans, "All our powers come to dust. Is this how it shall end for proud Dericost?"', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (451600619, 2, 35096,  1, 0,    0, False) /* Create Pyre Blade (35096) for Wield */;
+VALUES (451600619, 2, 35096,  1, 0,    0, False) /* Create Pyre Blade (35096) for Wield */
+     , (451600619, 9,361844,  1, 0, 0.04, False) /* Create Metos Shard (361844) for ContainTreasure */
+     , (451600619, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */;
 

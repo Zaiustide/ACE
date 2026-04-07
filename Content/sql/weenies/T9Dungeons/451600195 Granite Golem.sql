@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451600195;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451600195, 'T9_golemgranite', 10, '2026-03-23 11:12:42') /* Creature */;
+VALUES (451600195, 'T9_golemgranite', 10, '2026-04-06 08:17:52') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451600195,   1,         16) /* ItemType - Creature */
@@ -19,8 +19,8 @@ VALUES (451600195,   1,         16) /* ItemType - Creature */
      , (451600195,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451600195, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600195, 146,   35000000) /* XpOverride */
-     , (451600195, 307,        225) /* DamageRating */
-     , (451600195, 308,         75) /* DamageResistRating */
+     , (451600195, 307,        100) /* DamageRating */
+     , (451600195, 308,         45) /* DamageResistRating */
      , (451600195, 332,       4000) /* LuminanceAward */
      , (451600195, 386,         25) /* Overpower */;
 
@@ -83,7 +83,7 @@ VALUES (451600195,   1, 0x020007D7) /* Setup */
      , (451600195,  35,      10021) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451600195,   1,12000, 0, 0) /* Strength */
+VALUES (451600195,   1,4000, 0, 0) /* Strength */
      , (451600195,   2,20000, 0, 0) /* Endurance */
      , (451600195,   3, 500, 0, 0) /* Quickness */
      , (451600195,   4,1200, 0, 0) /* Coordination */
@@ -96,7 +96,7 @@ VALUES (451600195,   1, 13000, 0, 0,28000) /* MaxHealth */
      , (451600195,   5, 33860, 0, 0,34000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451600195,  6, 0, 3, 0, 269, 0, 0) /* MeleeDefense         Specialized */
+VALUES (451600195,  6, 0, 3, 0, 214, 0, 0) /* MeleeDefense         Specialized */
      , (451600195,  7, 0, 3, 0, 460, 0, 0) /* MissileDefense       Specialized */
      , (451600195, 14, 0, 2, 0, 190, 0, 0) /* ArcaneLore          Trained */
      , (451600195, 15, 0, 3, 0,  15, 0, 0) /* MagicDefense         Specialized */
@@ -143,8 +143,6 @@ VALUES (@parent_id, 0, 5 /* Motion */, 0, 1, 0x41000003 /* Ready */, NULL, NULL,
      , (@parent_id, 1, 5 /* Motion */, 0, 1, 0x41000014 /* Sleeping */, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (451600195, 9,  3671,  0, 0, 0.05, False) /* Create Granite Heart (3671) for ContainTreasure */
-     , (451600195, 9,     0,  0, 0, 0.95, False) /* Create nothing for ContainTreasure */
-     , (451600195, 9,  6353,  0, 0, 0.03, False) /* Create Pyreal Mote (6353) for ContainTreasure */
-     , (451600195, 9,     0,  0, 0, 0.97, False) /* Create nothing for ContainTreasure */;
+VALUES (451600195, 9,361844,  1, 0, 0.04, False) /* Create Metos Shard (361844) for ContainTreasure */
+     , (451600195, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */;
 
