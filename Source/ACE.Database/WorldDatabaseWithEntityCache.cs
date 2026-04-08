@@ -105,6 +105,12 @@ namespace ACE.Database
             return value;
         }
 
+        public ACE.Entity.Models.Weenie GetOrThrowCachedWeenie(uint weenieClassId)
+        {
+            var weenie = GetCachedWeenie(weenieClassId);
+            return weenie == null ? throw new Exception($"Weenie with ClassId {weenieClassId} not found in database.") : weenie;
+        }
+
         /// <summary>
         /// Weenies will have all their collections populated except the following: LandblockInstances, PointsOfInterest
         /// </summary>

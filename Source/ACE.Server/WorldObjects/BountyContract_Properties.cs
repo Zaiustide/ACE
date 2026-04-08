@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ACE.Entity.Enum.Properties;
 
 namespace ACE.Server.WorldObjects
@@ -15,10 +10,22 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyInt.BountyOwnerGuid); else SetProperty(PropertyInt.BountyOwnerGuid, value.Value); }
         }
 
+        public string BountyOwnerName
+        {
+            get => GetProperty(PropertyString.BountyOwnerName) ?? string.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyOwnerName); else SetProperty(PropertyString.BountyOwnerName, value); }
+        }
+
         public int? BountyTargetGuid
         {
             get => GetProperty(PropertyInt.BountyTargetGuid);
             set { if (value == null) RemoveProperty(PropertyInt.BountyTargetGuid); else SetProperty(PropertyInt.BountyTargetGuid, value.Value); }
+        }
+
+        public string BountyTargetName
+        {
+            get => GetProperty(PropertyString.BountyTargetName) ?? string.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyTargetName); else SetProperty(PropertyString.BountyTargetName, value); }
         }
 
         public double? BountyCreationTimestamp
@@ -27,15 +34,40 @@ namespace ACE.Server.WorldObjects
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyCreationTimestamp); else SetProperty(PropertyFloat.BountyCreationTimestamp, value.Value); }
         }
 
-        public bool IsBountyCompleted
-        {
-            get => GetProperty(PropertyBool.IsBountyCompleted) ?? false;
-            set { if (!value) RemoveProperty(PropertyBool.IsBountyCompleted); else SetProperty(PropertyBool.IsBountyCompleted, value); }
-        }
         public double? BountyContractLastLocationTimestamp
         {
             get => GetProperty(PropertyFloat.BountyContractLastLocationTimestamp);
             set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyContractLastLocationTimestamp); else SetProperty(PropertyFloat.BountyContractLastLocationTimestamp, value.Value); }
+        }
+
+        public double? BountyTargetDamageDealt
+        {
+            get => GetProperty(PropertyFloat.BountyTargetDamageDealt);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyTargetDamageDealt); else SetProperty(PropertyFloat.BountyTargetDamageDealt, value.Value); }
+        }
+
+        public double? BountyOwnerDamageReceived
+        {
+            get => GetProperty(PropertyFloat.BountyOwnerDamageReceived);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyOwnerDamageReceived); else SetProperty(PropertyFloat.BountyOwnerDamageReceived, value.Value); }
+        }
+
+        public double? BountyOwnerRemainingHealthPercentage
+        {
+            get => GetProperty(PropertyFloat.BountyOwnerRemainingHealthPercentage);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyOwnerRemainingHealthPercentage); else SetProperty(PropertyFloat.BountyOwnerRemainingHealthPercentage, value.Value); }
+        }
+
+        public int BountyKillStreakCount
+        {
+            get => GetProperty(PropertyInt.BountyKillStreakCount) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt.BountyKillStreakCount); else SetProperty(PropertyInt.BountyKillStreakCount, value); }
+        }
+
+        public int BountyContractStateRaw
+        {
+            get => GetProperty(PropertyInt.BountyContractStateRaw) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt.BountyContractStateRaw); else SetProperty(PropertyInt.BountyContractStateRaw, value); }
         }
     }
 }

@@ -2,8 +2,9 @@ using System;
 using System.Linq;
 using ACE.Common;
 using ACE.Common.Extensions;
+using ACE.Server.Entity;
 using ACE.Server.Entity.Bounties;
-using Newtonsoft.Json;
+using ACE.Server.Managers;
 
 namespace ACE.Server.WorldObjects;
 
@@ -17,43 +18,20 @@ public partial class Player
         {
             if (_bountyInformation == null)
             {
-                _bountyInformation = LoadBountyInformation();
+                _bountyInformation = this.LoadSerialized<BountyInformation>(ACE.Entity.Enum.Properties.PropertyString.BountyInformationsSerialized);
             }
             return _bountyInformation;
         }
     }
 
-    private BountyInformation LoadBountyInformation()
-    {
-        if (string.IsNullOrEmpty(BountyInformationsSerialized))
-            return new BountyInformation();
-        try
-        {
-            return JsonConvert.DeserializeObject<BountyInformation>(BountyInformationsSerialized)
-                   ?? new BountyInformation();
-        }
-        catch (Exception ex)
-        {
-            log.Error($"Failed to deserialize BountyInformations for player {Name} (Guid: {Guid.Full}). Exception: {ex}");
-            return new BountyInformation();
-        }
-    }
-
     private void SaveBountyInformation()
     {
-        try
-        {
-            BountyInformationsSerialized = JsonConvert.SerializeObject(BountyInformation);
-        }
-        catch (Exception ex)
-        {
-            log.Error($"Failed to serialize BountyInformations for player {Name} (Guid: {Guid.Full}). Exception: {ex}");
-        }
+        this.SaveSerialized(ACE.Entity.Enum.Properties.PropertyString.BountyInformationsSerialized, BountyInformation);
     }
 
     private double GetBountyCooldown(uint targetGuid)
     {
-        var target = GetBountyTarget(targetGuid);
+        var target = GetBountyTargetInfo(targetGuid);
 
         return target.LastCompletedTimestamp;
     }
@@ -69,7 +47,7 @@ public partial class Player
     private void SaveBountyExpiration(uint targetGuid)
     {
         var info = BountyInformation;
-        var target = GetBountyTarget(targetGuid);
+        var target = GetBountyTargetInfo(targetGuid);
         target.TotalExpirations++;
         info.TotalBountyExpirationsCount++;
         SaveBountyInformation();
@@ -79,22 +57,31 @@ public partial class Player
     {
         public uint TargetGuid;
         public bool IsNewUniqueTarget;
+        public bool IsHighPriorityTarget;
+        public bool IsKillStreakCompletion;
         public uint RepeatCount;
+        public uint DailyHighPriorityCount;
+        public uint KillStreak;
+        public uint DamageDealt { get; set; }
+        public uint TotalDamageDealt { get; set; }
+        public uint TotalDamageReceived { get; set; }
+        public uint DamageReceived { get; set; }
 
         public int CountLast30Min;
         public int CountLast60Min;
         public int CountLast90Min;
     }
 
-    private BountyCompletionResult UpdateCompletedBountyInformation(uint bountyTargetGuid, BountyContract contract)
+    private BountyCompletionResult UpdateCompletedBountyInformation(IPlayer bountyTarget, BountyContract contract)
     {
+        var targetGuid = bountyTarget.Guid.Full;
         var info = BountyInformation;
-        var target = GetBountyTarget(bountyTargetGuid);
+        var targetInfo = GetBountyTargetInfo(targetGuid);
 
         info.TotalBountiesCompleted++;
 
-        target.LastCompletedTimestamp = Time.GetUnixTime();
-        target.TotalCompletions++;
+        targetInfo.LastCompletedTimestamp = Time.GetUnixTime();
+        targetInfo.TotalCompletions++;
 
         // timestamps
         info.BountyCompletionTimestamps.Add(DateTime.UtcNow);
@@ -102,28 +89,56 @@ public partial class Player
             info.BountyCompletionTimestamps.RemoveAt(0);
 
         // repeat count
-        if (info.RepeatKillCounts.TryGetValue(bountyTargetGuid, out var repeatCount))
+        if (info.RepeatKillCounts.TryGetValue(targetGuid, out var repeatCount))
             repeatCount++;
         else
             repeatCount = 1;
 
-        info.RepeatKillCounts[bountyTargetGuid] = repeatCount;
+        info.RepeatKillCounts[targetGuid] = repeatCount;
 
         // unique
-        var isNewUnique = info.UniqueBountyTargets.Add(bountyTargetGuid);
+        var isNewUnique = info.UniqueBountyTargets.Add(targetGuid);
+
+        // high priority
+        var isHighPriorityTarget = bountyTarget.IsHighPriorityTarget();
+
+        if (isHighPriorityTarget)
+        {
+            targetInfo.TotalHighPriorityCompletions++;
+            info.TotalHighPriorityBountiesCompleted++;
+            info.TotalDailyHighPriorityBountiesCompleted++;
+        }
+
+        // kill streaks
+        var killStreakCount = contract.BountyKillStreakCount; 
+        var killStreakMinimum = PropertyManager.GetLong("bounty_kill_streak_minimum").Item;
+        var isKillStreakCompletion = killStreakCount > killStreakMinimum;
+
+        if (isKillStreakCompletion)
+        {
+            info.TotalKillStreakCompletions++;
+            targetInfo.TotalKillStreakCompletions++;
+
+            if (killStreakCount > info.HighestKillStreakBroken) info.HighestKillStreakBroken = (uint)killStreakCount;
+            if (killStreakCount > targetInfo.HighestKillStreakBroken) targetInfo.HighestKillStreakBroken = (uint)killStreakCount;
+        }
 
         return new BountyCompletionResult
         {
-            TargetGuid = bountyTargetGuid,
+            TargetGuid = targetInfo.TargetGuid,
             IsNewUniqueTarget = isNewUnique,
+            IsKillStreakCompletion = isKillStreakCompletion,
+            IsHighPriorityTarget = isHighPriorityTarget,
+            KillStreak = (uint)killStreakCount,
             RepeatCount = repeatCount,
+            DailyHighPriorityCount = info.TotalDailyHighPriorityBountiesCompleted,
             CountLast30Min = GetBountiesCompletedInLastMinutes(30),
             CountLast60Min = GetBountiesCompletedInLastMinutes(60),
             CountLast90Min = GetBountiesCompletedInLastMinutes(90)
         };
     }
 
-    private BountyTargetInfo GetBountyTarget(uint targetGuid)
+    private BountyTargetInfo GetBountyTargetInfo(uint targetGuid)
     {
         return BountyInformation.BountyTargets.GetOrAdd(targetGuid, guid => new BountyTargetInfo
         {
@@ -141,6 +156,9 @@ public partial class Player
             BountyInformation.RepeatKillCounts.Clear();
             BountyInformation.BountyCompletionTimestamps.Clear();
             BountyInformation.LastBountyQuestResetDate = today;
+            BountyInformation.TotalDailyHighPriorityBountiesCompleted = 0;
+            BountyInformation.DailyTargetDamageDealt.Clear();
+            BountyInformation.TotalDailyDamageDealt = 0;
 
             SaveBountyInformation();
         }

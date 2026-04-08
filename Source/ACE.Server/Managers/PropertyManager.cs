@@ -633,10 +633,12 @@ namespace ACE.Server.Managers
                 ("turnto_use_heading_stealth", new Property<bool>(false, "If TRUE, uses TurnToHeading (0x09) instead of TurnToObject (0x08) to prevent war detect plugins from detecting target ID (preserves visual, hides target info)")),
                 ("enforce_player_movement", new Property<bool>(false, "enable this to enforce server side verification of player movement")),
                 ("bounty_system_enabled", new Property<bool>(true, "enable this for the bounty hunter pvp feature")),
+                ("writ_of_pursuit_enabled", new Property<bool>(true, "enable this for the writ of pursuit bounty feature")),
                 ("bounty_allow_all_locations", new Property<bool>(false, "enable this to allow all locations to be valid bounty locations")),
                 ("bounty_allow_logged_out", new Property<bool>(false, "enable this to allow logged out characters to be valid bounties")),
                 ("bounty_pk_timer_active_enabled", new Property<bool>(true, "enable this for custom bounty pk timer active check")),
                 ("bounty_expirations_enabled", new Property<bool>(true, "enable this to allow bounties to expire")),
+                ("broadcast_kill_streak", new Property<bool>(true, "enable this to broadcast kill streak messages")),
                 ("local_server", new Property<bool>(false, "Do not enable on live servers! Enable this to allow for server behavior to change as necessary for testing envrionments.")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
@@ -680,8 +682,13 @@ namespace ACE.Server.Managers
                 ("bounty_cooldown_expiration_time", new Property<long>(0, "the amount of time in minutes for a bounty hunter's cooldown penalty")),
                 ("bounty_cooldown_target_expiration_time", new Property<long>(30, "the amount of time in minutes for a bounty target's cooldown penalty")),
                 ("bounty_minimum_player_level", new Property<long>(150, "the minimum player level that a bounty can be assigned to")),
+                ("bounty_kill_streak_minimum", new Property<long>(4, "the minimum killstreak count a player must have before being added to high priority bounties")),
                 ("pk_bounty_timer", new Property<long>(120, "the number of seconds where a player cannot perform certain actions (ie. teleporting) after encountering a bounty hunter")),
-                ("bounty_location_price_amount", new Property<long>(25, "the amount of pk trophies it costs to use the location finder of a bounty contract")),
+                ("bounty_currency_wcid", new Property<long>(1000003, "the WCID for the type of item used for the bounty currency (DEFAULT: is Phial Of Tears)")),
+                ("bounty_currency_return_amount", new Property<long>(1, "the amount of bounty currency to return for expired turn-ins)")),
+                ("bounty_wop_currency_wcid", new Property<long>(1000003, "the WCID for the type of item used for the bounty Writ of Pursuit currency (DEFAULT: is Phial Of Tears)")),
+                ("bounty_location_currency_wcid", new Property<long>(1000002, "the WCID for the type of item used for the bounty contract location finder (DEFAULT: is PK Trophy)")),
+                ("bounty_location_price_amount", new Property<long>(25, "the amount of bounty contract location finder currency it costs to use the location finder")),
                 ("bounty_max_contracts", new Property<long>(3, "the maximum amount of contracts a player can have"))
 
                 );
@@ -812,6 +819,10 @@ namespace ACE.Server.Managers
                 ("force_logout_materialization_duration", new Property<double>(1, "the number of seconds a player should materialize for before logging out")),
                 ("force_teleport_materialization_duration", new Property<double>(10.0, "the number of seconds after teleporting that a player should force materialize")),
                 ("bounty_last_location_duration", new Property<double>(30.0, "the number of seconds before a player can use the bounty contract's location finder again")),
+                ("bounty_weight_exponent", new Property<double>(0.75, "bounty weight tuning for selecting targets. More random selections when closer to 0.1, higher priority selections when closer to 1.0 for higher priority target selections")),
+                ("bounty_weight_multiplier", new Property<double>(50.0, "bounty weight multiplier tuning, use in conjunction with bounty_weight_exponent")),
+                ("bounty_weight_maxstack_scale", new Property<double>(0.2, "bounty weight max stack scale tuning this is used to apply an effective max stack")),
+                ("bounty_npc_use_cooldown_seconds", new Property<double>(3.0, "the cooldown in seconds between bounty npc usage")),
                 ("recent_teleport_threshold", new Property<double>(3.0, "the number of seconds after materializing that a player can teleport again"))
                 
                 );

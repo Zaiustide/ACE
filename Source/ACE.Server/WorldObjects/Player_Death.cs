@@ -140,10 +140,6 @@ namespace ACE.Server.WorldObjects
                 {
                     pkPlayer.CompletePkQuestTasks(PKQuests.PKQuests_KillAnywhere);
 
-                    //Bounty Kills
-                    if (BountyContract.IsBountySystemEnabled)
-                       pkPlayer.TryMarkBountyComplete(Guid.Full);
-
                     switch (Location.Landblock)
                     {
                         case 0xF76B:
@@ -201,6 +197,29 @@ namespace ACE.Server.WorldObjects
                             
                             break;
                     }
+
+                    // kill streaks
+                    var killStreak = ++pkPlayer.PlayerKillStreak;
+
+                    var killStreakMinimum = PropertyManager.GetLong("bounty_kill_streak_minimum").Item;
+                    var shouldBroadcastKillstreak = PropertyManager.GetBool("broadcast_kill_streak").Item;
+
+                    if (shouldBroadcastKillstreak && (killStreak > killStreakMinimum))
+                    {
+                        PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{pkPlayer.Name} currently has a kill streak of {killStreak}! is there anyone that can stop him?", ChatMessageType.WorldBroadcast));
+                    }
+
+                    if (shouldBroadcastKillstreak && (PlayerKillStreak > killStreakMinimum))
+                    {
+                        PlayerManager.BroadcastToAll(new GameMessageSystemChat($"{Name}'s kill streak of {PlayerKillStreak} has been ended by {pkPlayer.Name}!", ChatMessageType.WorldBroadcast));
+                    }
+
+                    PlayerKillStreak = 0; // reset kill streak on death
+
+                    //Bounty Kills
+                    if (BountyContract.IsBountySystemEnabled)
+                       pkPlayer.MarkBountyComplete(this, topDamager.TotalDamage, pkPlayer.Health.MaxValue, pkPlayer.Health.Current);
+
                 }
             }
             else if (IsPKLiteDeath(topDamager))
@@ -255,7 +274,7 @@ namespace ACE.Server.WorldObjects
             // as a factor in slag generation, this will eventually be moved to after the slag generation
 
             //if (topDamager != null && topDamager.IsOlthoiPlayer)
-                //OlthoiLootTimestamp = (int)Time.GetUnixTime();
+            //OlthoiLootTimestamp = (int)Time.GetUnixTime();
 
             if (CombatMode == CombatMode.Magic && MagicState.IsCasting)
                 FailCast(false);

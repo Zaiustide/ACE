@@ -1614,10 +1614,34 @@ namespace ACE.Server.WorldObjects
             set { if (!value) RemoveProperty(PropertyBool.IsBountyHighPriorityTarget); else SetProperty(PropertyBool.IsBountyHighPriorityTarget, value); }
         }
 
-        public int? BountyTargetRewardAmount
+        public int? BountyPriorityTargetRewardAmount
         {
-            get => GetProperty(PropertyInt.BountyTargetRewardAmount);
-            set { if (value == null) RemoveProperty(PropertyInt.BountyTargetRewardAmount); else SetProperty(PropertyInt.BountyTargetRewardAmount, value.Value); }
+            get => GetProperty(PropertyInt.BountyPriorityTargetRewardAmount);
+            set { if (value == null) RemoveProperty(PropertyInt.BountyPriorityTargetRewardAmount); else SetProperty(PropertyInt.BountyPriorityTargetRewardAmount, value.Value); }
+        }
+
+        public string BountyPriorityOwnerName
+        {
+            get => GetProperty(PropertyString.BountyPriorityOwnerName) ?? string.Empty;
+            set { if (string.IsNullOrEmpty(value)) RemoveProperty(PropertyString.BountyPriorityOwnerName); else SetProperty(PropertyString.BountyPriorityOwnerName, value); }
+        }
+
+        public int? BountyPriorityCurrency
+        {
+            get => GetProperty(PropertyInt.BountyPriorityCurrency);
+            set { if (value == null) RemoveProperty(PropertyInt.BountyPriorityCurrency); else SetProperty(PropertyInt.BountyPriorityCurrency, value.Value); }
+        }
+
+        public int PlayerKillStreak
+        {
+            get => GetProperty(PropertyInt.PlayerKillStreak) ?? 0;
+            set { if (value == 0) RemoveProperty(PropertyInt.PlayerKillStreak); else SetProperty(PropertyInt.PlayerKillStreak, value); }
+        }
+
+        public double? BountyLastUsedNpcTimestamp
+        {
+            get => GetProperty(PropertyFloat.BountyLastUsedNpcTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyFloat.BountyLastUsedNpcTimestamp); else SetProperty(PropertyFloat.BountyLastUsedNpcTimestamp, value.Value); }
         }
     }
 }

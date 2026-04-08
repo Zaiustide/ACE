@@ -367,7 +367,7 @@ namespace ACE.Server.Command.Handlers
 
             if (parameters.Length > 0)
             {
-                var playerName = string.Join(" ", parameters);                
+                var playerName = string.Join(" ", parameters);
 
                 if (PlayerManager.GlobalChatGagPlayer(session.Player, playerName))
                 {
@@ -915,7 +915,7 @@ namespace ACE.Server.Command.Handlers
             var player = PlayerManager.GetOnlinePlayer(playerName);
             // If the player is found, teleport the admin to the Player's location
             if (player != null)
-                session.Player.Teleport(player.Location);
+                session.Player.Teleport(player.Location, force: true);
             else
                 session.Network.EnqueueSend(new GameMessageSystemChat($"Player {playerName} was not found.", ChatMessageType.Broadcast));
         }
@@ -934,7 +934,7 @@ namespace ACE.Server.Command.Handlers
                 return;
             }
             var currentPos = new Position(player.Location);
-            player.Teleport(session.Player.Location);
+            player.Teleport(session.Player.Location, force: true);
             player.SetPosition(PositionType.TeleportedCharacter, currentPos);
             player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{session.Player.Name} has teleported you.", ChatMessageType.Magic));
 
@@ -961,7 +961,7 @@ namespace ACE.Server.Command.Handlers
                 return;
             }
 
-            player.Teleport(new Position(player.TeleportedCharacter));
+            player.Teleport(new Position(player.TeleportedCharacter), force: true);
             player.SetPosition(PositionType.TeleportedCharacter, null);
             player.Session.Network.EnqueueSend(new GameMessageSystemChat($"{session.Player.Name} has returned you to your previous location.", ChatMessageType.Magic));
 
@@ -987,7 +987,7 @@ namespace ACE.Server.Command.Handlers
 
                 player.SetPosition(PositionType.TeleportedCharacter, new Position(player.Location));
 
-                player.Teleport(new Position(destinationPlayer.Location));
+                player.Teleport(new Position(destinationPlayer.Location), force: true);
             }
 
             PlayerManager.BroadcastToAuditChannel(session.Player, $"{session.Player.Name} has teleported all online players to their location.");
@@ -1026,7 +1026,7 @@ namespace ACE.Server.Command.Handlers
                 var weenie = DatabaseManager.World.GetCachedWeenie(teleportPOI.WeenieClassId);
                 var portalDest = new Position(weenie.GetPosition(PositionType.Destination));
                 WorldObject.AdjustDungeon(portalDest);
-                session.Player.Teleport(portalDest);
+                session.Player.Teleport(portalDest, force: true);
             }
         }
 
@@ -1070,7 +1070,7 @@ namespace ACE.Server.Command.Handlers
                     positionData[i] = position;
                 }
 
-                session.Player.Teleport(new Position(cell, positionData[0], positionData[1], positionData[2], positionData[4], positionData[5], positionData[6], positionData[3]));
+                session.Player.Teleport(new Position(cell, positionData[0], positionData[1], positionData[2], positionData[4], positionData[5], positionData[6], positionData[3]), force: true);
             }
             catch (Exception)
             {
@@ -5102,15 +5102,15 @@ namespace ACE.Server.Command.Handlers
             var arenaEvents = DatabaseManager.Log.GetAllArenaEvents();
             Dictionary<uint, uint> characterRankings = new Dictionary<uint, uint>();
             arenaEvents = arenaEvents.Where(x => x.EventType.ToLower().Equals("1v1"))?.OrderBy(x => x.CreatedDateTime).ToList() ?? new List<ArenaEvent>();
-            foreach(var arenaEvent in arenaEvents)
+            foreach (var arenaEvent in arenaEvents)
             {
-                if(arenaEvent.WinningTeamGuid.HasValue)
+                if (arenaEvent.WinningTeamGuid.HasValue)
                 {
                     var winner = arenaEvent.Players?.FirstOrDefault(x => x.TeamGuid == arenaEvent.WinningTeamGuid);
-                    if(winner != null)
+                    if (winner != null)
                     {
                         var loser = arenaEvent.Players?.FirstOrDefault(x => x.CharacterId != winner.CharacterId);
-                        if(loser != null)
+                        if (loser != null)
                         {
                             var winnerCurrentRank = characterRankings.ContainsKey(winner.CharacterId) ? characterRankings[winner.CharacterId] : 1500;
                             var loserCurrentRank = characterRankings.ContainsKey(loser.CharacterId) ? characterRankings[loser.CharacterId] : 1500;
@@ -5157,7 +5157,7 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("worldbossspawn", AccessLevel.Sentinel, CommandHandlerFlag.None, 0,
             "Displays debug info about world bosses")]
         public static void HandleWorldBossSpawn(Session session, params string[] parameters)
-        {            
+        {
             uint bossWeenieId = 0;
 
             if (parameters.Count() == 1)
@@ -5209,7 +5209,7 @@ namespace ACE.Server.Command.Handlers
 
                 //Check if already whitelisted
                 var whiteList = PropertyManager.GetString("town_control_alleglist").Item;
-                if(whiteList.Contains(player.Guid.Full.ToString()))
+                if (whiteList.Contains(player.Guid.Full.ToString()))
                 {
                     CommandHandlerHelper.WriteOutputInfo(session, $"{playerName} is already a whitelisted allegiance");
                     return;
@@ -5258,7 +5258,7 @@ namespace ACE.Server.Command.Handlers
                 //Remove from the whitelist
                 var whitelistArr = whiteList.Split(",");
                 string newWhitelist = string.Empty;
-                for(int i = 0; i < whitelistArr.Length; i++)
+                for (int i = 0; i < whitelistArr.Length; i++)
                 {
                     if (!whitelistArr[i].Equals(player.Guid.Full.ToString()) && Int64.TryParse(whitelistArr[i], out long x))
                     {
@@ -5299,7 +5299,7 @@ namespace ACE.Server.Command.Handlers
                 {
                     CommandHandlerHelper.WriteOutputInfo(session, $"No player found with name = {playerName}");
                     return;
-                }                
+                }
 
                 //Check if already blacklisted
                 var blackList = PropertyManager.GetString("arenas_blacklist").Item;
@@ -5383,14 +5383,14 @@ namespace ACE.Server.Command.Handlers
         {
             try
             {
-                if(parameters.Count() > 1)
+                if (parameters.Count() > 1)
                 {
                     CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /ResetDungeonControl {optional: landblockId}");
                     return;
                 }
 
                 //If no parameters given, clear ownership of all dungeons
-                if(parameters.Count() < 1)
+                if (parameters.Count() < 1)
                 {
                     DungeonControl.ClearOwnership();
                     CommandHandlerHelper.WriteOutputInfo(session, $"All ownable dungeons have had their ownership reset");
@@ -5398,7 +5398,7 @@ namespace ACE.Server.Command.Handlers
                 }
 
                 //If parameters given, try to clear ownership of the specified dungeon                
-                if(!UInt32.TryParse(parameters[0], out uint landblockId))
+                if (!UInt32.TryParse(parameters[0], out uint landblockId))
                 {
                     CommandHandlerHelper.WriteOutputInfo(session, "Invalid Parameter.  Usage: /ResetDungeonControl {optional: landblockId}");
                     return;
@@ -5417,7 +5417,7 @@ namespace ACE.Server.Command.Handlers
                     CommandHandlerHelper.WriteOutputInfo(session, $"Dungeon {dungeon.DungeonName} has had its ownership reset");
                     return;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -5439,10 +5439,10 @@ namespace ACE.Server.Command.Handlers
         {
             var objectId = ObjectGuid.Invalid;
 
-            var target = session.Player.CurrentAppraisalTarget;
+            var target = session.Player.HealthQueryTarget;
 
             if (target.HasValue)
-                objectId = new ObjectGuid((uint)session.Player.CurrentAppraisalTarget);
+                objectId = new ObjectGuid(target.Value);
 
             var wo = session.Player.CurrentLandblock?.GetObject(objectId);
 

@@ -1114,24 +1114,20 @@ namespace ACE.Server.WorldObjects
                 if (!IsPKType)
                     return false;
 
-                var elapsed = Time.GetUnixTime() - LastPkAttackTimestamp;
+                var now = Time.GetUnixTime();
+                var elapsed = now - LastPkAttackTimestamp;
+
                 var pkTimerDuration = PropertyManager.GetLong("pk_timer").Item;
 
-                if (BountyContract.IsBountySystemEnabled && BountyContract.IsBountyPkTimerActiveEnabled)
+                if (BountyContract.IsBountySystemEnabled &&
+                    BountyContract.IsBountyPkTimerActiveEnabled &&
+                    LastBountyHunterSeenTimestamp.HasValue)
                 {
-                    var visiblePlayers = PhysicsObj.ObjMaint.GetVisibleObjectsValuesOfTypePlayer();
+                    var bountyDuration = PropertyManager.GetLong("pk_bounty_timer").Item;
+                    var sinceSeen = now - LastBountyHunterSeenTimestamp.Value;
 
-                    if (visiblePlayers != null)
-                    {
-                        foreach (var p in visiblePlayers)
-                        {
-                            if (p != null && p.TryGetBountyContract(Guid.Full, out var contract) && !contract.IsBountyExpired && !contract.IsBountyCompleted)
-                            {
-                                pkTimerDuration = PropertyManager.GetLong("pk_bounty_timer").Item;
-                                break;  
-                            }
-                        }
-                    }
+                    if (sinceSeen < bountyDuration)
+                        pkTimerDuration = bountyDuration;
                 }
 
                 return elapsed < pkTimerDuration;
