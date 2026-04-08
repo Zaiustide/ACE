@@ -564,6 +564,7 @@ namespace ACE.Server.Entity.PKQuests
                     bounty_unique_3.TaskCount = 3;
                     _pkQuestList.Add(bounty_unique_3);
 
+                    // Complete bounties on 5 different players
                     var bounty_unique_5 = new PKQuest();
                     bounty_unique_5.QuestCode = "BOUNTY_UNIQUE_5";
                     bounty_unique_5.Description = "Complete bounties on 5 different players";
@@ -626,6 +627,69 @@ namespace ACE.Server.Entity.PKQuests
                     bounty_fast_12.Rewards = new List<string>() { "LUM,200000", "XP%,100", "DBKEY,10", "PHIAL,8", "PKTROPHY,80" };
                     bounty_fast_12.TaskCount = 1;
                     _pkQuestList.Add(bounty_fast_12);
+
+                    // High Priority Target
+                    var bounty_priority_1 = new PKQuest();
+                    bounty_priority_1.QuestCode = "BOUNTY_PRIORITY_1";
+                    bounty_priority_1.Description = "Complete 1 High Priority Bounty Contract";
+                    bounty_priority_1.RewardDescription = "15k luminance, 20% XP to next level, 1 Darkbeat Key, 1 Phial of Bloody Tears, 3 PK Trophies";
+                    bounty_priority_1.Rewards = new List<string>() { "LUM,15000", "XP%,20", "DBKEY,1", "PHIAL,1", "PKTROPHY,3" };
+                    bounty_priority_1.TaskCount = 1;
+                    _pkQuestList.Add(bounty_priority_1);
+
+                    // Complete 3 High Priority Bounty Contracts
+                    var bounty_priority_3 = new PKQuest();
+                    bounty_priority_3.QuestCode = "BOUNTY_PRIORITY_3";
+                    bounty_priority_3.Description = "Complete 3 High Priority Bounty Contracts";
+                    bounty_priority_3.RewardDescription = "50k luminance, 40% XP to next level, 3 Darkbeat Keys, 2 Phials of Bloody Tears, 15 PK Trophies";
+                    bounty_priority_3.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,2", "PKTROPHY,15" };
+                    bounty_priority_3.TaskCount = 3;
+                    _pkQuestList.Add(bounty_priority_3);
+
+                    // Kill 1 player with an active kill streak
+                    var bounty_killstreak_1 = new PKQuest();
+                    bounty_killstreak_1.QuestCode = "BOUNTY_KILLSTREAK_1";
+                    bounty_killstreak_1.Description = "Kill 1 player who is on a kill streak";
+                    bounty_killstreak_1.RewardDescription = "25k luminance, 25% XP, 1 Key, 1 Phial, 8 PK Trophies";
+                    bounty_killstreak_1.Rewards = new List<string>() { "LUM,25000", "XP%,25", "DBKEY,1", "PHIAL,1", "PKTROPHY,8" };
+                    bounty_killstreak_1.TaskCount = 1;
+                    _pkQuestList.Add(bounty_killstreak_1);
+
+                    // Kill 3 players with active kill streaks
+                    var bounty_killstreak_3 = new PKQuest();
+                    bounty_killstreak_3.QuestCode = "BOUNTY_KILLSTREAK_3";
+                    bounty_killstreak_3.Description = "Kill 3 players who are on kill streaks";
+                    bounty_killstreak_3.RewardDescription = "50k luminance, 40% XP, 3 Keys, 2 Phials, 15 PK Trophies";
+                    bounty_killstreak_3.Rewards = new List<string>() { "LUM,50000", "XP%,40", "DBKEY,3", "PHIAL,2", "PKTROPHY,15" };
+                    bounty_killstreak_3.TaskCount = 3;
+                    _pkQuestList.Add(bounty_killstreak_3);
+
+                    // Kill 5 players with active kill streaks
+                    var bounty_killstreak_5 = new PKQuest();
+                    bounty_killstreak_5.QuestCode = "BOUNTY_KILLSTREAK_5";
+                    bounty_killstreak_5.Description = "Kill 5 players who are on kill streaks";
+                    bounty_killstreak_5.RewardDescription = "90k luminance, 65% XP, 5 Keys, 4 Phials, 30 PK Trophies";
+                    bounty_killstreak_5.Rewards = new List<string>() { "LUM,90000", "XP%,65", "DBKEY,5", "PHIAL,4", "PKTROPHY,30" };
+                    bounty_killstreak_5.TaskCount = 5;
+                    _pkQuestList.Add(bounty_killstreak_5);
+
+                    // End a kill streak of 5 or more
+                    var bounty_streakbreaker_5 = new PKQuest();
+                    bounty_streakbreaker_5.QuestCode = "BOUNTY_STREAKBREAKER_5";
+                    bounty_streakbreaker_5.Description = "End a player's kill streak of 5 or more";
+                    bounty_streakbreaker_5.RewardDescription = "100k luminance, 75% XP, 6 Keys, 5 Phials, 40 PK Trophies";
+                    bounty_streakbreaker_5.Rewards = new List<string>() { "LUM,100000", "XP%,75", "DBKEY,6", "PHIAL,5", "PKTROPHY,40" };
+                    bounty_streakbreaker_5.TaskCount = 1;
+                    _pkQuestList.Add(bounty_streakbreaker_5);
+
+                    // End a kill streak of 10 or more
+                    var bounty_streakbreaker_10 = new PKQuest();
+                    bounty_streakbreaker_10.QuestCode = "BOUNTY_STREAKBREAKER_10";
+                    bounty_streakbreaker_10.Description = "End a player's kill streak of 10 or more";
+                    bounty_streakbreaker_10.RewardDescription = "200k luminance, 100% XP, 10 Keys, 8 Phials, 75 PK Trophies";
+                    bounty_streakbreaker_10.Rewards = new List<string>() { "LUM,200000", "XP%,100", "DBKEY,10", "PHIAL,8", "PKTROPHY,75" };
+                    bounty_streakbreaker_10.TaskCount = 1;
+                    _pkQuestList.Add(bounty_streakbreaker_10);
                 }
 
                 return _pkQuestList;
@@ -669,6 +733,12 @@ namespace ACE.Server.Entity.PKQuests
         public static string[] PKQuests_BountyRepeat = { "BOUNTY_REPEAT_3", "BOUNTY_REPEAT_5" };
 
         public static string[] PKQuests_BountyFast = { "BOUNTY_FAST_2", "BOUNTY_FAST_3", "BOUNTY_FAST_8", "BOUNTY_FAST_12" };
+
+        public static string[] PKQuests_BountyPriority = { "BOUNTY_PRIORITY_1", "BOUNTY_PRIORITY_3" };
+
+        public static string[] PKQuests_BountyKillStreak = { "BOUNTY_KILLSTREAK_1", "BOUNTY_KILLSTREAK_3", "BOUNTY_KILLSTREAK_5" };
+
+        public static string[] PKQuests_BountyStreakBreaker = { "BOUNTY_STREAKBREAKER_5", "BOUNTY_STREAKBREAKER_10" };
 
         public static PKQuest GetPkQuestByCode(string questCode)
         {
