@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451600204;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451600204, 'T9_zombielich', 10, '2026-03-23 10:16:18') /* Creature */;
+VALUES (451600204, 'T9_zombielich', 10, '2026-04-06 08:17:22') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451600204,   1,         16) /* ItemType - Creature */
@@ -21,8 +21,8 @@ VALUES (451600204,   1,         16) /* ItemType - Creature */
      , (451600204, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600204, 140,          1) /* AiOptions - CanOpenDoors */
      , (451600204, 146,   50000000) /* XpOverride */
-     , (451600204, 307,        225) /* DamageRating */
-     , (451600204, 308,         75) /* DamageResistRating */
+     , (451600204, 307,        100) /* DamageRating */
+     , (451600204, 308,         35) /* DamageResistRating */
      , (451600204, 332,       5000) /* LuminanceAward */
      , (451600204, 386,         25) /* Overpower */;
 
@@ -87,7 +87,7 @@ VALUES (451600204,   1, 0x020016A1) /* Setup */
      , (451600204,  35,      10021) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451600204,   1,10000, 0, 0) /* Strength */
+VALUES (451600204,   1,1200, 0, 0) /* Strength */
      , (451600204,   2,2100, 0, 0) /* Endurance */
      , (451600204,   3, 850, 0, 0) /* Quickness */
      , (451600204,   4,1200, 0, 0) /* Coordination */
@@ -100,10 +100,10 @@ VALUES (451600204,   1, 23950, 0, 0,25000) /* MaxHealth */
      , (451600204,   5, 14350, 0, 0,15000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451600204,  6, 0, 3, 0, 142, 0, 0) /* MeleeDefense         Specialized */
+VALUES (451600204,  6, 0, 3, 0,  97, 0, 0) /* MeleeDefense         Specialized */
      , (451600204,  7, 0, 3, 0, 390, 0, 0) /* MissileDefense       Specialized */
      , (451600204, 14, 0, 3, 0,  50, 0, 0) /* ArcaneLore          Specialized */
-     , (451600204, 15, 0, 3, 0, 250, 0, 0) /* MagicDefense         Specialized */
+     , (451600204, 15, 0, 3, 0, 229, 0, 0) /* MagicDefense         Specialized */
      , (451600204, 20, 0, 3, 0, 400, 0, 0) /* Deception            Specialized */
      , (451600204, 31, 0, 3, 0, 580, 0, 0) /* CreatureEnchantment Specialized */
      , (451600204, 33, 0, 3, 0, 580, 0, 0) /* LifeMagic           Specialized */
@@ -141,4 +141,8 @@ VALUES (451600204,  4421,  2.029) /* Incantation of Acid Arc */
      , (451600204,  4446,  2.009) /* Incantation of Frost Blast */
      , (451600204,  4450,  2.009) /* Incantation of Lightning Blast */
      , (451600204,  4454,  2.009) /* Incantation of Shock Blast */;
+
+INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
+VALUES (451600204, 9,361844,  1, 0, 0.04, False) /* Create Metos Shard (361844) for ContainTreasure */
+     , (451600204, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */;
 

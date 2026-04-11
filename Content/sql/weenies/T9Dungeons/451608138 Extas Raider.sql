@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451608138;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451608138, 'T9_lugianextasraider', 10, '2026-03-23 09:43:06') /* Creature */;
+VALUES (451608138, 'T9_lugianextasraider', 10, '2026-04-06 08:15:17') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451608138,   1,         16) /* ItemType - Creature */
@@ -205,8 +205,6 @@ INSERT INTO `weenie_properties_emote_action` (`emote_Id`, `order`, `type`, `dela
 VALUES (@parent_id, 0, 10 /* Tell */, 0, 1, NULL, 'Cruath Quafeth.  Your kind says that often when hunting us.  Does it mean kill me now?', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
-VALUES (451608138, 9,  6876,  0, 0, 0.02, False) /* Create Sturdy Iron Key (6876) for ContainTreasure */
-     , (451608138, 9,     0,  0, 0, 0.98, False) /* Create nothing for ContainTreasure */
-     , (451608138, 9,  7043,  0, 0, 0.03, False) /* Create Large Lugian Sinew (7043) for ContainTreasure */
-     , (451608138, 9,     0,  0, 0, 0.97, False) /* Create nothing for ContainTreasure */;
+VALUES (451608138, 9,361846,  1, 0, 0.04, False) /* Create Citadel Shard (361846) for ContainTreasure */
+     , (451608138, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */;
 

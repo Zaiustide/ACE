@@ -9,39 +9,39 @@ VALUES (0x76147001, 451624497, 0x61470103, 7.91207, -58.3475, 0.01, 0.382228, 0,
 /* @teleloc 0x61470103 [7.912070 -58.347500 0.010000] 0.382228 0.000000 0.000000 -0.924068 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147002,  451608138, 0x6147010E, 50.9078, -99.5767, 0.01, 0.261977, 0, 0, -0.965074,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147002, 451608138, 0x6147010E, 50.9078, -99.5767, 0.01, 0.261977, 0, 0, -0.965074,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147010E [50.907799 -99.576698 0.010000] 0.261977 0.000000 0.000000 -0.965074 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147003,  451608138, 0x6147010E, 53.3758, -99.0639, 0.01, 0.338938, 0, 0, -0.940809,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147003, 451608138, 0x6147010E, 53.3758, -99.0639, 0.01, 0.338938, 0, 0, -0.940809,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147010E [53.375801 -99.063904 0.010000] 0.338938 0.000000 0.000000 -0.940809 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147004,  451608138, 0x6147010E, 51.8016, -97.1626, 0.01, 0.338938, 0, 0, -0.940809,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147004, 451608138, 0x6147010E, 51.8016, -97.1626, 0.01, 0.338938, 0, 0, -0.940809,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147010E [51.801601 -97.162598 0.010000] 0.338938 0.000000 0.000000 -0.940809 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147005,  451608138, 0x6147011C, 79.1465, -157.764, 0.01, 0.999444, 0, 0, 0.033327,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147005, 451608138, 0x6147011C, 79.1465, -157.764, 0.01, 0.999444, 0, 0, 0.033327,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147011C [79.146500 -157.764008 0.010000] 0.999444 0.000000 0.000000 0.033327 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147006,  451608138, 0x6147011C, 80.0071, -159.938, 0.01, 0.998349, 0, 0, -0.057442,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147006, 451608138, 0x6147011C, 80.0071, -159.938, 0.01, 0.998349, 0, 0, -0.057442,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147011C [80.007103 -159.938004 0.010000] 0.998349 0.000000 0.000000 -0.057442 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147007,  451608138, 0x6147012A, 96.1683, -130.987, 0.01, 0.805816, 0, 0, -0.592166,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147007, 451608138, 0x6147012A, 96.1683, -130.987, 0.01, 0.805816, 0, 0, -0.592166,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147012A [96.168297 -130.987000 0.010000] 0.805816 0.000000 0.000000 -0.592166 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147008,  451608138, 0x6147012A, 97.7839, -129.317, 0.01, 0.792861, 0, 0, -0.609402,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147008, 451608138, 0x6147012A, 97.7839, -129.317, 0.01, 0.792861, 0, 0, -0.609402,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147012A [97.783897 -129.317001 0.010000] 0.792861 0.000000 0.000000 -0.609402 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147009,  451608138, 0x61470132, 110.234, -49.5147, 0.01, 0.041263, 0, 0, -0.999148,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147009, 451608138, 0x61470132, 110.234, -49.5147, 0.01, 0.041263, 0, 0, -0.999148,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x61470132 [110.234001 -49.514702 0.010000] 0.041263 0.000000 0.000000 -0.999148 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7614700A,  451608138, 0x61470132, 108.999, -47.814, 0.01, 0.016274, 0, 0, -0.999868,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x7614700A, 451608138, 0x61470132, 108.999, -47.814, 0.01, 0.016274, 0, 0, -0.999868,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x61470132 [108.999001 -47.813999 0.010000] 0.016274 0.000000 0.000000 -0.999868 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
@@ -61,11 +61,11 @@ VALUES (0x7614700E, 451624497, 0x6147013C, 124.848, -40.3904, 0.055, 0.243655, 0
 /* @teleloc 0x6147013C [124.848000 -40.390400 0.055000] 0.243655 0.000000 0.000000 0.969862 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x7614700F,  451608138, 0x6147013E, 121.146, -78.8195, 0.01, 0.51961, 0, 0, -0.854404,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x7614700F, 451608138, 0x6147013E, 121.146, -78.8195, 0.01, 0.51961, 0, 0, -0.854404,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147013E [121.146004 -78.819504 0.010000] 0.519610 0.000000 0.000000 -0.854404 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147010,  451608138, 0x6147013E, 123.181, -81.5521, 0.01, 0.703139, 0, 0, -0.711053,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147010, 451608138, 0x6147013E, 123.181, -81.5521, 0.01, 0.703139, 0, 0, -0.711053,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147013E [123.181000 -81.552101 0.010000] 0.703139 0.000000 0.000000 -0.711053 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
@@ -186,11 +186,11 @@ VALUES (0x76147013, 0x76147000, '2005-02-09 10:00:00') /* Gotrok Tiatus (4516244
      , (0x76147013, 0x76147069, '2005-02-09 10:00:00') /* Gotrok Tiatus (451624497) */;
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147014,  451608138, 0x6147015A, 160.138, -67.2755, 0.01, 0.054737, 0, 0, 0.998501,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147014, 451608138, 0x6147015A, 160.138, -67.2755, 0.01, 0.054737, 0, 0, 0.998501,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147015A [160.138000 -67.275497 0.010000] 0.054737 0.000000 0.000000 0.998501 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147015,  451608138, 0x6147015A, 161.262, -66.4891, 0.01, 0.002933, 0, 0, 0.999996,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147015, 451608138, 0x6147015A, 161.262, -66.4891, 0.01, 0.002933, 0, 0, 0.999996,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x6147015A [161.261993 -66.489098 0.010000] 0.002933 0.000000 0.000000 0.999996 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
@@ -254,19 +254,19 @@ VALUES (0x76147024, 451624497, 0x6147019D, 192.564, -1.25682, 6.01, 0.034912, 0,
 /* @teleloc 0x6147019D [192.563995 -1.256820 6.010000] 0.034912 0.000000 0.000000 0.999390 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147025,  451608138, 0x614701A0, 191.323, -27.0536, 6.01, 0.00611, 0, 0, -0.999981,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147025, 451608138, 0x614701A0, 191.323, -27.0536, 6.01, 0.00611, 0, 0, -0.999981,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x614701A0 [191.322998 -27.053600 6.010000] 0.006110 0.000000 0.000000 -0.999981 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147026,  451608138, 0x614701A0, 190.195, -25.8728, 6.01, -0.05476, 0, 0, -0.9985,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147026, 451608138, 0x614701A0, 190.195, -25.8728, 6.01, -0.05476, 0, 0, -0.9985,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x614701A0 [190.195007 -25.872801 6.010000] -0.054760 0.000000 0.000000 -0.998500 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147027,  451608138, 0x614701A2, 189.766, -45.2125, 6.055, -0.115418, 0, 0, 0.993317,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147027, 451608138, 0x614701A2, 189.766, -45.2125, 6.055, -0.115418, 0, 0, 0.993317,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x614701A2 [189.766006 -45.212502 6.055000] -0.115418 0.000000 0.000000 0.993317 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
-VALUES (0x76147028,  451608138, 0x614701A2, 190.103, -46.9792, 6.01, 0.059289, 0, 0, 0.998241,  True, '2005-02-09 10:00:00'); /* Extas Raider */
+VALUES (0x76147028, 451608138, 0x614701A2, 190.103, -46.9792, 6.01, 0.059289, 0, 0, 0.998241,  True, '2005-02-09 10:00:00'); /* Extas Raider */
 /* @teleloc 0x614701A2 [190.102997 -46.979198 6.010000] 0.059289 0.000000 0.000000 0.998241 */
 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
@@ -528,3 +528,14 @@ VALUES (0x76147068, 451624497, 0x61470269, 242.057, -58.9161, 24.01, -0.692905, 
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x76147069, 451624497, 0x61470269, 242.348, -60.9632, 24.01, -0.761842, 0, 0, 0.647763,  True, '2005-02-09 10:00:00'); /* Gotrok Tiatus */
 /* @teleloc 0x61470269 [242.348007 -60.963200 24.010000] -0.761842 0.000000 0.000000 0.647763 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7614706A, 451601702, 0x61470164, 300.1, -147.325, 0.01, 0.999969, 0, 0, -0.007892, True, '2026-04-03 19:25:57'); /* Commander Dickus */
+/* @teleloc 0x61470164 [300.100006 -147.324997 0.010000] 0.999969 0.000000 0.000000 -0.007892 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x7614706B,  3951, 0x61470163, 296.158, -144.143, 0.055, 0.998467, 0, 0, -0.055356, False, '2026-04-03 19:30:00'); /* Linkable Monster Gen (1 hour) */
+/* @teleloc 0x61470163 [296.157990 -144.143005 0.055000] 0.998467 0.000000 0.000000 -0.055356 */
+
+INSERT INTO `landblock_instance_link` (`parent_GUID`, `child_GUID`, `last_Modified`)
+VALUES (0x7614706B, 0x7614706A, '2005-02-09 10:00:00') /* Commander Dickus */

@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451601630;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451601630, 'T9_zombielichlord', 10, '2026-03-23 10:16:42') /* Creature */;
+VALUES (451601630, 'T9_zombielichlord', 10, '2026-04-06 08:15:34') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451601630,   1,         16) /* ItemType - Creature */
@@ -21,8 +21,8 @@ VALUES (451601630,   1,         16) /* ItemType - Creature */
      , (451601630, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451601630, 140,          1) /* AiOptions - CanOpenDoors */
      , (451601630, 146,   60000000) /* XpOverride */
-     , (451601630, 307,        325) /* DamageRating */
-     , (451601630, 308,        125) /* DamageResistRating */
+     , (451601630, 307,        125) /* DamageRating */
+     , (451601630, 308,         45) /* DamageResistRating */
      , (451601630, 332,       6000) /* LuminanceAward */
      , (451601630, 386,         35) /* Overpower */;
 
@@ -100,10 +100,10 @@ VALUES (451601630,   1, 34800, 0, 0,36000) /* MaxHealth */
      , (451601630,   5, 28400, 0, 0,30000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451601630,  6, 0, 3, 0, 100, 0, 0) /* MeleeDefense         Specialized */
+VALUES (451601630,  6, 0, 3, 0,  30, 0, 0) /* MeleeDefense         Specialized */
      , (451601630,  7, 0, 3, 0, 350, 0, 0) /* MissileDefense       Specialized */
      , (451601630, 14, 0, 2, 0, 200, 0, 0) /* ArcaneLore          Trained */
-     , (451601630, 15, 0, 3, 0,  63, 0, 0) /* MagicDefense         Specialized */
+     , (451601630, 15, 0, 3, 0,  43, 0, 0) /* MagicDefense         Specialized */
      , (451601630, 20, 0, 3, 0, 400, 0, 0) /* Deception            Specialized */
      , (451601630, 31, 0, 3, 0, 400, 0, 0) /* CreatureEnchantment  Specialized */
      , (451601630, 33, 0, 3, 0, 400, 0, 0) /* LifeMagic            Specialized */
@@ -139,4 +139,8 @@ VALUES (451601630,  4433,   2.04) /* Incantation of Acid Stream */
      , (451601630,  4450,   2.04) /* Incantation of Lightning Blast */
      , (451601630,  4438,   2.04) /* Incantation of Flame Blast */
      , (451601630,  4643,   2.04) /* Incantation of Drain Health Other */;
+
+INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
+VALUES (451601630, 9,361844,  1, 0, 0.04, False) /* Create Metos Shard (361844) for ContainTreasure */
+     , (451601630, 9,     0,  0, 0, 0.96, False) /* Create nothing for ContainTreasure */;
 
