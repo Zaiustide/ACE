@@ -5,12 +5,10 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime;
 using System.Threading.Tasks;
-
-using log4net;
-
 using ACE.Common;
 using ACE.Common.Extensions;
 using ACE.Database;
+using ACE.Database.Models.Log;
 using ACE.Database.Models.Shard;
 using ACE.Database.Models.World;
 using ACE.DatLoader;
@@ -32,8 +30,7 @@ using ACE.Server.Physics.Extensions;
 using ACE.Server.Physics.Managers;
 using ACE.Server.WorldObjects;
 using ACE.Server.WorldObjects.Entity;
-
-
+using log4net;
 using Position = ACE.Entity.Position;
 using Spell = ACE.Server.Entity.Spell;
 
@@ -2437,102 +2434,129 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("forcelogoff", AccessLevel.Developer, CommandHandlerFlag.RequiresWorld, "Force log off of specified character or last appraised character")]
         public static void HandleForceLogoff(Session session, params string[] parameters)
         {
-            var playerName = "";
-            if (parameters.Length > 0)
-                playerName = string.Join(" ", parameters);
-
+            var playerName = parameters.Length > 0 ? string.Join(" ", parameters) : "";
             WorldObject target = null;
 
             if (!string.IsNullOrEmpty(playerName))
             {
                 var plr = PlayerManager.FindByName(playerName);
-                if (plr != null)
-                {
-                    target = PlayerManager.GetOnlinePlayer(plr.Guid);
-
-                    if (target == null)
-                    {
-                        CommandHandlerHelper.WriteOutputInfo(session, $"Unable to force log off for {plr.Name}: Player is not online.");
-                        return;
-                    }
-                }
-                else
+                if (plr == null)
                 {
                     CommandHandlerHelper.WriteOutputInfo(session, $"Unable to force log off for {playerName}: Player not found in manager.");
                     return;
                 }
+
+                target = PlayerManager.GetOnlinePlayer(plr.Guid);
+                if (target == null)
+                {
+                    CommandHandlerHelper.WriteOutputInfo(session, $"Unable to force log off for {plr.Name}: Player is not online.");
+                    return;
+                }
             }
             else
-                target = CommandHandlerHelper.GetLastAppraisedObject(session);
-
-            if (target != null && target is Player player)
             {
-                //if (player.Session != null)
-                //    player.Session.LogOffPlayer(true);
-                //else
-                //    player.LogOut();
-
-                var msg = $"Player {player.Name} (0x{player.Guid}) found in PlayerManager.onlinePlayers.\n";
-                msg += $"------- Session: {(player.Session != null ? $"C2S: {player.Session.EndPointC2S} | S2C: {player.Session.EndPointS2C}" : "NULL")}\n";
-                msg += $"------- CurrentLandblock: {(player.CurrentLandblock != null ? $"0x{player.CurrentLandblock.Id:X4}" : "NULL")}\n";
-                msg += $"------- Location: {(player.Location != null ? $"{player.Location.ToLOCString()}" : "NULL")}\n";
-                msg += $"------- IsLoggingOut: {player.IsLoggingOut}\n";
-                msg += $"------- IsInDeathProcess: {player.IsInDeathProcess}\n";
-                var foundOnLandblock = false;
-                if (player.CurrentLandblock != null)
-                    foundOnLandblock = LandblockManager.GetLandblock(player.CurrentLandblock.Id, false).GetObject(player.Guid) != null;
-                msg += $"------- FoundOnLandblock: {foundOnLandblock}\n";
-                var playerForcedLogOffRequested = player.ForcedLogOffRequested;
-                msg += $"------- ForcedLogOffRequested: {playerForcedLogOffRequested}\n";
-
-                msg += "Log off path taken: ";
-                if (playerForcedLogOffRequested)
-                {
-                    player.Session?.Terminate(Network.Enum.SessionTerminationReason.ForcedLogOffRequested, new GameMessageBootAccount(" because the character was forced to log off by an admin"));
-                    player.ForceLogoff();
-                    msg += "player.Session?.Terminate() | player.ForceLogoff()";
-                }
-                else if (player.Session != null)
-                {
-                    player.ForcedLogOffRequested = true;
-                    player.Session.Terminate(Network.Enum.SessionTerminationReason.ForcedLogOffRequested, new GameMessageBootAccount(" because the character was forced to log off by an admin"));
-                    msg += "player.ForcedLogOffRequested = true | player.Session.Terminate()";
-                }
-                else if (player.CurrentLandblock != null && foundOnLandblock)
-                {
-                    player.ForcedLogOffRequested = true;
-                    player.LogOut();
-                    msg += "player.ForcedLogOffRequested = true | player.LogOut()";
-                }
-                else if (player.IsInDeathProcess)
-                {
-                    player.ForcedLogOffRequested = true;
-                    player.IsInDeathProcess = false;
-                    player.LogOut_Inner(true);
-                    msg += "player.ForcedLogOffRequested = true | player.IsInDeathProcess = false | player.LogOut_Inner(true)";
-                }
-                else
-                {
-                    player.ForcedLogOffRequested = true;
-                    msg += "player.ForcedLogOffRequested = true";
-                }
-
-                if (!playerForcedLogOffRequested)
-                    msg += "\nUse this command again if this player does not properly log off within the next minute.";
-                else
-                    msg += "\nPlease send the above report to ACEmulator development team via Discord.";
-
-                CommandHandlerHelper.WriteOutputInfo(session, msg);
-
-                PlayerManager.BroadcastToAuditChannel(session?.Player, $"Forcing Log Off of {player.Name}...");
+                target = CommandHandlerHelper.GetLastAppraisedObject(session);
             }
-            else
+
+            if (target is not Player player)
             {
                 if (target != null)
                     CommandHandlerHelper.WriteOutputInfo(session, $"Unable to force log off for {target.Name}: Target is not a player.");
-                //else
-                //    CommandHandlerHelper.WriteOutputInfo(session, $"Unable to force log off for {playerName}: Player not found in manager.");
+                return;
             }
+
+            var foundOnLandblock = player.CurrentLandblock != null &&
+                LandblockManager.GetLandblock(player.CurrentLandblock.Id, false).GetObject(player.Guid) != null;
+
+            var wasForced = player.ForcedLogOffRequested;
+
+            var logoffPath = ExecuteLogoff(player, foundOnLandblock);
+
+            var msg =
+                $"Player {player.Name} (0x{player.Guid}) found in PlayerManager.onlinePlayers.\n" +
+                $"------- Session: {(player.Session != null ? $"C2S: {player.Session.EndPointC2S} | S2C: {player.Session.EndPointS2C}" : "NULL")}\n" +
+                $"------- CurrentLandblock: {(player.CurrentLandblock != null ? $"0x{player.CurrentLandblock.Id:X4}" : "NULL")}\n" +
+                $"------- Location: {player.Location?.ToLOCString() ?? "NULL"}\n" +
+                $"------- IsLoggingOut: {player.IsLoggingOut}\n" +
+                $"------- IsInDeathProcess: {player.IsInDeathProcess}\n" +
+                $"------- MaterializedLogoutState: {player.MaterializedLogoutState.ToString()}\n" +
+                $"------- PkLogoutState: {player.PkLogoutState.ToString()}\n" +
+                $"------- FoundOnLandblock: {foundOnLandblock}\n" +
+                $"------- ForcedLogOffRequested: {player.ForcedLogOffRequested}\n" +
+                $"Log off path taken: {logoffPath}";
+
+            msg += !wasForced
+                ? "\nUse this command again if this player does not properly log off within the next minute."
+                : "\nPlease send the above report to ACEmulator development team via Discord.";
+
+            DatabaseManager.Log.LogStuckCharacter(new StuckCharacterLog
+            {
+                PlayerGuid = player.Guid.Full,
+                PlayerName = player.Name,
+                AccountName = player.Account?.AccountName,
+                AccountId = (int)(player.Account?.AccountId ?? 0),
+
+                SessionInfo = player.Session != null
+                    ? $"C2S: {player.Session.EndPointC2S} | S2C: {player.Session.EndPointS2C}"
+                    : "NULL",
+
+                Landblock = player.CurrentLandblock != null
+                    ? $"0x{player.CurrentLandblock.Id:X4}"
+                    : "NULL",
+
+                Location = player.Location?.ToLOCString() ?? "NULL",
+
+                IsLoggingOut = player.IsLoggingOut,
+                IsInDeathProcess = player.IsInDeathProcess,
+                MaterializedLogoutState = (uint)player.MaterializedLogoutState,
+                PkLogoutState = (uint)player.PkLogoutState,
+                FoundOnLandblock = foundOnLandblock,
+                ForcedLogOffRequested = player.ForcedLogOffRequested,
+
+                LogoffPath = logoffPath,
+                CreatedAtUtc = DateTime.UtcNow
+            });
+
+            CommandHandlerHelper.WriteOutputInfo(session, msg);
+
+            PlayerManager.BroadcastToAuditChannel(session?.Player, $"Forcing Log Off of {player.Name}...");
+        }
+
+        private static string ExecuteLogoff(Player player, bool foundOnLandblock)
+        {
+            if (player.ForcedLogOffRequested)
+            {
+                player.Session?.Terminate(Network.Enum.SessionTerminationReason.ForcedLogOffRequested,
+                    new GameMessageBootAccount(" because the character was forced to log off by an admin"));
+                player.ForceLogoff();
+                return "Session.Terminate | ForceLogoff";
+            }
+
+            if (player.Session != null)
+            {
+                player.ForcedLogOffRequested = true;
+                player.Session.Terminate(Network.Enum.SessionTerminationReason.ForcedLogOffRequested,
+                    new GameMessageBootAccount(" because the character was forced to log off by an admin"));
+                return "ForcedLogOffRequested = true | Session.Terminate";
+            }
+
+            if (player.CurrentLandblock != null && foundOnLandblock)
+            {
+                player.ForcedLogOffRequested = true;
+                player.LogOut();
+                return "ForcedLogOffRequested = true | LogOut";
+            }
+
+            if (player.IsInDeathProcess)
+            {
+                player.ForcedLogOffRequested = true;
+                player.IsInDeathProcess = false;
+                player.LogOut_Inner(true);
+                return "ForcedLogOffRequested = true | ClearDeath | LogOut_Inner";
+            }
+
+            player.ForcedLogOffRequested = true;
+            return "ForcedLogOffRequested = true";
         }
 
         [CommandHandler("showsession", AccessLevel.Developer, CommandHandlerFlag.RequiresWorld, "Show IP and ID for network session of last appraised character")]
