@@ -2468,7 +2468,12 @@ namespace ACE.Server.Command.Handlers
             var foundOnLandblock = player.CurrentLandblock != null &&
                 LandblockManager.GetLandblock(player.CurrentLandblock.Id, false).GetObject(player.Guid) != null;
 
+            // capture state before logoff for message and DB log
             var wasForced = player.ForcedLogOffRequested;
+            var wasInDeathProcess = player.IsInDeathProcess;
+            var wasLoggingOut = player.IsLoggingOut;
+            var pkState = player.PkLogoutState;
+            var matState = player.MaterializedLogoutState;
 
             var logoffPath = ExecuteLogoff(player, foundOnLandblock);
 
@@ -2477,12 +2482,12 @@ namespace ACE.Server.Command.Handlers
                 $"------- Session: {(player.Session != null ? $"C2S: {player.Session.EndPointC2S} | S2C: {player.Session.EndPointS2C}" : "NULL")}\n" +
                 $"------- CurrentLandblock: {(player.CurrentLandblock != null ? $"0x{player.CurrentLandblock.Id:X4}" : "NULL")}\n" +
                 $"------- Location: {player.Location?.ToLOCString() ?? "NULL"}\n" +
-                $"------- IsLoggingOut: {player.IsLoggingOut}\n" +
-                $"------- IsInDeathProcess: {player.IsInDeathProcess}\n" +
-                $"------- MaterializedLogoutState: {player.MaterializedLogoutState.ToString()}\n" +
-                $"------- PkLogoutState: {player.PkLogoutState.ToString()}\n" +
+                $"------- IsLoggingOut: {wasLoggingOut}\n" +
+                $"------- IsInDeathProcess: {wasInDeathProcess}\n" +
+                $"------- MaterializedLogoutState: {matState.ToString()}\n" +
+                $"------- PkLogoutState: {pkState.ToString()}\n" +
                 $"------- FoundOnLandblock: {foundOnLandblock}\n" +
-                $"------- ForcedLogOffRequested: {player.ForcedLogOffRequested}\n" +
+                $"------- ForcedLogOffRequested: {wasForced}\n" +
                 $"Log off path taken: {logoffPath}";
 
             msg += !wasForced
@@ -2506,12 +2511,12 @@ namespace ACE.Server.Command.Handlers
 
                 Location = player.Location?.ToLOCString() ?? "NULL",
 
-                IsLoggingOut = player.IsLoggingOut,
-                IsInDeathProcess = player.IsInDeathProcess,
-                MaterializedLogoutState = (uint)player.MaterializedLogoutState,
-                PkLogoutState = (uint)player.PkLogoutState,
+                IsLoggingOut = wasLoggingOut,
+                IsInDeathProcess = wasInDeathProcess,
+                ForcedLogOffRequested = wasForced,
                 FoundOnLandblock = foundOnLandblock,
-                ForcedLogOffRequested = player.ForcedLogOffRequested,
+                PkLogoutState = (uint)pkState,
+                MaterializedLogoutState = (uint)matState,
 
                 LogoffPath = logoffPath,
                 CreatedAtUtc = DateTime.UtcNow
