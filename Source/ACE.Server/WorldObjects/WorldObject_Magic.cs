@@ -1192,7 +1192,7 @@ namespace ACE.Server.WorldObjects
                     ActionChain lifestoneRecall = new ActionChain();
                     lifestoneRecall.AddAction(targetPlayer, () => targetPlayer.DoPreTeleportHide());
                     lifestoneRecall.AddDelaySeconds(2.0f);  // 2 second delay
-                    lifestoneRecall.AddAction(targetPlayer, () => targetPlayer.TeleToPosition(recall));
+                    lifestoneRecall.AddAction(targetPlayer, () => targetPlayer.TeleToPosition(recall, force: false));
                     lifestoneRecall.EnqueueChain();
                 }
                 else
@@ -1223,7 +1223,7 @@ namespace ACE.Server.WorldObjects
                         var teleportDest = new Position(portal.Destination);
                         AdjustDungeon(teleportDest);
 
-                        targetPlayer.Teleport(teleportDest);
+                        targetPlayer.Teleport(teleportDest, force: false);
                     });
                     portalRecall.EnqueueChain();
                 }
@@ -1381,7 +1381,7 @@ namespace ACE.Server.WorldObjects
                     var teleportDest = new Position(spell.Position);
                     AdjustDungeon(teleportDest);
 
-                    targetPlayer.Teleport(teleportDest);
+                    targetPlayer.Teleport(teleportDest, force: false);
 
                     targetPlayer.SendTeleportedViaMagicMessage(itemCaster, spell);
                 });
@@ -1434,7 +1434,7 @@ namespace ACE.Server.WorldObjects
                 var teleportDest = new Position(spell.Position);
                 AdjustDungeon(teleportDest);
 
-                targetPlayer.Teleport(teleportDest);
+                targetPlayer.Teleport(teleportDest, force: false);
 
                 targetPlayer.SendTeleportedViaMagicMessage(itemCaster, spell);
             });

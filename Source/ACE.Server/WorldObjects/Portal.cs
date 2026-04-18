@@ -331,7 +331,7 @@ namespace ACE.Server.WorldObjects
 
                 player.SendWeenieError(WeenieError.ITeleported);
 
-            }), true);
+            }), force: false);
         }
     }
 }

@@ -154,6 +154,14 @@ namespace ACE.Server.Managers
             }
         }
 
+        public static bool IsInLogoffQueue(Player player)
+        {
+            if (player == null)
+                return false;
+
+            return playersPendingLogoff.Contains(player);
+        }
+
         /// <summary>
         /// This will save any player in the OfflinePlayers dictionary that has ChangesDetected. The biotas are saved in parallel.
         /// </summary>

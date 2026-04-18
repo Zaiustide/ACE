@@ -400,7 +400,7 @@ namespace ACE.Server.Managers
                 actionChain.AddAction(session.Player, () =>
                 {
                     if (session != null && session.Player != null)
-                        session.Player.Teleport(fixLoc, force: true);
+                        session.Player.Teleport(fixLoc);
                 });
                 actionChain.EnqueueChain();
             }
@@ -440,15 +440,6 @@ namespace ACE.Server.Managers
                 session.Network.EnqueueSend(new GameMessageSystemChat("You have returned to the Olthoi Queen to serve the hive.", ChatMessageType.Broadcast));
             else if (playerLoggedInOnNoLogLandblock) // see http://acpedia.org/wiki/Mount_Elyrii_Hive
                 session.Network.EnqueueSend(new GameMessageSystemChat("The currents of portal space cannot return you from whence you came. Your previous location forbids login.", ChatMessageType.Broadcast));            
-
-            // Force a materialization when logging in
-            if (session.Player.ForceTeleportMaterialization)
-            {
-                var actionChain = new ActionChain();
-                actionChain.AddDelaySeconds(session.Player.TeleportMaterializedDuration);
-                actionChain.AddAction(session.Player, session.Player.OnTeleportComplete);
-                actionChain.EnqueueChain();
-            }
         }
 
         private static string AppendLines(params string[] lines)
@@ -468,7 +459,7 @@ namespace ACE.Server.Managers
         /// Note that this work will be done on the next tick, not immediately, so be careful about your order of operations.
         /// If you must ensure order, pass your follow up work in with the argument actionToFollowUpWith. That work will be enqueued onto the Player.
         /// </summary>
-        public static void ThreadSafeTeleport(Player player, Position newPosition, IAction actionToFollowUpWith = null, bool fromPortal = false, bool force = false)
+        public static void ThreadSafeTeleport(Player player, Position newPosition, IAction actionToFollowUpWith = null, bool fromPortal = false, bool force = true)
         {
             EnqueueAction(new ActionEventDelegate(() =>
             {

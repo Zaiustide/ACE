@@ -558,6 +558,48 @@ namespace ACE.Database
 
         #endregion
 
+        #region Stuck Character Log
+        public void LogStuckCharacter(StuckCharacterLog stuckLog)
+        {
+            if (stuckLog == null)
+                return;
+
+            try
+            {
+                using (var context = new LogDbContext())
+                {
+                    context.Database.ExecuteSql(
+                        @$"INSERT INTO stuck_character_log 
+                        (playerGuid, playerName, accountName, accountId, sessionInfo, landblock, location,
+                         isLoggingOut, isInDeathProcess, foundOnLandblock, forcedLogOffRequested,
+                         pkLogoutState, materializedLogoutState, logoffPath, createdAtUtc)
+                        VALUES
+                        ({stuckLog.PlayerGuid},
+                         {stuckLog.PlayerName ?? (object)DBNull.Value},
+                         {stuckLog.AccountName ?? (object)DBNull.Value},
+                         {stuckLog.AccountId},
+                         {stuckLog.SessionInfo ?? (object)DBNull.Value},
+                         {stuckLog.Landblock ?? (object)DBNull.Value},
+                         {stuckLog.Location ?? (object)DBNull.Value},
+                         {stuckLog.IsLoggingOut},
+                         {stuckLog.IsInDeathProcess},
+                         {stuckLog.FoundOnLandblock},
+                         {stuckLog.ForcedLogOffRequested},
+                         {stuckLog.PkLogoutState},
+                         {stuckLog.MaterializedLogoutState},
+                         {stuckLog.LogoffPath ?? (object)DBNull.Value},
+                         {DateTime.Now});");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception in LogStuckCharacter saving stuck character event to DB. ex: {ex}");
+            }
+
+            return;
+        }
+        #endregion
+
         //public bool ExampleCustomSql()
         //{            
         //    var sql = @$"";
