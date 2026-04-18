@@ -432,5 +432,34 @@ namespace ACE.Server.WorldObjects
 
             actionChain.EnqueueChain();
         }
+
+        public void ApplyBountyContract(Action action)
+        {
+            IsBusy = true;
+
+            var actionChain = new ActionChain();
+
+            var prevStance = CurrentMotionState.Stance;
+            var animTime = 0.0f;
+
+            if (prevStance != MotionStance.NonCombat)
+                animTime += EnqueueMotion_Force(actionChain, MotionStance.NonCombat, MotionCommand.Ready, (MotionCommand)prevStance);
+
+            var useAnimTime = EnqueueMotion_Force(actionChain, MotionStance.NonCombat, MotionCommand.ScanHorizon);
+            animTime += useAnimTime;
+
+            actionChain.AddAction(this, action);
+
+            animTime += EnqueueMotion_Force(actionChain, MotionStance.NonCombat, MotionCommand.Ready, MotionCommand.ScanHorizon);
+
+            if (prevStance != MotionStance.NonCombat)
+                animTime += EnqueueMotion_Force(actionChain, prevStance, MotionCommand.Ready, MotionCommand.NonCombat);
+
+            actionChain.AddAction(this, () => { IsBusy = false; });
+
+            actionChain.EnqueueChain();
+
+            LastUseTime = animTime;
+        }
     }
 }

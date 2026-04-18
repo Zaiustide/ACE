@@ -3466,10 +3466,12 @@ namespace ACE.Server.WorldObjects
 
                         target.EmoteManager.ExecuteEmoteSet(emoteResult, this);
 
-                        if (!CheckBountyContractTurnIns(target, itemToGive) || !CheckBountyPurchase(target, itemToGive) || !CheckWritOfPursuit(target, itemToGive))
-                            return;
+                        var result = NpcTransactionResult.Ignore;
 
-                        itemToGive.Destroy();
+                        if (target.WeenieClassId == BountyContract.BountyNPCWcid)
+                            result = CheckBountyTransactions(target, itemToGive);
+
+                        HandleNpcTransactionResult(result, target, itemToGive);
                     }
 
                 }
@@ -3507,6 +3509,32 @@ namespace ACE.Server.WorldObjects
 
                 Session.Network.EnqueueSend(new GameEventWeenieErrorWithString(Session, (WeenieErrorWithString)WeenieError.TradeAiDoesntWant, target.Name));
                 Session.Network.EnqueueSend(new GameEventInventoryServerSaveFailed(Session, item.Guid.Full));
+            }
+        }
+
+        enum NpcTransactionResult
+        {
+            Consume,   // destroy item
+            Return,    // give back to player
+            Ignore     // not handled
+        }
+
+        private void HandleNpcTransactionResult(NpcTransactionResult result, WorldObject npc, WorldObject itemToGive)
+        {
+            switch (result)
+            {
+                case NpcTransactionResult.Return:
+                    TryCreateForGive(npc, itemToGive);
+                    break;
+
+                case NpcTransactionResult.Consume:
+                    itemToGive.Destroy();
+                    break;
+
+                case NpcTransactionResult.Ignore:
+                default:
+                    itemToGive.Destroy();
+                    break;
             }
         }
 
