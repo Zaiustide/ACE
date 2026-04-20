@@ -253,6 +253,14 @@ namespace ACE.Server.Managers
                     session.Player.Location = new Position(0xA9B40019, 84, 7.1f, 94, 0, 0, -0.0784591f, 0.996917f);  // ultimate fallback
             }
 
+            // If the client is logging into an invalid position
+            if (!session.Player.Location.IsValidPosition())
+            {
+                var fallbackPosition = new Position(session.Player.FallbackPosition);
+                session.Player.Location = new Position(fallbackPosition);
+                log.Warn($"Player {session.Player.Name} logged in with invalid position, relocating to {fallbackPosition.ToLOCString()}");
+            } 
+
             //Handle logging into arena
             if(ArenaLocation.IsArenaLandblock(session.Player.Location?.Landblock ?? 0))
             {

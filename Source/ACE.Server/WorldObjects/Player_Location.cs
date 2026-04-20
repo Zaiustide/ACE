@@ -707,15 +707,28 @@ namespace ACE.Server.WorldObjects
         private ulong _teleportId = 0;
         public ulong CurrentTeleportId => _teleportId;
 
+        public Position FallbackPosition => Sanctuary ?? Instantiation ?? new Position(0xA9B40019, 84, 7.1f, 94, 0, 0, -0.0784591f, 0.996917f);
+
         /// <summary>
         /// This is not thread-safe. Consider using WorldManager.ThreadSafeTeleport() instead if you're calling this from a multi-threaded subsection.
         /// </summary>
         public void Teleport(Position _newPosition, bool fromPortal = false, bool force = true)
         {
-            if(!ValidateTeleport(_newPosition, force))
+            var validateResult = ValidateTeleport(_newPosition, force);
+
+            switch (validateResult)
             {
-                Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouHaveBeenTeleportedTooRecently));
-                return;
+                case TeleportValidationResult.Allowed:
+                    break;
+
+                case TeleportValidationResult.BlockedRecentTeleport:
+                    Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouHaveBeenTeleportedTooRecently));
+                    return;
+
+                case TeleportValidationResult.InvalidDestination:
+                    WorldManager.ThreadSafeTeleport(this, new Position(FallbackPosition));
+                    Session.Network.EnqueueSend(new GameMessageSystemChat("The location you have been teleported to was invalid, you have been moved to a safe location instead.", ChatMessageType.System));
+                    return;
             }
 
             var newPosition = new Position(_newPosition);
@@ -896,23 +909,31 @@ namespace ACE.Server.WorldObjects
             ForceMaterializeForTeleport(currentTeleportId);
         }
 
-        private bool ValidateTeleport(Position newPosition, bool force)
+        private enum TeleportValidationResult
         {
-            if (!IsRecentTeleportPreventionEnabled)
-                return true;
+            Allowed,
+            BlockedRecentTeleport,
+            InvalidDestination
+        }
 
-            if (force)
-                return true;
+        private TeleportValidationResult ValidateTeleport(Position newPosition, bool force)
+        {
+            if (IsAdmin)
+                return TeleportValidationResult.Allowed;
 
-            // prevent teleporting if already teleporting 
+            if (!newPosition.IsValidPosition())
+                return TeleportValidationResult.InvalidDestination;
+
+            if (!IsRecentTeleportPreventionEnabled || force)
+                return TeleportValidationResult.Allowed;
+
             if (Teleporting)
-                return false;
+                return TeleportValidationResult.BlockedRecentTeleport;
 
-            // prevent teleporting after exiting portal space if it's within the recent teleport 
             if (BlockRecentTeleport)
-                return false;
+                return TeleportValidationResult.BlockedRecentTeleport;
 
-            return true;
+            return TeleportValidationResult.Allowed;
         }
 
         public void DoPreTeleportHide()
@@ -983,12 +1004,13 @@ namespace ACE.Server.WorldObjects
             var newPos = physicsPos.ACEPosition();
 
             // If validating physics-derived position fails, log a warning and attempt to use the Sanctuary position as a fallback if not logging out, otherwise just exit.
-            if (physicsPos.ObjCellID == 0)
+            if (physicsPos.ObjCellID == 0 || physicsPos.Landblock == 0 || !newPos.IsValidPosition())
             {
                 log.Warn($"[TELEPORT BLOCKED] Invalid ACE position for {Name}");
                 log.Warn($"  PhysicsObjCellID: {physicsPos.ObjCellID}");
+                log.Warn($"  PhysicsLandblock: {physicsPos.Landblock}");
                 log.Warn($"  PhysicsCell: {newPos.Cell}");
-                log.Warn($"  PhysicsPos: {newPos.Pos}");
+                log.Warn($"  CurrentPosLandblock: {newPos.Landblock}");
                 log.Warn($"  CurrentPosCell: {Location.Cell}");
                 log.Warn($"  CurrentPos: {Location.Pos}");
                 log.Warn($"  Teleporting: {Teleporting}");
@@ -1009,20 +1031,21 @@ namespace ACE.Server.WorldObjects
                 // If we've exhausted retries to get a valid position, teleport the player to their sancutary as a last resort
                 if (OnTeleportCompleteFailureRetry >= 3)
                 {
-                    var fixLoc = Sanctuary ?? Instantiation ?? new Position(0xA9B40019, 84, 7.1f, 94, 0, 0, -0.0784591f, 0.996917f);
+                    log.Warn("Failed to get valid position after multiple retries, teleporting to sanctuary as fallback.");
+                    var fallbackPosition = new Position(FallbackPosition);
                     var delayTeleport = new ActionChain();
-                    delayTeleport.AddDelaySeconds(1);
-                    delayTeleport.AddAction(this, () => WorldManager.ThreadSafeTeleport(this, fixLoc));
+                    delayTeleport.AddAction(this, () => Teleport(fallbackPosition));
                     delayTeleport.EnqueueChain();
                     OnTeleportCompleteFailureRetry = 0;
                     return;
                 } else
                 {
+                    OnTeleportCompleteFailureRetry++;
+                    log.Warn($"  Failed to get valid position, retrying after short delay. Retry count: {OnTeleportCompleteFailureRetry}");
                     var actionChain = new ActionChain();
-                    actionChain.AddDelaySeconds(0.5);
+                    actionChain.AddDelaySeconds(0.1);
                     actionChain.AddAction(this, () => OnTeleportComplete(teleportId));
                     actionChain.EnqueueChain();
-                    OnTeleportCompleteFailureRetry++;
                     return;
                 }
             }

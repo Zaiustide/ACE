@@ -381,5 +381,16 @@ namespace ACE.Server.Entity
             var currentLb = $"{currentLbRaw:X8}".Substring(0, 4);
             return currentLb;
         }
+
+        public static bool IsValidPosition(this Position pos)
+        {
+            if (pos.Landblock == 0)
+                return false;
+            if (float.IsNaN(pos.PositionX) || float.IsNaN(pos.PositionY) || float.IsNaN(pos.PositionZ))
+                return false;
+            if (!pos.Rotation.IsRotationValid())
+                return false;
+            return true;
+        }
     }
 }
