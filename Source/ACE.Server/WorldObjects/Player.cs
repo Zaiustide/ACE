@@ -541,7 +541,7 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public bool LogOut(bool clientSessionTerminatedAbruptly = false, bool forceImmediate = false)
         {
-            if (PKLogoutActive && !forceImmediate || PkLogoutState != LogoutState.Pending)
+            if ((PKLogoutActive && !forceImmediate) || (PkLogoutState != LogoutState.Pending))
             {
                 return HandlePKLogout();
             }
@@ -605,7 +605,7 @@ namespace ACE.Server.WorldObjects
                 return false;
             }
 
-            if (Teleporting && MaterializedLogoutState is LogoutState.Pending)
+            if (Teleporting && !IsInDeathProcess && MaterializedLogoutState is LogoutState.Pending)
             {
                 ForceMaterializeForLogoff();
                 return false;
