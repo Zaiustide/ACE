@@ -536,56 +536,62 @@ namespace ACE.Server.WorldObjects
         {
             // cleans up bugged chars with dangling item set spells
             // from previous bugs
-
-            var allPossessions = GetAllPossessions().ToDictionary(i => i.Guid, i => i);
-
-            // this is a legacy method, but is still a decent failsafe to catch any existing issues
-
-            // get active item enchantments
-            var enchantments = Biota.PropertiesEnchantmentRegistry.Clone(BiotaDatabaseLock).Where(i => i.Duration == -1 && i.SpellId != (int)SpellId.Vitae).ToList();
-
-            foreach (var enchantment in enchantments)
+            try
             {
-                var table = enchantment.HasSpellSetId ? allPossessions : EquippedObjects;
+                var allPossessions = GetAllPossessions().ToDictionary(i => i.Guid, i => i);
 
-                // if this item is not equipped, remove enchantment
-                if (!table.TryGetValue(new ObjectGuid(enchantment.CasterObjectId), out var item))
+                // this is a legacy method, but is still a decent failsafe to catch any existing issues
+
+                // get active item enchantments
+                var enchantments = Biota.PropertiesEnchantmentRegistry.Clone(BiotaDatabaseLock).Where(i => i.Duration == -1 && i.SpellId != (int)SpellId.Vitae).ToList();
+
+                foreach (var enchantment in enchantments)
                 {
-                    var spell = new Spell(enchantment.SpellId, false);
-                    log.Error($"{Name}.AuditItemSpells(): removing spell {spell.Name} from {(enchantment.HasSpellSetId ? "non-possessed" : "non-equipped")} item");
+                    var table = enchantment.HasSpellSetId ? allPossessions : EquippedObjects;
 
-                    EnchantmentManager.Dispel(enchantment);
-                    continue;
-                }
-
-                // is this item part of a set?
-                if (!item.HasItemSet)
-                    continue;
-
-                // get all of the equipped items in this set
-                var setItems = EquippedObjects.Values.Where(i => i.HasItemSet && i.EquipmentSetId == item.EquipmentSetId).ToList();
-
-                // get all of the spells currently active from this set
-                var currentSpells = GetSpellSet(setItems);
-
-                // get all of the spells possible for this item set
-                var possibleSpells = GetSpellSetAll((EquipmentSet)item.EquipmentSetId);
-
-                // get the difference between them
-                var inactiveSpells = possibleSpells.Except(currentSpells).ToList();
-
-                // remove any item set spells that shouldn't be active
-                foreach (var inactiveSpell in inactiveSpells)
-                {
-                    var removeSpells = enchantments.Where(i => i.SpellSetId == item.EquipmentSetId && i.SpellId == inactiveSpell.Id).ToList();
-
-                    foreach (var removeSpell in removeSpells)
+                    // if this item is not equipped, remove enchantment
+                    if (!table.TryGetValue(new ObjectGuid(enchantment.CasterObjectId), out var item))
                     {
-                        log.Error($"{Name}.AuditItemSpells(): removing spell {inactiveSpell.Name} from {item.EquipmentSetId}");
+                        var spell = new Spell(enchantment.SpellId, false);
+                        log.Error($"{Name}.AuditItemSpells(): removing spell {spell.Name} from {(enchantment.HasSpellSetId ? "non-possessed" : "non-equipped")} item");
 
-                        EnchantmentManager.Dispel(removeSpell);
+                        EnchantmentManager.Dispel(enchantment);
+                        continue;
+                    }
+
+                    // is this item part of a set?
+                    if (!item.HasItemSet)
+                        continue;
+
+                    // get all of the equipped items in this set
+                    var setItems = EquippedObjects.Values.Where(i => i.HasItemSet && i.EquipmentSetId == item.EquipmentSetId).ToList();
+
+                    // get all of the spells currently active from this set
+                    var currentSpells = GetSpellSet(setItems);
+
+                    // get all of the spells possible for this item set
+                    var possibleSpells = GetSpellSetAll((EquipmentSet)item.EquipmentSetId);
+
+                    // get the difference between them
+                    var inactiveSpells = possibleSpells.Except(currentSpells).ToList();
+
+                    // remove any item set spells that shouldn't be active
+                    foreach (var inactiveSpell in inactiveSpells)
+                    {
+                        var removeSpells = enchantments.Where(i => i.SpellSetId == item.EquipmentSetId && i.SpellId == inactiveSpell.Id).ToList();
+
+                        foreach (var removeSpell in removeSpells)
+                        {
+                            log.Error($"{Name}.AuditItemSpells(): removing spell {inactiveSpell.Name} from {item.EquipmentSetId}");
+
+                            EnchantmentManager.Dispel(removeSpell);
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                log.Error($"Exception in Player.AuditItemSpells() for player {Name}. Ex: {ex}");
             }
         }
     }
