@@ -31,6 +31,7 @@ namespace ACE.Database.Models.Log
 
         public virtual DbSet<RareLog> RareLogs { get; set; }
 
+        public virtual DbSet<StuckCharacterLog> StuckCharacterLogs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -355,6 +356,62 @@ namespace ACE.Database.Models.Log
 
                 entity.Property(e => e.CreatedDateTime)
                     .HasColumnName("createDateTime");               
+            });
+
+            modelBuilder.Entity<StuckCharacterLog>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("stuckCharacterLogId");
+
+                entity.ToTable("stuck_character_log");
+
+                entity.Property(e => e.PlayerGuid)
+                    .HasColumnName("playerGuid");
+
+                entity.Property(e => e.PlayerName)
+                    .HasColumnName("playerName");
+
+                entity.Property(e => e.AccountName)
+                    .HasColumnName("accountName");
+
+                entity.Property(e => e.AccountId)
+                    .HasColumnName("accountId");
+
+                entity.Property(e => e.SessionInfo)
+                    .HasColumnName("sessionInfo");
+
+                entity.Property(e => e.Landblock)
+                    .HasColumnName("landblock");
+
+                entity.Property(e => e.Location)
+                    .HasColumnName("location");
+
+                entity.Property(e => e.IsLoggingOut)
+                    .HasColumnName("isLoggingOut");
+
+                entity.Property(e => e.IsInDeathProcess)
+                    .HasColumnName("isInDeathProcess");
+
+                entity.Property(e => e.FoundOnLandblock)
+                    .HasColumnName("foundOnLandblock");
+
+                entity.Property(e => e.ForcedLogOffRequested)
+                    .HasColumnName("forcedLogOffRequested");
+
+                entity.Property(e => e.PkLogoutState)
+                    .HasColumnName("pkLogoutState");
+
+                entity.Property(e => e.MaterializedLogoutState)
+                    .HasColumnName("materializedLogoutState");
+
+                entity.Property(e => e.LogoffPath)
+                    .HasColumnName("logoffPath");
+
+                entity.Property(e => e.CreatedAtUtc)
+                    .HasColumnName("createdAtUtc");
             });
 
             OnModelCreatingPartial(modelBuilder);

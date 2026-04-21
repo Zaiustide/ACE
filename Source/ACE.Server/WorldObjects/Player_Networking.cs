@@ -143,6 +143,8 @@ namespace ACE.Server.WorldObjects
                 actionChain.EnqueueChain();
             }
 
+            ForceMaterializeForLogin();
+
             log.DebugFormat("[LOGIN] Account {0} entered the world with character {1} (0x{2}) at {3}.", Account.AccountName, Name, Guid, DateTime.Now.ToCommonString());
         }
 
@@ -512,6 +514,22 @@ namespace ACE.Server.WorldObjects
             }
 
             return false;
+        }
+        public bool ForceLoginMaterialization => PropertyManager.GetBool("force_login_materialization").Item;
+        public double ForceLoginMaterializationDuration => PropertyManager.GetDouble("force_login_materialization_duration").Item;
+        public void ForceMaterializeForLogin()
+        {
+            if (!ForceLoginMaterialization)
+                return;
+
+            // if we are dead and teleporting, exit
+            if (IsInDeathProcess)
+                return;
+
+            var actionChain = new ActionChain();
+            actionChain.AddDelaySeconds(ForceLoginMaterializationDuration);
+            actionChain.AddAction(this, () => OnTeleportComplete(CurrentTeleportId));
+            actionChain.EnqueueChain();
         }
 
         /// <summary>

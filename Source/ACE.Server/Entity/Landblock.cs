@@ -406,7 +406,7 @@ namespace ACE.Server.Entity
                                 {
                                     //Teleport to LS
                                     playerToKick.Session.Network.EnqueueSend(new GameMessageSystemChat("You have violated the max number of members allowed inside of a zerg restricted area.  Fuck you.", ChatMessageType.Broadcast));
-                                    playerToKick.Teleport(playerToKick.Sanctuary, force: true);
+                                    playerToKick.Teleport(playerToKick.Sanctuary);
                                 }
                                 catch (Exception ex)
                                 {
@@ -423,7 +423,7 @@ namespace ACE.Server.Entity
                         {
                             var currPlayer = (Player)disallowedPlayer;
                             currPlayer.Session.Network.EnqueueSend(new GameMessageSystemChat("You have violated the whitelist inside of a zerg restricted area.  Fuck you.", ChatMessageType.Broadcast));
-                            currPlayer.Teleport(currPlayer.Sanctuary, force: true);
+                            currPlayer.Teleport(currPlayer.Sanctuary);
                         }
                         catch (Exception ex)
                         {

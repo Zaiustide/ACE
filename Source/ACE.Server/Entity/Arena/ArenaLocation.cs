@@ -229,7 +229,7 @@ namespace ACE.Server.Entity
                                         if(teamPlayer != null)
                                         {
                                             log.Info($"ArenaLocation.Tick() - {ArenaName} status = 2 - teleporting {teamPlayer.Name} to position {teamPosition.Value.ToLOCString}");
-                                            teamPlayer.Teleport(teamPosition.Value, force: true);
+                                            teamPlayer.Teleport(teamPosition.Value);
                                         }
                                     }
                                 }
@@ -240,7 +240,7 @@ namespace ACE.Server.Entity
                                 {
                                     var j = i < positions.Count ? i : positions.Count - 1;
                                     log.Info($"ArenaLocation.Tick() - {ArenaName} status = 2 - teleporting {playerList[i].Name} to position {positions[j].ToLOCString}");
-                                    playerList[i].Teleport(positions[j], force: true);
+                                    playerList[i].Teleport(positions[j]);
                                 }
                             }
 
@@ -461,7 +461,7 @@ namespace ACE.Server.Entity
                                     if (player.CurrentLandblock?.IsArenaLandblock ?? false)
                                     {
                                         player.Session.Network.EnqueueSend(new GameMessageSystemChat($"Thank you for playing arenas.  You've loitered a bit too long after the event.  Have a nice trip to your Lifestone!", ChatMessageType.System));
-                                        player.Teleport(player.Sanctuary, force: true);
+                                        player.Teleport(player.Sanctuary);
                                     }
                                 }
                             }
@@ -1703,7 +1703,7 @@ namespace ACE.Server.Entity
                         continue;
                     }
 
-                    player.Teleport(player.Sanctuary, force: true);
+                    player.Teleport(player.Sanctuary);
                     player.Session.Network.EnqueueSend(new GameMessageSystemChat("You've been teleported to your lifestone because you were inside an arena location without being an active participant in an arena event", ChatMessageType.System));
                 }
             }

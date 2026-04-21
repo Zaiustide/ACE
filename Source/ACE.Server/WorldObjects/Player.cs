@@ -160,7 +160,7 @@ namespace ACE.Server.WorldObjects
 
             // set pink bubble state
             IgnoreCollisions = true; ReportCollisions = false; Hidden = true;
-        }
+         }
 
         private void SetEphemeralValues()
         {
@@ -522,7 +522,7 @@ namespace ACE.Server.WorldObjects
 
         public bool ForceLogoutMaterialization => PropertyManager.GetBool("force_logout_materialization").Item;
 
-        public double MaterializedLogoutDuration => PropertyManager.GetDouble("force_logout_materialization_duration").Item;
+        public double ForceLogoutMaterializationDuration => PropertyManager.GetDouble("force_logout_materialization_duration").Item;
 
         public enum LogoutState
         {
@@ -541,7 +541,7 @@ namespace ACE.Server.WorldObjects
         /// </summary>
         public bool LogOut(bool clientSessionTerminatedAbruptly = false, bool forceImmediate = false)
         {
-            if (PKLogoutActive && !forceImmediate || PkLogoutState != LogoutState.Pending)
+            if ((PKLogoutActive && !forceImmediate) || (PkLogoutState != LogoutState.Pending))
             {
                 return HandlePKLogout();
             }
@@ -580,11 +580,8 @@ namespace ACE.Server.WorldObjects
         {
             PkLogoutState = LogoutState.InProgress;
             PKLogout = true;
-
-            if (ForceLogoutMaterialization)
-                OnTeleportComplete();
-
             IsFrozen = true;
+
             EnqueueBroadcastPhysicsState();
 
             //Session.Network.EnqueueSend(new GameEventWeenieError(Session, WeenieError.YouHaveBeenInPKBattleTooRecently));
@@ -608,9 +605,9 @@ namespace ACE.Server.WorldObjects
                 return false;
             }
 
-            if (Teleporting && MaterializedLogoutState is LogoutState.Pending)
+            if (Teleporting && !IsInDeathProcess && MaterializedLogoutState is LogoutState.Pending)
             {
-                ForceMaterialize();
+                ForceMaterializeForLogoff();
                 return false;
             }
 
@@ -618,11 +615,15 @@ namespace ACE.Server.WorldObjects
             return true;
         }
 
-        public void ForceMaterialize()
+        public void ForceMaterializeForLogoff()
         {
             MaterializedLogoutState = LogoutState.InProgress;
-            OnTeleportComplete();
-            LogoffTimestamp = Time.GetFutureUnixTime(MaterializedLogoutDuration);
+
+            _teleportId++;
+
+            OnTeleportComplete(_teleportId);
+
+            LogoffTimestamp = Time.GetFutureUnixTime(ForceLogoutMaterializationDuration);
             PlayerManager.AddPlayerToLogoffQueue(this);
         }
 
