@@ -1,6 +1,5 @@
 using ACE.Common.Extensions;
 using ACE.Database;
-using ACE.DatLoader.Entity;
 using ACE.Entity.Enum;
 using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
@@ -335,7 +334,11 @@ namespace ACE.Server.Network.Structure
             if (wo is BountyContract bc)
             {
                 AddGearLongDescProperties(bc);
+            }
 
+            if (wo.WeenieClassId == BountyContract.WritOfPursuitWcid)
+            {
+                AddGearLongDescProperties(wo);
             }
 
             if (!Success)
@@ -775,7 +778,8 @@ namespace ACE.Server.Network.Structure
                 (wo.GearCreatureResistType != CreatureType.Invalid && wo.GearCreatureResistRating > 0) ||
                 (wo.GearCreatureSlayerType != CreatureType.Invalid && wo.GearCreatureSlayerRating > 0) ||
                 wo.SplitArrows ||
-                wo is BountyContract)
+                wo is BountyContract||
+                wo.WeenieClassId == BountyContract.WritOfPursuitWcid)
             {
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
                 var currentLongDesc = PropertiesString.ContainsKey(PropertyString.LongDesc) ? PropertiesString[PropertyString.LongDesc] : "";
@@ -803,6 +807,13 @@ namespace ACE.Server.Network.Structure
 
                 if (wo is BountyContract bc)
                     newLongDesc += bc.BuildBountyContractLongDescription();
+
+                if (wo.WeenieClassId == BountyContract.WritOfPursuitWcid)
+                {
+                    var rewardName = BountyContract.BountyWopCurrencyWeenie.GetPluralName();
+                    newLongDesc += $"A writ that allows a player to create a high priority bounty target with a reward. Inscribe this writ with a player name and reward amount ({rewardName}) delimited by a colon. Ex: Asheron:100\n\n";
+                    newLongDesc += "High priority targets have a greater chance of being selected by the Bounty Collector and more people competing for the same target.";
+                }
 
                 //Add back the flavor text to the LongDesc
                 newLongDesc += "\n";

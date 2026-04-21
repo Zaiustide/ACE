@@ -1516,17 +1516,5 @@ namespace ACE.Server.WorldObjects
                 return (AllegiancePermissionLevel)(AllegianceOfficerRank ?? 0);
             }
         }
-
-        public bool IsAllegianceWhitelisted =>
-          Allegiance?.MonarchId.HasValue == true &&
-          TownControlAllegiances.IsAllowedAllegiance((int)Allegiance.MonarchId!.Value);
-
-        public bool IsSameAllegiance(Player playerB)
-        {
-            var monarch = MonarchId != null ? MonarchId : Guid.Full;
-            var playerBMonarch = playerB.MonarchId != null ? playerB.MonarchId : playerB.Guid.Full;
-
-            return monarch == playerBMonarch;
-        }
     }
 }

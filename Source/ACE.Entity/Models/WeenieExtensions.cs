@@ -214,5 +214,18 @@ namespace ACE.Entity.Models
 
             return value;
         }
+
+        public static string BuildAmountString(this Weenie weenie, long amount)
+        {
+            if (amount > 1)
+            {
+                var name = weenie.GetPluralName();
+                return $"{amount} {name}";
+            } else
+            {
+                var name = weenie.GetName();
+                return $"a {name}";
+            }
+        }
     }
 }
