@@ -641,6 +641,7 @@ namespace ACE.Server.Managers
                 ("bounty_expirations_enabled", new Property<bool>(true, "enable this to allow bounties to expire")),
                 ("broadcast_kill_streak", new Property<bool>(true, "enable this to broadcast kill streak messages")),
                 ("recent_teleport_prevention", new Property<bool>(true, "enable this to prevent players from teleporting too frequently")),
+                ("town_control_ip_restricted", new Property<bool>(false, "enable this to restrict unique Ip access to Town Control Events")),
                 ("local_server", new Property<bool>(false, "Do not enable on live servers! Enable this to allow for server behavior to change as necessary for testing envrionments.")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world"))
                 );
@@ -691,6 +692,7 @@ namespace ACE.Server.Managers
                 ("bounty_wop_currency_wcid", new Property<long>(1000003, "the WCID for the type of item used for the bounty Writ of Pursuit currency (DEFAULT: is Phial Of Tears)")),
                 ("bounty_location_currency_wcid", new Property<long>(1000002, "the WCID for the type of item used for the bounty contract location finder (DEFAULT: is PK Trophy)")),
                 ("bounty_location_price_amount", new Property<long>(25, "the amount of bounty contract location finder currency it costs to use the location finder")),
+                ("town_control_allegiance_player_limit", new Property<long>(13, "the maximum total entries of players per allegiance")),
                 ("bounty_max_contracts", new Property<long>(3, "the maximum amount of contracts a player can have"))
 
                 );
