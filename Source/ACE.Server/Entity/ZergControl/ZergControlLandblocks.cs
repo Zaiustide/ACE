@@ -1,15 +1,19 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ACE.Server.Managers;
 
 namespace ACE.Server.Entity
 {
     public static class ZergControlLandblocks
     {
 
+        private static HashSet<int> _worldBossLandblocks = new HashSet<int>() { 0x6543, 0x02C8 };
+
+        private static HashSet<int> _townControlLandblocks = new HashSet<int>() { 0x4FF1, 0x00AB, 0xE9F0, 0xE9F1, 0xE8F1 };
+
         private static Dictionary<uint, ZergControlArea> _zergControlLandblocksMap;
+
+        public static long TownControlAllegiancePlayerLimit => PropertyManager.GetLong("town_control_allegiance_player_limit", 9).Item;
 
         public static Dictionary<uint, ZergControlArea> ZergControlLandblocksMap
         {
@@ -21,27 +25,27 @@ namespace ACE.Server.Entity
 
                     //Zerg control Town Control landblocks to 9
                     var holtTC = new ZergControlArea();
-                    holtTC.MaxPlayersPerAllegiance = 9;
+                    holtTC.MaxPlayersPerAllegiance = (uint)TownControlAllegiancePlayerLimit;
                     holtTC.AreaLandblockIds = new uint[] { 0x4FF1 };
                     _zergControlLandblocksMap.Add(0x4FF1, holtTC);
 
                     var yaraqTC = new ZergControlArea();
-                    yaraqTC.MaxPlayersPerAllegiance = 9;
+                    yaraqTC.MaxPlayersPerAllegiance = (uint)TownControlAllegiancePlayerLimit;
                     yaraqTC.AreaLandblockIds = new uint[] { 0x00AB };
                     _zergControlLandblocksMap.Add(0x00AB, yaraqTC);
 
                     var shoushiTC1 = new ZergControlArea();
-                    shoushiTC1.MaxPlayersPerAllegiance = 9;
+                    shoushiTC1.MaxPlayersPerAllegiance = (uint)TownControlAllegiancePlayerLimit;
                     shoushiTC1.AreaLandblockIds = new uint[] { 0xE9F0, 0xE9F1, 0xE8F1 };
                     _zergControlLandblocksMap.Add(0xE9F1, shoushiTC1);
 
                     var shoushiTC2 = new ZergControlArea();
-                    shoushiTC2.MaxPlayersPerAllegiance = 9;
+                    shoushiTC2.MaxPlayersPerAllegiance = (uint)TownControlAllegiancePlayerLimit;
                     shoushiTC2.AreaLandblockIds = new uint[] { 0xE9F0, 0xE9F1, 0xE8F1 };
                     _zergControlLandblocksMap.Add(0xE9F0, shoushiTC2);
 
                     var shoushiTC3 = new ZergControlArea();
-                    shoushiTC3.MaxPlayersPerAllegiance = 9;
+                    shoushiTC3.MaxPlayersPerAllegiance = (uint)TownControlAllegiancePlayerLimit;
                     shoushiTC3.AreaLandblockIds = new uint[] { 0xE9F0, 0xE9F1, 0xE8F1 };
                     _zergControlLandblocksMap.Add(0xE8F1, shoushiTC3);
 
@@ -104,6 +108,16 @@ namespace ACE.Server.Entity
             }
         }
 
+        public static bool IsWorldBossLandblock(uint landblockId)
+        {
+            return _worldBossLandblocks.Contains((int)landblockId);
+        }
+
+        public static bool IsTownControlLandblock(uint landblockId)
+        {
+            return _townControlLandblocks.Contains((int)landblockId);
+        }
+
         public static bool IsZergControlLandblock(uint landblockId)
         {
             return ZergControlLandblocksMap.ContainsKey(landblockId);
@@ -124,5 +138,7 @@ namespace ACE.Server.Entity
     {
         public uint[] AreaLandblockIds;
         public uint MaxPlayersPerAllegiance;
+        public bool IsTownControlArea => AreaLandblockIds.Any(id => ZergControlLandblocks.IsTownControlLandblock(id));
+        public bool IsWorldBossArea => AreaLandblockIds.Any(id => ZergControlLandblocks.IsWorldBossLandblock(id));
     }
 }

@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Linq;
-
 using ACE.Common;
 using ACE.Database;
 using ACE.DatLoader;
@@ -13,11 +10,10 @@ using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Entity;
 using ACE.Server.Entity.Actions;
+using ACE.Server.Managers;
+using ACE.Server.Network;
 using ACE.Server.Network.GameEvent.Events;
 using ACE.Server.Network.GameMessages.Messages;
-using ACE.Server.Managers;
-using ACE.Server.Entity.TownControl;
-using ACE.Server.Network;
 
 namespace ACE.Server.WorldObjects
 {
@@ -783,106 +779,24 @@ namespace ACE.Server.WorldObjects
             if (UnderLifestoneProtection)
                 LifestoneProtectionDispel();
 
-            //For Zerg controlled landblocks, don't allow more than X players from the same allegiance at a time
-            if (ZergControlLandblocks.IsZergControlLandblock(newPosition.Landblock)
-                && this.WeenieType != WeenieType.Sentinel
-                && this.WeenieType != WeenieType.Admin)
+            if (IsInZergRestrictedEntry(newPosition, out ZergControlArea area))
             {
                 try
                 {
-                    ZergControlArea zergArea = ZergControlLandblocks.GetLandblockZergControlArea(newPosition.Landblock);
+                    var result = EvaluateZergEntry(area, newPosition);
 
-                    //Get the player's Allegiance ID
-                    var playerAllegiance = AllegianceManager.GetAllegiance(this);
-                    uint? playerMonarchId = null;
-                    string playerAllegName = null;
-                    if (playerAllegiance != null && playerAllegiance.MonarchId.HasValue)
+                    if (result.Failure)
                     {
-                        playerMonarchId = playerAllegiance.MonarchId.Value;
-                        playerAllegName = playerAllegiance.Monarch.Player.Name;
-
-                        //Check how many other players are in the same area from the same Allegiance
-                        List<Player> sameAllegPlayersInArea = new List<Player>();
-                        foreach (var landblockId in zergArea.AreaLandblockIds)
-                        {
-                            var landblock = LandblockManager.GetLandblock(new LandblockId(landblockId << 16), false);
-                            var playersInLandblock = landblock.GetCurrentLandblockPlayers();
-                            foreach (var landblockPlayer in playersInLandblock)
-                            {
-                                var lbPlayerAlleg = AllegianceManager.GetAllegiance(landblockPlayer);
-                                if (lbPlayerAlleg != null &&
-                                    lbPlayerAlleg.MonarchId.HasValue &&
-                                    lbPlayerAlleg.MonarchId.Equals(playerMonarchId) &&
-                                    !sameAllegPlayersInArea.Contains(landblockPlayer))
-                                {
-                                    sameAllegPlayersInArea.Add(landblockPlayer);
-                                }
-                            }
-                        }
-
-                        //If there's already the max number of players from same Allegiance, send a message and kick to the LS
-                        if (sameAllegPlayersInArea.Count >= zergArea.MaxPlayersPerAllegiance)
-                        {
-                            this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  {playerAllegName} already has {zergArea.MaxPlayersPerAllegiance} players in this area, which is the maximum allowed per allegiance.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
-
-                            //For Indoor world boss, if you got into the dungeon but got kicked due to zerg limit
-                            //remove quest stamp for EnterBattleDungeon
-                            if (_newPosition.Landblock == 0x6543 || _newPosition.Landblock == 0x02C8)
-                            {
-                                QuestManager.Erase("EnterBattleDungeon");
-                            }
-
-                            Teleport(Sanctuary);
-                            return;
-                        }
-
-                        //If player's allegiance is not whitelisted don't allow entry
-                        if (!TownControlAllegiances.IsAllowedAllegiance((int)playerMonarchId.Value))
-                        {
-                            this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  This area is currently only open to clans who are whitelisted for town control to prevent players from breaking allegiance in order to exceed clan capacity restrictions.  Please contact an admin to get your clan whitelisted for entry.", ChatMessageType.Broadcast));
-
-                            Teleport(Sanctuary);
-                            return;
-                        }
-
-                        //If there's an active indoor WB event, and you're teleporting into that landblock,
-                        //check if the max number of entries per allegiance has been exceeded
-                        var wb = WorldBossManager.GetActiveWorldBoss();
-                        if (wb != null && wb.MaxAllegianceEntries.HasValue && wb.IndoorLocation.Landblock == _newPosition.Landblock)
-                        {
-                            var currAllegEntryCount = wb.AllegianceEntries.GetValueOrDefault<uint, uint>(playerMonarchId.Value);
-                            if (currAllegEntryCount >= wb.MaxAllegianceEntries)
-                            {
-                                this.Session.Network.EnqueueSend(new GameMessageSystemChat($"Your allegiance has already reached it's maximum number of entrants to this World Boss event. ", ChatMessageType.Broadcast));
-
-                                Teleport(Sanctuary);
-                                return;
-                            }
-                            else
-                            {
-                                if (wb.AllegianceEntries.ContainsKey(playerMonarchId.Value))
-                                {
-                                    wb.AllegianceEntries[playerMonarchId.Value]++;
-                                }
-                                else
-                                {
-                                    wb.AllegianceEntries.Add(playerMonarchId.Value, 1);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //The player has no allegiance, disallow entry
-                        this.Session.Network.EnqueueSend(new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  Unfortunately you are not a member of an allegiance and are unable to enter this area to prevent abuse by players who break allegiance to exceed the clan capacity limitations.  You have been redirected to your lifestone.", ChatMessageType.Broadcast));
-
-                        Teleport(Sanctuary);
+                        HandleZergEntryFailure(result, area, newPosition);
+                        WorldManager.ThreadSafeTeleport(this, Sanctuary);
                         return;
                     }
+
+                    HandleZergEntrySuccess(area, newPosition);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    log.Error($"Exception checking zerg limit on player teleport. Player: {this.Name}, Ex: {ex}");
+                    log.Error($"Exception checking zerg limit on player teleport. Player: {Name}, Ex: {ex}");
                 }
             }
 
@@ -907,6 +821,21 @@ namespace ACE.Server.WorldObjects
 
             // Force a materialization when teleporting
             ForceMaterializeForTeleport(currentTeleportId);
+        }
+
+        public bool IsInZergRestrictedEntry(Position newPosition, out ZergControlArea area)
+        {
+            area = null;
+
+            if (newPosition == null)
+                return false;
+
+            if (IsAdmin || IsSentinel)
+                return false;
+
+            area = ZergControlLandblocks.GetLandblockZergControlArea(newPosition.Landblock);
+
+            return area != null;
         }
 
         private enum TeleportValidationResult
