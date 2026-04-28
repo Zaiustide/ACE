@@ -34,20 +34,5 @@ namespace ACE.Server.Entity.Bounties
             player.RemoveProperty(ACE.Entity.Enum.Properties.PropertyInt.BountyPriorityCurrency);
             player.RemoveProperty(ACE.Entity.Enum.Properties.PropertyString.BountyPriorityOwnerName);
         }
-
-        public static bool IsAllegianceWhitelisted(this IPlayer player)
-        {
-            var allegiance = AllegianceManager.GetAllegiance(player);
-            return allegiance?.MonarchId.HasValue == true && TownControlAllegiances.IsAllowedAllegiance((int)allegiance.MonarchId!.Value);
-        }
-
-        public static bool IsSameAllegiance(this IPlayer playerA, IPlayer playerB)
-        {
-            var playerAMonarch = playerA.MonarchId != null ? playerA.MonarchId : playerA.Guid.Full;
-            var playerBMonarch = playerB.MonarchId != null ? playerB.MonarchId : playerB.Guid.Full;
-
-            return playerAMonarch == playerBMonarch;
-        }
-
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using ACE.Entity.Enum.Properties;
-using ACE.Server.Entity.Bounties;
+using ACE.Server.Entity.TownControl;
+using ACE.Server.Managers;
 using log4net;
 using Newtonsoft.Json;
 
@@ -40,6 +41,20 @@ namespace ACE.Server.Entity
             {
                 log.Error($"Failed to serialize {propertyKey} for player {player.Name} (Guid: {player.Guid.Full}). Exception: {ex}");
             }
+        }
+
+        public static bool IsAllegianceWhitelisted(this IPlayer player)
+        {
+            var allegiance = AllegianceManager.GetAllegiance(player);
+            return allegiance?.MonarchId.HasValue == true && TownControlAllegiances.IsAllowedAllegiance((int)allegiance.MonarchId!.Value);
+        }
+
+        public static bool IsSameAllegiance(this IPlayer playerA, IPlayer playerB)
+        {
+            var playerAMonarch = playerA.MonarchId != null ? playerA.MonarchId : playerA.Guid.Full;
+            var playerBMonarch = playerB.MonarchId != null ? playerB.MonarchId : playerB.Guid.Full;
+
+            return playerAMonarch == playerBMonarch;
         }
     }
 }
