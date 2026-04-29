@@ -29,22 +29,9 @@ namespace ACE.Database.Models.TownControl
         public HashSet<string> IpAddresses { get; set; } = new HashSet<string>();
 
         [NotMapped]
-        public Dictionary<uint, TownControlEventAllegiance> Allegiances { get; set; } = new Dictionary<uint, TownControlEventAllegiance>();
-    }
+        public HashSet<uint> CharacterEntries { get; set; } = new HashSet<uint>();
 
-    [NotMapped]
-    public class TownControlEventAllegiance
-    {
-        public  required string ClanName { get; set; }
-        public Dictionary<uint, TownControlEventPlayer> Players { get; set; } = new Dictionary<uint, TownControlEventPlayer>();
-    }
-
-    [NotMapped]
-    public class TownControlEventPlayer
-    {
-        public required uint Guid { get; set; } 
-        public required string Name { get; set; }
-        public required string Ip { get; set; }
-        public required uint MonarchId { get; set; }
+        [NotMapped]
+        public Dictionary<uint, uint> AllegianceEntries { get; set; } = new Dictionary<uint, uint>();
     }
 }
