@@ -12,7 +12,9 @@ namespace ACE.Server.WorldObjects
 {
     public partial class Player
     {
-        private bool IsTownControlIpRestricted => PropertyManager.GetBool("town_control_ip_restricted", false).Item;
+        private static bool IsTownControlIpRestricted => PropertyManager.GetBool("town_control_ip_restricted", false).Item;
+        public static long TownControlAllegiancePlayerLimit => PropertyManager.GetLong("town_control_allegiance_player_limit", 13).Item;
+
         public enum ZergEntryStatus
         {
             Allowed,
@@ -49,18 +51,18 @@ namespace ACE.Server.WorldObjects
 
             var allegiance = AllegianceManager.GetAllegiance(this);
 
-            // check town control and worldboss first
+            // check if the player's allegiance already has the maximum number of players in this area
+            var sameAllegCount = CountPlayersInAreaWithAllegiance(area, allegiance.MonarchId.Value);
+
+            if (sameAllegCount >= area.MaxPlayersPerAllegiance)
+                return new ZergEntryResult { Status = ZergEntryStatus.SameAllegianceLimitReached };
+
+            // check town control and worldboss specific rules
             if (ZergControlLandblocks.IsTownControlLandblock(newPosition.Landblock))
                 return EvaluateTownControlZerg(allegiance.MonarchId.Value, newPosition);
 
             if (ZergControlLandblocks.IsWorldBossLandblock(newPosition.Landblock))
                 return EvaluateWorldBoss(allegiance.MonarchId.Value, newPosition);
-
-            // remaining checks are general zerg control checks
-            var sameAllegCount = CountPlayersInAreaWithAllegiance(area, allegiance.MonarchId.Value);
-
-            if (sameAllegCount >= area.MaxPlayersPerAllegiance)
-                return new ZergEntryResult { Status = ZergEntryStatus.SameAllegianceLimitReached };
 
             return new ZergEntryResult { Status = ZergEntryStatus.Allowed };
         }
@@ -69,30 +71,26 @@ namespace ACE.Server.WorldObjects
         {
             var ip = Session?.EndPointC2S?.Address.ToString() ?? string.Empty;
 
-            if (TownControlLandblocks.IsTownControlRewardLandblock(pos.Landblock))
-            {
-                var townId = TownControlLandblocks.GetTownIdByLandblockId(pos.Landblock);
+            var townId = TownControlLandblocks.GetTownIdByLandblockId(pos.Landblock);
 
-                if (townId.HasValue)
-                {
-                    var latestEvent = TownControl.GetLatestTownControlEventByTownId(townId.Value);
+            if (!townId.HasValue)
+                return new ZergEntryResult { Status = ZergEntryStatus.Allowed };
 
-                    if (latestEvent == null)
-                        return new ZergEntryResult { Status = ZergEntryStatus.TcEventEnded };
+            var latestEvent = TownControl.GetLatestTownControlEventByTownId(townId.Value);
 
-                    if (IsTownControlIpRestricted && latestEvent.IpAddresses.Contains(ip))
-                        return new ZergEntryResult { Status = ZergEntryStatus.TcIpRestricted };
+            if (latestEvent == null)
+                return new ZergEntryResult { Status = ZergEntryStatus.TcEventEnded };
 
-                    if (latestEvent.Allegiances.TryGetValue(monarchId, out var allegiance))
-                    {
-                        if (allegiance.Players.TryGetValue(Guid.Full, out var townPlayer))
-                            return new ZergEntryResult { Status = ZergEntryStatus.TcCharacterEntryLimitReached };
+            if (IsTownControlIpRestricted && latestEvent.IpAddresses.Contains(ip))
+                return new ZergEntryResult { Status = ZergEntryStatus.TcIpRestricted };
 
-                        if (allegiance.Players.Count >= ZergControlLandblocks.TownControlAllegiancePlayerLimit)
-                            return new ZergEntryResult { Status = ZergEntryStatus.TcAllegianceEntryLimitReached };
-                    }
-                }
-            }
+            if (latestEvent.CharacterEntries.Contains(Guid.Full))
+                return new ZergEntryResult { Status = ZergEntryStatus.TcCharacterEntryLimitReached };
+
+            var count = latestEvent.AllegianceEntries.GetValueOrDefault(monarchId);
+
+            if (count >= TownControlAllegiancePlayerLimit)
+                return new ZergEntryResult { Status = ZergEntryStatus.TcAllegianceEntryLimitReached };
 
             return new ZergEntryResult { Status = ZergEntryStatus.TcAllowed };
         }
@@ -141,6 +139,10 @@ namespace ACE.Server.WorldObjects
             var allegiance = AllegianceManager.GetAllegiance(this);
             var playerAllegName = allegiance?.Monarch?.Player?.Name ?? "Unknown";
 
+            // If the player failed to enter a world boss area due to zerg, we don't want them locked out
+            if (zergArea.IsWorldBossArea)
+                QuestManager.Erase("EnterBattleDungeon");
+
             if (result.Status == ZergEntryStatus.NotWhitelisted)
             {
                 Session.Network.EnqueueSend(
@@ -152,9 +154,6 @@ namespace ACE.Server.WorldObjects
             {
                 Session.Network.EnqueueSend(
                     new GameMessageSystemChat($"You have attempted to enter a zerg restricted area.  {playerAllegName} already has {zergArea.MaxPlayersPerAllegiance} players in this area, which is the maximum allowed per allegiance.  You have been redirected to your lifestone.", ChatMessageType.System));
-
-                if (zergArea.IsWorldBossArea)
-                    QuestManager.Erase("EnterBattleDungeon");
                 return;
             }
 
@@ -224,23 +223,12 @@ namespace ACE.Server.WorldObjects
                 return;
 
             latestEvent.IpAddresses.Add(ip);
+            latestEvent.CharacterEntries.Add(Guid.Full);
 
-            if (!latestEvent.Allegiances.TryGetValue(allegiance.MonarchId.Value, out var tcAllegiance))
-            {
-                tcAllegiance = new TownControlEventAllegiance { ClanName = clanName };
-                latestEvent.Allegiances.Add(MonarchId.Value, tcAllegiance);
-            }
-
-            if (!tcAllegiance.Players.ContainsKey(Guid.Full))
-            {
-                tcAllegiance.Players.Add(Guid.Full, new TownControlEventPlayer
-                {
-                    Guid = Guid.Full,
-                    MonarchId = allegiance.MonarchId.Value,
-                    Name = Name,
-                    Ip = ip
-                });
-            }
+            if (latestEvent.AllegianceEntries.ContainsKey(allegiance.MonarchId.Value))
+                latestEvent.AllegianceEntries[allegiance.MonarchId.Value]++;
+             else
+                latestEvent.AllegianceEntries.Add(allegiance.MonarchId.Value, 1);
 
             Session.Network.EnqueueSend(
                 new GameMessageSystemChat($"You have entered the town control area for {clanName}.  Good luck!", ChatMessageType.System));
@@ -253,16 +241,16 @@ namespace ACE.Server.WorldObjects
             if (wb == null)
                 return;
 
-            if (wb.IndoorLocation.Landblock == pos.Landblock)
-            {
-                if (wb.AllegianceEntries.ContainsKey(MonarchId.Value))
-                    wb.AllegianceEntries[MonarchId.Value]++;
-                else
-                    wb.AllegianceEntries.Add(MonarchId.Value, 1);
+            if (wb.IndoorLocation.Landblock != pos.Landblock)
+                return;
 
-                Session.Network.EnqueueSend(
-                    new GameMessageSystemChat($"You have entered the world boss area for {wb.Name}.  Good luck!", ChatMessageType.System));
-            }
+            if (wb.AllegianceEntries.ContainsKey(MonarchId.Value))
+                wb.AllegianceEntries[MonarchId.Value]++;
+            else
+                wb.AllegianceEntries.Add(MonarchId.Value, 1);
+
+            Session.Network.EnqueueSend(
+                new GameMessageSystemChat($"You have entered the world boss area for {wb.Name}.  Good luck!", ChatMessageType.System));
         }
     }
 }
