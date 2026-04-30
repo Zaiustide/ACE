@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451601629;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451601629, 'T9_tuskerguard', 10, '2026-04-06 08:15:50') /* Creature */;
+VALUES (451601629, 'T9_tuskerguard', 10, '2026-04-30 12:06:26') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451601629,   1,         16) /* ItemType - Creature */
@@ -91,7 +91,7 @@ VALUES (451601629,   1, 35000, 0, 0,35000) /* MaxHealth */
      , (451601629,   5,     0, 0, 0,  180) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451601629,  6, 0, 3, 0, 300, 0, 0) /* MeleeDefense        Specialized */
+VALUES (451601629,  6, 0, 3, 0, 240, 0, 0) /* MeleeDefense         Specialized */
      , (451601629,  7, 0, 3, 0, 450, 0, 0) /* MissileDefense      Specialized */
      , (451601629, 15, 0, 3, 0, 400, 0, 0) /* MagicDefense        Specialized */
      , (451601629, 20, 0, 2, 0,  50, 0, 0) /* Deception           Trained */
@@ -111,8 +111,8 @@ VALUES (451601629,  0,1024,  0,    0,  450,  225,  360,  297,  450,  315,  450, 
      , (451601629,  8,1024,110, 0.75,  450,  225,  360,  297,  450,  315,  450,  450,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
 
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
-VALUES (451601629,          0) /*  */
-     , (451601629,          0) /*  */;
+VALUES (451601629,  94)
+     , (451601629, 414);
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (451601629, 3 /* Death */, 0.0025, NULL, NULL, NULL, NULL, NULL, NULL, NULL);

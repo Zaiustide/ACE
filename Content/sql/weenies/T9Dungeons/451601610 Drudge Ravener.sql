@@ -100,7 +100,7 @@ VALUES (451601610,   1, 26000, 0, 0,29000) /* MaxHealth */
      , (451601610,   5,   250, 0, 0, 3600) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451601610,  6, 0, 3, 0, 172, 0, 0) /* MeleeDefense         Specialized */
+VALUES (451601610,  6, 0, 3, 0, 150, 0, 0) /* MeleeDefense         Specialized */
      , (451601610,  7, 0, 3, 0, 390, 0, 0) /* MissileDefense      Specialized */
      , (451601610, 14, 0, 2, 0, 200, 0, 0) /* ArcaneLore          Trained */
      , (451601610, 15, 0, 3, 0, 350, 0, 0) /* MagicDefense        Specialized */
@@ -131,9 +131,9 @@ VALUES (451601610,  6199,  2.085) /* Incantation of Lightning Arc */
      , (451601610,  4322,   2.03) /* Incantation of Slowness Other */;
 
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
-VALUES (451601610,          0) /*  */
-     , (451601610,          0) /*  */;
-
+VALUES (451601610,  94)
+     , (451601610, 414);
+     
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (451601610, 3 /* Death */, 0.0025, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
