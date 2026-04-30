@@ -131,8 +131,8 @@ VALUES (451601609,  6199,  2.085) /* Incantation of Lightning Arc */
      , (451601609,  4322,   2.03) /* Incantation of Slowness Other */;
 
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
-VALUES (451601609,          0) /*  */
-     , (451601609,          0) /*  */;
+VALUES (451601609,  94)
+     , (451601609, 414);
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (451601609, 3 /* Death */, 0.0025, NULL, NULL, NULL, NULL, NULL, NULL, NULL);

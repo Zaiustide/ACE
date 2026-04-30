@@ -135,9 +135,9 @@ VALUES (451600023,  4433,   2.02) /* Incantation of Acid Stream */
      , (451600023,  4322,   2.02) /* Incantation of Slowness Other */;
 
 INSERT INTO `weenie_properties_event_filter` (`object_Id`, `event`)
-VALUES (451600023,          0) /*  */
-     , (451600023,          0) /*  */;
-
+VALUES (451600023,  94)
+     , (451600023, 414);
+     
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (451600023, 3 /* Death */, 0.0125, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
