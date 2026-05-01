@@ -59,3 +59,9 @@ VALUES (0x77ACA018, 600055, 0x7ACA0135, 67.6868, 12.4768, 200.005, -0.976977, 0,
 INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
 VALUES (0x77ACA019, 451601900, 0x7ACA0012, 69.4117, 31.455, 200.005, 0.382684, 0, 0, -0.92388, False, '2026-04-06 19:41:01'); /* Emissary of the Hopeslayer */
 /* @teleloc 0x7ACA0012 [69.411697 31.455000 200.005005] 0.382684 0.000000 0.000000 -0.923880 */
+VALUES (0x77ACA019,  2078, 0x7ACA0011, 60.0827, 8.81523, 219.837, 0.999168, 0, 0, -0.040788, False, '2026-05-01 08:28:11'); /* Golem Burial Ground */
+/* @teleloc 0x7ACA0011 [60.082699 8.815230 219.837006] 0.999168 0.000000 0.000000 -0.040788 */
+
+INSERT INTO `landblock_instance` (`guid`, `weenie_Class_Id`, `obj_Cell_Id`, `origin_X`, `origin_Y`, `origin_Z`, `angles_W`, `angles_X`, `angles_Y`, `angles_Z`, `is_Link_Child`, `last_Modified`)
+VALUES (0x77ACA01A,  5900, 0x7ACA0019, 87.3937, 8.3237, 212.207, 0.994116, 0, 0, 0.108325, False, '2026-05-01 08:32:47'); /* Lost City of Frore Portal */
+/* @teleloc 0x7ACA0019 [87.393700 8.323700 212.207001] 0.994116 0.000000 0.000000 0.108325 */
