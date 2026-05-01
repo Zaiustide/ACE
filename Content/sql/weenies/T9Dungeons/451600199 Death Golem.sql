@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451600199;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451600199, 'T9_deathgolem', 10, '2026-04-30 01:39:07') /* Creature */;
+VALUES (451600199, 'T9_deathgolem', 10, '2026-04-30 08:34:07') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451600199,   1,         16) /* ItemType - Creature */
@@ -19,7 +19,7 @@ VALUES (451600199,   1,         16) /* ItemType - Creature */
      , (451600199,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451600199, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600199, 146,   35000000) /* XpOverride */
-     , (451600199, 307,         25) /* DamageRating */
+     , (451600199, 307,         30) /* DamageRating */
      , (451600199, 308,         25) /* DamageResistRating */
      , (451600199, 332,       5000) /* LuminanceAward */
      , (451600199, 386,         35) /* Overpower */;
@@ -46,7 +46,7 @@ VALUES (451600199,   1,       5) /* HeartbeatInterval */
      , (451600199,  12,    0.25) /* Shade */
      , (451600199,  13,     0.8) /* ArmorModVsSlash */
      , (451600199,  14,     0.8) /* ArmorModVsPierce */
-     , (451600199,  15,     0.8) /* ArmorModVsBludgeon */
+     , (451600199,  15,     0.7) /* ArmorModVsBludgeon */
      , (451600199,  16,     0.8) /* ArmorModVsCold */
      , (451600199,  17,     0.8) /* ArmorModVsFire */
      , (451600199,  18,     0.8) /* ArmorModVsAcid */
@@ -95,9 +95,9 @@ VALUES (451600199,   1, 700, 0, 0) /* Strength */
      , (451600199,   6,1200, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (451600199,   1, 22000, 0, 0,32000) /* MaxHealth */
-     , (451600199,   3,     0, 0, 0,20000) /* MaxStamina */
-     , (451600199,   5, 13600, 0, 0,15000) /* MaxMana */;
+VALUES (451600199,   1, 25700, 0, 0,26000) /* MaxHealth */
+     , (451600199,   3, 19400, 0, 0,20000) /* MaxStamina */
+     , (451600199,   5, 13800, 0, 0,15000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
 VALUES (451600199,  6, 0, 3, 0, 214, 0, 0) /* MeleeDefense         Specialized */
@@ -114,22 +114,22 @@ VALUES (451600199,  6, 0, 3, 0, 214, 0, 0) /* MeleeDefense         Specialized *
      , (451600199, 51, 0, 3, 0, 134, 0, 0) /* SneakAttack          Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
-VALUES (451600199,  0,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head - Nether */
-     , (451600199,  1,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 2, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0) /* Chest - Nether */
-     , (451600199,  2,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen - Nether */
-     , (451600199,  3,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm - Nether */
-     , (451600199,  4,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm - Nether */
-     , (451600199,  5,1024,100, 0.75,   90,   39,   52,   78,   30,   30,   72,   90,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand - Nether */
-     , (451600199,  6,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg - Nether */
-     , (451600199,  7,1024,  0,    0,   90,   39,   52,   78,   30,   30,   72,   90,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg - Nether */
-     , (451600199,  8,1024,110, 0.75,   90,   39,   52,   78,   30,   30,   72,   90,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot - Nether */;
+VALUES (451600199,  0,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head - Nether */
+     , (451600199,  1,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 2, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0) /* Chest - Nether */
+     , (451600199,  2,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen - Nether */
+     , (451600199,  3,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm - Nether */
+     , (451600199,  4,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm - Nether */
+     , (451600199,  5,1024, 90, 0.75,   63,   27,   36,   54,   21,   21,   50,   63,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand - Nether */
+     , (451600199,  6,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg - Nether */
+     , (451600199,  7,1024,  0,    0,   63,   27,   36,   54,   21,   21,   50,   63,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg - Nether */
+     , (451600199,  8,1024,100, 0.75,   63,   27,   36,   54,   21,   21,   50,   63,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot - Nether */;
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
-VALUES (451600199,  5402,   2.05) /* Incantation of Corruption */
+VALUES (451600199,  5402,   2.06) /* Incantation of Corruption */
      , (451600199,  5338,   2.05) /* Incantation of Destructive Curse */
-     , (451600199,  4633,   2.04) /* Incantation of Vulnerability Other */
-     , (451600199,  4643,   2.06) /* Incantation of Drain Health Other */
-     , (451600199,  5386,   2.06) /* Incantation of Weakening Curse */;
+     , (451600199,  4633,   2.01) /* Incantation of Vulnerability Other */
+     , (451600199,  4643,   2.05) /* Incantation of Drain Health Other */
+     , (451600199,  5386,   2.02) /* Incantation of Weakening Curse */;
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (451600199, 2, 21159,  1,93,    0, False) /* Create Covenant Tassets (21159) for Wield */

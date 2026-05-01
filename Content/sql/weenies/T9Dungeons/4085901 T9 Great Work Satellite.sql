@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 4085901;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (4085901, 'ace4085901-gwsatellite', 10, '2026-04-29 10:29:21') /* Creature */;
+VALUES (4085901, 'ace4085901-gwsatellite', 10, '2026-04-30 08:04:32') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (4085901,   1,         16) /* ItemType - Creature */
@@ -16,9 +16,9 @@ VALUES (4085901,   1,         16) /* ItemType - Creature */
      , (4085901,  81,          4) /* MaxGeneratedObjects */
      , (4085901,  82,          4) /* InitGeneratedObjects */
      , (4085901,  93,       3084) /* PhysicsState - Ethereal, ReportCollisions, Gravity, LightingOn */
-     , (4085901, 307,        50) /* DamageRating */
      , (4085901, 103,          3) /* GeneratorDestructionType - Kill */
-     , (4085901, 133,          4) /* ShowableOnRadar - ShowAlways */;
+     , (4085901, 133,          4) /* ShowableOnRadar - ShowAlways */
+     , (4085901, 307,         80) /* DamageRating */;
 
 INSERT INTO `weenie_properties_bool` (`object_Id`, `type`, `value`)
 VALUES (4085901,   1, True ) /* Stuck */
@@ -48,7 +48,7 @@ VALUES (4085901,   1,       5) /* HeartbeatInterval */
      , (4085901,  43,      15) /* GeneratorRadius */
      , (4085901,  64,    0.75) /* ResistSlash */
      , (4085901,  65,    0.75) /* ResistPierce */
-     , (4085901,  66,    0.75) /* ResistBludgeon */
+     , (4085901,  66,       1) /* ResistBludgeon */
      , (4085901,  67,     0.3) /* ResistFire */
      , (4085901,  68,     0.3) /* ResistCold */
      , (4085901,  69,     0.3) /* ResistAcid */
@@ -83,27 +83,27 @@ VALUES (4085901,   1, 800, 0, 0) /* Strength */
      , (4085901,   6, 600, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (4085901,   1,   5000, 0, 0, 5000) /* MaxHealth */
+VALUES (4085901,   1,  5000, 0, 0, 5000) /* MaxHealth */
      , (4085901,   3,  1000, 0, 0, 1100) /* MaxStamina */
      , (4085901,   5, 30000, 0, 0,30600) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (4085901,  6, 0, 3, 0, 292, 0, 0) /* MeleeDefense         Specialized */
-     , (4085901,  7, 0, 3, 0, 485, 0, 0) /* MissileDefense       Specialized */
-     , (4085901, 15, 0, 3, 0, 304, 0, 0) /* MagicDefense         Specialized */
+VALUES (4085901,  6, 0, 2, 0, 292, 0, 0) /* MeleeDefense             Trained */
+     , (4085901,  7, 0, 2, 0, 485, 0, 0) /* MissileDefense           Trained */
+     , (4085901, 15, 0, 2, 0, 304, 0, 0) /* MagicDefense             Trained */
      , (4085901, 34, 0, 3, 0, 250, 0, 0) /* WarMagic             Specialized */
      , (4085901, 45, 0, 3, 0, 180, 0, 0) /* LightWeapons         Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
-VALUES (4085901,  0,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head */
-     , (4085901,  1,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 2, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0) /* Chest */
-     , (4085901,  2,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen */
-     , (4085901,  3,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm */
-     , (4085901,  4,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm */
-     , (4085901,  5,  4,  1, 0.75,  200,  200,  200,  200,  200,  200,  200,  200,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand */
-     , (4085901,  6,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg */
-     , (4085901,  7,  4,  0,    0,  200,  200,  200,  200,  200,  200,  200,  200,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg */
-     , (4085901,  8,  4,  1, 0.75,  200,  200,  200,  200,  200,  200,  200,  200,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot */;
+VALUES (4085901,  0,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head - Bludgeon */
+     , (4085901,  1,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 2, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0) /* Chest - Bludgeon */
+     , (4085901,  2,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen - Bludgeon */
+     , (4085901,  3,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm - Bludgeon */
+     , (4085901,  4,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm - Bludgeon */
+     , (4085901,  5,  4,  1, 0.75,  180,  180,  180,  180,  180,  180,  180,  180,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand - Bludgeon */
+     , (4085901,  6,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg - Bludgeon */
+     , (4085901,  7,  4,  0,    0,  180,  180,  180,  180,  180,  180,  180,  180,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg - Bludgeon */
+     , (4085901,  8,  4,  1, 0.75,  180,  180,  180,  180,  180,  180,  180,  180,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot - Bludgeon */;
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
 VALUES (4085901,  4421,   2.25) /* Incantation of Acid Arc */

@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451600194;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451600194, 'T9_golemcopper', 10, '2026-04-06 08:18:09') /* Creature */;
+VALUES (451600194, 'T9_golemcopper', 10, '2026-04-30 07:18:48') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451600194,   1,         16) /* ItemType - Creature */
@@ -19,8 +19,8 @@ VALUES (451600194,   1,         16) /* ItemType - Creature */
      , (451600194,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451600194, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600194, 146,   35000000) /* XpOverride */
-     , (451600194, 307,        125) /* DamageRating */
-     , (451600194, 308,         65) /* DamageResistRating */
+     , (451600194, 307,         75) /* DamageRating */
+     , (451600194, 308,         35) /* DamageResistRating */
      , (451600194, 332,       5000) /* LuminanceAward */
      , (451600194, 386,         35) /* Overpower */;
 
@@ -46,7 +46,7 @@ VALUES (451600194,   1,       5) /* HeartbeatInterval */
      , (451600194,  12,     0.5) /* Shade */
      , (451600194,  13,    0.44) /* ArmorModVsSlash */
      , (451600194,  14,    0.58) /* ArmorModVsPierce */
-     , (451600194,  15,    0.86) /* ArmorModVsBludgeon */
+     , (451600194,  15,     0.7) /* ArmorModVsBludgeon */
      , (451600194,  16,    0.33) /* ArmorModVsCold */
      , (451600194,  17,    0.33) /* ArmorModVsFire */
      , (451600194,  18,     0.8) /* ArmorModVsAcid */
@@ -56,7 +56,7 @@ VALUES (451600194,   1,       5) /* HeartbeatInterval */
      , (451600194,  43,       3) /* GeneratorRadius */
      , (451600194,  64,    0.33) /* ResistSlash */
      , (451600194,  65,     0.5) /* ResistPierce */
-     , (451600194,  66,    0.83) /* ResistBludgeon */
+     , (451600194,  66,       1) /* ResistBludgeon */
      , (451600194,  67,     0.2) /* ResistFire */
      , (451600194,  68,     0.2) /* ResistCold */
      , (451600194,  69,       1) /* ResistAcid */
@@ -68,7 +68,8 @@ VALUES (451600194,   1,       5) /* HeartbeatInterval */
      , (451600194,  75,       1) /* ResistManaBoost */
      , (451600194,  80,       3) /* AiUseMagicDelay */
      , (451600194, 104,      10) /* ObviousRadarRange */
-     , (451600194, 125,       1) /* ResistHealthDrain */;
+     , (451600194, 125,       1) /* ResistHealthDrain */
+     , (451600194, 151,       1) /* IgnoreShield */;
 
 INSERT INTO `weenie_properties_string` (`object_Id`, `type`, `value`)
 VALUES (451600194,   1, 'Blood Guardian') /* Name */;
@@ -85,23 +86,23 @@ VALUES (451600194,   1, 0x020013F7) /* Setup */
      , (451600194,  35,      10021) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451600194,   1,5000, 0, 0) /* Strength */
-     , (451600194,   2,20000, 0, 0) /* Endurance */
+VALUES (451600194,   1,4000, 0, 0) /* Strength */
+     , (451600194,   2,2000, 0, 0) /* Endurance */
      , (451600194,   3, 500, 0, 0) /* Quickness */
      , (451600194,   4,1200, 0, 0) /* Coordination */
      , (451600194,   5,2200, 0, 0) /* Focus */
      , (451600194,   6,1200, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (451600194,   1, 22000, 0, 0,32000) /* MaxHealth */
-     , (451600194,   3,     0, 0, 0,20000) /* MaxStamina */
-     , (451600194,   5, 13600, 0, 0,15000) /* MaxMana */;
+VALUES (451600194,   1, 21000, 0, 0,22000) /* MaxHealth */
+     , (451600194,   3,   200, 0, 0, 2200) /* MaxStamina */
+     , (451600194,   5,   300, 0, 0, 1500) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451600194,  6, 0, 3, 0, 214, 0, 0) /* MeleeDefense         Specialized */
-     , (451600194,  7, 0, 3, 0, 460, 0, 0) /* MissileDefense       Specialized */
+VALUES (451600194,  6, 0, 2, 0, 204, 0, 0) /* MeleeDefense             Trained */
+     , (451600194,  7, 0, 2, 0, 460, 0, 0) /* MissileDefense           Trained */
      , (451600194, 14, 0, 2, 0, 200, 0, 0) /* ArcaneLore          Trained */
-     , (451600194, 15, 0, 3, 0,  15, 0, 0) /* MagicDefense         Specialized */
+     , (451600194, 15, 0, 2, 0,   5, 0, 0) /* MagicDefense             Trained */
      , (451600194, 20, 0, 2, 0, 400, 0, 0) /* Deception                Trained */
      , (451600194, 22, 0, 2, 0,  10, 0, 0) /* Jump                Trained */
      , (451600194, 24, 0, 2, 0, 910, 0, 0) /* Run                 Trained */
@@ -122,11 +123,11 @@ VALUES (451600194,  0,  4,  0,    0,  300,  132,  176,  260,  100,  100,  240,  
      , (451600194,  8,  4, 50, 0.75,  300,  132,  176,  260,  100,  100,  240,  300,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot - Bludgeon */;
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
-VALUES (451600194,  4455,   2.09) /* Incantation of Shock Wave */
-     , (451600194,  4457,   2.09) /* Incantation of Whirling Blade */
-     , (451600194,  4454,   2.09) /* Incantation of Shock Blast */
-     , (451600194,  4633,  2.005) /* Incantation of Vulnerability Other */
-     , (451600194,  4643,   2.07) /* Incantation of Drain Health Other */;
+VALUES (451600194,  4455,   2.06) /* Incantation of Shock Wave */
+     , (451600194,  4457,   2.06) /* Incantation of Whirling Blade */
+     , (451600194,  4454,   2.02) /* Incantation of Shock Blast */
+     , (451600194,  4633,   2.01) /* Incantation of Vulnerability Other */
+     , (451600194,  4643,   2.05) /* Incantation of Drain Health Other */;
 
 INSERT INTO `weenie_properties_emote` (`object_Id`, `category`, `probability`, `weenie_Class_Id`, `style`, `substyle`, `quest`, `vendor_Type`, `min_Health`, `max_Health`)
 VALUES (451600194, 5 /* HeartBeat */, 0.075, NULL, 0x8000003C /* HandCombat */, 0x41000003 /* Ready */, NULL, NULL, NULL, NULL);
