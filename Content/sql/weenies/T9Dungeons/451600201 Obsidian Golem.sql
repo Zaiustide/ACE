@@ -1,7 +1,7 @@
 DELETE FROM `weenie` WHERE `class_Id` = 451600201;
 
 INSERT INTO `weenie` (`class_Id`, `class_Name`, `type`, `last_Modified`)
-VALUES (451600201, 'T9_golemobsidian', 10, '2026-04-06 08:17:37') /* Creature */;
+VALUES (451600201, 'T9_golemobsidian', 10, '2026-04-30 07:29:07') /* Creature */;
 
 INSERT INTO `weenie_properties_int` (`object_Id`, `type`, `value`)
 VALUES (451600201,   1,         16) /* ItemType - Creature */
@@ -19,8 +19,8 @@ VALUES (451600201,   1,         16) /* ItemType - Creature */
      , (451600201,  93,       1032) /* PhysicsState - ReportCollisions, Gravity */
      , (451600201, 133,          2) /* ShowableOnRadar - ShowMovement */
      , (451600201, 146,   40000000) /* XpOverride */
-     , (451600201, 307,        165) /* DamageRating */
-     , (451600201, 308,         65) /* DamageResistRating */
+     , (451600201, 307,        100) /* DamageRating */
+     , (451600201, 308,         40) /* DamageResistRating */
      , (451600201, 332,       6200) /* LuminanceAward */
      , (451600201, 386,         35) /* Overpower */;
 
@@ -84,21 +84,21 @@ VALUES (451600201,   1, 0x02001516) /* Setup */
      , (451600201,  35,      10021) /* DeathTreasureType */;
 
 INSERT INTO `weenie_properties_attribute` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`)
-VALUES (451600201,   1,7000, 0, 0) /* Strength */
-     , (451600201,   2,20000, 0, 0) /* Endurance */
+VALUES (451600201,   1,5000, 0, 0) /* Strength */
+     , (451600201,   2,1600, 0, 0) /* Endurance */
      , (451600201,   3, 500, 0, 0) /* Quickness */
      , (451600201,   4,1200, 0, 0) /* Coordination */
      , (451600201,   5,2200, 0, 0) /* Focus */
      , (451600201,   6,1200, 0, 0) /* Self */;
 
 INSERT INTO `weenie_properties_attribute_2nd` (`object_Id`, `type`, `init_Level`, `level_From_C_P`, `c_P_Spent`, `current_Level`)
-VALUES (451600201,   1, 25000, 0, 0,35000) /* MaxHealth */
-     , (451600201,   3,     0, 0, 0,20000) /* MaxStamina */
-     , (451600201,   5, 17860, 0, 0,18000) /* MaxMana */;
+VALUES (451600201,   1, 24200, 0, 0,25000) /* MaxHealth */
+     , (451600201,   3,   500, 0, 0, 2100) /* MaxStamina */
+     , (451600201,   5, 16800, 0, 0,18000) /* MaxMana */;
 
 INSERT INTO `weenie_properties_skill` (`object_Id`, `type`, `level_From_P_P`, `s_a_c`, `p_p`, `init_Level`, `resistance_At_Last_Check`, `last_Used_Time`)
-VALUES (451600201,  6, 0, 3, 0, 234, 0, 0) /* MeleeDefense         Specialized */
-     , (451600201,  7, 0, 3, 0, 460, 0, 0) /* MissileDefense       Specialized */
+VALUES (451600201,  6, 0, 2, 0, 204, 0, 0) /* MeleeDefense             Trained */
+     , (451600201,  7, 0, 2, 0, 460, 0, 0) /* MissileDefense           Trained */
      , (451600201, 14, 0, 2, 0, 200, 0, 0) /* ArcaneLore          Trained */
      , (451600201, 15, 0, 3, 0,   5, 0, 0) /* MagicDefense         Specialized */
      , (451600201, 20, 0, 2, 0, 400, 0, 0) /* Deception                Trained */
@@ -111,21 +111,21 @@ VALUES (451600201,  6, 0, 3, 0, 234, 0, 0) /* MeleeDefense         Specialized *
      , (451600201, 51, 0, 3, 0,5434, 0, 0) /* SneakAttack          Specialized */;
 
 INSERT INTO `weenie_properties_body_part` (`object_Id`, `key`, `d_Type`, `d_Val`, `d_Var`, `base_Armor`, `armor_Vs_Slash`, `armor_Vs_Pierce`, `armor_Vs_Bludgeon`, `armor_Vs_Cold`, `armor_Vs_Fire`, `armor_Vs_Acid`, `armor_Vs_Electric`, `armor_Vs_Nether`, `b_h`, `h_l_f`, `m_l_f`, `l_l_f`, `h_r_f`, `m_r_f`, `l_r_f`, `h_l_b`, `m_l_b`, `l_l_b`, `h_r_b`, `m_r_b`, `l_r_b`)
-VALUES (451600201,  0,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head - Bludgeon */
-     , (451600201,  1,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 2, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0) /* Chest - Bludgeon */
-     , (451600201,  2,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen - Bludgeon */
-     , (451600201,  3,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm - Bludgeon */
-     , (451600201,  4,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm - Bludgeon */
-     , (451600201,  5,  4, 65, 0.75,  450,  636,  792,  540,  285,  789,  303,  789,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand - Bludgeon */
-     , (451600201,  6,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg - Bludgeon */
-     , (451600201,  7,  4,  0,    0,  450,  636,  792,  540,  285,  789,  303,  789,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg - Bludgeon */
-     , (451600201,  8,  4, 65, 0.75,  450,  636,  792,  540,  285,  789,  303,  789,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot - Bludgeon */;
+VALUES (451600201,  0,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 1, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0, 0.33,    0,    0) /* Head - Bludgeon */
+     , (451600201,  1,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 2, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0, 0.44, 0.17,    0) /* Chest - Bludgeon */
+     , (451600201,  2,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 3,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0,    0, 0.17,    0) /* Abdomen - Bludgeon */
+     , (451600201,  3,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 1, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0, 0.23, 0.03,    0) /* UpperArm - Bludgeon */
+     , (451600201,  4,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 2,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0,    0,  0.3,    0) /* LowerArm - Bludgeon */
+     , (451600201,  5,  4, 60, 0.75,  247,  349,  435,  297,  156,  433,  166,  433,    0, 2,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0,    0,  0.2,    0) /* Hand - Bludgeon */
+     , (451600201,  6,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 3,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18,    0, 0.13, 0.18) /* UpperLeg - Bludgeon */
+     , (451600201,  7,  4,  0,    0,  247,  349,  435,  297,  156,  433,  166,  433,    0, 3,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6,    0,    0,  0.6) /* LowerLeg - Bludgeon */
+     , (451600201,  8,  4, 60, 0.75,  247,  349,  435,  297,  156,  433,  166,  433,    0, 3,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22,    0,    0, 0.22) /* Foot - Bludgeon */;
 
 INSERT INTO `weenie_properties_spell_book` (`object_Id`, `spell`, `probability`)
-VALUES (451600201,  4455,   2.09) /* Incantation of Shock Wave */
-     , (451600201,  4451,   2.09) /* Incantation of Lightning Bolt */
-     , (451600201,  4454,   2.09) /* Incantation of Shock Blast */
-     , (451600201,  4450,   2.09) /* Incantation of Lightning Blast */;
+VALUES (451600201,  4455,   2.03) /* Incantation of Shock Wave */
+     , (451600201,  4451,   2.03) /* Incantation of Lightning Bolt */
+     , (451600201,  4454,   2.01) /* Incantation of Shock Blast */
+     , (451600201,  4450,   2.01) /* Incantation of Lightning Blast */;
 
 INSERT INTO `weenie_properties_create_list` (`object_Id`, `destination_Type`, `weenie_Class_Id`, `stack_Size`, `palette`, `shade`, `try_To_Bond`)
 VALUES (451600201, 9,361844,  1, 0, 0.04, False) /* Create Metos Shard (361844) for ContainTreasure */
