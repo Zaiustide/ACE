@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using ACE.Common;
 using ACE.Database;
 using ACE.Database.Models.World;
 using ACE.Entity;
@@ -1155,13 +1155,39 @@ namespace ACE.Server.WorldObjects
                         foreach (var player in attackerList)
                         {
                             var tcTrophy = WorldObjectFactory.CreateNewWorldObject(1000002); //PK Trophy
-                            tcTrophy.SetStackSize((int)trophiesPerAttacker);
+
+                            //Roll for a chance to double your PK trophies
+                            var trophyStackSize = (int)trophiesPerAttacker;
+                            var dblTrophies = ThreadSafeRandom.Next(0, 100) > 85;
+                            if (dblTrophies)
+                                trophyStackSize = trophyStackSize * 2;
+                            tcTrophy.SetStackSize(trophyStackSize);
 
                             var invCreateResult = player.TryCreateInInventoryWithNetworking(tcTrophy);
                             if (invCreateResult)
                             {
                                 player.Session.Network.EnqueueSend(new GameMessageCreateObject(tcTrophy));
-                                var msg = new GameMessageSystemChat($"You have received {trophiesPerAttacker} PK Trophies for successfully attacking {town.TownName}.", ChatMessageType.Broadcast);
+                                var msg = new GameMessageSystemChat($"{(dblTrophies ? "It's your lucky day, your reward has been doubled.  " : "")}You have received {trophyStackSize} PK Trophies for successfully attacking {town.TownName}.", ChatMessageType.Broadcast);
+                                player.Session.Network.EnqueueSend(msg);
+                            }
+
+                            //Give a Box
+                            var tcBox = WorldObjectFactory.CreateNewWorldObject(510000); //A Box
+                            player.TryCreateInInventoryWithNetworking(tcBox);
+                            if (invCreateResult)
+                            {
+                                player.Session.Network.EnqueueSend(new GameMessageCreateObject(tcTrophy));
+                                var msg = new GameMessageSystemChat($"You have received A Box for successfully attacking {town.TownName}.", ChatMessageType.Broadcast);
+                                player.Session.Network.EnqueueSend(msg);
+                            }
+
+                            //Give a Hera Key
+                            var tcHera = WorldObjectFactory.CreateNewWorldObject(490364); //A Box
+                            player.TryCreateInInventoryWithNetworking(tcHera);
+                            if (invCreateResult)
+                            {
+                                player.Session.Network.EnqueueSend(new GameMessageCreateObject(tcTrophy));
+                                var msg = new GameMessageSystemChat($"You have received a Hera's Vault Key for successfully attacking {town.TownName}.", ChatMessageType.Broadcast);
                                 player.Session.Network.EnqueueSend(msg);
                             }
                         }
@@ -1230,14 +1256,42 @@ namespace ACE.Server.WorldObjects
                         foreach (var player in defenderList)
                         {
                             var tcTrophy = WorldObjectFactory.CreateNewWorldObject(1000002); //PK Trophy
-                            tcTrophy.SetStackSize((int)trophiesPerDefender);
+                            //Roll for a chance to double your PK trophies
+                            var trophyStackSize = (int)trophiesPerDefender;
+                            var dblTrophies = ThreadSafeRandom.Next(0, 100) > 85;
+                            if (dblTrophies)
+                                trophyStackSize = trophyStackSize * 2;
+                            tcTrophy.SetStackSize(trophyStackSize);
 
                             var invCreateResult = player.TryCreateInInventoryWithNetworking(tcTrophy);
                             if (invCreateResult)
                             {
                                 player.Session.Network.EnqueueSend(new GameMessageCreateObject(tcTrophy));
-                                var msg = new GameMessageSystemChat($"You have received {trophiesPerDefender} PK Trophies for successfully defending {town.TownName}.", ChatMessageType.Broadcast);
+                                var msg = new GameMessageSystemChat($"{(dblTrophies ? "It's your lucky day, your reward has been doubled.  " : "")}You have received {trophiesPerDefender} PK Trophies for successfully defending {town.TownName}.", ChatMessageType.Broadcast);
                                 player.Session.Network.EnqueueSend(msg);
+                            }                            
+
+                            //Give a Hera Key
+                            var tcHera = WorldObjectFactory.CreateNewWorldObject(490364); //A Box
+                            player.TryCreateInInventoryWithNetworking(tcHera);
+                            if (invCreateResult)
+                            {
+                                player.Session.Network.EnqueueSend(new GameMessageCreateObject(tcTrophy));
+                                var msg = new GameMessageSystemChat($"You have received a Hera's Vault Key for successfully defending {town.TownName}.", ChatMessageType.Broadcast);
+                                player.Session.Network.EnqueueSend(msg);
+                            }
+
+                            //Give 5 Boxes
+                            for (int i = 0; i < 5; i++)
+                            {
+                                var tcBox = WorldObjectFactory.CreateNewWorldObject(510000); //A Box
+                                player.TryCreateInInventoryWithNetworking(tcBox);
+                                if (invCreateResult)
+                                {
+                                    player.Session.Network.EnqueueSend(new GameMessageCreateObject(tcTrophy));
+                                    var msg = new GameMessageSystemChat($"You have received A Box for successfully defending {town.TownName}.", ChatMessageType.Broadcast);
+                                    player.Session.Network.EnqueueSend(msg);
+                                }
                             }
                         }
 
